@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Brand Colors */
+  --color-primary-green: #5b9a2f;
+  --color-primary-green-dark: #4a7d25;
+  --color-charcoal: #3d3d3d;
+  --color-warm-gold: #f5a623;
+  --color-warm-gold-dark: #d4891a;
+  --color-near-black: #1a1a1a;
+  --color-off-white: #f8f6f1;
+  --color-light-gray: #e8e4dd;
+  --color-terracotta: #c0674a;
+
+  /* Typography */
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
+  --font-script: var(--font-dancing), cursive;
+}
+
+/* Reset and base styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-charcoal);
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus states for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-primary-green);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-primary-green);
+  color: white;
+}
