@@ -1,34 +1,31 @@
 import Link from "next/link";
 import { sql } from "@/lib/db";
 
-const STATUS_DOT: Record<string, string> = {
-  new: "bg-[#5b9a2f]",
-  contacted: "bg-[#f5a623]",
-  closed: "bg-[#1a1a1a]/25",
-};
-
 async function getDashboardData() {
-  const [posts, published, subscribers, contacts, newContacts, recentContacts, recentSubscribers] =
+  const [published, subscribers, pipelineTotal, pipelineProspects, upcomingBookings, recentSubscribers, recentActivity] =
     await Promise.all([
-      sql`SELECT COUNT(*)::int AS count FROM blog_posts`,
       sql`SELECT COUNT(*)::int AS count FROM blog_posts WHERE published = true`,
       sql`SELECT COUNT(*)::int AS count FROM newsletter_subscribers`,
-      sql`SELECT COUNT(*)::int AS count FROM contact_submissions`,
-      sql`SELECT COUNT(*)::int AS count FROM contact_submissions WHERE status = 'new'`,
-      sql`SELECT id, name, hotel_name, status, submitted_at FROM contact_submissions ORDER BY submitted_at DESC LIMIT 5`,
+      sql`SELECT COUNT(*)::int AS count FROM pipeline_contacts`,
+      sql`SELECT COUNT(*)::int AS count FROM pipeline_contacts WHERE pipeline_stage = 'prospect'`,
+      sql`SELECT COUNT(*)::int AS count FROM bookings WHERE status = 'confirmed' AND booking_date >= CURRENT_DATE`,
       sql`SELECT id, email, source, subscribed_at FROM newsletter_subscribers ORDER BY subscribed_at DESC LIMIT 5`,
+      sql`SELECT pa.id, pa.type, pa.title, pa.created_at, pc.name AS contact_name
+          FROM pipeline_activities pa
+          JOIN pipeline_contacts pc ON pa.contact_id = pc.id
+          ORDER BY pa.created_at DESC LIMIT 5`,
     ]);
 
   return {
     stats: {
-      totalPosts: posts[0].count,
       publishedPosts: published[0].count,
       subscribers: subscribers[0].count,
-      totalContacts: contacts[0].count,
-      newContacts: newContacts[0].count,
+      pipelineTotal: pipelineTotal[0].count,
+      pipelineProspects: pipelineProspects[0].count,
+      upcomingBookings: upcomingBookings[0].count,
     },
-    recentContacts,
     recentSubscribers,
+    recentActivity,
   };
 }
 
@@ -46,14 +43,14 @@ function timeAgo(dateStr: string): string {
 }
 
 export default async function AdminDashboard() {
-  const { stats, recentContacts, recentSubscribers } = await getDashboardData();
+  const { stats, recentSubscribers, recentActivity } = await getDashboardData();
 
   const cards = [
-    { label: "Total Posts", value: stats.totalPosts, color: "border-[#5b9a2f]", href: "/admin/posts" },
-    { label: "Published", value: stats.publishedPosts, color: "border-[#5b9a2f]", href: "/admin/posts" },
+    { label: "Published Posts", value: stats.publishedPosts, color: "border-[#5b9a2f]", href: "/admin/posts" },
     { label: "Subscribers", value: stats.subscribers, color: "border-[#f5a623]", href: "/admin/subscribers" },
-    { label: "Total Contacts", value: stats.totalContacts, color: "border-[#c0674a]", href: "/admin/contacts" },
-    { label: "New Contacts", value: stats.newContacts, color: "border-[#c0674a]", href: "/admin/contacts" },
+    { label: "Pipeline Contacts", value: stats.pipelineTotal, color: "border-[#3b82f6]", href: "/admin/crm" },
+    { label: "Prospects", value: stats.pipelineProspects, color: "border-[#8b5cf6]", href: "/admin/crm" },
+    { label: "Upcoming Bookings", value: stats.upcomingBookings, color: "border-[#c0674a]", href: "/admin/schedule" },
   ];
 
   return (
@@ -78,47 +75,49 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      {/* Recent Activity */}
+      {/* Activity Panels */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Contacts */}
+        {/* CRM Activity */}
         <div className="bg-white border border-[#e8e4dd] rounded-lg">
           <div className="flex items-center justify-between px-5 py-4 border-b border-[#e8e4dd]">
             <h2 className="font-display text-base font-semibold text-[#1a1a1a]">
-              Recent Contacts
+              CRM Activity
             </h2>
             <Link
-              href="/admin/contacts"
+              href="/admin/crm"
               className="text-xs font-medium text-[#5b9a2f] hover:underline"
             >
               View all
             </Link>
           </div>
-          {recentContacts.length === 0 ? (
+          {recentActivity.length === 0 ? (
             <p className="px-5 py-8 text-sm text-[#1a1a1a]/40 text-center">
-              No contacts yet.
+              No CRM activity yet.
             </p>
           ) : (
             <div>
-              {recentContacts.map((contact: Record<string, string>, i: number) => (
+              {recentActivity.map((item: Record<string, string>, i: number) => (
                 <div
-                  key={contact.id}
+                  key={item.id}
                   className={`flex items-center gap-3 px-5 py-3 ${
-                    i !== recentContacts.length - 1 ? "border-b border-[#e8e4dd]" : ""
+                    i !== recentActivity.length - 1 ? "border-b border-[#e8e4dd]" : ""
                   }`}
                 >
-                  <span
-                    className={`w-2 h-2 rounded-full flex-shrink-0 ${STATUS_DOT[contact.status] || ""}`}
-                  />
+                  <div className="w-7 h-7 rounded-full bg-[#3b82f6]/10 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-[#3b82f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#1a1a1a] truncate">
-                      {contact.name}
+                      {item.contact_name}
                     </p>
                     <p className="text-xs text-[#1a1a1a]/40 truncate">
-                      {contact.hotel_name}
+                      {item.title}
                     </p>
                   </div>
                   <span className="text-xs text-[#1a1a1a]/30 flex-shrink-0">
-                    {timeAgo(contact.submitted_at)}
+                    {timeAgo(item.created_at)}
                   </span>
                 </div>
               ))}

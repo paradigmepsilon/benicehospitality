@@ -43,6 +43,32 @@ export async function POST(req: Request) {
       console.error("Failed to store contact submission:", dbError);
     }
 
+    // Create/update pipeline contact
+    try {
+      const crmResult = await sql`
+        INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source)
+        VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${location || null}, ${roomCount || null}, 'contact_form')
+        ON CONFLICT (email) DO UPDATE SET
+          name = EXCLUDED.name,
+          phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),
+          hotel_name = COALESCE(EXCLUDED.hotel_name, pipeline_contacts.hotel_name),
+          hotel_location = COALESCE(EXCLUDED.hotel_location, pipeline_contacts.hotel_location),
+          room_count = COALESCE(EXCLUDED.room_count, pipeline_contacts.room_count),
+          updated_at = NOW()
+        RETURNING id
+      `;
+      const contactId = crmResult[0].id;
+
+      await sql`UPDATE contact_submissions SET pipeline_contact_id = ${contactId} WHERE email = ${email} AND pipeline_contact_id IS NULL`;
+
+      await sql`
+        INSERT INTO pipeline_activities (contact_id, type, title, description)
+        VALUES (${contactId}, 'contact_form_submitted', 'Contact form submitted', ${message || null})
+      `;
+    } catch (crmError) {
+      console.error("Failed to create pipeline contact:", crmError);
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Contact form error:", error);

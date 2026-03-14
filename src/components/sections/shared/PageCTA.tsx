@@ -29,7 +29,7 @@ export default function PageCTA({
         </AnimatedItem>
         <AnimatedItem>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button href="/contact" variant="primary" size="lg">
+            <Button href="/book" variant="primary" size="lg">
               Book a Discovery Call
             </Button>
             <Button href="/contact#snapshot" variant="secondary" size="lg">

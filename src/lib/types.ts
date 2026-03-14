@@ -142,3 +142,39 @@ export interface ContactSubmission {
   submitted_at: string;
   status: "new" | "contacted" | "closed";
 }
+
+export type CrmPipelineStage = "prospect" | "qualified" | "proposal" | "client" | "closed_lost";
+export type CrmSource = "contact_form" | "booking" | "manual";
+export type CrmActivityType =
+  | "contact_form_submitted"
+  | "booking_scheduled"
+  | "booking_cancelled"
+  | "stage_changed"
+  | "note_added"
+  | "manual";
+
+export interface CrmContact {
+  id: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  hotel_name: string | null;
+  hotel_location: string | null;
+  room_count: string | null;
+  company: string | null;
+  pipeline_stage: CrmPipelineStage;
+  source: CrmSource;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CrmActivity {
+  id: number;
+  contact_id: number;
+  type: CrmActivityType;
+  title: string;
+  description: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}

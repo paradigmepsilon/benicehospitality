@@ -99,7 +99,7 @@ export default function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button href="/contact" variant="primary" size="sm">
+            <Button href="/book" variant="primary" size="sm">
               Book a Call
             </Button>
           </div>
@@ -172,7 +172,7 @@ export default function Header() {
             </Link>
           ))}
           <div className="mt-4">
-            <Button href="/contact" variant="primary" size="lg">
+            <Button href="/book" variant="primary" size="lg">
               Book a Discovery Call
             </Button>
           </div>

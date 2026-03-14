@@ -28,7 +28,7 @@ export default function HeroSection() {
           <p>Without adding complexity.</p>
         </div>
         <div className="mt-4">
-          <Button href="/contact" variant="primary" size="lg">
+          <Button href="/book" variant="primary" size="lg">
             Book a Discovery Call
           </Button>
         </div>
