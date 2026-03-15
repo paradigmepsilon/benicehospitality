@@ -54,6 +54,14 @@ async function migrate() {
   `;
   console.log("  ✓ blog_posts.published_at column added");
 
+  // Add SEO fields to blog_posts
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS meta_description TEXT`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS target_keyword TEXT`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS secondary_keywords TEXT[] DEFAULT '{}'`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS hashtags TEXT[] DEFAULT '{}'`;
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}'`;
+  console.log("  ✓ blog_posts SEO columns added");
+
   await sql`
     CREATE TABLE IF NOT EXISTS uploads (
       id SERIAL PRIMARY KEY,

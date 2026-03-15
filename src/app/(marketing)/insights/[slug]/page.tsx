@@ -19,24 +19,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const posts = await sql`
-    SELECT title, excerpt, featured_image_url, published_at, created_at, updated_at, category
+    SELECT title, excerpt, featured_image_url, published_at, created_at, updated_at, category,
+           meta_description, target_keyword, secondary_keywords
     FROM blog_posts WHERE slug = ${slug} AND published = true AND (published_at IS NULL OR published_at <= NOW())
   `;
 
   if (posts.length === 0) return { title: "Post Not Found" };
 
   const post = posts[0];
+  const description = post.meta_description || post.excerpt;
+  const keywords = [post.target_keyword, ...(post.secondary_keywords || [])].filter(Boolean);
 
   return {
     title: post.title,
-    description: post.excerpt,
+    description,
+    ...(keywords.length > 0 && { keywords }),
     alternates: {
       canonical: `https://benicehospitalitygroup.com/insights/${slug}`,
     },
     openGraph: {
       type: "article",
       title: `${post.title} | Be Nice Hospitality Group`,
-      description: post.excerpt,
+      description,
       url: `https://benicehospitalitygroup.com/insights/${slug}`,
       images: post.featured_image_url ? [{ url: post.featured_image_url }] : undefined,
       publishedTime: post.published_at || post.created_at,
@@ -61,14 +65,17 @@ export default async function BlogPostPage({
 
   const post = posts[0];
 
+  const allKeywords = [post.target_keyword, ...(post.secondary_keywords || []), ...(post.tags || [])].filter(Boolean);
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description: post.excerpt,
+    description: post.meta_description || post.excerpt,
     image: post.featured_image_url,
     datePublished: post.published_at || post.created_at,
     dateModified: post.updated_at,
+    ...(allKeywords.length > 0 && { keywords: allKeywords.join(", ") }),
     author: {
       "@type": "Organization",
       name: "Be Nice Hospitality Group",
@@ -132,6 +139,22 @@ export default async function BlogPostPage({
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
+
+      {/* Tags */}
+      {post.tags && post.tags.length > 0 && (
+        <div className="px-6">
+          <div className="max-w-3xl mx-auto flex flex-wrap gap-2">
+            {post.tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="inline-block font-sans text-xs font-medium px-3 py-1 bg-[#f8f6f1] border border-[#e8e4dd] text-[#1a1a1a]/70 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Back link */}
       <div className="pb-16 px-6">

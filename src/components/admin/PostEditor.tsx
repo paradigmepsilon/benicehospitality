@@ -42,6 +42,11 @@ interface PostData {
   featured_image_url: string;
   published: boolean;
   published_at?: string | null;
+  meta_description?: string | null;
+  target_keyword?: string | null;
+  secondary_keywords?: string[];
+  hashtags?: string[];
+  tags?: string[];
 }
 
 async function uploadImage(file: File): Promise<string> {
@@ -391,6 +396,76 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> | null }) {
   );
 }
 
+function TagInput({
+  label,
+  placeholder,
+  values,
+  onChange,
+  autoPrefix,
+}: {
+  label: string;
+  placeholder: string;
+  values: string[];
+  onChange: (v: string[]) => void;
+  autoPrefix?: string;
+}) {
+  const [input, setInput] = useState("");
+
+  function addItems(raw: string) {
+    const items = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((s) => (autoPrefix && !s.startsWith(autoPrefix) ? autoPrefix + s : s));
+    const unique = [...new Set([...values, ...items])];
+    if (unique.length !== values.length) onChange(unique);
+    setInput("");
+  }
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
+        {label}
+      </label>
+      {values.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {values.map((item) => (
+            <span
+              key={item}
+              className="inline-flex items-center gap-1 bg-[#f8f6f1] border border-[#e8e4dd] text-[#1a1a1a] text-xs px-2.5 py-1 rounded-full"
+            >
+              {item}
+              <button
+                type="button"
+                onClick={() => onChange(values.filter((v) => v !== item))}
+                className="text-[#1a1a1a]/40 hover:text-red-500 transition-colors ml-0.5"
+              >
+                &times;
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if ((e.key === "Enter" || e.key === ",") && input.trim()) {
+            e.preventDefault();
+            addItems(input);
+          }
+        }}
+        onBlur={() => {
+          if (input.trim()) addItems(input);
+        }}
+        className="w-full border border-[#e8e4dd] px-4 py-2.5 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
 function toLocalDatetime(isoStr: string): string {
   const d = new Date(isoStr);
   const offset = d.getTimezoneOffset();
@@ -496,6 +571,12 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const [editorContent, setEditorContent] = useState(post?.content || "");
+  const [seoOpen, setSeoOpen] = useState(false);
+  const [metaDescription, setMetaDescription] = useState(post?.meta_description || "");
+  const [targetKeyword, setTargetKeyword] = useState(post?.target_keyword || "");
+  const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>(post?.secondary_keywords || []);
+  const [hashtags, setHashtags] = useState<string[]>(post?.hashtags || []);
+  const [tags, setTags] = useState<string[]>(post?.tags || []);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -543,6 +624,11 @@ export default function PostEditor({ post }: { post?: PostData }) {
       featured_image_url: featuredImageUrl,
       published,
       published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
+      meta_description: metaDescription || null,
+      target_keyword: targetKeyword || null,
+      secondary_keywords: secondaryKeywords,
+      hashtags,
+      tags,
     };
 
     try {
@@ -773,6 +859,79 @@ export default function PostEditor({ post }: { post?: PostData }) {
               className="w-full border border-[#e8e4dd] px-4 py-2.5 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors resize-y"
               placeholder="Short description for the blog grid..."
             />
+          </div>
+
+          {/* SEO & Social — collapsible */}
+          <div className="border border-[#e8e4dd] rounded">
+            <button
+              type="button"
+              onClick={() => setSeoOpen(!seoOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-[#1a1a1a] hover:bg-[#f8f6f1] transition-colors"
+            >
+              <span>SEO &amp; Social</span>
+              <svg
+                className={`w-4 h-4 text-[#1a1a1a]/40 transition-transform ${seoOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {seoOpen && (
+              <div className="border-t border-[#e8e4dd] px-4 py-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
+                    Meta Description
+                  </label>
+                  <textarea
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    rows={2}
+                    className="w-full border border-[#e8e4dd] px-4 py-2.5 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors resize-y"
+                    placeholder="Custom meta description for search engines. Leave blank to use excerpt."
+                  />
+                  <p className={`text-xs mt-1 ${metaDescription.length > 160 ? "text-red-500" : metaDescription.length > 140 ? "text-[#f5a623]" : "text-[#1a1a1a]/40"}`}>
+                    {metaDescription.length}/160 characters
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
+                    Target Keyword
+                  </label>
+                  <input
+                    type="text"
+                    value={targetKeyword}
+                    onChange={(e) => setTargetKeyword(e.target.value)}
+                    className="w-full border border-[#e8e4dd] px-4 py-2.5 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors"
+                    placeholder="Primary keyword to target"
+                  />
+                </div>
+
+                <TagInput
+                  label="Secondary Keywords"
+                  placeholder="Type a keyword and press Enter or comma to add"
+                  values={secondaryKeywords}
+                  onChange={setSecondaryKeywords}
+                />
+
+                <TagInput
+                  label="Tags"
+                  placeholder="Type a tag and press Enter or comma to add"
+                  values={tags}
+                  onChange={setTags}
+                />
+
+                <TagInput
+                  label="Hashtags"
+                  placeholder="Type a hashtag and press Enter or comma to add"
+                  values={hashtags}
+                  onChange={setHashtags}
+                  autoPrefix="#"
+                />
+              </div>
+            )}
           </div>
 
           <div>

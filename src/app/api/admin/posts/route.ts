@@ -36,6 +36,11 @@ export async function POST(request: Request) {
       featured_image_url,
       published,
       published_at,
+      meta_description,
+      target_keyword,
+      secondary_keywords,
+      hashtags,
+      tags,
     } = body;
 
     if (!title || !excerpt || !category) {
@@ -48,8 +53,8 @@ export async function POST(request: Request) {
     const slug = customSlug || slugify(title);
 
     const result = await sql`
-      INSERT INTO blog_posts (title, slug, excerpt, content, category, featured_image_url, published, published_at)
-      VALUES (${title}, ${slug}, ${excerpt}, ${content || ""}, ${category}, ${featured_image_url || ""}, ${published ?? false}, ${published_at || null})
+      INSERT INTO blog_posts (title, slug, excerpt, content, category, featured_image_url, published, published_at, meta_description, target_keyword, secondary_keywords, hashtags, tags)
+      VALUES (${title}, ${slug}, ${excerpt}, ${content || ""}, ${category}, ${featured_image_url || ""}, ${published ?? false}, ${published_at || null}, ${meta_description || null}, ${target_keyword || null}, ${secondary_keywords || []}, ${hashtags || []}, ${tags || []})
       RETURNING *
     `;
 

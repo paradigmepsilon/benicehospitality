@@ -118,6 +118,11 @@ export interface BlogPost {
   category: string;
   featured_image_url: string;
   published: boolean;
+  meta_description: string | null;
+  target_keyword: string | null;
+  secondary_keywords: string[];
+  hashtags: string[];
+  tags: string[];
   created_at: string;
   updated_at: string;
 }

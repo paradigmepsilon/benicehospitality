@@ -37,6 +37,11 @@ export async function PUT(
     featured_image_url,
     published,
     published_at,
+    meta_description,
+    target_keyword,
+    secondary_keywords,
+    hashtags,
+    tags,
   } = body;
 
   const result = await sql`
@@ -50,6 +55,11 @@ export async function PUT(
       featured_image_url = COALESCE(${featured_image_url}, featured_image_url),
       published = COALESCE(${published}, published),
       published_at = ${published_at !== undefined ? (published_at || null) : null},
+      meta_description = ${meta_description !== undefined ? (meta_description || null) : null},
+      target_keyword = ${target_keyword !== undefined ? (target_keyword || null) : null},
+      secondary_keywords = COALESCE(${secondary_keywords !== undefined ? secondary_keywords : null}, secondary_keywords),
+      hashtags = COALESCE(${hashtags !== undefined ? hashtags : null}, hashtags),
+      tags = COALESCE(${tags !== undefined ? tags : null}, tags),
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *
