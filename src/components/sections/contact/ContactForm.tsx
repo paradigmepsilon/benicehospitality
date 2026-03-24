@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import AnimatedSection, {
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
@@ -28,6 +29,8 @@ interface FormState {
 }
 
 export default function ContactForm() {
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const [honeypot, setHoneypot] = useState("");
   const [form, setForm] = useState<FormState>({
     name: "",
     email: "",
@@ -128,12 +131,15 @@ export default function ContactForm() {
           roomCount: form.roomCount,
           interests: form.interests.join(", "),
           message: form.message,
+          website: honeypot,
+          turnstileToken: turnstileRef.current?.getResponse(),
         }),
       });
 
       const data = await res.json();
       if (data.success) {
         setStatus("success");
+        turnstileRef.current?.reset();
       } else {
         setStatus("error");
       }
@@ -210,6 +216,18 @@ export default function ContactForm() {
 
           <AnimatedItem>
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              {/* Honeypot — hidden from real users */}
+              <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+              />
+
               {/* Row 1 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
@@ -385,6 +403,12 @@ export default function ContactForm() {
                   </a>
                 </p>
               )}
+
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                options={{ size: "invisible" }}
+              />
 
               <Button
                 type="submit"

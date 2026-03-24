@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { fadeUp } from "@/lib/motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
@@ -54,6 +55,8 @@ export default function BookingCalendar() {
   const [error, setError] = useState<string | null>(null);
   const [availableDays, setAvailableDays] = useState<Set<number>>(new Set());
 
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const [honeypot, setHoneypot] = useState("");
   const [form, setForm] = useState<FormState>({
     name: "",
     email: "",
@@ -147,12 +150,15 @@ export default function BookingCalendar() {
           message: form.message,
           date: selectedDate,
           time: selectedTime,
+          website: honeypot,
+          turnstileToken: turnstileRef.current?.getResponse(),
         }),
       });
 
       const data = await res.json();
       if (data.success) {
         setStep("success");
+        turnstileRef.current?.reset();
       } else {
         setError(data.error || "Something went wrong. Please try again.");
       }
@@ -421,6 +427,18 @@ export default function BookingCalendar() {
               </h3>
 
               <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                {/* Honeypot — hidden from real users */}
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+                />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className={labelClass}>
@@ -518,6 +536,12 @@ export default function BookingCalendar() {
                     </a>
                   </p>
                 )}
+
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                  options={{ size: "invisible" }}
+                />
 
                 <Button
                   type="submit"

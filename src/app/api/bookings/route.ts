@@ -2,13 +2,34 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { bookingConfirmationEmail } from "@/lib/email-templates";
+import { contactBookingLimiter } from "@/lib/rate-limit";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
+    // Rate limiting
+    const forwarded = req.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+    const { success: withinLimit } = contactBookingLimiter.check(ip);
+    if (!withinLimit) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
     const body = await req.json();
-    const { name, email, phone, hotelName, message, date, time } = body;
+    const { name, email, phone, hotelName, message, date, time, website, turnstileToken } = body;
+
+    // Honeypot check — silently reject bots
+    if (website) {
+      return NextResponse.json({ success: true });
+    }
+
+    // Turnstile verification
+    const turnstileValid = await verifyTurnstileToken(turnstileToken);
+    if (!turnstileValid) {
+      return NextResponse.json({ error: "Verification failed. Please try again." }, { status: 400 });
+    }
 
     if (!name || !email || !hotelName || !date || !time) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });

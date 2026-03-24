@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, FormEvent } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import AnimatedSection, {
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
 
 export default function NewsletterSignup() {
+  const turnstileRef = useRef<TurnstileInstance>(null);
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -19,12 +22,18 @@ export default function NewsletterSignup() {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "insights" }),
+        body: JSON.stringify({
+          email,
+          source: "insights",
+          website: honeypot,
+          turnstileToken: turnstileRef.current?.getResponse(),
+        }),
       });
 
       if (!res.ok) throw new Error();
       setStatus("success");
       setEmail("");
+      turnstileRef.current?.reset();
     } catch {
       setStatus("error");
     }
@@ -54,6 +63,17 @@ export default function NewsletterSignup() {
               onSubmit={handleSubmit}
               className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
             >
+              {/* Honeypot — hidden from real users */}
+              <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+              />
               <input
                 type="email"
                 value={email}
@@ -70,6 +90,11 @@ export default function NewsletterSignup() {
               >
                 {status === "loading" ? "Subscribing..." : "Subscribe"}
               </button>
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                options={{ size: "invisible" }}
+              />
             </form>
           )}
           {status === "error" && (
