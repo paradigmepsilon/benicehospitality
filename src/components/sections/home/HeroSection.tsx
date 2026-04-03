@@ -1,7 +1,27 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero';
 import Button from '@/components/ui/Button';
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.25,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 export default function HeroSection() {
   return (
@@ -14,25 +34,54 @@ export default function HeroSection() {
       scrollToExpand="Scroll to explore"
       textBlend
     >
-      <div className="flex flex-col items-center text-center gap-6 px-6 py-16 max-w-2xl mx-auto">
-        <div className="font-display text-2xl md:text-3xl text-near-black font-semibold leading-snug text-center">
-          <p>We help</p>
-          <p className="font-script text-primary-green text-3xl md:text-4xl font-normal mb-3">Independent Luxury Boutique Hotels</p>
-          <ul className="text-center inline-block space-y-1 mb-3 text-base md:text-lg font-sans font-normal">
-            <li>Grow Direct Revenue</li>
-            <li><div className="w-8 h-px bg-warm-gold/50 mx-auto my-1" /></li>
-            <li>Streamline Operations</li>
-            <li><div className="w-8 h-px bg-warm-gold/50 mx-auto my-1" /></li>
-            <li>Create Guest Experiences that Feel Premium</li>
-          </ul>
-          <p>Without adding complexity.</p>
-        </div>
-        <div className="mt-4">
+      <motion.div
+        className="flex flex-col items-center text-center px-6 py-16 max-w-3xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.p
+          variants={itemVariants}
+          className="font-sans text-sm md:text-base tracking-[0.3em] uppercase text-charcoal/60 mb-4"
+        >
+          We help
+        </motion.p>
+
+        <motion.p
+          variants={itemVariants}
+          className="font-script text-primary-green text-4xl md:text-5xl lg:text-6xl font-normal mb-10 leading-tight"
+        >
+          Independent Luxury Boutique Hotels
+        </motion.p>
+
+        <motion.div variants={itemVariants} className="w-full space-y-6 mb-10">
+          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
+            Grow Direct Revenue
+          </p>
+          <div className="w-16 h-px bg-warm-gold mx-auto" />
+          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
+            Streamline Operations
+          </p>
+          <div className="w-16 h-px bg-warm-gold mx-auto" />
+          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
+            Create Guest Experiences that Feel
+            <span className="text-warm-gold italic"> Premium</span>
+          </p>
+        </motion.div>
+
+        <motion.p
+          variants={itemVariants}
+          className="font-display text-lg md:text-xl text-charcoal/70 italic"
+        >
+          — Without adding complexity.
+        </motion.p>
+
+        <motion.div variants={itemVariants} className="mt-10">
           <Button href="/book" variant="primary" size="lg">
             Book a Discovery Call
           </Button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </ScrollExpandMedia>
   );
 }
