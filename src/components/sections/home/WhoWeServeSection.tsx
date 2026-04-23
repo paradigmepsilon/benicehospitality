@@ -24,7 +24,9 @@ export default function WhoWeServeSection() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 max-w-2xl mx-auto">
-              10 to 50 rooms. U.S. market. No brand affiliations required.
+              Independent boutique hotels and luxury short-term rental
+              operators. 10 to 50 rooms (or keys). U.S. market. No brand
+              affiliations required.
             </p>
           </AnimatedItem>
         </div>
@@ -63,8 +65,9 @@ export default function WhoWeServeSection() {
           <div className="bg-off-white border-l-4 border-primary-green p-8 max-w-3xl mx-auto">
             <p className="font-sans text-base text-charcoal leading-relaxed">
               Whether you&apos;re an owner-operator wearing every hat, a
-              first-time developer learning on the fly, or a small portfolio
-              owner who can&apos;t yet justify a full commercial team,{" "}
+              first-time developer learning on the fly, a small portfolio
+              owner who can&apos;t yet justify a full commercial team, or a
+              luxury STR operator running a handful of high-end units,{" "}
               <strong className="font-semibold text-near-black">
                 we built this for you.
               </strong>

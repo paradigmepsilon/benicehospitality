@@ -4,6 +4,7 @@ import PainPointsSection from "@/components/sections/home/PainPointsSection";
 import ThreePillarsSection from "@/components/sections/home/ThreePillarsSection";
 import WhoWeServeSection from "@/components/sections/home/WhoWeServeSection";
 import ServiceTiersPreview from "@/components/sections/home/ServiceTiersPreview";
+import AEOCallout from "@/components/sections/home/AEOCallout";
 import GuestallyIntro from "@/components/sections/home/GuestallyIntro";
 import TestimonialsSection from "@/components/sections/home/TestimonialsSection";
 import HomeCTA from "@/components/sections/home/HomeCTA";
@@ -28,6 +29,7 @@ export default function HomePage() {
       <HeroSection />
       <PainPointsSection />
       <ThreePillarsSection />
+      <AEOCallout />
       <WhoWeServeSection />
       <ServiceTiersPreview />
       <div className="w-full px-6"><div className="max-w-7xl mx-auto h-px bg-white/15" /></div>

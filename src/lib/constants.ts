@@ -397,6 +397,20 @@ export const METRICS: MetricStat[] = [
 
 export const TIER_ONE_SERVICES = [
   {
+    name: "AEO Readiness Diagnostic",
+    timeline: "2 weeks",
+    description:
+      "A deep Answer Engine Optimization audit that shows exactly how visible your property is to ChatGPT, Perplexity, Google AI Overviews, and Gemini, and what it will take to be cited by them.",
+    deliverables: [
+      "Brand and category query testing across 4+ AI engines",
+      "Schema.org gap analysis (Hotel, FAQPage, LocalBusiness, Review, Offer)",
+      "Content answerability scoring and llms.txt assessment",
+      "Competitor AEO benchmark (5 nearby properties)",
+      "Prioritized 90-day AEO roadmap with effort estimates",
+      "60-minute strategy walkthrough with the founders",
+    ],
+  },
+  {
     name: "Boutique Hotel Profit Audit",
     timeline: "2–3 weeks",
     description:
@@ -447,6 +461,20 @@ export const TIER_ONE_SERVICES = [
 ];
 
 export const TIER_TWO_SERVICES = [
+  {
+    name: "AEO Implementation",
+    timeline: "6–8 weeks",
+    description:
+      "The full build: we make your property discoverable and citation-worthy in ChatGPT, Perplexity, Google AI Overviews, and Gemini. This is the flagship frontier opportunity for independent hotels and luxury STR operators right now.",
+    deliverables: [
+      "Full schema.org build-out (Hotel, FAQPage, LocalBusiness, Review, Offer)",
+      "llms.txt authoring and answer-formatted content restructuring",
+      "FAQ library built for AI extraction across top traveler queries",
+      "Citation-earning outreach (editorial, list inclusions, Wikipedia/Wikidata)",
+      "AI search monitoring setup so you can track visibility over time",
+      "Staff handoff and ongoing maintenance playbook",
+    ],
+  },
   {
     name: "Direct Booking Growth Sprint",
     timeline: "4–8 weeks",

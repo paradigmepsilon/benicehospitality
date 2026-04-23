@@ -105,6 +105,37 @@ export default async function ResourcePage({
         </div>
       </section>
 
+      {/* Featured callout (optional per resource) */}
+      {resource.featuredCallout && (
+        <section className="py-14 px-6 bg-white border-b border-light-gray">
+          <div className="max-w-4xl mx-auto">
+            <div className="border-l-4 border-primary-green bg-off-white rounded-r-lg p-8 md:p-10">
+              <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-primary-green mb-3">
+                {resource.featuredCallout.label}
+              </p>
+              <h2 className="font-display text-2xl md:text-3xl font-semibold text-near-black leading-tight mb-4">
+                {resource.featuredCallout.title}
+              </h2>
+              <p className="font-sans text-base text-charcoal/80 leading-relaxed">
+                {resource.featuredCallout.body}
+              </p>
+              {resource.featuredCallout.ctaHref &&
+                resource.featuredCallout.ctaText && (
+                  <div className="mt-6">
+                    <Link
+                      href={resource.featuredCallout.ctaHref}
+                      className="font-sans text-sm font-semibold text-primary-green hover:text-primary-green/80 transition-colors inline-flex items-center gap-2"
+                    >
+                      {resource.featuredCallout.ctaText}
+                      <span aria-hidden>→</span>
+                    </Link>
+                  </div>
+                )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* What you get */}
       <section className="py-24 px-6 bg-off-white">
         <div className="max-w-4xl mx-auto">

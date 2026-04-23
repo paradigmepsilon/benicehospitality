@@ -14,6 +14,13 @@ export interface TierZeroResource {
   whoItsFor: string[];
   howItWorks: { step: string; description: string }[];
   faq: { question: string; answer: string }[];
+  featuredCallout?: {
+    label: string;
+    title: string;
+    body: string;
+    ctaText?: string;
+    ctaHref?: string;
+  };
 }
 
 export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
@@ -446,60 +453,77 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "visibility-discoverability-audit",
     name: "Visibility & Discoverability Audit",
     shortDescription:
-      "How easily can travelers find your property? SEO, listing optimization, and distribution gap analysis.",
+      "How easily can travelers find your property — including in ChatGPT, Perplexity, and Google AI Overviews? Full channel + AEO audit with a 0–120 score.",
     metaTitle:
-      "Free Hotel Visibility & Discoverability Audit | BNHG",
+      "Free Hotel Visibility & AEO Audit | BNHG",
     metaDescription:
-      "Free visibility audit for boutique hotels. 0–100 visibility score across OTAs, Google, metasearch, social, email, and PR. Channel presence grid and quick wins included.",
+      "Free visibility + AEO audit for boutique hotels and luxury short-term rentals. 0–120 score across 7 categories including AI search & answer engines (ChatGPT, Perplexity, Google AI Overviews). Channel presence grid and quick wins included.",
     targetKeywords: [
       "hotel visibility audit",
       "hotel discoverability",
       "hotel online presence",
       "hotel distribution gap analysis",
+      "hotel AEO",
+      "hotel AI search visibility",
+      "ChatGPT hotel visibility",
+      "answer engine optimization hotels",
     ],
-    heroHeadline: "Can Travelers Actually Find You?",
+    heroHeadline: "Can Travelers (and AI) Actually Find You?",
     heroSubhead:
-      "A free visibility audit for independent boutique hotels. We check every channel a traveler might look and score your discoverability out of 100.",
+      "A free visibility audit for independent boutique hotels and luxury short-term rental operators. We check every channel a traveler might look, including ChatGPT, Perplexity, and Google AI Overviews, and score your discoverability out of 120.",
     pillar: "Commercial",
+    featuredCallout: {
+      label: "NEW: AEO Module",
+      title: "Now with Answer Engine Optimization",
+      body: "Travelers increasingly ask ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Most boutique properties are completely invisible in those answers. We now audit AI search visibility as a featured 7th category worth 20 points — the biggest single opportunity on the page.",
+      ctaText: "See the dedicated AEO page",
+      ctaHref: "/resources/aeo-optimization",
+    },
     whatYouGet: [
-      "0–100 visibility score across 8 channel categories",
-      "Channel presence grid: OTAs, metasearch, Google, social, maps, email, blog, PR",
-      "List of channels you're missing from completely",
+      "0–120 visibility score across 7 channel categories, including AI Search & Answer Engines (AEO)",
+      "Channel presence grid: OTAs, metasearch, Google, social, maps, email, blog, PR, and AI engines (ChatGPT, Perplexity, AI Overviews)",
+      "AEO subscore with specific gaps in schema, llms.txt, and AI-answerable content",
+      "List of channels you're missing from completely, AI engines included",
       "Quick wins that would move your score the most",
       "A short prioritized 30-day action list",
     ],
     whoItsFor: [
-      "Hotels with low organic bookings",
-      "Properties new to the market or repositioning",
-      "Operators who suspect they're invisible on key channels",
+      "Hotels and luxury STR operators with low organic bookings",
+      "Properties new to the market, repositioning, or invisible to AI search",
+      "Operators who suspect they're invisible on key channels or in AI answers",
     ],
     howItWorks: [
       {
         step: "Share your URL",
         description:
-          "Send us your website. We search everywhere a traveler might look.",
+          "Send us your website. We search everywhere a traveler might look, from Booking.com to ChatGPT.",
       },
       {
         step: "We grade every channel",
         description:
-          "We check your presence across OTAs, Google, metasearch, social, maps, email, blog, and PR.",
+          "We check your presence across OTAs, Google, metasearch, social, maps, email, blog, PR, and AI search engines (ChatGPT, Perplexity, Google AI Overviews, Gemini) plus your schema and llms.txt.",
       },
       {
         step: "You get the audit",
         description:
-          "A written report with your score, channel grid, and quick-win action list.",
+          "A written report with your 120-pt score, channel grid, AEO subscore, and quick-win action list.",
       },
     ],
     faq: [
       {
         question: "What's a good visibility score?",
         answer:
-          "Most independent boutique hotels score 45–65 on their first audit. A score above 75 usually correlates with strong organic demand.",
+          "Most independent boutique hotels and luxury STR operators score 55–75 out of 120 on their first audit. A score above 95 usually correlates with strong organic demand. AEO scores are typically very low (0–6 out of 20) on first audit, which is exactly the opportunity.",
       },
       {
         question: "Is this the same as an SEO audit?",
         answer:
-          "No. SEO is one of eight categories we check. This is a broader discoverability view across every channel a traveler might search.",
+          "No. SEO is one sub-category. This is a broader discoverability view across seven categories including AI Search & Answer Engines (AEO). AEO is distinct from SEO: SEO is about ranking in search results; AEO is about being cited in AI-generated answers.",
+      },
+      {
+        question: "What is AEO and why does it matter for hotels?",
+        answer:
+          "AEO (Answer Engine Optimization) is the practice of making your property visible in AI-generated answers on ChatGPT, Perplexity, Google AI Overviews, and Gemini. Travelers increasingly use these tools to ask for hotel recommendations. If your property isn't named, linked, or described, you're invisible to a fast-growing share of booking intent. AEO is the newest and highest-leverage part of this audit.",
       },
       {
         question: "How long does it take?",
@@ -509,7 +533,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Can you help me fix the gaps?",
         answer:
-          "Yes — that's what Tier 2 implementation work is for. But the audit is useful on its own and you can fix many gaps without us.",
+          "Yes. Our Tier 1 AEO Readiness Diagnostic goes deeper, and Tier 2 AEO Implementation builds out the schema, llms.txt, FAQ library, and answer-formatted content you need to actually show up in AI answers.",
       },
     ],
   },
@@ -581,6 +605,91 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
         question: "Can I request more than 5?",
         answer:
           "Tier 1 diagnostics go deeper. The Quick Win list is intentionally short.",
+      },
+    ],
+  },
+  {
+    slug: "aeo-optimization",
+    name: "AEO Optimization for Hotels",
+    shortDescription:
+      "Travelers are asking ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Find out if you're in the answer.",
+    metaTitle:
+      "Free AEO Audit for Hotels | Answer Engine Optimization | BNHG",
+    metaDescription:
+      "Free AEO (Answer Engine Optimization) snapshot for independent boutique hotels and luxury short-term rentals. See whether ChatGPT, Perplexity, Google AI Overviews, and Gemini recommend your property — and exactly what's missing.",
+    targetKeywords: [
+      "hotel AEO",
+      "answer engine optimization hotels",
+      "ChatGPT hotel visibility",
+      "Perplexity hotel citations",
+      "Google AI Overview hotel",
+      "hotel AI search visibility",
+      "llms.txt hotel",
+      "hotel schema markup",
+    ],
+    heroHeadline: "Are You in the AI Answer?",
+    heroSubhead:
+      "A free Answer Engine Optimization (AEO) snapshot for independent boutique hotels and luxury short-term rental operators. We test your property across ChatGPT, Perplexity, Google AI Overviews, and Gemini, then show you exactly what's missing.",
+    pillar: "Commercial",
+    featuredCallout: {
+      label: "Why this matters now",
+      title: "AI search is the newest booking channel",
+      body: "A growing share of travelers now asks an AI assistant before a search engine. Most boutique properties score 0–6 out of 20 on AEO today. That gap is the single biggest low-effort visibility opportunity available right now, and the window to get ahead of competitors is short.",
+    },
+    whatYouGet: [
+      "An AEO snapshot testing your property across ChatGPT, Perplexity, Google AI Overviews, and Gemini",
+      "A schema.org audit covering Hotel/LodgingBusiness, LocalBusiness, FAQPage, Review, and Offer",
+      "A check for `llms.txt` and content answerability (FAQ structure, scannable facts, direct Q&A)",
+      "A 'why you're invisible' summary with the top 3 fixes ranked by impact",
+      "Next-step path to Tier 1 (Readiness Diagnostic) or Tier 2 (Implementation) if you want help fixing it",
+    ],
+    whoItsFor: [
+      "Hotels and luxury STR operators who don't appear when AI assistants recommend properties in their market",
+      "Properties with no schema markup, no llms.txt, or no FAQ content structured for AI extraction",
+      "Operators who want a first-mover advantage on the AEO frontier before competitors catch on",
+    ],
+    howItWorks: [
+      {
+        step: "Share your URL",
+        description:
+          "Send us your website. We test your property against real AI queries a traveler would ask.",
+      },
+      {
+        step: "We audit your AEO surface",
+        description:
+          "We check ChatGPT, Perplexity, AI Overviews, and Gemini for citations, then inspect your schema, llms.txt, and content answerability.",
+      },
+      {
+        step: "You get the snapshot",
+        description:
+          "A written report showing where you're visible, where you're invisible, and the 3 highest-impact fixes you can make this month.",
+      },
+    ],
+    faq: [
+      {
+        question: "What is AEO and how is it different from SEO?",
+        answer:
+          "AEO (Answer Engine Optimization) is the practice of making your property visible in AI-generated answers on tools like ChatGPT, Perplexity, Google AI Overviews, and Gemini. SEO is about ranking in the blue-link search results; AEO is about being the source an AI cites when it answers a traveler's question. Both matter, but AEO is much less contested today.",
+      },
+      {
+        question: "Why is this a big opportunity right now?",
+        answer:
+          "Almost no independent hotels have done AEO work yet. The fixes (schema, llms.txt, FAQ restructuring, citation-worthy content) are technically straightforward and compound. First movers earn disproportionate visibility.",
+      },
+      {
+        question: "How is this different from the Visibility & Discoverability Audit?",
+        answer:
+          "The Visibility Audit covers 7 channel categories with AEO as one of them. This snapshot zooms in on AEO specifically, with more depth on schema, llms.txt, and AI-engine testing. Start with the Visibility Audit if you want the full picture; start with the AEO snapshot if you know AI search is your gap.",
+      },
+      {
+        question: "Can you help me actually fix the AEO gaps?",
+        answer:
+          "Yes. Tier 1 AEO Readiness Diagnostic goes deeper (brand-query testing across four engines, competitor AEO benchmark, 90-day roadmap). Tier 2 AEO Implementation is the full build: schema markup, llms.txt, FAQ library, content restructuring, citation-earning outreach, and ongoing AI search monitoring.",
+      },
+      {
+        question: "How long does the free snapshot take?",
+        answer:
+          "Typically 3–5 business days.",
       },
     ],
   },
