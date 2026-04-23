@@ -6,14 +6,16 @@ import BNHGFramework from "@/components/sections/about/BNHGFramework";
 import PageCTA from "@/components/sections/shared/PageCTA";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: {
+    absolute: "Boutique Hotel Consultants | About Be Nice Hospitality Group",
+  },
   description:
     "BNHG was co-founded by Alex and Della Henry, two military veterans who combine enterprise-level operations experience with deep hospitality expertise to help independent boutique hotels grow.",
   alternates: {
     canonical: "https://benicehospitalitygroup.com/about",
   },
   openGraph: {
-    title: "About | Be Nice Hospitality Group",
+    title: "Boutique Hotel Consultants | About Be Nice Hospitality Group",
     description:
       "Meet the team behind BNHG. Hospitality expertise meets systems thinking for independent boutique hotels.",
   },

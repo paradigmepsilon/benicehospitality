@@ -1,10 +1,20 @@
-import Image from "next/image";
 import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { TESTIMONIALS } from "@/lib/constants";
+
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .replace(/[^A-Za-z]/g, "")
+    .slice(0, 2)
+    .toUpperCase();
+}
 
 export default function TestimonialsSection() {
   return (
@@ -44,14 +54,11 @@ export default function TestimonialsSection() {
                   {t.quote}
                 </blockquote>
                 <div className="flex items-center gap-4 border-t border-light-gray pt-6">
-                  <div className="relative w-12 h-12 flex-shrink-0 overflow-hidden rounded-full">
-                    <Image
-                      src={t.image || ""}
-                      alt={t.author}
-                      fill
-                      className="object-cover"
-                      sizes="48px"
-                    />
+                  <div
+                    className="relative w-12 h-12 shrink-0 rounded-full bg-primary-green/10 text-primary-green flex items-center justify-center font-sans font-semibold text-sm"
+                    aria-hidden="true"
+                  >
+                    {getInitials(t.author)}
                   </div>
                   <div>
                     <p className="font-sans font-semibold text-near-black text-sm">

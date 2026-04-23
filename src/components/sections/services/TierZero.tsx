@@ -1,10 +1,11 @@
+import Link from "next/link";
 import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
-import { FREE_RESOURCES } from "@/lib/constants";
+import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 
 export default function TierZero() {
   return (
@@ -54,16 +55,19 @@ export default function TierZero() {
             stagger
             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
           >
-            {FREE_RESOURCES.map((resource, i) => (
-              <AnimatedItem key={i}>
-                <div className="bg-white border border-light-gray rounded-lg p-5 hover:border-primary-green/50 hover:shadow-md transition-all duration-300">
+            {TIER_ZERO_RESOURCES.map((resource) => (
+              <AnimatedItem key={resource.slug}>
+                <Link
+                  href={`/resources/${resource.slug}`}
+                  className="block bg-white border border-light-gray rounded-lg p-5 hover:border-primary-green/50 hover:shadow-md transition-all duration-300 h-full"
+                >
                   <h3 className="font-display text-xl font-semibold text-near-black leading-snug mb-2">
                     {resource.name}
                   </h3>
                   <p className="font-sans text-xs text-charcoal/60 leading-relaxed">
-                    {resource.description}
+                    {resource.shortDescription}
                   </p>
-                </div>
+                </Link>
               </AnimatedItem>
             ))}
           </AnimatedDiv>

@@ -91,6 +91,12 @@ export interface FreeResource {
   icon?: string;
 }
 
+export interface FAQItem {
+  question: string;
+  answer: string;
+  category: string;
+}
+
 export interface PropertyType {
   name: string;
   description: string;

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import AnimatedSection, {
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
+import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 
 const INTERESTS = [
   "Free Resource",
@@ -14,6 +16,12 @@ const INTERESTS = [
   "Guestally Demo",
   "Just Exploring",
 ];
+
+function slugToResourceName(slug: string | null): string | null {
+  if (!slug) return null;
+  const match = TIER_ZERO_RESOURCES.find((r) => r.slug === slug);
+  return match ? match.name : null;
+}
 
 const ROOM_COUNTS = ["10–20 rooms", "21–35 rooms", "36–50 rooms", "50+ rooms"];
 
@@ -29,18 +37,22 @@ interface FormState {
 }
 
 export default function ContactForm() {
+  const searchParams = useSearchParams();
+  const prefilledResource = slugToResourceName(searchParams.get("resource"));
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [honeypot, setHoneypot] = useState("");
-  const [form, setForm] = useState<FormState>({
+  const [form, setForm] = useState<FormState>(() => ({
     name: "",
     email: "",
     phone: "",
     hotelName: "",
     location: "",
     roomCount: "",
-    interests: [],
-    message: "",
-  });
+    interests: prefilledResource ? ["Free Resource"] : [],
+    message: prefilledResource
+      ? `I'd like to request the ${prefilledResource}.`
+      : "",
+  }));
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [touched, setTouched] = useState<Set<string>>(new Set());
@@ -213,6 +225,20 @@ export default function ContactForm() {
               Tell Us About Your Property
             </h2>
           </AnimatedItem>
+
+          {prefilledResource && (
+            <AnimatedItem>
+              <div className="mb-6 border border-primary-green/40 bg-primary-green/5 p-4 rounded-lg">
+                <p className="font-sans text-sm text-near-black">
+                  <span className="font-semibold">Requesting:</span>{" "}
+                  {prefilledResource}
+                </p>
+                <p className="font-sans text-xs text-charcoal/60 mt-1">
+                  We&apos;ve pre-selected &ldquo;Free Resource&rdquo; below. Just fill out the rest and hit send.
+                </p>
+              </div>
+            </AnimatedItem>
+          )}
 
           <AnimatedItem>
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>

@@ -26,7 +26,7 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex gap-4 mt-6">
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/be-nice-hospitality/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -42,7 +42,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/benicehospitality"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -152,10 +152,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="tel:+1"
+                  href="tel:+14045419934"
                   className="font-sans text-sm text-white/60 hover:text-white transition-colors duration-200"
                 >
-                  Contact us for phone
+                  (404) 541-9934
                 </a>
               </li>
               <li className="font-sans text-sm text-white/60">

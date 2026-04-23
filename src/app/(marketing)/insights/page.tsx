@@ -6,14 +6,16 @@ import InsightsGrid from "@/components/sections/insights/InsightsGrid";
 import NewsletterSignup from "@/components/sections/insights/NewsletterSignup";
 
 export const metadata: Metadata = {
-  title: "Insights",
+  title: {
+    absolute: "Boutique Hotel Strategy Insights & Articles | BNHG",
+  },
   description:
     "Strategy, operations, and technology thinking for independent boutique hotel owners and general managers. Direct booking strategies, tech stack optimization, guest experience frameworks, and more.",
   alternates: {
     canonical: "https://benicehospitalitygroup.com/insights",
   },
   openGraph: {
-    title: "Insights | Be Nice Hospitality Group",
+    title: "Boutique Hotel Strategy Insights & Articles | BNHG",
     description:
       "Boutique hotel insights: revenue strategy, guest experience, and technology thinking for independent hoteliers.",
   },

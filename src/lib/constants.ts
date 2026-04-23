@@ -13,6 +13,7 @@ import type {
   PropertyType,
   GuestallyFeature,
   MetricStat,
+  FAQItem,
 } from "./types";
 
 export const NAV_LINKS: NavLink[] = [
@@ -21,6 +22,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Services", href: "/services" },
 
   { label: "Insights", href: "/insights" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -188,8 +190,6 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Sarah M.",
     title: "Owner-Operator",
     property: "18-Room Urban Boutique, Charleston, SC",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
   },
   {
     quote:
@@ -197,8 +197,6 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "James T.",
     title: "General Manager",
     property: "32-Room Destination Property, Asheville, NC",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80",
   },
   {
     quote:
@@ -206,8 +204,6 @@ export const TESTIMONIALS: Testimonial[] = [
     author: "Patricia L.",
     title: "Owner & Founder",
     property: "22-Room Historic Inn, Savannah, GA",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
   },
 ];
 
@@ -557,5 +553,154 @@ export const TIER_THREE_SERVICES = [
       "Industry benchmarking and market intel",
       "Access to BNHG research and resources",
     ],
+  },
+];
+
+export const FAQ_CATEGORIES = [
+  "About BNHG & Consulting Basics",
+  "Revenue & Direct Booking",
+  "Hotel Technology",
+  "Working with BNHG",
+] as const;
+
+export const FAQ_ITEMS: FAQItem[] = [
+  // About BNHG & Consulting Basics
+  {
+    category: "About BNHG & Consulting Basics",
+    question: "What does a boutique hotel consultant do?",
+    answer:
+      "A boutique hotel consultant helps independent hotels improve revenue, operations, guest experience, and technology. For properties with 10–50 rooms, that usually means direct booking strategy, OTA channel rebalancing, tech stack optimization, guest messaging, and operational systems. At BNHG, we focus specifically on independent luxury boutique hotels and work across commercial, guest experience, and technology pillars rather than revenue management alone.",
+  },
+  {
+    category: "About BNHG & Consulting Basics",
+    question: "How much does boutique hotel consulting cost?",
+    answer:
+      "Boutique hotel consulting typically ranges from a few thousand dollars for a targeted diagnostic to $5,000–$15,000+ per month for ongoing fractional advisory. BNHG uses a four-tier model: Tier 0 resources are free, Tier 1 diagnostics are scoped engagements, Tier 2 is implementation work, and Tier 3 is ongoing fractional advisory. Pricing depends on scope, property size, and timeline. The cheapest way to start is with a free Tier 0 resource so you can evaluate the quality of our thinking before committing.",
+  },
+  {
+    category: "About BNHG & Consulting Basics",
+    question: "Who is Be Nice Hospitality Group?",
+    answer:
+      "Be Nice Hospitality Group (BNHG) is a boutique hotel consulting and technology firm for independent luxury hotels with 10–50 rooms. Based in Hapeville, Georgia, BNHG was co-founded by Alex and Della Henry, two military veterans who combine enterprise operations experience with deep hospitality expertise. The firm also builds Guestally, a guest messaging and upsell automation platform for independent hotels.",
+  },
+  {
+    category: "About BNHG & Consulting Basics",
+    question: "What size hotels does BNHG work with?",
+    answer:
+      "BNHG specializes in independent luxury boutique hotels with 10–50 rooms. That includes urban boutiques, destination properties, historic inns, and lifestyle hotels that are owner-operated or managed by a small leadership team. We do not work with large branded hotels or properties below 10 rooms.",
+  },
+  {
+    category: "About BNHG & Consulting Basics",
+    question: "How is BNHG different from larger hospitality consulting firms?",
+    answer:
+      "Large hospitality consulting firms like Xotels or HVS primarily serve branded chains or 100+ room properties and often focus narrowly on revenue management. BNHG is built for independent operators at the 10–50 room range, works across commercial, guest experience, and tech pillars, and offers a free Tier 0 layer so owners can try the thinking before paying. We also build our own software (Guestally), which means we understand the tech side from the inside.",
+  },
+
+  // Revenue & Direct Booking
+  {
+    category: "Revenue & Direct Booking",
+    question: "How do I reduce OTA dependency at my independent hotel?",
+    answer:
+      "Reducing OTA dependency at an independent hotel requires three things working together: a high-converting direct booking website, a parity and rate strategy that rewards direct guests, and retargeting of OTA-acquired guests into direct channels on repeat stays. In practice that means auditing your booking engine, tightening rate parity, launching a best-rate guarantee, improving on-site SEO, and capturing email on every booking. Most boutique hotels we work with move from 60%+ OTA dependency to under 40% within 6–9 months.",
+  },
+  {
+    category: "Revenue & Direct Booking",
+    question: "What's a realistic direct booking percentage for a boutique hotel?",
+    answer:
+      "A healthy direct booking percentage for an independent boutique hotel is 45–60%. Properties that lean heavily on OTAs for discovery often sit at 25–35% direct. Properties with strong brands, repeat guests, and a well-optimized website can push 60–70%. Direct booking as a percentage of total bookings is more important than total volume — every direct booking saves 15–25% in OTA commission.",
+  },
+  {
+    category: "Revenue & Direct Booking",
+    question: "How do boutique hotels increase ancillary revenue?",
+    answer:
+      "Boutique hotels increase ancillary revenue by pre-selling upgrades and experiences before arrival, offering smart in-stay upsells through guest messaging, and packaging local partnerships (restaurants, spas, activities) as add-ons. The highest-ROI moves are pre-arrival upsells (room upgrades, early check-in, late check-out, amenity kits) because guests are already committed. Guestally automates this entire flow so you capture revenue without manual effort from your front desk.",
+  },
+  {
+    category: "Revenue & Direct Booking",
+    question: "What's the ROI on a hotel tech audit?",
+    answer:
+      "Hotel tech audits typically pay for themselves within 30–60 days. Most boutique hotels we audit are overpaying for 2–4 overlapping tools and missing 1–2 critical ones. A well-run audit usually surfaces $500–$3,000 per month in redundant software spend and unlocks new revenue opportunities (upsells, direct booking tooling, guest messaging) that were previously unavailable. The implementation timeline is usually 2–4 weeks.",
+  },
+  {
+    category: "Revenue & Direct Booking",
+    question: "How long does it take to see revenue improvements from consulting?",
+    answer:
+      "Revenue improvements at a boutique hotel show up in three waves. Quick wins (tech consolidation, OTA parity fixes, ancillary upsells) appear within 30–60 days. Direct booking shifts and conversion improvements take 90–120 days. Compounding revenue (brand strength, repeat guests, rate positioning) takes 6–12 months. Most BNHG clients see measurable revenue impact within the first 90 days.",
+  },
+  {
+    category: "Revenue & Direct Booking",
+    question: "What's included in a hotel revenue audit?",
+    answer:
+      "A hotel revenue audit from BNHG covers OTA dependency and channel mix, direct booking conversion, rate parity and positioning, ancillary revenue capture, guest segmentation and acquisition cost, and benchmark comparison against comparable properties. The output is a short written report with specific, prioritized actions — not a generic scorecard. The free Tier 0 Revenue Opportunity Snapshot is a lighter version of this audit.",
+  },
+
+  // Hotel Technology
+  {
+    category: "Hotel Technology",
+    question: "What is the best guest messaging software for small hotels?",
+    answer:
+      "The best guest messaging software for small independent hotels is one that integrates with your PMS, automates pre-arrival and in-stay messaging, captures upsell revenue, and doesn't require a dedicated ops person to run. Guestally was built specifically for independent boutique hotels (10–50 rooms) that want messaging and upsell automation without enterprise complexity. Other options in the market include Canary Technologies, Akia, and Duve, but most are priced and scoped for larger or branded properties.",
+  },
+  {
+    category: "Hotel Technology",
+    question: "What's included in a hotel tech audit?",
+    answer:
+      "A hotel tech audit reviews your PMS, booking engine, channel manager, CRM, guest messaging, payment processing, housekeeping and maintenance tools, and analytics stack. BNHG's audit flags redundant tools you can cut, critical tools you are missing, integration gaps between systems, and priorities for the next 90 days. The deliverable is a written report with a before/after stack diagram and a month-by-month implementation plan.",
+  },
+  {
+    category: "Hotel Technology",
+    question: "Do independent hotels need a PMS, booking engine, and channel manager?",
+    answer:
+      "Yes. An independent hotel needs a property management system (PMS) to run reservations and operations, a booking engine to accept direct reservations on your website, and a channel manager to keep rates and inventory in sync across OTAs. Modern platforms like Mews, Cloudbeds, and Little Hotelier bundle these together for small properties. The wrong combination is usually where small hotels bleed money — either through overlapping tools or missing integrations.",
+  },
+  {
+    category: "Hotel Technology",
+    question: "How do I know if my hotel tech stack is overbuilt?",
+    answer:
+      "Your hotel tech stack is probably overbuilt if you pay for more than one tool that does the same job (two booking engines, multiple upsell tools, overlapping CRMs), if you have software nobody on staff uses, or if the total monthly cost exceeds 3–4% of your revenue. Most boutique hotels we audit are overpaying for 2–4 redundant tools. A Tech Stack Quick Scan will surface this in about a week.",
+  },
+  {
+    category: "Hotel Technology",
+    question: "What is Guestally and how does it work?",
+    answer:
+      "Guestally is a guest messaging and upsell automation platform for independent boutique hotels. It connects to your PMS, automates pre-arrival messaging, surfaces personalized upsell offers (upgrades, early check-in, experiences), handles in-stay guest requests, and captures reviews post-stay. It's built specifically for 10–50 room independent properties, not enterprise chains. Guestally is a subsidiary of Be Nice Hospitality Group.",
+  },
+  {
+    category: "Hotel Technology",
+    question: "Can small hotels use the same tech as major brands?",
+    answer:
+      "Not usually. Major brand tech stacks are priced for 100+ room properties and require dedicated operations and IT resources to run. Small independent hotels need simpler, integrated platforms built for owner-operators. The right stack for a 20-room boutique is very different from a 200-room Hilton — and trying to run enterprise tools at that scale usually costs more than the revenue lift.",
+  },
+
+  // Working with BNHG
+  {
+    category: "Working with BNHG",
+    question: "What's the difference between Tier 0, 1, 2, and 3 services?",
+    answer:
+      "Tier 0 is our free layer: 8 research-backed resources (Revenue Opportunity Snapshot, Online Reputation Briefing, Tech Stack Quick Scan, and more) that we deliver with no strings attached. Tier 1 is paid diagnostics — scoped audits of a specific problem area. Tier 2 is implementation — we do the work alongside your team. Tier 3 is ongoing fractional advisory — monthly strategic partnership with one of our principals. Most clients start at Tier 0, move to Tier 1, and decide from there.",
+  },
+  {
+    category: "Working with BNHG",
+    question: "How do I start working with BNHG?",
+    answer:
+      "The fastest way to start with BNHG is to request a free Tier 0 resource — it gives you a research-backed deliverable specific to your property with no commitment. If you prefer to talk first, book a 30-minute discovery call. Both paths are free. We'll never pitch you until we understand your property, your goals, and what kind of partner (if any) you actually need.",
+  },
+  {
+    category: "Working with BNHG",
+    question: "Do you work with hotels outside the Southeast U.S.?",
+    answer:
+      "Yes. BNHG is based in Hapeville, Georgia, but we work with independent boutique hotels across the United States. Most of our engagements are remote-first with occasional on-site visits depending on scope. If you are outside the U.S. and running an independent boutique hotel in the 10–50 room range, reach out — we evaluate engagements case by case.",
+  },
+  {
+    category: "Working with BNHG",
+    question: "What happens on a discovery call?",
+    answer:
+      "A BNHG discovery call is 30 minutes. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation — either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
+  },
+  {
+    category: "Working with BNHG",
+    question: "What free resources does BNHG offer?",
+    answer:
+      "BNHG offers 8 free Tier 0 resources for boutique hotel operators: the Revenue Opportunity Snapshot, Online Reputation Briefing, Competitive Position Map, Guest Persona Highlights, Tech Stack Quick Scan, Guestally ROI Estimate, Visibility & Discoverability Audit, and Quick Win Action List. Each is custom to your property, research-backed, and completely free. Start with whichever one maps to your biggest question right now.",
   },
 ];
