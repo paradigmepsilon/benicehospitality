@@ -569,7 +569,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "About BNHG & Consulting Basics",
     question: "What does a boutique hotel consultant do?",
     answer:
-      "A boutique hotel consultant helps independent hotels improve revenue, operations, guest experience, and technology. For properties with 10–50 rooms, that usually means direct booking strategy, OTA channel rebalancing, tech stack optimization, guest messaging, and operational systems. At BNHG, we focus specifically on independent luxury boutique hotels and work across commercial, guest experience, and technology pillars rather than revenue management alone.",
+      "A boutique hotel consultant helps independent hotels improve revenue, operations, guest experience, and technology. For properties with 10–50 rooms, that usually means direct booking strategy, OTA channel rebalancing, tech stack optimization, guest messaging, and operational systems. At BNHG, we focus specifically on independent luxury boutique properties and work across commercial, guest experience, and technology pillars rather than revenue management alone.",
   },
   {
     category: "About BNHG & Consulting Basics",
@@ -587,7 +587,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "About BNHG & Consulting Basics",
     question: "What size hotels does BNHG work with?",
     answer:
-      "BNHG specializes in independent luxury boutique hotels with 10–50 rooms. That includes urban boutiques, destination properties, historic inns, and lifestyle hotels that are owner-operated or managed by a small leadership team. We do not work with large branded hotels or properties below 10 rooms.",
+      "BNHG specializes in independent luxury boutique properties with 10–50 rooms. That includes urban boutiques, destination properties, historic inns, and lifestyle hotels that are owner-operated or managed by a small leadership team. We do not work with large branded hotels or properties below 10 rooms.",
   },
   {
     category: "About BNHG & Consulting Basics",

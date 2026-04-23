@@ -51,7 +51,7 @@ export default function HeroSection() {
           variants={itemVariants}
           className="font-script text-primary-green text-4xl md:text-5xl lg:text-6xl font-normal mb-10 leading-tight"
         >
-          Independent Luxury Boutique Hotels
+          Independent Luxury Boutique Properties
         </motion.p>
 
         <motion.div variants={itemVariants} className="w-full space-y-6 mb-10">

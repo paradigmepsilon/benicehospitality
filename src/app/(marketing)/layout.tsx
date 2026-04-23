@@ -52,7 +52,7 @@ const graph = {
       url: SITE_URL,
       serviceType: "Boutique Hotel Consulting",
       description:
-        "Consulting and fractional advisory services for independent luxury boutique hotels. Revenue strategy, operations, guest experience, and hotel technology.",
+        "Consulting and fractional advisory services for independent luxury boutique properties. Revenue strategy, operations, guest experience, and hotel technology.",
       areaServed: {
         "@type": "Country",
         name: "United States",

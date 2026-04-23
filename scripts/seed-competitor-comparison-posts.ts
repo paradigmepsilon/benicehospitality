@@ -64,7 +64,7 @@ const POSTS: PostSeed[] = [
 
 <h2>The Short Version</h2>
 
-<p><strong>BNHG</strong> is a U.S.-based consulting and technology firm purpose-built for independent luxury boutique hotels in the 10 to 50 room range. We work across three pillars — commercial performance, guest experience, and hotel technology — and we build our own software (Guestally) for the properties we serve.</p>
+<p><strong>BNHG</strong> is a U.S.-based consulting and technology firm purpose-built for independent luxury boutique properties in the 10 to 50 room range. We work across three pillars — commercial performance, guest experience, and hotel technology — and we build our own software (Guestally) for the properties we serve.</p>
 
 <p><strong>Xotels</strong> is a global revenue management and hotel management firm. They are headquartered in Europe, operate across dozens of countries, and their core service is outsourced revenue management. They work with independent hotels but also with larger properties, resorts, and small chains. Their ideal client is generally larger than BNHG's.</p>
 
@@ -98,7 +98,7 @@ const POSTS: PostSeed[] = [
 
 <p>Xotels' ideal client is a property or small group with at least 50 rooms (and often many more), a business model that can support an outsourced revenue management function, and a leadership team comfortable with a longer engagement. They serve some smaller properties, but their economics work best at scale.</p>
 
-<p>BNHG's ideal client is a 10 to 50 room independent luxury boutique hotel in the United States, owner-operated or run by a small leadership team, with a problem that spans revenue, guest experience, or tech — or the owner is not sure which. We are specifically not a fit for larger properties, branded chains, or international resorts.</p>
+<p>BNHG's ideal client is a 10 to 50 room independent luxury boutique property in the United States, owner-operated or run by a small leadership team, with a problem that spans revenue, guest experience, or tech — or the owner is not sure which. We are specifically not a fit for larger properties, branded chains, or international resorts.</p>
 
 <p>If you sit above 50 rooms and your problem is primarily revenue management, Xotels is likely the better partner. If you sit at 10 to 50 rooms and you want a strategic partner who understands the independent boutique segment from the inside, BNHG is built for you.</p>
 
@@ -199,7 +199,7 @@ const POSTS: PostSeed[] = [
 
 <h3>1. Be Nice Hospitality Group (BNHG)</h3>
 
-<p><strong>Specialty:</strong> U.S.-based consulting and technology for 10–50 room independent luxury boutique hotels. Cross-pillar work across commercial performance, guest experience, and hotel technology.</p>
+<p><strong>Specialty:</strong> U.S.-based consulting and technology for 10–50 room independent luxury boutique properties. Cross-pillar work across commercial performance, guest experience, and hotel technology.</p>
 
 <p><strong>Engagement model:</strong> Four tiers. Tier 0 is free (8 research-backed resources). Tier 1 is paid diagnostics. Tier 2 is implementation. Tier 3 is ongoing fractional advisory.</p>
 
@@ -403,7 +403,7 @@ const POSTS: PostSeed[] = [
 
 <h2>How BNHG Fits Into This</h2>
 
-<p>If you are running a 10 to 50 room independent luxury boutique hotel in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://benicehospitalitygroup.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question — the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five — and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
+<p>If you are running a 10 to 50 room independent luxury boutique property in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://benicehospitalitygroup.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question — the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five — and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
 
 <p>Our <a href="https://benicehospitalitygroup.com/faq">FAQ</a> covers most of the questions owners ask before they engage. Between the free resource and the FAQ, you'll know whether we're the right fit long before there's any pressure to commit.</p>
 

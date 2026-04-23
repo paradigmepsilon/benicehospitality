@@ -18,7 +18,7 @@ export default function WhoWeServeSection() {
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-4 leading-tight">
               Built for Independent{" "}
               <span className="text-primary-green italic">
-                Luxury Boutique Hotels
+                Luxury Boutique Properties
               </span>
             </h2>
           </AnimatedItem>
