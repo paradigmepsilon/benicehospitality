@@ -412,7 +412,7 @@ export default function BookingCalendar() {
                   {formatDate(selectedDate)}
                 </p>
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
-                  {formatTime(selectedTime)} ET &middot; 30 minutes
+                  {formatTime(selectedTime)} ET &middot; 1 hour
                 </p>
                 <button
                   onClick={() => setStep("time")}
@@ -577,7 +577,7 @@ export default function BookingCalendar() {
                   {formatDate(selectedDate)}
                 </p>
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
-                  {formatTime(selectedTime)} ET &middot; 30 minutes
+                  {formatTime(selectedTime)} ET &middot; 1 hour
                 </p>
               </div>
               <p className="font-sans text-sm text-charcoal/60 mb-8">

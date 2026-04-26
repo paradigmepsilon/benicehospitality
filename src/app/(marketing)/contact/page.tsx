@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     title: "Contact Boutique Hotel Consultants | Be Nice Hospitality Group",
     description:
       "Get in touch with BNHG. Request a free resource, book a discovery call, or learn about our boutique hotel consulting and Guestally software.",
+    url: "https://benicehospitalitygroup.com/contact",
+    type: "website",
+    images: [
+      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+    ],
   },
 };
 

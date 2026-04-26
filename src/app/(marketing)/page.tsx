@@ -10,7 +10,9 @@ import TestimonialsSection from "@/components/sections/home/TestimonialsSection"
 import HomeCTA from "@/components/sections/home/HomeCTA";
 
 export const metadata: Metadata = {
-  title: "Be Nice Hospitality Group | Boutique Hotel Consulting & Technology",
+  title: {
+    absolute: "Be Nice Hospitality Group | Boutique Hotel Consulting & Technology",
+  },
   description:
     "We help independent luxury boutique properties grow direct revenue, streamline operations, and create guest experiences that feel premium. Serving 10–50 room properties across the U.S.",
   alternates: {
@@ -20,6 +22,11 @@ export const metadata: Metadata = {
     title: "Be Nice Hospitality Group | Boutique Hotel Consulting",
     description:
       "Consulting and technology built exclusively for independent luxury boutique properties with 10–50 rooms.",
+    url: "https://benicehospitalitygroup.com",
+    type: "website",
+    images: [
+      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+    ],
   },
 };
 

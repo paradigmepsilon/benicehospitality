@@ -34,6 +34,9 @@ export default function HeroSection() {
       scrollToExpand="Scroll to explore"
       textBlend
     >
+      <h1 className="sr-only">
+        Boutique Hotel Consulting and Technology for Independent Luxury Properties
+      </h1>
       <motion.div
         className="flex flex-col items-center text-center px-6 py-16 max-w-3xl mx-auto"
         variants={containerVariants}

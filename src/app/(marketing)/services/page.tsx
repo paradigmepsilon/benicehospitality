@@ -17,6 +17,11 @@ export const metadata: Metadata = {
     title: "Boutique Hotel Consulting Services & Pricing | BNHG",
     description:
       "Four tiers of hotel consulting, from no-cost resources to full strategic partnership for independent boutique hotels.",
+    url: "https://benicehospitalitygroup.com/services",
+    type: "website",
+    images: [
+      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+    ],
   },
 };
 
@@ -28,7 +33,7 @@ export default function ServicesPage() {
       <TierOneTwoThree />
       <PageCTA
         headline="Not Sure Where to Start? Let's Figure It Out Together."
-        subtext="A 30-minute discovery call is all it takes to understand your biggest opportunity and recommend the right starting point."
+        subtext="A 40-minute discovery call is all it takes to understand your biggest opportunity and recommend the right starting point."
       />
     </>
   );

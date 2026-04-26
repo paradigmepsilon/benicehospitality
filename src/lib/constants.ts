@@ -711,7 +711,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Working with BNHG",
     question: "How do I start working with BNHG?",
     answer:
-      "The fastest way to start with BNHG is to request a free Tier 0 resource — it gives you a research-backed deliverable specific to your property with no commitment. If you prefer to talk first, book a 30-minute discovery call. Both paths are free. We'll never pitch you until we understand your property, your goals, and what kind of partner (if any) you actually need.",
+      "The fastest way to start with BNHG is to request a free Tier 0 resource — it gives you a research-backed deliverable specific to your property with no commitment. If you prefer to talk first, book a 40-minute discovery call. Both paths are free. We'll never pitch you until we understand your property, your goals, and what kind of partner (if any) you actually need.",
   },
   {
     category: "Working with BNHG",
@@ -723,7 +723,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Working with BNHG",
     question: "What happens on a discovery call?",
     answer:
-      "A BNHG discovery call is 30 minutes. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation — either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
+      "A BNHG discovery call is 40 minutes, booked into a 1-hour slot so we never have to rush. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation — either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
   },
   {
     category: "Working with BNHG",

@@ -18,6 +18,11 @@ export const metadata: Metadata = {
     title: "Boutique Hotel Strategy Insights & Articles | BNHG",
     description:
       "Boutique hotel insights: revenue strategy, guest experience, and technology thinking for independent hoteliers.",
+    url: "https://benicehospitalitygroup.com/insights",
+    type: "website",
+    images: [
+      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+    ],
   },
 };
 

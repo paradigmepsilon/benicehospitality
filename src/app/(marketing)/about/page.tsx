@@ -18,6 +18,11 @@ export const metadata: Metadata = {
     title: "Boutique Hotel Consultants | About Be Nice Hospitality Group",
     description:
       "Meet the team behind BNHG. Hospitality expertise meets systems thinking for independent boutique hotels.",
+    url: "https://benicehospitalitygroup.com/about",
+    type: "website",
+    images: [
+      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+    ],
   },
 };
 

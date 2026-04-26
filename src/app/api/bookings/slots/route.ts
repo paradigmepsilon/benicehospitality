@@ -77,7 +77,7 @@ export async function GET(request: Request) {
     blockedRanges.push({ start: sh * 60 + sm, end: eh * 60 + em });
   }
 
-  // Generate 30-minute slots within each window
+  // Generate 1-hour slots within each window (40-minute meeting + 20-minute buffer)
   const slots: string[] = [];
   const nowET = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
   const nowTime = new Date(nowET);
@@ -91,16 +91,16 @@ export async function GET(request: Request) {
     let currentMinutes = startH * 60 + startM;
     const endMinutes = endH * 60 + endM;
 
-    while (currentMinutes + 30 <= endMinutes) {
+    while (currentMinutes + 60 <= endMinutes) {
       const hours = Math.floor(currentMinutes / 60);
       const mins = currentMinutes % 60;
       const timeStr = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
       const slotStart = currentMinutes;
-      const slotEnd = currentMinutes + 30;
+      const slotEnd = currentMinutes + 60;
 
       // Skip if already booked
       if (bookedTimes.has(timeStr)) {
-        currentMinutes += 30;
+        currentMinutes += 60;
         continue;
       }
 
@@ -110,7 +110,7 @@ export async function GET(request: Request) {
       );
 
       if (isBlocked) {
-        currentMinutes += 30;
+        currentMinutes += 60;
         continue;
       }
 
@@ -118,13 +118,13 @@ export async function GET(request: Request) {
       if (isToday) {
         const currentETMinutes = nowTime.getHours() * 60 + nowTime.getMinutes();
         if (slotStart <= currentETMinutes) {
-          currentMinutes += 30;
+          currentMinutes += 60;
           continue;
         }
       }
 
       slots.push(timeStr);
-      currentMinutes += 30;
+      currentMinutes += 60;
     }
   }
 

@@ -45,14 +45,25 @@ export default async function InsightsGrid() {
             <AnimatedItem key={post.id}>
               <Link href={`/insights/${post.slug}`} className="block h-full">
                 <article className="bg-white border border-light-gray rounded-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col group">
-                  <div className="relative h-44 sm:h-52 overflow-hidden">
-                    <Image
-                      src={post.featured_image_url}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
+                  <div className="relative h-44 sm:h-52 overflow-hidden bg-near-black">
+                    {post.featured_image_url ? (
+                      <Image
+                        src={post.featured_image_url}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-near-black via-charcoal to-near-black"
+                      >
+                        <span className="font-display italic text-warm-gold/70 text-2xl tracking-tight">
+                          BNHG
+                        </span>
+                      </div>
+                    )}
                     <div className="absolute top-4 left-4">
                       <span
                         className={[

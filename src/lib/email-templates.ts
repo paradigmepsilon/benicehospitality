@@ -111,7 +111,7 @@ export function bookingConfirmationEmail({
                         </td>
                         <td style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
                           <span style="color:#3d3d3d;font-size:13px;">Duration</span><br />
-                          <strong>30 minutes</strong>
+                          <strong>1 hour</strong>
                         </td>
                       </tr>
                     </table>

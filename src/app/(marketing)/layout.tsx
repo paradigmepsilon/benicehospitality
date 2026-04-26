@@ -8,9 +8,20 @@ const ALEX_ID = `${SITE_URL}/#alex-henry`;
 const DELLA_ID = `${SITE_URL}/#della-henry`;
 const GUESTALLY_ID = "https://guestally.ai/#organization";
 
+const SIGNAL_ID = `${SITE_URL}/signal#service`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
+
 const graph = {
   "@context": "https://schema.org",
   "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": WEBSITE_ID,
+      url: SITE_URL,
+      name: "Be Nice Hospitality Group",
+      publisher: { "@id": ORG_ID },
+      inLanguage: "en-US",
+    },
     {
       "@type": "Organization",
       "@id": ORG_ID,
@@ -19,7 +30,7 @@ const graph = {
       url: SITE_URL,
       logo: `${SITE_URL}/images/logo.png`,
       description:
-        "Boutique hotel consulting and technology for independent luxury hotels with 10–50 rooms. Direct booking strategy, operations, guest experience, and Guestally software.",
+        "Boutique hotel consulting and technology for independent luxury hotels with 10–50 rooms. Direct booking strategy, operations, guest experience, AI services (Signal), and Guestally software.",
       telephone: "+1-404-541-9934",
       email: "admin@benicehospitality.com",
       address: {
@@ -29,7 +40,10 @@ const graph = {
         addressCountry: "US",
       },
       founder: [{ "@id": ALEX_ID }, { "@id": DELLA_ID }],
-      subOrganization: { "@id": GUESTALLY_ID },
+      subOrganization: [
+        { "@id": GUESTALLY_ID },
+        { "@id": SIGNAL_ID },
+      ],
       sameAs: [
         "https://www.linkedin.com/company/be-nice-hospitality/",
         "https://www.instagram.com/benicehospitality",

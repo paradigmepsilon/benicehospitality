@@ -10,7 +10,7 @@ export default function BookingHero() {
           <span className="text-warm-gold italic">Discovery Call</span>
         </h1>
         <p className="font-sans text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
-          Pick a time that works for you. It&apos;s a relaxed, 30-minute
+          Pick a time that works for you. It&apos;s a relaxed, 40-minute
           conversation about your property&mdash;no sales pressure, just
           honest insight from people who&apos;ve been in your shoes.
         </p>
