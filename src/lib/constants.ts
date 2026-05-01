@@ -20,7 +20,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
-
+  { label: "Free Audit", href: "/audit/request" },
   { label: "Insights", href: "/insights" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
@@ -124,12 +124,12 @@ export const PROPERTY_TYPES: PropertyType[] = [
 export const SERVICE_TIERS_PREVIEW = [
   {
     tier: 0,
-    label: "Free Resources",
-    headline: "We do the research. You get the insight.",
+    label: "Free Comprehensive Audit",
+    headline: "Your hotel, scored across seven dimensions.",
     description:
-      "Custom, property-specific resources delivered at no cost. No strings attached. Just a demonstration of what we know about your market.",
-    cta: "Request a Free Resource",
-    ctaHref: "/contact",
+      "A two-page diagnostic of your property: revenue opportunity, online reputation, competitive position, guest personas, tech stack, visibility, and quick wins. Free, custom, and yours to keep.",
+    cta: "Get Your Free Audit",
+    ctaHref: "/audit/request",
   },
   {
     tier: 1,

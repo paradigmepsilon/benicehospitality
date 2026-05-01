@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/process-nurture", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/prepare-daily-batches", "schedule": "0 12 * * 1-5" },
+    { "path": "/api/cron/process-sends", "schedule": "*/5 13-17 * * 1-5" },
+    { "path": "/api/cron/expire-unapproved-batches", "schedule": "0 22 * * 1-5" }
+  ]
+}

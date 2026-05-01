@@ -6,10 +6,15 @@ import Link from "next/link";
 
 const NAV_ITEMS = [
   { label: "Overview", href: "/admin", icon: "grid" },
-  { label: "Blog Posts", href: "/admin/posts", icon: "edit" },
-  { label: "Subscribers", href: "/admin/subscribers", icon: "mail" },
+  { label: "Daily Approval", href: "/admin/daily-approval/today", icon: "clock" },
+  { label: "Campaigns", href: "/admin/campaigns", icon: "send" },
+  { label: "Audits", href: "/admin/audits", icon: "chart" },
+  { label: "Audit Requests", href: "/admin/audit-requests", icon: "inbox" },
+  { label: "Leads", href: "/admin/leads", icon: "users" },
   { label: "CRM", href: "/admin/crm", icon: "briefcase" },
   { label: "Schedule", href: "/admin/schedule", icon: "calendar" },
+  { label: "Blog Posts", href: "/admin/posts", icon: "edit" },
+  { label: "Subscribers", href: "/admin/subscribers", icon: "mail" },
 ];
 
 function NavIcon({ icon }: { icon: string }) {
@@ -54,6 +59,24 @@ function NavIcon({ icon }: { icon: string }) {
       return (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case "chart":
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6m4 6V5m4 14v-9m-9 9h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      );
+    case "inbox":
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 0l-3.5 3.5a2 2 0 01-1.4.6h-4.2a2 2 0 01-1.4-.6L4 13m16 0v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6" />
+        </svg>
+      );
+    case "send":
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
       );
     default:

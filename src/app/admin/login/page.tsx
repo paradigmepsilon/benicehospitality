@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,7 +27,10 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push("/admin");
+      // Hard navigation so the proxy sees the freshly set admin_session cookie
+      // on the next request. router.push() can race the cookie write under
+      // Next.js 16 + Turbopack and cause an immediate bounce back to login.
+      window.location.assign("/admin");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {

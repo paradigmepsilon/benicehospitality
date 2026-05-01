@@ -4,6 +4,9 @@ import { sql } from "@/lib/db";
 import { bookingConfirmationEmail } from "@/lib/email-templates";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { FOCUS_DIMENSION_KEYS } from "@/lib/constants/dimensions";
+import { getAuditByToken } from "@/lib/audit/token";
+import { logAuditEvent, cancelPendingNurture } from "@/lib/audit/events";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -18,7 +21,29 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, email, phone, hotelName, message, date, time, website, turnstileToken } = body;
+    const {
+      name,
+      email,
+      phone,
+      hotelName,
+      message,
+      date,
+      time,
+      website,
+      turnstileToken,
+      focus_dimension: focusDimension,
+      audit_token: auditToken,
+    } = body;
+
+    if (!focusDimension) {
+      return NextResponse.json(
+        { error: "Please choose a focus area for your call." },
+        { status: 400 }
+      );
+    }
+    if (!FOCUS_DIMENSION_KEYS.includes(focusDimension)) {
+      return NextResponse.json({ error: "Invalid focus_dimension." }, { status: 400 });
+    }
 
     // Honeypot check — silently reject bots
     if (website) {
@@ -49,14 +74,42 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "This time slot is no longer available. Please choose another." }, { status: 409 });
     }
 
+    // Resolve audit_token -> audit_id (if present)
+    let auditId: number | null = null;
+    if (auditToken && typeof auditToken === "string") {
+      const audit = await getAuditByToken(auditToken);
+      if (audit) auditId = audit.id;
+    }
+
     // Insert booking
     const result = await sql`
-      INSERT INTO bookings (name, email, phone, hotel_name, message, booking_date, booking_time)
-      VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${message || null}, ${date}, ${time})
+      INSERT INTO bookings (name, email, phone, hotel_name, message, booking_date, booking_time, focus_dimension, audit_id)
+      VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${message || null}, ${date}, ${time}, ${focusDimension || null}, ${auditId})
       RETURNING *
     `;
 
     const booking = result[0];
+
+    // If linked to an audit, log the booked_call event and cancel pending nurture for that lead
+    if (auditId) {
+      try {
+        const viewRows = await sql`
+          SELECT id FROM audit_views WHERE audit_id = ${auditId} AND email = ${email.toLowerCase().trim()} LIMIT 1
+        `;
+        const auditViewId = (viewRows[0]?.id as number | undefined) ?? null;
+        await logAuditEvent({
+          auditId,
+          auditViewId,
+          eventType: "booked_call",
+          metadata: { booking_id: booking.id, focus_dimension: focusDimension || null, date, time },
+        });
+        if (auditViewId) {
+          await cancelPendingNurture({ auditViewId, reason: "booked_call" });
+        }
+      } catch (auditEventErr) {
+        console.error("Failed to log booked_call event:", auditEventErr);
+      }
+    }
 
     // Format date/time for emails
     const bookingDate = new Date(date + "T00:00:00");

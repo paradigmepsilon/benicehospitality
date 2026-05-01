@@ -221,6 +221,219 @@ async function migrate() {
   `;
   console.log("  ✓ Existing data migrated to pipeline");
 
+  // ============================================================
+  // Tier 0 Audit System (Stage 1)
+  // ============================================================
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS audits (
+      id SERIAL PRIMARY KEY,
+      token VARCHAR(64) UNIQUE NOT NULL,
+      hotel_url TEXT NOT NULL,
+      hotel_slug VARCHAR(255) NOT NULL,
+      hotel_name VARCHAR(500) NOT NULL,
+      hotel_location VARCHAR(255),
+      room_count INTEGER,
+      overall_score INTEGER NOT NULL CHECK (overall_score BETWEEN 0 AND 100),
+      overall_grade VARCHAR(2) NOT NULL,
+      audit_data JSONB NOT NULL,
+      status VARCHAR(20) NOT NULL DEFAULT 'active',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      expires_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audits_token ON audits(token)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audits_hotel_slug ON audits(hotel_slug)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audits_created_at ON audits(created_at DESC)`;
+  console.log("  ✓ audits table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS audit_views (
+      id SERIAL PRIMARY KEY,
+      audit_id INTEGER NOT NULL REFERENCES audits(id) ON DELETE CASCADE,
+      email VARCHAR(320) NOT NULL,
+      first_viewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      last_viewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      view_count INTEGER NOT NULL DEFAULT 1,
+      ip_address INET,
+      user_agent TEXT,
+      UNIQUE(audit_id, email)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_views_audit_id ON audit_views(audit_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_views_email ON audit_views(email)`;
+  console.log("  ✓ audit_views table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS audit_events (
+      id SERIAL PRIMARY KEY,
+      audit_id INTEGER NOT NULL REFERENCES audits(id) ON DELETE CASCADE,
+      audit_view_id INTEGER REFERENCES audit_views(id) ON DELETE SET NULL,
+      event_type VARCHAR(50) NOT NULL,
+      metadata JSONB,
+      occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_events_audit_id ON audit_events(audit_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_events_event_type ON audit_events(event_type)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_events_occurred_at ON audit_events(occurred_at DESC)`;
+  console.log("  ✓ audit_events table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS nurture_queue (
+      id SERIAL PRIMARY KEY,
+      audit_view_id INTEGER NOT NULL REFERENCES audit_views(id) ON DELETE CASCADE,
+      sequence_step VARCHAR(20) NOT NULL,
+      scheduled_for TIMESTAMPTZ NOT NULL,
+      sent_at TIMESTAMPTZ,
+      cancelled_at TIMESTAMPTZ,
+      cancellation_reason VARCHAR(100),
+      resend_message_id VARCHAR(255),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(audit_view_id, sequence_step)
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_nurture_queue_scheduled_pending
+    ON nurture_queue(scheduled_for)
+    WHERE sent_at IS NULL AND cancelled_at IS NULL
+  `;
+  console.log("  ✓ nurture_queue table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS lead_notes (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(320) NOT NULL,
+      note TEXT NOT NULL,
+      author_admin_id VARCHAR(255) NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_lead_notes_email ON lead_notes(email)`;
+  console.log("  ✓ lead_notes table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS audit_requests (
+      id SERIAL PRIMARY KEY,
+      hotel_url TEXT NOT NULL,
+      email VARCHAR(320) NOT NULL,
+      role VARCHAR(50),
+      status VARCHAR(20) NOT NULL DEFAULT 'pending',
+      audit_id INTEGER REFERENCES audits(id) ON DELETE SET NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      fulfilled_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_audit_requests_status ON audit_requests(status)`;
+  console.log("  ✓ audit_requests table created");
+
+  // Extend bookings for focus dimension + audit linkage (Stage 4)
+  await sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS focus_dimension VARCHAR(50)`;
+  await sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS audit_id INTEGER REFERENCES audits(id) ON DELETE SET NULL`;
+  console.log("  ✓ bookings.focus_dimension and bookings.audit_id columns added");
+
+  // ============================================================
+  // Bulk Outreach (Stage 8)
+  // ============================================================
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS unsubscribes (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(320) UNIQUE NOT NULL,
+      source VARCHAR(50) NOT NULL,
+      reason TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_unsubscribes_email ON unsubscribes(email)`;
+  console.log("  ✓ unsubscribes table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS outreach_campaigns (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      batch_id VARCHAR(64) UNIQUE,
+      status VARCHAR(20) NOT NULL DEFAULT 'created',
+      send_schedule JSONB NOT NULL,
+      total_targets INTEGER NOT NULL DEFAULT 0,
+      scheduled_count INTEGER NOT NULL DEFAULT 0,
+      sent_count INTEGER NOT NULL DEFAULT 0,
+      paused_at TIMESTAMPTZ,
+      paused_reason VARCHAR(255),
+      created_by_admin_id VARCHAR(255) NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_campaigns_status ON outreach_campaigns(status)`;
+  console.log("  ✓ outreach_campaigns table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS outreach_targets (
+      id SERIAL PRIMARY KEY,
+      campaign_id INTEGER NOT NULL REFERENCES outreach_campaigns(id) ON DELETE CASCADE,
+      hotel_url TEXT NOT NULL,
+      hotel_name VARCHAR(500),
+      contact_name VARCHAR(255),
+      contact_email VARCHAR(320) NOT NULL,
+      contact_role VARCHAR(100),
+      audit_id INTEGER REFERENCES audits(id) ON DELETE SET NULL,
+      draft_subject VARCHAR(500),
+      draft_body TEXT,
+      scheduled_send_at TIMESTAMPTZ,
+      approved_at TIMESTAMPTZ,
+      approved_by_admin_id VARCHAR(255),
+      sent_at TIMESTAMPTZ,
+      bounced_at TIMESTAMPTZ,
+      complained_at TIMESTAMPTZ,
+      replied_at TIMESTAMPTZ,
+      unsubscribed_at TIMESTAMPTZ,
+      status VARCHAR(30) NOT NULL DEFAULT 'imported',
+      failure_reason TEXT,
+      resend_message_id VARCHAR(255),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(campaign_id, contact_email)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_targets_campaign ON outreach_targets(campaign_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_targets_status ON outreach_targets(status)`;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_outreach_targets_scheduled_unapproved
+    ON outreach_targets(scheduled_send_at)
+    WHERE sent_at IS NULL AND approved_at IS NULL
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_outreach_targets_scheduled_approved
+    ON outreach_targets(scheduled_send_at)
+    WHERE sent_at IS NULL AND approved_at IS NOT NULL
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_targets_email ON outreach_targets(contact_email)`;
+  console.log("  ✓ outreach_targets table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS daily_approval_batches (
+      id SERIAL PRIMARY KEY,
+      send_date DATE NOT NULL,
+      campaign_id INTEGER REFERENCES outreach_campaigns(id) ON DELETE CASCADE,
+      target_count INTEGER NOT NULL,
+      approved_at TIMESTAMPTZ,
+      approved_by_admin_id VARCHAR(255),
+      notification_sent_at TIMESTAMPTZ,
+      notification_email_id VARCHAR(255),
+      expired_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(send_date, campaign_id)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_daily_approval_batches_send_date ON daily_approval_batches(send_date)`;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_daily_approval_batches_pending
+    ON daily_approval_batches(send_date)
+    WHERE approved_at IS NULL AND expired_at IS NULL
+  `;
+  console.log("  ✓ daily_approval_batches table created");
+
   // Seed default availability (Mon-Fri 9am-5pm) if table is empty
   const existingWindows = await sql`SELECT COUNT(*) as count FROM availability_windows`;
   if (Number(existingWindows[0].count) === 0) {

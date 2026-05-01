@@ -39,3 +39,10 @@ export const contactBookingLimiter = createLimiter(5, 15 * 60 * 1000);
 
 // 3 requests per 15 minutes
 export const newsletterLimiter = createLimiter(3, 15 * 60 * 1000);
+
+// Audit lifecycle limiters
+export const auditTeaserLimiter = createLimiter(10, 60 * 1000);
+export const auditUnlockLimiter = createLimiter(5, 60 * 1000);
+export const auditTrackLimiter = createLimiter(30, 60 * 1000);
+export const auditRequestLimiter = createLimiter(3, 60 * 1000);
+export const unsubscribeLimiter = createLimiter(10, 60 * 1000);

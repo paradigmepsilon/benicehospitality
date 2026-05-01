@@ -6,8 +6,11 @@ import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { fadeUp } from "@/lib/motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
+import FocusDimensionStep from "@/components/sections/book/FocusDimensionStep";
+import { DIMENSIONS } from "@/lib/constants/dimensions";
+import type { FocusDimensionKey, LetterGrade } from "@/lib/types/audit";
 
-type Step = "date" | "time" | "details" | "success";
+type Step = "date" | "time" | "focus" | "details" | "success";
 
 interface FormState {
   name: string;
@@ -15,6 +18,14 @@ interface FormState {
   phone: string;
   hotelName: string;
   message: string;
+}
+
+interface AuditTeaser {
+  hotel_name: string;
+  hotel_location: string | null;
+  overall_score: number;
+  overall_grade: LetterGrade;
+  generated_at: string;
 }
 
 const MONTH_NAMES = [
@@ -65,6 +76,41 @@ export default function BookingCalendar() {
     message: "",
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [focusDimension, setFocusDimension] = useState<FocusDimensionKey | null>(null);
+  const [auditToken, setAuditToken] = useState<string | null>(null);
+  const [auditTeaser, setAuditTeaser] = useState<AuditTeaser | null>(null);
+  const [recommendedDimension, setRecommendedDimension] = useState<FocusDimensionKey | null>(null);
+
+  // Read audit_token from URL once on mount and fetch the teaser to display the
+  // hotel-specific score banner. We don't fail the booking flow if this errors.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("audit_token");
+    if (!token) return;
+    setAuditToken(token);
+
+    fetch(`/api/audit/${token}/teaser`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: AuditTeaser | null) => {
+        if (data) {
+          setAuditTeaser(data);
+          // Pre-fill hotel name from the audit so the user doesn't have to retype it
+          setForm((prev) => (prev.hotelName ? prev : { ...prev, hotelName: data.hotel_name }));
+        }
+      })
+      .catch(() => {});
+
+    // If the visitor has a valid audit_view_id cookie for this audit, fetch the
+    // lowest-scoring dimension to surface as the recommended focus. Quietly no-op
+    // if the visitor isn't unlocked yet.
+    fetch(`/api/audit/${token}/recommendation`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { recommended_dimension: FocusDimensionKey } | null) => {
+        if (data?.recommended_dimension) setRecommendedDimension(data.recommended_dimension);
+      })
+      .catch(() => {});
+  }, []);
 
   // Fetch available days for current month (single efficient API call)
   useEffect(() => {
@@ -103,6 +149,11 @@ export default function BookingCalendar() {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
+    setStep("focus");
+  };
+
+  const handleFocusContinue = () => {
+    if (!focusDimension) return;
     setStep("details");
   };
 
@@ -136,6 +187,14 @@ export default function BookingCalendar() {
       return;
     }
 
+    if (!focusDimension) {
+      // Defensive: the focus step should have set this. If it didn't, send the
+      // user back rather than submitting without one.
+      setStep("focus");
+      setError("Please choose what you'd like to focus on.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -152,6 +211,8 @@ export default function BookingCalendar() {
           time: selectedTime,
           website: honeypot,
           turnstileToken: turnstileRef.current?.getResponse(),
+          focus_dimension: focusDimension,
+          audit_token: auditToken,
         }),
       });
 
@@ -205,58 +266,90 @@ export default function BookingCalendar() {
   return (
     <AnimatedSection theme="off-white" className="py-16 px-6">
       <div className="max-w-4xl mx-auto">
+        {/* Audit context banner (shown when arriving from /audit/[token]) */}
+        {auditTeaser && step !== "success" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="max-w-2xl mx-auto mb-8 bg-near-black text-white rounded-lg p-5 sm:p-6 flex items-center gap-4 sm:gap-6">
+              <div className="shrink-0 inline-flex flex-col items-center justify-center w-16 h-16 rounded-full border-2 border-warm-gold/30 bg-warm-gold/10">
+                <span className="font-display text-lg font-semibold leading-none">
+                  {auditTeaser.overall_score}
+                </span>
+                <span className="text-warm-gold text-xs font-semibold mt-0.5">
+                  {auditTeaser.overall_grade}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-warm-gold text-[10px] font-semibold uppercase tracking-[0.18em] mb-1">
+                  Based on your Tier 0 audit
+                </p>
+                <p className="font-display text-base sm:text-lg font-semibold">
+                  {auditTeaser.hotel_name}
+                </p>
+                <p className="text-white/60 text-xs sm:text-sm mt-0.5">
+                  Pick a dimension to focus this 40-minute call on.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Step indicator */}
         {step !== "success" && (
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-            <div className="flex items-center justify-center gap-3 mb-12">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-12">
               {[
-                { key: "date", label: "Date" },
-                { key: "time", label: "Time" },
-                { key: "details", label: "Details" },
-              ].map((s, i) => (
-                <div key={s.key} className="flex items-center gap-3">
-                  <button
-                    onClick={() => {
-                      if (s.key === "date") { setStep("date"); setSelectedTime(null); }
-                      if (s.key === "time" && selectedDate) setStep("time");
-                      if (s.key === "details" && selectedTime) setStep("details");
-                    }}
-                    className={[
-                      "flex items-center gap-2 text-sm font-sans font-medium transition-colors",
-                      step === s.key
-                        ? "text-primary-green"
-                        : (s.key === "date" || (s.key === "time" && selectedDate) || (s.key === "details" && selectedTime))
-                          ? "text-charcoal/60 hover:text-charcoal"
-                          : "text-charcoal/30 cursor-default",
-                    ].join(" ")}
-                    disabled={
-                      (s.key === "time" && !selectedDate) ||
-                      (s.key === "details" && !selectedTime)
-                    }
-                  >
-                    <span
+                { key: "date" as Step, label: "Date" },
+                { key: "time" as Step, label: "Time" },
+                { key: "focus" as Step, label: "Focus" },
+                { key: "details" as Step, label: "Details" },
+              ].map((s, i) => {
+                const reachable =
+                  s.key === "date" ||
+                  (s.key === "time" && !!selectedDate) ||
+                  (s.key === "focus" && !!selectedTime) ||
+                  (s.key === "details" && !!focusDimension);
+                const isComplete =
+                  (s.key === "date" && (step === "time" || step === "focus" || step === "details")) ||
+                  (s.key === "time" && (step === "focus" || step === "details")) ||
+                  (s.key === "focus" && step === "details");
+                return (
+                  <div key={s.key} className="flex items-center gap-2 sm:gap-3">
+                    <button
+                      onClick={() => {
+                        if (!reachable) return;
+                        if (s.key === "date") { setStep("date"); setSelectedTime(null); }
+                        else if (s.key === "time") setStep("time");
+                        else if (s.key === "focus") setStep("focus");
+                        else if (s.key === "details") setStep("details");
+                      }}
                       className={[
-                        "w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-colors",
+                        "flex items-center gap-2 text-sm font-sans font-medium transition-colors",
                         step === s.key
-                          ? "border-primary-green bg-primary-green text-white"
-                          : (s.key === "date" && (step === "time" || step === "details")) ||
-                            (s.key === "time" && step === "details")
-                            ? "border-primary-green/40 text-primary-green/60"
-                            : "border-charcoal/20 text-charcoal/30",
+                          ? "text-primary-green"
+                          : reachable
+                            ? "text-charcoal/60 hover:text-charcoal"
+                            : "text-charcoal/30 cursor-default",
                       ].join(" ")}
+                      disabled={!reachable}
                     >
-                      {(s.key === "date" && (step === "time" || step === "details")) ||
-                       (s.key === "time" && step === "details")
-                        ? "✓"
-                        : i + 1}
-                    </span>
-                    <span className="hidden sm:inline">{s.label}</span>
-                  </button>
-                  {i < 2 && (
-                    <div className="w-8 h-px bg-charcoal/15" />
-                  )}
-                </div>
-              ))}
+                      <span
+                        className={[
+                          "w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-colors",
+                          step === s.key
+                            ? "border-primary-green bg-primary-green text-white"
+                            : isComplete
+                              ? "border-primary-green/40 text-primary-green/60"
+                              : "border-charcoal/20 text-charcoal/30",
+                        ].join(" ")}
+                      >
+                        {isComplete ? "✓" : i + 1}
+                      </span>
+                      <span className="hidden sm:inline">{s.label}</span>
+                    </button>
+                    {i < 3 && <div className="w-6 sm:w-8 h-px bg-charcoal/15" />}
+                  </div>
+                );
+              })}
             </div>
           </motion.div>
         )}
@@ -402,11 +495,52 @@ export default function BookingCalendar() {
           </motion.div>
         )}
 
-        {/* Step 3: Details form */}
-        {step === "details" && selectedDate && selectedTime && (
+        {/* Step 3: Focus dimension */}
+        {step === "focus" && selectedDate && selectedTime && (
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="font-display text-2xl sm:text-3xl font-semibold text-near-black mb-3">
+                  What would you like to focus on?
+                </h3>
+                <p className="font-sans text-sm sm:text-base text-charcoal/70 leading-relaxed max-w-xl mx-auto">
+                  We&apos;ll arrive prepared with a deeper read on your chosen dimension. Pick the one that matters most right now.
+                </p>
+              </div>
+
+              <FocusDimensionStep
+                selected={focusDimension}
+                onSelect={setFocusDimension}
+                recommendedKey={recommendedDimension}
+              />
+
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
+                <button
+                  type="button"
+                  onClick={() => setStep("time")}
+                  className="font-sans text-sm text-charcoal/60 hover:text-charcoal transition-colors order-2 sm:order-1"
+                >
+                  Back to time
+                </button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={handleFocusContinue}
+                  disabled={!focusDimension}
+                  className="order-1 sm:order-2"
+                >
+                  Continue
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Step 4: Details form */}
+        {step === "details" && selectedDate && selectedTime && focusDimension && (
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <div className="max-w-lg mx-auto">
-              {/* Selected date/time summary */}
+              {/* Selected date/time/focus summary */}
               <div className="bg-white border border-light-gray rounded-lg p-5 mb-8 text-center">
                 <p className="font-display text-lg font-semibold text-near-black">
                   {formatDate(selectedDate)}
@@ -414,12 +548,29 @@ export default function BookingCalendar() {
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
                   {formatTime(selectedTime)} ET &middot; 1 hour
                 </p>
-                <button
-                  onClick={() => setStep("time")}
-                  className="font-sans text-xs text-charcoal/40 hover:text-charcoal/60 transition-colors mt-2"
-                >
-                  Change time
-                </button>
+                <p className="font-sans text-xs text-charcoal/60 mt-2">
+                  Focus:{" "}
+                  <span className="font-medium text-charcoal">
+                    {DIMENSIONS.find((d) => d.key === focusDimension)?.label}
+                  </span>
+                </p>
+                <div className="flex items-center justify-center gap-3 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setStep("time")}
+                    className="font-sans text-xs text-charcoal/40 hover:text-charcoal/60 transition-colors"
+                  >
+                    Change time
+                  </button>
+                  <span className="text-charcoal/20" aria-hidden="true">·</span>
+                  <button
+                    type="button"
+                    onClick={() => setStep("focus")}
+                    className="font-sans text-xs text-charcoal/40 hover:text-charcoal/60 transition-colors"
+                  >
+                    Change focus
+                  </button>
+                </div>
               </div>
 
               <h3 className="font-display text-2xl font-semibold text-near-black mb-6">
