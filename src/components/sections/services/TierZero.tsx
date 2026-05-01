@@ -86,14 +86,15 @@ export default function TierZero() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-6 leading-tight">
-              Your Hotel, Scored Across Six Dimensions
+              Your Hotel, Scored in Eight Sections
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 leading-relaxed">
               Our flagship Tier 0 deliverable is a Comprehensive Audit: a
-              two-page diagnostic of your property across six dimensions of
-              boutique hotel performance, plus three prioritized quick wins. We
+              two-page diagnostic that opens with an overall score, breaks your
+              property down across six dimensions of boutique hotel
+              performance, and closes with three prioritized quick wins. We
               pull real market data, real competitor intelligence, and real
               industry benchmarks, then translate it into a scored report you
               can act on immediately.
