@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { inboundReplyPayloadSchema } from "@/lib/validation/outreach";
 import { internalReplyAlertEmail } from "@/lib/email-templates";
+import { logOutreachEvent } from "@/lib/outreach/events";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -74,6 +75,12 @@ export async function POST(request: Request) {
     SET replied_at = NOW(), status = 'replied', updated_at = NOW()
     WHERE id = ${target.id}
   `;
+
+  await logOutreachEvent({
+    targetId: target.id,
+    eventType: "replied",
+    metadata: { subject, preview },
+  });
 
   // Cancel pending nurture sequences for this email (audit-side)
   await sql`

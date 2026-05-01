@@ -182,22 +182,25 @@ async function migrate() {
   await sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS pipeline_contact_id INT REFERENCES pipeline_contacts(id)`;
   console.log("  ✓ Pipeline foreign key columns added");
 
-  // Migrate existing contact submissions into pipeline contacts
+  // Migrate existing contact submissions into pipeline contacts.
+  // NOTE: Originally used ON CONFLICT(email) — that constraint was dropped later in
+  // this script (multi-property hotels share info@ addresses). Use NOT EXISTS instead
+  // so this block is safe to re-run after the constraint is gone.
   await sql`
     INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source, created_at)
-    SELECT DISTINCT ON (email) name, email, phone, hotel_name, hotel_location, room_count, 'contact_form', submitted_at
-    FROM contact_submissions
-    ORDER BY email, submitted_at DESC
-    ON CONFLICT (email) DO NOTHING
+    SELECT DISTINCT ON (cs.email) cs.name, cs.email, cs.phone, cs.hotel_name, cs.hotel_location, cs.room_count, 'contact_form', cs.submitted_at
+    FROM contact_submissions cs
+    WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = cs.email)
+    ORDER BY cs.email, cs.submitted_at DESC
   `;
 
   // Migrate existing bookings into pipeline contacts
   await sql`
     INSERT INTO pipeline_contacts (name, email, phone, hotel_name, source, created_at)
-    SELECT DISTINCT ON (email) name, email, phone, hotel_name, 'booking', created_at
-    FROM bookings
-    ORDER BY email, created_at DESC
-    ON CONFLICT (email) DO NOTHING
+    SELECT DISTINCT ON (b.email) b.name, b.email, b.phone, b.hotel_name, 'booking', b.created_at
+    FROM bookings b
+    WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = b.email)
+    ORDER BY b.email, b.created_at DESC
   `;
 
   // Link existing records
@@ -445,6 +448,88 @@ async function migrate() {
     }
     console.log("  ✓ default availability windows seeded (Mon-Fri 9am-5pm)");
   }
+
+  // Outbound CSV prospect import — extend pipeline_contacts with property fields
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS website_url TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS linkedin_url TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS fit_quality TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS region TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS state TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS city TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS owner_role TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS import_batch_id TEXT`;
+  await sql`ALTER TABLE pipeline_contacts ADD COLUMN IF NOT EXISTS imported_at TIMESTAMPTZ`;
+
+  // Backfill: keep legacy inbound rows from colliding on the new property dedup index.
+  // Treat NULL, '', and placeholder hotel names ('-', 'n/a', 'na', 'none') as missing.
+  await sql`
+    UPDATE pipeline_contacts
+    SET hotel_name = 'Inbound#' || id
+    WHERE website_url IS NULL
+      AND (
+        hotel_name IS NULL
+        OR TRIM(hotel_name) = ''
+        OR LOWER(TRIM(hotel_name)) IN ('-', 'n/a', 'na', 'none')
+      )
+  `;
+
+  // Drop legacy email uniqueness — multi-property hotel groups share info@ addresses
+  await sql`ALTER TABLE pipeline_contacts DROP CONSTRAINT IF EXISTS pipeline_contacts_email_key`;
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS pipeline_contacts_property_uniq
+    ON pipeline_contacts (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+  `;
+  console.log("  ✓ pipeline_contacts extended for outbound CSV import");
+
+  // Bridge prospect CRM → outbound campaigns
+  await sql`ALTER TABLE outreach_targets ADD COLUMN IF NOT EXISTS pipeline_contact_id INT REFERENCES pipeline_contacts(id) ON DELETE SET NULL`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_targets_pipeline_contact ON outreach_targets(pipeline_contact_id)`;
+  await sql`ALTER TABLE audits ADD COLUMN IF NOT EXISTS is_stub BOOLEAN NOT NULL DEFAULT FALSE`;
+  console.log("  ✓ outreach_targets.pipeline_contact_id + audits.is_stub added");
+
+  // Per-target outbound event log. Lets the CRM contact timeline and campaign
+  // detail page show "delivered/opened/clicked/replied/bounced" interleaved
+  // with manual pipeline_activities. Resend webhook events get a unique id
+  // we can dedup on so a webhook replay doesn't double-log.
+  await sql`
+    CREATE TABLE IF NOT EXISTS outreach_events (
+      id SERIAL PRIMARY KEY,
+      target_id INT NOT NULL REFERENCES outreach_targets(id) ON DELETE CASCADE,
+      event_type TEXT NOT NULL,
+      occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      resend_event_id TEXT,
+      metadata JSONB,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_outreach_events_target ON outreach_events(target_id, occurred_at DESC)`;
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS outreach_events_resend_dedup ON outreach_events(resend_event_id) WHERE resend_event_id IS NOT NULL`;
+  console.log("  ✓ outreach_events table created");
+
+  // Operator-pasted HTML for audit landing pages. When set, the public audit
+  // page renders this HTML instead of the structured AuditReport component.
+  // Lets you bring in the output of the Claude-generated Tier 0 audit verbatim.
+  await sql`ALTER TABLE audits ADD COLUMN IF NOT EXISTS custom_html TEXT`;
+  // public_slug is the routable, human-readable URL slug (distinct from
+  // hotel_slug, which is the raw slugified hotel name). When two audits share
+  // the same hotel_slug, we append `-<id>` to keep the URL unique.
+  await sql`ALTER TABLE audits ADD COLUMN IF NOT EXISTS public_slug TEXT`;
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS idx_audits_public_slug ON audits(public_slug) WHERE public_slug IS NOT NULL`;
+  // Backfill: existing rows get public_slug = hotel_slug, with -<id> appended
+  // when there's a collision. Skip rows already populated.
+  await sql`
+    WITH ranked AS (
+      SELECT id, hotel_slug,
+             ROW_NUMBER() OVER (PARTITION BY hotel_slug ORDER BY id ASC) AS rn
+      FROM audits
+      WHERE public_slug IS NULL
+    )
+    UPDATE audits a
+    SET public_slug = CASE WHEN r.rn = 1 THEN r.hotel_slug ELSE r.hotel_slug || '-' || a.id END
+    FROM ranked r
+    WHERE a.id = r.id
+  `;
+  console.log("  ✓ audits.custom_html + audits.public_slug added");
 
   console.log("Migrations complete!");
 }

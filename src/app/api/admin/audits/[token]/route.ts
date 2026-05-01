@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { sql } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 
@@ -12,8 +13,8 @@ export async function GET(
   const { token } = await params;
 
   const auditRows = await sql`
-    SELECT id, token, hotel_url, hotel_slug, hotel_name, hotel_location, room_count,
-           overall_score, overall_grade, audit_data, status, created_at, expires_at
+    SELECT id, token, hotel_url, hotel_slug, public_slug, hotel_name, hotel_location, room_count,
+           overall_score, overall_grade, audit_data, custom_html, status, is_stub, created_at, expires_at
     FROM audits
     WHERE token = ${token}
     LIMIT 1
@@ -61,4 +62,59 @@ export async function GET(
   const funnel = funnelRows[0];
 
   return NextResponse.json({ audit, views, events, nurture, funnel });
+}
+
+const patchSchema = z.object({
+  // Operator-pasted HTML for the public audit landing page. Pass null to clear
+  // (revert to the structured AuditReport renderer).
+  custom_html: z.string().nullable().optional(),
+  // When the operator replaces stub content with real audit data, they should
+  // also flip is_stub off so the daily-approval gate stops blocking sends.
+  is_stub: z.boolean().optional(),
+  status: z.enum(["active", "expired", "archived"]).optional(),
+});
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ token: string }> },
+) {
+  const auth = await requireAuth(request);
+  if (auth) return auth;
+
+  const { token } = await params;
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  const parsed = patchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Validation failed", issues: parsed.error.issues }, { status: 400 });
+  }
+  const data = parsed.data;
+
+  const existing = await sql`SELECT id, custom_html, is_stub, status FROM audits WHERE token = ${token} LIMIT 1`;
+  if (existing.length === 0) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  const cur = existing[0];
+
+  const nextCustomHtml = data.custom_html === undefined ? cur.custom_html : data.custom_html;
+  // If the operator pasted real HTML, treat the audit as no-longer-stub by
+  // default. They can override explicitly via is_stub in the same patch.
+  const inferredIsStub =
+    data.is_stub !== undefined ? data.is_stub : (data.custom_html ? false : cur.is_stub);
+  const nextStatus = data.status ?? cur.status;
+
+  const updated = await sql`
+    UPDATE audits
+    SET
+      custom_html = ${nextCustomHtml},
+      is_stub = ${inferredIsStub},
+      status = ${nextStatus}
+    WHERE token = ${token}
+    RETURNING id, token, public_slug, custom_html, is_stub, status
+  `;
+  return NextResponse.json({ audit: updated[0] });
 }

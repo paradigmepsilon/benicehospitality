@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql } from "@/lib/db";
+import { logOutreachEvent, type OutreachEventType } from "@/lib/outreach/events";
 
 /**
  * Resend uses Svix-format webhook signatures. The signature header carries
@@ -39,6 +40,7 @@ function verifySignature(
 
 interface ResendEvent {
   type: string;
+  created_at?: string;
   data?: {
     email_id?: string;
     to?: string | string[];
@@ -46,6 +48,16 @@ interface ResendEvent {
     click?: { link?: string };
   };
 }
+
+const RESEND_TYPE_TO_EVENT: Record<string, OutreachEventType> = {
+  "email.sent": "sent",
+  "email.delivered": "delivered",
+  "email.delivery_delayed": "delivery_delayed",
+  "email.opened": "opened",
+  "email.clicked": "clicked",
+  "email.bounced": "bounced",
+  "email.complained": "complained",
+};
 
 export async function POST(request: Request) {
   const secret = process.env.RESEND_WEBHOOK_SECRET;
@@ -86,6 +98,8 @@ export async function POST(request: Request) {
   }
   const target = targetRows[0];
 
+  // Status-field updates for the events that drive auto-pause + unsubscribe logic.
+  // These mirror outreach_targets columns the rest of the system reads.
   switch (event.type) {
     case "email.bounced": {
       const reason = event.data?.bounce?.message || "bounced";
@@ -102,7 +116,6 @@ export async function POST(request: Request) {
         SET complained_at = NOW(), status = 'complained', updated_at = NOW()
         WHERE id = ${target.id}
       `;
-      // Auto-unsubscribe complainants
       await sql`
         INSERT INTO unsubscribes (email, source, reason)
         VALUES (${target.contact_email.toLowerCase()}, 'complaint', 'spam_complaint')
@@ -110,17 +123,25 @@ export async function POST(request: Request) {
       `;
       break;
     }
-    case "email.delivered":
-    case "email.opened":
-    case "email.clicked":
-    case "email.delivery_delayed":
-    case "email.sent":
-      // For now, we just accept these. We could later record deliveries/opens
-      // in a webhook_events log table if we want time-series analytics.
-      break;
     default:
-      // Unknown event type — accept but ignore
       break;
+  }
+
+  // Always log every recognized event type to the immutable event stream.
+  // svixId acts as the dedup key — replays of the same webhook are idempotent.
+  const eventType = RESEND_TYPE_TO_EVENT[event.type];
+  if (eventType) {
+    await logOutreachEvent({
+      targetId: target.id,
+      eventType,
+      occurredAt: event.created_at ?? null,
+      resendEventId: svixId,
+      metadata: {
+        resend_type: event.type,
+        bounce_reason: event.data?.bounce?.message,
+        click_link: event.data?.click?.link,
+      },
+    });
   }
 
   return NextResponse.json({ ok: true });

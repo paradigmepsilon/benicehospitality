@@ -23,12 +23,23 @@ export async function GET(
   const campaign = campaignRows[0];
 
   const targets = await sql`
-    SELECT id, hotel_url, hotel_name, contact_email, contact_name, contact_role,
-           audit_id, draft_subject, draft_body, scheduled_send_at, approved_at, sent_at,
-           bounced_at, complained_at, replied_at, unsubscribed_at, status, failure_reason
-    FROM outreach_targets
-    WHERE campaign_id = ${id}
-    ORDER BY scheduled_send_at ASC NULLS LAST, id ASC
+    SELECT
+      ot.id, ot.hotel_url, ot.hotel_name, ot.contact_email, ot.contact_name, ot.contact_role,
+      ot.audit_id, ot.draft_subject, ot.draft_body, ot.scheduled_send_at, ot.approved_at, ot.sent_at,
+      ot.bounced_at, ot.complained_at, ot.replied_at, ot.unsubscribed_at, ot.status, ot.failure_reason,
+      ot.pipeline_contact_id, a.token AS audit_token, a.is_stub AS audit_is_stub,
+      (a.custom_html IS NOT NULL AND TRIM(a.custom_html) <> '') AS audit_has_html,
+      le.last_event_type, le.last_event_at, COALESCE(le.event_count, 0)::int AS event_count
+    FROM outreach_targets ot
+    LEFT JOIN audits a ON a.id = ot.audit_id
+    LEFT JOIN LATERAL (
+      SELECT
+        (SELECT event_type FROM outreach_events e WHERE e.target_id = ot.id ORDER BY occurred_at DESC LIMIT 1) AS last_event_type,
+        (SELECT occurred_at FROM outreach_events e WHERE e.target_id = ot.id ORDER BY occurred_at DESC LIMIT 1) AS last_event_at,
+        (SELECT COUNT(*) FROM outreach_events e WHERE e.target_id = ot.id) AS event_count
+    ) le ON TRUE
+    WHERE ot.campaign_id = ${id}
+    ORDER BY ot.scheduled_send_at ASC NULLS LAST, ot.id ASC
   `;
 
   const health = await getCampaignHealth(id);

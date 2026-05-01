@@ -87,13 +87,16 @@ export interface AuditRow {
   token: string;
   hotel_url: string;
   hotel_slug: string;
+  public_slug: string | null;
   hotel_name: string;
   hotel_location: string | null;
   room_count: number | null;
   overall_score: number;
   overall_grade: LetterGrade;
   audit_data: AuditData;
+  custom_html: string | null;
   status: AuditStatus;
+  is_stub?: boolean;
   created_at: string;
   expires_at: string | null;
 }

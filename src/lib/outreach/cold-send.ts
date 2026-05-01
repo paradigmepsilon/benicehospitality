@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { buildUnsubscribeUrl } from "@/lib/outreach/unsubscribe";
+import { renderEmail } from "@/lib/outreach/render";
 
 let cached: Resend | null = null;
 function getResend(): Resend {
@@ -20,54 +20,6 @@ export function getColdSenderReplyTo(): string {
   return process.env.COLD_SENDER_REPLY_TO || process.env.ADMIN_EMAIL || "admin@benicehospitality.com";
 }
 
-const PLAIN_TEXT_FOOTER = (unsubscribeUrl: string) => `
-
----
-Be Nice Hospitality Group
-Hapeville, GA
-admin@benicehospitality.com
-
-If you'd rather not receive these, unsubscribe here: ${unsubscribeUrl}`;
-
-const HTML_FOOTER = (unsubscribeUrl: string) => `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;border-top:1px solid #e8e4dd;padding-top:18px;">
-  <tr><td style="font-family:'DM Sans',Arial,sans-serif;font-size:12px;color:#888;line-height:1.6;">
-    <p style="margin:0 0 4px;color:#1a1a1a;font-weight:500;">Be Nice Hospitality Group</p>
-    <p style="margin:0 0 4px;">Hapeville, GA · <a href="mailto:admin@benicehospitality.com" style="color:#888;">admin@benicehospitality.com</a></p>
-    <p style="margin:8px 0 0;">If you'd rather not receive these, <a href="${unsubscribeUrl}" style="color:#888;text-decoration:underline;">unsubscribe here</a>.</p>
-  </td></tr>
-</table>`;
-
-/**
- * Convert a plain-text or lightly-formatted draft body into an HTML email.
- * The draft body is what the skill produced; the website injects the
- * footer with a per-target unsubscribe token at send time.
- */
-function bodyToHtml(plainBody: string): string {
-  // Convert paragraph breaks (double newlines) to <p> tags; preserve single
-  // newlines as <br>. Escape any HTML to keep the email plain.
-  const escaped = plainBody
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-
-  const paragraphs = escaped.split(/\n{2,}/).map((p) => {
-    const withBreaks = p.replace(/\n/g, "<br />");
-    return `<p style="margin:0 0 14px;font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#1a1a1a;line-height:1.6;">${withBreaks}</p>`;
-  });
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" /><title>Be Nice Hospitality Group</title></head>
-<body style="margin:0;padding:24px;background-color:#ffffff;-webkit-font-smoothing:antialiased;">
-  <div style="max-width:560px;margin:0 auto;">
-    ${paragraphs.join("\n    ")}
-  </div>
-</body>
-</html>`;
-}
-
 export interface ColdSendArgs {
   to: string;
   subject: string;
@@ -81,17 +33,12 @@ export interface ColdSendResult {
 }
 
 export async function sendColdEmail(args: ColdSendArgs): Promise<ColdSendResult> {
-  const unsubscribeUrl = buildUnsubscribeUrl(args.to);
   const subject = args.subject.trim();
 
-  // Substitute UNSUBSCRIBE_URL into the draft body if the skill placed the
-  // placeholder there (used in plaintext-only flows). Otherwise we'll append
-  // the footer.
-  const plainBody = args.body
-    .replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl);
-
-  const html = bodyToHtml(plainBody) + HTML_FOOTER(unsubscribeUrl);
-  const text = plainBody + PLAIN_TEXT_FOOTER(unsubscribeUrl);
+  // Render via the shared helper so the admin "Preview email" view matches the
+  // wire byte-for-byte. {{AUDIT_URL}} is expected to be pre-substituted by the
+  // caller (process-sends does this); {{UNSUBSCRIBE_URL}} is filled in here.
+  const { html, text, unsubscribeUrl } = renderEmail({ body: args.body, to: args.to });
 
   try {
     const result = await getResend().emails.send({

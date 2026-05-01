@@ -16,10 +16,25 @@ export async function GET(
     return NextResponse.json({ error: "Contact not found" }, { status: 404 });
   }
 
-  const [activities, submissions, bookings] = await Promise.all([
+  const [activities, submissions, bookings, outreachEvents, outreachTargets] = await Promise.all([
     sql`SELECT * FROM pipeline_activities WHERE contact_id = ${id} ORDER BY created_at DESC`,
     sql`SELECT * FROM contact_submissions WHERE pipeline_contact_id = ${id} ORDER BY submitted_at DESC`,
     sql`SELECT * FROM bookings WHERE pipeline_contact_id = ${id} ORDER BY booking_date DESC`,
+    sql`
+      SELECT e.id, e.target_id, e.event_type, e.occurred_at, e.metadata,
+             ot.campaign_id, ot.draft_subject, ot.contact_email
+      FROM outreach_events e
+      JOIN outreach_targets ot ON ot.id = e.target_id
+      WHERE ot.pipeline_contact_id = ${id}
+      ORDER BY e.occurred_at DESC
+    `,
+    sql`
+      SELECT id, campaign_id, status, scheduled_send_at, sent_at, approved_at,
+             bounced_at, replied_at, draft_subject
+      FROM outreach_targets
+      WHERE pipeline_contact_id = ${id}
+      ORDER BY scheduled_send_at DESC NULLS LAST, id DESC
+    `,
   ]);
 
   return NextResponse.json({
@@ -27,6 +42,8 @@ export async function GET(
     activities,
     submissions,
     bookings,
+    outreach_events: outreachEvents,
+    outreach_targets: outreachTargets,
   });
 }
 
@@ -42,7 +59,17 @@ export async function PATCH(
   const { name, email, phone, hotel_name, hotel_location, room_count, company, pipeline_stage, notes } = body;
 
   if (pipeline_stage !== undefined) {
-    const valid = ["prospect", "qualified", "proposal", "client", "closed_lost"];
+    const valid = [
+      "prospect",
+      "email_sent",
+      "linkedin_sent",
+      "replied",
+      "meeting_booked",
+      "qualified",
+      "proposal",
+      "client",
+      "closed_lost",
+    ];
     if (!valid.includes(pipeline_stage)) {
       return NextResponse.json(
         { error: "Invalid pipeline stage" },

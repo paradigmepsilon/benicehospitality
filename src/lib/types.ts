@@ -154,15 +154,35 @@ export interface ContactSubmission {
   status: "new" | "contacted" | "closed";
 }
 
-export type CrmPipelineStage = "prospect" | "qualified" | "proposal" | "client" | "closed_lost";
-export type CrmSource = "contact_form" | "booking" | "manual";
+export type CrmPipelineStage =
+  | "prospect"
+  | "email_sent"
+  | "linkedin_sent"
+  | "replied"
+  | "meeting_booked"
+  | "qualified"
+  | "proposal"
+  | "client"
+  | "closed_lost";
+export type CrmSource = "contact_form" | "booking" | "manual" | "csv_import";
 export type CrmActivityType =
   | "contact_form_submitted"
   | "booking_scheduled"
   | "booking_cancelled"
   | "stage_changed"
   | "note_added"
-  | "manual";
+  | "manual"
+  | "csv_imported"
+  | "email_sent"
+  | "linkedin_sent"
+  | "replied"
+  | "call_held"
+  | "meeting_booked"
+  | "meeting_held"
+  | "proposal_sent"
+  | "closed_won"
+  | "closed_lost"
+  | "note";
 
 export interface CrmContact {
   id: number;
@@ -176,6 +196,15 @@ export interface CrmContact {
   pipeline_stage: CrmPipelineStage;
   source: CrmSource;
   notes: string | null;
+  website_url: string | null;
+  linkedin_url: string | null;
+  fit_quality: string | null;
+  region: string | null;
+  state: string | null;
+  city: string | null;
+  owner_role: string | null;
+  import_batch_id: string | null;
+  imported_at: string | null;
   created_at: string;
   updated_at: string;
 }

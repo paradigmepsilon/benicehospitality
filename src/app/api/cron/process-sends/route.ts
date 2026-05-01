@@ -5,6 +5,7 @@ import { sendColdEmail } from "@/lib/outreach/cold-send";
 import { getCampaignHealth } from "@/lib/outreach/health";
 import { internalCampaignAlertEmail } from "@/lib/email-templates";
 import { logAuditEvent } from "@/lib/audit/events";
+import { buildAuditUrl } from "@/lib/audit/token";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -90,17 +91,21 @@ export async function POST(request: Request) {
       continue;
     }
 
-    // Pull approved targets due to send now
+    // Pull approved targets due to send now. Join the audits row so we have
+    // the public_slug (or token fallback) for {{AUDIT_URL}} substitution.
     const targets = (await sql`
-      SELECT id, campaign_id, audit_id, contact_email, draft_subject, draft_body
-      FROM outreach_targets
-      WHERE campaign_id = ${c.id}
-        AND status = 'approved'
-        AND scheduled_send_at <= NOW()
-        AND sent_at IS NULL
-      ORDER BY scheduled_send_at ASC
+      SELECT
+        ot.id, ot.campaign_id, ot.audit_id, ot.contact_email, ot.draft_subject, ot.draft_body,
+        a.public_slug AS audit_public_slug, a.token AS audit_token
+      FROM outreach_targets ot
+      LEFT JOIN audits a ON a.id = ot.audit_id
+      WHERE ot.campaign_id = ${c.id}
+        AND ot.status = 'approved'
+        AND ot.scheduled_send_at <= NOW()
+        AND ot.sent_at IS NULL
+      ORDER BY ot.scheduled_send_at ASC
       LIMIT ${SEND_BATCH_LIMIT}
-    `) as unknown as ApprovedTargetRow[];
+    `) as unknown as Array<ApprovedTargetRow & { audit_public_slug: string | null; audit_token: string | null }>;
 
     // Move campaign to 'sending' if not already
     if (c.status === "scheduled" && targets.length > 0) {
@@ -119,10 +124,18 @@ export async function POST(request: Request) {
         continue;
       }
 
+      // Substitute {{AUDIT_URL}} just before send so the email goes out with
+      // the canonical public slug (or token fallback). UNSUBSCRIBE_URL is
+      // substituted inside sendColdEmail per recipient.
+      const slugOrToken = t.audit_public_slug || t.audit_token;
+      const bodyForSend = slugOrToken
+        ? t.draft_body.replace(/\{\{AUDIT_URL\}\}/g, buildAuditUrl(slugOrToken))
+        : t.draft_body;
+
       const result = await sendColdEmail({
         to: t.contact_email,
         subject: t.draft_subject,
-        body: t.draft_body,
+        body: bodyForSend,
       });
 
       if (!result.ok) {
