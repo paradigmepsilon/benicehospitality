@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import AuditRequestForm from "@/components/sections/audit/AuditRequestForm";
+import { STOCK_TECH } from "@/lib/stock-images";
 
 export const metadata: Metadata = {
-  title: { absolute: "Get Your Free Tier 0 Audit | Be Nice Hospitality Group" },
+  title: { absolute: "Get Your Free Audit | Be Nice Hospitality Group" },
   description:
-    "Request a free Tier 0 Comprehensive Audit for your boutique hotel. Two-page diagnostic across seven dimensions. No cost, no commitment.",
+    "Free Tier 0 Comprehensive Audit. URL in, branded report out. Built for boutique hotel owners and sharing-economy operators who want a serious second opinion.",
   alternates: {
-    canonical: "https://www.benicehospitality.com/audit/request",
+    canonical: "https://benicehospitality.com/audit/request",
   },
   openGraph: {
-    title: "Get Your Free Tier 0 Audit | Be Nice Hospitality Group",
+    title: "Get Your Free Audit | Be Nice Hospitality Group",
     description:
-      "Two-page diagnostic of your boutique hotel across seven dimensions. Free, custom, and yours to keep.",
-    url: "https://www.benicehospitality.com/audit/request",
+      "Two-page diagnostic across seven dimensions. Custom to your property, yours to keep, no commitment.",
+    url: "https://benicehospitality.com/audit/request",
     type: "website",
   },
 };
@@ -31,19 +33,28 @@ export default function AuditRequestPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative bg-near-black py-24 sm:py-28 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-near-black to-near-black/90" />
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+      <section className="relative bg-near-black py-24 sm:py-28 px-6 md:px-12 lg:px-20 overflow-hidden">
+        <Image
+          src={STOCK_TECH.src}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-near-black/95 via-near-black/85 to-near-black/55" />
+        <div className="relative z-10 max-w-4xl">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
             Tier 0 · Free Comprehensive Audit
           </p>
           <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight">
-            Your hotel, scored across seven dimensions.
+            Your operation, scored across seven dimensions.
           </h1>
-          <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl mx-auto leading-relaxed">
-            We&apos;ll analyze your property, score it, and send you a two-page
-            diagnostic with the three highest-impact actions you can take. Free,
-            custom, and yours to keep.
+          <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl leading-relaxed">
+            We analyze your property or fleet, score it across seven dimensions, and send back a two-page diagnostic with the three highest-impact next moves. Free, custom, and yours to keep.
+          </p>
+          <p className="font-sans text-sm text-white/55 mt-4">
+            Built for boutique hotel owners and sharing-economy operators. Tell us your role and we route the report to the right next step.
           </p>
         </div>
       </section>
@@ -86,8 +97,7 @@ export default function AuditRequestPage() {
                 ))}
               </ul>
               <p className="text-xs text-charcoal/60 leading-relaxed border-t border-light-gray pt-4">
-                Audits are typically ready within 48 hours. We&apos;ll send the
-                link to your email so you can review when you&apos;re ready.
+                Audits are typically ready within 48 hours. We send the report link to your email so you can read it when you have time.
               </p>
             </div>
           </aside>

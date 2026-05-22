@@ -6,7 +6,11 @@ import { auditRequestLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { internalAuditRequestEmail } from "@/lib/email-templates";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let cachedResend: Resend | null = null;
+function getResend(): Resend {
+  if (!cachedResend) cachedResend = new Resend(process.env.RESEND_API_KEY);
+  return cachedResend;
+}
 
 export async function POST(request: Request) {
   const forwarded = request.headers.get("x-forwarded-for");
@@ -66,7 +70,7 @@ export async function POST(request: Request) {
 
     // Notify Alex internally
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
         to: process.env.ADMIN_EMAIL || process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
         replyTo: email,

@@ -23,23 +23,21 @@ export default function AuditRequestThanksPage() {
           </svg>
         </div>
         <h1 className="font-display text-3xl md:text-5xl font-semibold text-near-black mb-4 leading-tight">
-          We&apos;ve got your request.
+          We have your request.
         </h1>
         <p className="font-sans text-lg text-charcoal/70 leading-relaxed mb-3">
-          Thanks. We&apos;ll have your Tier 0 Comprehensive Audit ready within
-          48 hours, and we&apos;ll email you the link when it&apos;s done.
+          Your Tier 0 Comprehensive Audit will be ready within 48 hours. We send the report link to the email you submitted.
         </p>
         <p className="font-sans text-sm text-charcoal/60 leading-relaxed mb-10">
-          In the meantime, no need to do anything. We&apos;ve already started
-          gathering the data.
+          Nothing to do on your end. We have already started gathering the data.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button href="/" variant="primary">
             Back to Home
           </Button>
-          <Button href="/insights" variant="secondary">
-            Read Our Insights
+          <Button href="/resources" variant="secondary">
+            Browse Resources
           </Button>
         </div>
 

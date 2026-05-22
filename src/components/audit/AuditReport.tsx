@@ -6,9 +6,10 @@ import CTABand from "@/components/audit/CTABand";
 interface AuditReportProps {
   token: string;
   data: AuditData;
+  requesterRole?: string | null;
 }
 
-export default function AuditReport({ token, data }: AuditReportProps) {
+export default function AuditReport({ token, data, requesterRole }: AuditReportProps) {
   const visibilityNote = data.signal_referral_eligible
     ? "Want a deeper read on AI search visibility? Ask about Signal by BNHG during your call."
     : undefined;
@@ -52,6 +53,7 @@ export default function AuditReport({ token, data }: AuditReportProps) {
           token={token}
           hotelName={data.hotel.name}
           signalEligible={data.signal_referral_eligible}
+          requesterRole={requesterRole ?? null}
         />
       </section>
 

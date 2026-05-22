@@ -13,6 +13,7 @@ interface AuditPageClientProps {
   overallScore: number;
   overallGrade: LetterGrade;
   generatedAt: string;
+  requesterRole: string | null;
 }
 
 function formatGeneratedAt(iso: string): string {
@@ -34,6 +35,7 @@ export default function AuditPageClient({
   overallScore,
   overallGrade,
   generatedAt,
+  requesterRole,
 }: AuditPageClientProps) {
   const [unlocked, setUnlocked] = useState<AuditData | null>(null);
 
@@ -73,7 +75,7 @@ export default function AuditPageClient({
       <section className="py-12 md:py-16 px-6">
         <div className="max-w-5xl mx-auto">
           {unlocked ? (
-            <AuditReport token={token} data={unlocked} />
+            <AuditReport token={token} data={unlocked} requesterRole={requesterRole} />
           ) : (
             <EmailGate
               token={token}

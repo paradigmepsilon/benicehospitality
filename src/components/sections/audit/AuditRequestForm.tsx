@@ -77,7 +77,7 @@ export default function AuditRequestForm() {
         Request your audit
       </h2>
       <p className="font-sans text-sm text-charcoal/70 mb-7 leading-relaxed">
-        Three fields. We&apos;ll send your audit to your email when it&apos;s ready.
+        Three fields. We send the finished audit to your email within 48 hours.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -86,7 +86,7 @@ export default function AuditRequestForm() {
             htmlFor="hotel-url"
             className="block font-sans text-sm font-semibold text-near-black mb-1.5"
           >
-            Your hotel website
+            Your property or business website
           </label>
           <input
             id="hotel-url"
@@ -96,7 +96,7 @@ export default function AuditRequestForm() {
             required
             value={hotelUrl}
             onChange={(e) => setHotelUrl(e.target.value)}
-            placeholder="yourhotel.com"
+            placeholder="yourbusiness.com"
             className="w-full border border-light-gray bg-white px-4 py-3 text-base text-near-black placeholder:text-charcoal/40 focus:outline-none focus:border-primary-green rounded-md transition-colors"
           />
         </div>
@@ -115,7 +115,7 @@ export default function AuditRequestForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@yourhotel.com"
+            placeholder="you@yourbusiness.com"
             className="w-full border border-light-gray bg-white px-4 py-3 text-base text-near-black placeholder:text-charcoal/40 focus:outline-none focus:border-primary-green rounded-md transition-colors"
           />
         </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAuditBySlugOrToken } from "@/lib/audit/token";
+import { getAuditBySlugOrToken, getRoleForAudit } from "@/lib/audit/token";
 import AuditPageClient from "@/components/audit/AuditPageClient";
 
 interface PageProps {
@@ -43,6 +43,8 @@ export default async function AuditPage({ params }: PageProps) {
     );
   }
 
+  const requesterRole = await getRoleForAudit(audit.id);
+
   return (
     <AuditPageClient
       token={audit.token}
@@ -51,6 +53,7 @@ export default async function AuditPage({ params }: PageProps) {
       overallScore={audit.overall_score}
       overallGrade={audit.overall_grade}
       generatedAt={audit.audit_data.generated_at}
+      requesterRole={requesterRole}
     />
   );
 }
