@@ -71,6 +71,22 @@ function firstActive(rows: Record<string, unknown>[]): AuditRow | null {
 }
 
 /**
+ * Look up the original requester's role for an audit. Returns the earliest
+ * non-null role from audit_requests linked to this audit, or null if there
+ * is no associated request (e.g., admin-created stub audits).
+ */
+export async function getRoleForAudit(auditId: number): Promise<string | null> {
+  const rows = await sql`
+    SELECT role FROM audit_requests
+    WHERE audit_id = ${auditId} AND role IS NOT NULL
+    ORDER BY created_at ASC
+    LIMIT 1
+  `;
+  const role = rows[0]?.role;
+  return typeof role === "string" ? role : null;
+}
+
+/**
  * Choose a public_slug for a new audit. Uses the slugified hotel name as the
  * base. If another audit already owns that slug, append "-2", "-3", etc.
  * until we find an unused one. Bounded loop, falls back to "-<random>" if

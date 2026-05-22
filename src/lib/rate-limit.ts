@@ -46,3 +46,28 @@ export const auditUnlockLimiter = createLimiter(5, 60 * 1000);
 export const auditTrackLimiter = createLimiter(30, 60 * 1000);
 export const auditRequestLimiter = createLimiter(3, 60 * 1000);
 export const unsubscribeLimiter = createLimiter(10, 60 * 1000);
+
+// MTR Viability Scorecard limiters
+export const scorecardSubmitLimiter = createLimiter(5, 60 * 1000);
+export const scorecardUnlockLimiter = createLimiter(3, 60 * 1000);
+
+// Course waitlist — 3 signups per minute per IP
+export const waitlistLimiter = createLimiter(3, 60 * 1000);
+
+// Auth limiters. Login is kept tight to slow credential stuffing — each key
+// (typically email+IP) gets 5 attempts per 15 minutes. Password-reset request
+// is per-IP since the email is unauthenticated input. Reset consumption is
+// per-IP because the token itself is single-use already.
+export const loginLimiter = createLimiter(5, 15 * 60 * 1000);
+export const passwordResetRequestLimiter = createLimiter(3, 15 * 60 * 1000);
+export const passwordResetConsumeLimiter = createLimiter(10, 15 * 60 * 1000);
+
+// Pull the client IP out of standard proxy headers. Returns "unknown" instead
+// of null so it can safely be used as part of a limiter key.
+export function getClientIp(request: Request): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0]!.trim();
+  const real = request.headers.get("x-real-ip");
+  if (real) return real.trim();
+  return "unknown";
+}

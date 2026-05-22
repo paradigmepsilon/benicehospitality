@@ -286,10 +286,12 @@ export function bookingConfirmationEmail({
   name,
   formattedDate,
   formattedTime,
+  durationLabel = "1 hour",
 }: {
   name: string;
   formattedDate: string;
   formattedTime: string;
+  durationLabel?: string;
 }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -392,7 +394,7 @@ export function bookingConfirmationEmail({
                         </td>
                         <td style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
                           <span style="color:#3d3d3d;font-size:13px;">Duration</span><br />
-                          <strong>1 hour</strong>
+                          <strong>${durationLabel}</strong>
                         </td>
                       </tr>
                     </table>
@@ -402,7 +404,7 @@ export function bookingConfirmationEmail({
 
               <!-- Follow-up text -->
               <p style="margin:28px 0 0;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:15px;color:#3d3d3d;line-height:1.6;">
-                We'll follow up with call details before your appointment. If you need to reschedule or have any questions, simply reply to this email.
+                We'll follow up with call details before your appointment. Need to reschedule or ask a question? Just reply to this email.
               </p>
 
               <!-- CTA button -->
@@ -444,4 +446,201 @@ export function bookingConfirmationEmail({
   </table>
 </body>
 </html>`;
+}
+
+// ============================================================================
+// MTR Viability Scorecard emails
+// ============================================================================
+
+const SCORECARD_BAND_COPY: Record<
+  "high" | "moderate" | "low",
+  { label: string; color: string; bg: string; line: string }
+> = {
+  high: {
+    label: "High Viability",
+    color: "#5b9a2f",
+    bg: "#5b9a2f1a",
+    line: "This property is a strong MTR candidate. The biggest opportunity is sharpening what is already working.",
+  },
+  moderate: {
+    label: "Moderate Viability",
+    color: "#f5a623",
+    bg: "#f5a6231a",
+    line: "This property can work as an MTR with some targeted upgrades. Your report ranks the highest-ROI fixes first.",
+  },
+  low: {
+    label: "Low Viability",
+    color: "#c0674a",
+    bg: "#c0674a1a",
+    line: "This property needs significant work before it pencils as an MTR. The report lays out what would have to change.",
+  },
+};
+
+function scorecardCallout({
+  propertyNickname,
+  overallScore,
+  maxScore,
+  band,
+}: {
+  propertyNickname: string;
+  overallScore: number;
+  maxScore: number;
+  band: "high" | "moderate" | "low";
+}) {
+  const meta = SCORECARD_BAND_COPY[band];
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px;background-color:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
+    <tr><td style="padding:24px 28px;">
+      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">MTR Viability Scorecard</p>
+      <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
+        ${propertyNickname}
+      </p>
+      <p style="margin:8px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:600;color:#1a1a1a;line-height:1;">
+        ${overallScore.toFixed(1)}<span style="font-size:18px;color:#3d3d3d;font-weight:500;"> / ${maxScore.toFixed(0)}</span>
+        <span style="margin-left:12px;display:inline-block;font-size:14px;color:${meta.color};font-weight:600;background:${meta.bg};padding:2px 10px;border-radius:4px;vertical-align:middle;">${meta.label}</span>
+      </p>
+    </td></tr>
+  </table>`;
+}
+
+export interface ScorecardReadyPayload {
+  name: string;
+  propertyNickname: string;
+  overallScore: number;
+  maxScore: number;
+  band: "high" | "moderate" | "low";
+  resultsUrl: string;
+  bookingUrl: string;
+}
+
+export function scorecardReadyEmail(p: ScorecardReadyPayload) {
+  const meta = SCORECARD_BAND_COPY[p.band];
+  return auditLayout({
+    preheader: `${p.propertyNickname}: ${p.overallScore.toFixed(1)} / ${p.maxScore.toFixed(0)}, ${meta.label}.`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your MTR Viability Scorecard is ready</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 16px;">Hi ${p.name},</p>
+      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the MTR Viability Scorecard.</p>
+      ${scorecardCallout({ propertyNickname: p.propertyNickname, overallScore: p.overallScore, maxScore: p.maxScore, band: p.band })}
+      <p style="margin:0 0 16px;">${meta.line}</p>
+      <p style="margin:0 0 16px;">Your full report includes section-by-section scores and a specific recommendation for every gap. The link stays active so you can come back any time.</p>
+      ${primaryButton(p.resultsUrl, "View My Full Report")}
+      <p style="margin:32px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:18px;color:#1a1a1a;font-weight:600;">Want a second set of eyes?</p>
+      <p style="margin:8px 0 0;">Della and the BNHG team run free 30-minute strategy calls for operators working through MTR setup. Bring your scorecard, we will work through your highest-leverage next move.</p>
+      ${primaryButton(p.bookingUrl, "Book a Strategy Call")}
+      <p style="margin:32px 0 0;color:#1a1a1a;font-weight:500;">The BNHG team</p>
+    `,
+  });
+}
+
+export interface InternalScorecardRequestPayload {
+  email: string;
+  name: string;
+  role: "owner" | "investor" | "manager" | "considering";
+  propertyNickname: string;
+  band: "high" | "moderate" | "low";
+  overallScore: number;
+  maxScore: number;
+  requestId: number;
+}
+
+const SCORECARD_ROLE_LABELS: Record<
+  InternalScorecardRequestPayload["role"],
+  string
+> = {
+  owner: "Owner",
+  investor: "Investor",
+  manager: "Property Manager",
+  considering: "Considering buying",
+};
+
+export function internalScorecardRequestEmail(
+  p: InternalScorecardRequestPayload,
+) {
+  const meta = SCORECARD_BAND_COPY[p.band];
+  return auditLayout({
+    preheader: `New scorecard: ${p.propertyNickname} (${meta.label})`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New MTR Viability Scorecard submission</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 18px;">A visitor just unlocked their scorecard.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
+        <tr><td style="padding:18px 22px;font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#3d3d3d;line-height:1.7;">
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Property:</strong> ${p.propertyNickname}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">From:</strong> ${p.name} &lt;${p.email}&gt;</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Role:</strong> ${SCORECARD_ROLE_LABELS[p.role]}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Score:</strong> ${p.overallScore.toFixed(1)} / ${p.maxScore.toFixed(0)} (${meta.label})</p>
+          <p style="margin:0;"><strong style="color:#1a1a1a;">Submission ID:</strong> #${p.requestId}</p>
+        </td></tr>
+      </table>
+      <p style="margin:18px 0 0;font-size:13px;color:#3d3d3d;">Contact has been added to <code>pipeline_contacts</code> with source <code>viability_scorecard</code>.</p>
+    `,
+  });
+}
+
+export interface WaitlistStudentEmailPayload {
+  name: string;
+  tierName: string;
+  courseName: string;
+  /** When tier is "interest" (no real pricing tiers yet), the email skips the
+   *  "the X tier of Y" line and just confirms the course waitlist. */
+  tierless?: boolean;
+  /** Co-founder signing the email. Defaults to Della so the existing RRR flow
+   *  is untouched. CRR waitlist passes Alex. */
+  signoffName?: string;
+  signoffTitle?: string;
+}
+
+export function waitlistStudentThankYouEmail(p: WaitlistStudentEmailPayload) {
+  const signoffName = p.signoffName || "Della Henry";
+  const signoffTitle = p.signoffTitle || "Co-founder, Be Nice Hospitality Group";
+  const intro = p.tierless
+    ? `Thanks for raising your hand for the <strong style="color:#1a1a1a;">${p.courseName}</strong> waitlist.`
+    : `Thanks for raising your hand for the <strong style="color:#1a1a1a;">${p.tierName}</strong> tier of ${p.courseName}.`;
+  return auditLayout({
+    preheader: `You're on the ${p.courseName} waitlist. We'll be in touch when the doors unlock.`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">You&rsquo;re on the list, ${p.name}.</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 16px;">${intro}</p>
+      <p style="margin:0 0 16px;">We&rsquo;re finishing the curriculum now. The moment enrollment opens, I&rsquo;ll send a note straight to this inbox so you can claim your seat before the public link goes out.</p>
+      <p style="margin:0 0 16px;">No drip campaign, no upsells in the meantime. One note when the doors unlock.</p>
+      <p style="margin:24px 0 0;">If you have questions before then, just reply to this email and I&rsquo;ll answer myself.</p>
+      <p style="margin:24px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:16px;color:#1a1a1a;">${signoffName}</p>
+      <p style="margin:2px 0 0;font-size:13px;color:#3d3d3d;">${signoffTitle}</p>
+    `,
+  });
+}
+
+export interface WaitlistAdminEmailPayload {
+  name: string;
+  email: string;
+  tierName: string;
+  courseSlug: string;
+  signupTime: string;
+  signupId: number;
+  adminUrl: string;
+}
+
+export function waitlistAdminNotificationEmail(p: WaitlistAdminEmailPayload) {
+  return auditLayout({
+    preheader: `New waitlist signup: ${p.tierName} — ${p.name}`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New waitlist signup</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 18px;">Someone just joined the course waitlist.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
+        <tr><td style="padding:18px 22px;font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#3d3d3d;line-height:1.7;">
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Name:</strong> ${p.name}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Email:</strong> <a href="mailto:${p.email}" style="color:#5b9a2f;">${p.email}</a></p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Tier:</strong> ${p.tierName}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Course:</strong> ${p.courseSlug}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Signed up:</strong> ${p.signupTime}</p>
+          <p style="margin:0;"><strong style="color:#1a1a1a;">Signup ID:</strong> #${p.signupId}</p>
+        </td></tr>
+      </table>
+      ${primaryButton(p.adminUrl, "View the waitlist")}
+      <p style="margin:18px 0 0;font-size:13px;color:#3d3d3d;">Reply to this email to write back directly. They also live in <code>pipeline_contacts</code> with source <code>course_waitlist</code>.</p>
+    `,
+  });
 }
