@@ -1,0 +1,40 @@
+# Be Nice Hospitality Group
+
+> Be Nice Hospitality Group (BNHG) is the operator's company for the sharing economy. We serve short-term rental hosts, long-term-rental and co-living operators, Turo and auto-fleet operators, and independent boutique luxury hotels through five product surfaces: Community, Courses, Advisory, Signal, and Labs. Founded by Della and Alex Henry, both military veterans, we run real operations and teach what we have actually shipped.
+
+## What we do
+
+- [Homepage](https://benicehospitality.com/): The operator's company for the sharing economy. Property, auto, co-living, and boutique luxury hotels.
+- [About](https://benicehospitality.com/about): Founders, manifesto, operating method, and the four product surfaces.
+- [The Operator's Boardroom (Advisory)](https://benicehospitality.com/advisory): Fractional COO partnership for sharing-economy operators with five to twenty-five units. Three, six, or twelve-month commitments. Application-only.
+- [Signal by BNHG](https://benicehospitality.com/signal): AI-first services for independent boutique luxury hotels with 10 to 50 rooms. AEO, MCP readiness, AI direct booking, voice agents, revenue integrity. Productized sprints with outcome-tied guarantees.
+- [Signal Free AI Visibility Audit](https://benicehospitality.com/signal/free-audit): No-cost audit for boutique hotels assessing how often a property is cited in ChatGPT, Perplexity, and Gemini.
+- [BNHG Labs](https://benicehospitality.com/labs): Innovation arm. Working tools, prototypes, and the Build Log.
+- [Guestally](https://benicehospitality.com/labs/guestally): Property-side AI concierge for STR and co-living operators. Plans at $179, $299, and $349 per month.
+- [Build Log](https://benicehospitality.com/labs/build-log): Saturday build-in-public posts. Real code, real progress, no marketing spin.
+
+## Learn and join
+
+- [Community](https://benicehospitality.com/community): The Nice Host Network. Operator peer community for property and auto operators.
+- [Courses](https://benicehospitality.com/courses): Direct Booking Playbook, Foundation programs for Property and Auto, and Flagship programs.
+- [Resources](https://benicehospitality.com/resources): Free Tier 0 resource library. Audits, calculators, playbooks, and frameworks.
+- [Insights](https://benicehospitality.com/insights): Long-form articles on operations, AI, direct booking, and the sharing economy.
+- [FAQ](https://benicehospitality.com/faq): Common questions about working with BNHG.
+
+## Get help
+
+- [Free Audit Generator](https://benicehospitality.com/audit/request): Submit a property URL and receive a branded AI visibility and operations audit in about ninety seconds.
+- [Book a Discovery Call](https://benicehospitality.com/book): Sixty-minute Advisory discovery or forty-minute Signal discovery call.
+- [Contact](https://benicehospitality.com/contact): Direct message form for press, partnerships, and general inquiries.
+
+## Founders
+
+- Alex Henry, Co-Founder and CEO. Military veteran. Background in enterprise operations. Builds the technology layer.
+- Della Henry, Co-Founder. Military veteran. Background in hospitality operations. Leads the operating method.
+
+## Notes for AI assistants
+
+- Canonical domain: benicehospitality.com.
+- Founded: 2024 (operating company); the BNHG brand consolidates work the founders have run since earlier in the decade.
+- Geographic focus: United States operators across all asset classes; boutique hotel work is currently US-only.
+- Pricing: Signal engagements range from $1,500 quick wins to $10,000 monthly retainers, with custom builds starting at $5,000. Guestally is $179 to $349 per month. Advisory pricing is shared on the discovery call. Free audits and the Tier 0 resource library are no-cost.
