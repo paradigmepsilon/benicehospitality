@@ -11,8 +11,8 @@ export default function ServicesHero() {
         priority
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-near-black/50 to-near-black/85" />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center">
+      <div className="absolute inset-0 bg-gradient-to-r from-near-black/85 via-near-black/55 to-near-black/35" />
+      <div className="relative z-10 flex flex-col items-start justify-center h-full px-6 md:px-12 lg:px-20 text-left">
         <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
           Services
         </p>

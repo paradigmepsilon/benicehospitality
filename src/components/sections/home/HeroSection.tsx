@@ -1,90 +1,60 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import ScrollExpandMedia from '@/components/ui/scroll-expansion-hero';
-import Button from '@/components/ui/Button';
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.25,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
+import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <ScrollExpandMedia
-      mediaType="video"
-      mediaSrc="/images/BNHG Intro Video.mp4"
-      bgImageSrc="/images/backgroundimage2.jpg"
-      titleLine1="Your Boutique Hotel Deserves"
-      titleLine2="Better Than Guesswork"
-      scrollToExpand="Scroll to explore"
-      textBlend
+    <section
+      className="relative isolate w-full bg-near-black pt-32 md:pt-28 pb-2 md:pb-4"
+      aria-labelledby="hero-headline"
     >
-      <h1 className="sr-only">
-        Boutique Hotel Consulting and Technology for Independent Luxury Properties
-      </h1>
-      <motion.div
-        className="flex flex-col items-center text-center px-6 py-16 max-w-3xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.p
-          variants={itemVariants}
-          className="font-sans text-sm md:text-base tracking-[0.3em] uppercase text-charcoal/60 mb-4"
-        >
-          We help
-        </motion.p>
+      {/* Text — sits above the image on mobile, overlays on md+ */}
+      <div className="md:absolute md:inset-0 md:z-10 md:flex md:items-center md:pointer-events-none">
+        <div className="px-6 pb-8 md:px-12 lg:px-20 md:py-0 md:pointer-events-auto">
+          <div className="max-w-xl">
+            <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-cream/70 md:text-cream/90 mb-6">
+              Built by operators, for operators
+            </p>
 
-        <motion.p
-          variants={itemVariants}
-          className="font-script text-primary-green text-4xl md:text-5xl lg:text-6xl font-normal mb-10 leading-tight"
-        >
-          Independent Luxury Boutique Properties
-        </motion.p>
+            <h1
+              id="hero-headline"
+              className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold text-cream leading-[1.05] tracking-tight mb-6"
+            >
+              Use OTAs for discovery.
+              <br />
+              Run the rest like a business.
+            </h1>
 
-        <motion.div variants={itemVariants} className="w-full space-y-6 mb-10">
-          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
-            Grow Direct Revenue
-          </p>
-          <div className="w-16 h-px bg-warm-gold mx-auto" />
-          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
-            Streamline Operations
-          </p>
-          <div className="w-16 h-px bg-warm-gold mx-auto" />
-          <p className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-near-black tracking-tight">
-            Create Guest Experiences that Feel
-            <span className="text-warm-gold italic"> Premium</span>
-          </p>
-        </motion.div>
+            <p className="font-sans text-base md:text-lg text-cream/90 leading-relaxed">
+              We&rsquo;re operators who got tired of running our portfolios on
+              duct tape. So we built the systems, training, services, and
+              software we wished existed for our properties and vehicle rental
+              businesses.
+            </p>
+          </div>
+        </div>
+      </div>
 
-        <motion.p
-          variants={itemVariants}
-          className="font-display text-lg md:text-xl text-charcoal/70 italic"
-        >
-          — Without adding complexity.
-        </motion.p>
-
-        <motion.div variants={itemVariants} className="mt-10">
-          <Button href="/book" variant="primary" size="lg">
-            Book a Discovery Call
-          </Button>
-        </motion.div>
-      </motion.div>
-    </ScrollExpandMedia>
+      {/* Full-width image — natural 3:2, capped on very wide screens.
+          On mobile it appears below the text block; on md+ the text overlays it. */}
+      <div className="relative w-full aspect-[3/2] max-h-[760px] overflow-hidden">
+        <Image
+          src="/images/Website Images/image2.png"
+          alt="Della and Alex Henry in front of an Atlanta skyline at golden hour"
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+          priority
+        />
+        {/* Scrim only when text overlays (md+) */}
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden md:block bg-gradient-to-r from-black/70 via-black/35 to-transparent"
+        />
+        {/* Bottom fade — softens the image edge into the section's near-black bg */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-24 md:h-32 bg-gradient-to-b from-transparent to-near-black"
+        />
+      </div>
+    </section>
   );
 }

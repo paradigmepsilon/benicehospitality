@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 const containerVariants = {
   hidden: {},
@@ -23,7 +24,7 @@ const itemVariants = {
 export default function SignalHero() {
   return (
     <section className="relative bg-off-white pt-36 md:pt-44 pb-20 md:pb-28 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center">
+      <div className="px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -65,8 +66,15 @@ export default function SignalHero() {
             variants={itemVariants}
             className="flex flex-wrap items-center gap-6 mt-8"
           >
-            <Button href="/book" variant="primary" size="lg">
-              Book a 40-Minute Discovery Call
+            <Button
+              href={bookingUrl({
+                callType: "discovery_call_45",
+                source: BOOKING_SOURCES.SIGNAL_COMPONENT_HERO,
+              })}
+              variant="primary"
+              size="lg"
+            >
+              Book a Discovery Call
             </Button>
             <a
               href="#offerings"

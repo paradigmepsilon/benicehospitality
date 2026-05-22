@@ -1,31 +1,36 @@
 import type { Metadata } from "next";
 import HeroSection from "@/components/sections/home/HeroSection";
-import PainPointsSection from "@/components/sections/home/PainPointsSection";
 import ThreePillarsSection from "@/components/sections/home/ThreePillarsSection";
-import WhoWeServeSection from "@/components/sections/home/WhoWeServeSection";
-import ServiceTiersPreview from "@/components/sections/home/ServiceTiersPreview";
-import AEOCallout from "@/components/sections/home/AEOCallout";
-import GuestallyIntro from "@/components/sections/home/GuestallyIntro";
-import TestimonialsSection from "@/components/sections/home/TestimonialsSection";
-import HomeCTA from "@/components/sections/home/HomeCTA";
+import ProductSurfaces from "@/components/sections/home/ProductSurfaces";
+import WhoItsFor from "@/components/sections/home/WhoItsFor";
+import FoundersBand from "@/components/sections/home/FoundersBand";
+import WhoItsForBanner from "@/components/sections/home/WhoItsForBanner";
+import SectionDivider from "@/components/ui/SectionDivider";
+import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Be Nice Hospitality Group | Boutique Hotel Consulting & Technology",
+    absolute:
+      "Be Nice Hospitality Group | The Operator's Company for the Sharing Economy",
   },
   description:
-    "We help independent luxury boutique properties grow direct revenue, streamline operations, and create guest experiences that feel premium. Serving 10–50 room properties across the U.S.",
+    "Training, services, and software for operators running short-term rentals, mid-term, long-term, co-living, Turo fleets, and boutique luxury hotels. Atlanta-headquartered. Founded by Della and Alex Henry.",
   alternates: {
-    canonical: "https://benicehospitalitygroup.com",
+    canonical: "https://benicehospitality.com",
   },
   openGraph: {
-    title: "Be Nice Hospitality Group | Boutique Hotel Consulting",
+    title: "Be Nice Hospitality Group",
     description:
-      "Consulting and technology built exclusively for independent luxury boutique properties with 10–50 rooms.",
-    url: "https://benicehospitalitygroup.com",
+      "Built by operators, for operators. Training and community for property operators, AI services for boutique hotels, and the BNHG Labs portfolio of operator tools.",
+    url: "https://benicehospitality.com",
     type: "website",
     images: [
-      { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },
+      {
+        url: "/images/hero-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "Be Nice Hospitality Group",
+      },
     ],
   },
 };
@@ -34,15 +39,15 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <PainPointsSection />
+      <SectionDivider fromColor={C.nearBlack} toColor={C.white} />
       <ThreePillarsSection />
-      <AEOCallout />
-      <WhoWeServeSection />
-      <ServiceTiersPreview />
-      <div className="w-full px-6"><div className="max-w-7xl mx-auto h-px bg-white/15" /></div>
-      <GuestallyIntro />
-      <TestimonialsSection />
-      <HomeCTA />
+      <SectionDivider fromColor={C.white} toColor={C.warmGold} flip />
+      <WhoItsForBanner />
+      <WhoItsFor />
+      <ProductSurfaces />
+      <SectionDivider fromColor={C.primaryGreen} toColor={C.white} />
+      <FoundersBand />
+      <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
     </>
   );
 }

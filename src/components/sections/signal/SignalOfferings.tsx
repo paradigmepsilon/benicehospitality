@@ -1,5 +1,6 @@
 import AnimatedSection, { AnimatedDiv, AnimatedItem } from "@/components/ui/AnimatedSection";
 import SectionLabel from "@/components/ui/SectionLabel";
+import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 interface Offer {
   name: string;
@@ -182,7 +183,10 @@ export default function SignalOfferings() {
               {tier.more && (
                 <AnimatedItem>
                   <a
-                    href="/book"
+                    href={bookingUrl({
+                      callType: "discovery_call_45",
+                      source: BOOKING_SOURCES.SIGNAL_OFFERINGS_CARD,
+                    })}
                     className="font-display italic text-base text-primary-green hover:text-primary-green-dark transition-colors mt-6 inline-block"
                   >
                     {tier.more}
@@ -220,10 +224,13 @@ export default function SignalOfferings() {
           </AnimatedItem>
           <AnimatedItem>
             <a
-              href="/book"
+              href={bookingUrl({
+                callType: "discovery_call_45",
+                source: BOOKING_SOURCES.SIGNAL_OFFERINGS_FOOTER,
+              })}
               className="font-sans text-sm font-medium text-warm-gold hover:text-white border-b border-warm-gold/60 hover:border-white pb-1 mt-8 inline-block transition-colors"
             >
-              Discuss a custom build &rarr;
+              Book a Discovery Call &rarr;
             </a>
           </AnimatedItem>
         </div>

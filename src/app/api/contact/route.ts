@@ -4,7 +4,12 @@ import { sql } from "@/lib/db";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-construct so this module can load at build time without RESEND_API_KEY.
+let cachedResend: Resend | null = null;
+function getResend(): Resend {
+  if (!cachedResend) cachedResend = new Resend(process.env.RESEND_API_KEY);
+  return cachedResend;
+}
 
 export async function POST(req: Request) {
   try {
@@ -30,24 +35,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Verification failed. Please try again." }, { status: 400 });
     }
 
-    if (!name || !email || !hotelName) {
+    if (!name || !email) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
-    await resend.emails.send({
+    const hotelNameValue = hotelName || "";
+    const locationValue = location || null;
+    const roomCountValue = roomCount || null;
+
+    await getResend().emails.send({
       from: "BNHG Website <onboarding@resend.dev>",
       to: process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
       replyTo: email,
-      subject: `New Contact: ${hotelName} — ${name}`,
+      subject: `New Contact: ${name}${interests ? ` — ${interests}` : ""}`,
       html: `
         <h2>New Contact Form Submission</h2>
         <table style="border-collapse:collapse;width:100%;max-width:600px;">
           <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;">${name}</td></tr>
           <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${email}</td></tr>
           ${phone ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${phone}</td></tr>` : ""}
-          <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Hotel</td><td style="padding:8px;border-bottom:1px solid #eee;">${hotelName}</td></tr>
-          ${location ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${location}</td></tr>` : ""}
-          ${roomCount ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Rooms</td><td style="padding:8px;border-bottom:1px solid #eee;">${roomCount}</td></tr>` : ""}
           ${interests ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Interests</td><td style="padding:8px;border-bottom:1px solid #eee;">${interests}</td></tr>` : ""}
           ${message ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Message</td><td style="padding:8px;border-bottom:1px solid #eee;">${message}</td></tr>` : ""}
         </table>
@@ -58,7 +64,7 @@ export async function POST(req: Request) {
     try {
       await sql`
         INSERT INTO contact_submissions (name, email, phone, hotel_name, hotel_location, room_count, interests, message)
-        VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${location || null}, ${roomCount || null}, ${interests || null}, ${message || null})
+        VALUES (${name}, ${email}, ${phone || null}, ${hotelNameValue}, ${locationValue}, ${roomCountValue}, ${interests || null}, ${message || null})
       `;
     } catch (dbError) {
       console.error("Failed to store contact submission:", dbError);
@@ -68,7 +74,7 @@ export async function POST(req: Request) {
     try {
       const crmResult = await sql`
         INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source)
-        VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${location || null}, ${roomCount || null}, 'contact_form')
+        VALUES (${name}, ${email}, ${phone || null}, ${hotelNameValue}, ${locationValue}, ${roomCountValue}, 'contact_form')
         ON CONFLICT (email) DO UPDATE SET
           name = EXCLUDED.name,
           phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),

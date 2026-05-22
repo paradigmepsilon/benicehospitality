@@ -2,58 +2,51 @@ import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
-import SectionLabel from "@/components/ui/SectionLabel";
 import { PILLARS } from "@/lib/constants";
 
 export default function ThreePillarsSection() {
   return (
-    <AnimatedSection theme="dark" className="py-24 px-6">
+    <AnimatedSection theme="light" className="pt-6 md:pt-8 pb-6 md:pb-8 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 md:mb-20 max-w-3xl mx-auto">
           <AnimatedItem>
-            <SectionLabel light>What We Do</SectionLabel>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight">
+              Top 3 things that separate operators from hosts
+            </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-white mb-4 leading-tight">
-              Three Pillars. One Goal:{" "}
-              <span className="text-warm-gold italic">Profitable Growth.</span>
-            </h2>
+            <div
+              aria-hidden
+              className="mx-auto mt-6 h-px w-16 bg-warm-gold"
+            />
           </AnimatedItem>
         </div>
 
         <AnimatedDiv
           stagger
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10 lg:gap-14"
         >
           {PILLARS.map((pillar, i) => (
-            <AnimatedItem key={i}>
-              <div className="border border-white/10 rounded-lg p-8 h-full hover:border-primary-green/50 transition-all duration-300 hover:-translate-y-1 group">
-                <div className="w-8 h-px bg-warm-gold/50 mb-6" />
-                <h3 className="font-display text-2xl font-semibold text-white mb-3">
+            <AnimatedItem key={pillar.title}>
+              <article className="border-l-2 border-warm-gold pl-6 md:pl-8">
+                <p
+                  aria-hidden="true"
+                  className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
                   {pillar.title}
                 </h3>
-                <p className="font-sans text-white/70 mb-6 leading-relaxed">
+                <p className="font-sans text-base italic text-charcoal/80 leading-relaxed mb-4">
                   {pillar.tagline}
                 </p>
-                <ul className="space-y-2 mb-8">
-                  {pillar.points.map((point, j) => (
-                    <li
-                      key={j}
-                      className="font-sans text-sm text-white/60 flex items-start gap-2"
-                    >
-                      <span className="text-primary-green mt-1 flex-shrink-0">
-                        →
-                      </span>
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                {pillar.stat && (
-                  <p className="font-sans text-sm text-warm-gold/80 italic border-t border-white/10 pt-6">
-                    {pillar.stat}
+                {pillar.body && (
+                  <p className="font-sans text-base text-charcoal leading-relaxed">
+                    {pillar.body}
                   </p>
                 )}
-              </div>
+              </article>
             </AnimatedItem>
           ))}
         </AnimatedDiv>

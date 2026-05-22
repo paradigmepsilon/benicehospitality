@@ -17,6 +17,8 @@ function getInitials(name: string) {
 }
 
 export default function TestimonialsSection() {
+  if (TESTIMONIALS.length === 0) return null;
+
   return (
     <AnimatedSection theme="off-white" className="py-24 px-6">
       <div className="max-w-7xl mx-auto">

@@ -44,7 +44,7 @@ export default function AEOCallout() {
               >
                 Get the Free AEO Snapshot
               </Button>
-              <Button href="/services#tier-2" variant="secondary" size="lg">
+              <Button href="/signal" variant="secondary" size="lg">
                 See AEO Implementation
               </Button>
             </div>

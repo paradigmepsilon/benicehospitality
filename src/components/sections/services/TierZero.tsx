@@ -108,8 +108,8 @@ export default function TierZero() {
           </AnimatedItem>
           <AnimatedItem>
             <div className="mt-8 flex justify-center">
-              <Button href="/audit/request" variant="primary" size="lg">
-                Get Your Free Audit
+              <Button href="/login" variant="primary" size="lg">
+                Community Login
               </Button>
             </div>
           </AnimatedItem>

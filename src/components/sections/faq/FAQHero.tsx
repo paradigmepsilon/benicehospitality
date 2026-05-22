@@ -1,8 +1,8 @@
 export default function FAQHero() {
   return (
-    <section className="relative bg-near-black py-28 px-6 overflow-hidden">
+    <section className="relative bg-near-black py-28 px-6 md:px-12 lg:px-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-near-black to-near-black/90" />
-      <div className="relative z-10 max-w-4xl mx-auto text-center">
+      <div className="relative z-10 max-w-4xl">
         <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
           Frequently Asked Questions
         </p>
@@ -10,7 +10,7 @@ export default function FAQHero() {
           Answers for{" "}
           <span className="text-warm-gold italic">Independent Operators</span>
         </h1>
-        <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl mx-auto leading-relaxed">
+        <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl leading-relaxed">
           What boutique hotel consulting actually costs, how to reduce OTA
           dependency, which guest messaging tools are right for small hotels,
           and everything else we get asked.

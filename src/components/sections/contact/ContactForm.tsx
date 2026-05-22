@@ -9,13 +9,7 @@ import AnimatedSection, {
 import Button from "@/components/ui/Button";
 import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 
-const INTERESTS = [
-  "Free Resource",
-  "Diagnostic",
-  "Implementation Help",
-  "Guestally Demo",
-  "Just Exploring",
-];
+const INTERESTS = ["Properties", "Vehicles", "Boutique Hotels"];
 
 function slugToResourceName(slug: string | null): string | null {
   if (!slug) return null;
@@ -23,15 +17,10 @@ function slugToResourceName(slug: string | null): string | null {
   return match ? match.name : null;
 }
 
-const ROOM_COUNTS = ["10–20 rooms", "21–35 rooms", "36–50 rooms", "50+ rooms"];
-
 interface FormState {
   name: string;
   email: string;
   phone: string;
-  hotelName: string;
-  location: string;
-  roomCount: string;
   interests: string[];
   message: string;
 }
@@ -45,10 +34,7 @@ export default function ContactForm() {
     name: "",
     email: "",
     phone: "",
-    hotelName: "",
-    location: "",
-    roomCount: "",
-    interests: prefilledResource ? ["Free Resource"] : [],
+    interests: [],
     message: prefilledResource
       ? `I'd like to request the ${prefilledResource}.`
       : "",
@@ -59,7 +45,7 @@ export default function ContactForm() {
 
   const validate = (fields?: (keyof FormState)[]) => {
     const newErrors: Partial<Record<keyof FormState, string>> = {};
-    const check = fields || (["name", "email", "hotelName"] as (keyof FormState)[]);
+    const check = fields || (["name", "email"] as (keyof FormState)[]);
 
     if (check.includes("name") && !form.name.trim()) {
       newErrors.name = "Name is required.";
@@ -70,9 +56,6 @@ export default function ContactForm() {
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
         newErrors.email = "Please enter a valid email address.";
       }
-    }
-    if (check.includes("hotelName") && !form.hotelName.trim()) {
-      newErrors.hotelName = "Hotel name is required.";
     }
 
     return newErrors;
@@ -124,7 +107,7 @@ export default function ContactForm() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      setTouched(new Set(["name", "email", "hotelName"]));
+      setTouched(new Set(["name", "email"]));
       return;
     }
 
@@ -138,9 +121,6 @@ export default function ContactForm() {
           name: form.name,
           email: form.email,
           phone: form.phone,
-          hotelName: form.hotelName,
-          location: form.location,
-          roomCount: form.roomCount,
           interests: form.interests.join(", "),
           message: form.message,
           website: honeypot,
@@ -174,9 +154,6 @@ export default function ContactForm() {
       name: "",
       email: "",
       phone: "",
-      hotelName: "",
-      location: "",
-      roomCount: "",
       interests: [],
       message: "",
     });
@@ -234,7 +211,7 @@ export default function ContactForm() {
                   {prefilledResource}
                 </p>
                 <p className="font-sans text-xs text-charcoal/60 mt-1">
-                  We&apos;ve pre-selected &ldquo;Free Resource&rdquo; below. Just fill out the rest and hit send.
+                  We&apos;ve noted your request in the message below. Just fill out the rest and hit send.
                 </p>
               </div>
             </AnimatedItem>
@@ -312,67 +289,6 @@ export default function ContactForm() {
                 />
               </div>
 
-              {/* Row 2 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label htmlFor="hotelName" className={labelClass}>
-                    Hotel Name <span className="text-primary-green">*</span>
-                  </label>
-                  <input
-                    id="hotelName"
-                    name="hotelName"
-                    type="text"
-                    required
-                    value={form.hotelName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="The Magnolia Inn"
-                    className={inputClass("hotelName")}
-                  />
-                  {errors.hotelName && touched.has("hotelName") && (
-                    <p className="font-sans text-xs text-red-500 mt-1">{errors.hotelName}</p>
-                  )}
-                </div>
-                <div>
-                  <label htmlFor="location" className={labelClass}>
-                    Hotel Location{" "}
-                    <span className="text-charcoal/40 font-normal">
-                      (City, State)
-                    </span>
-                  </label>
-                  <input
-                    id="location"
-                    name="location"
-                    type="text"
-                    value={form.location}
-                    onChange={handleChange}
-                    placeholder="Savannah, GA"
-                    className={inputClass()}
-                  />
-                </div>
-              </div>
-
-              {/* Room Count */}
-              <div>
-                <label htmlFor="roomCount" className={labelClass}>
-                  Approximate Room Count
-                </label>
-                <select
-                  id="roomCount"
-                  name="roomCount"
-                  value={form.roomCount}
-                  onChange={handleChange}
-                  className={inputClass()}
-                >
-                  <option value="">Select room count</option>
-                  {ROOM_COUNTS.map((rc) => (
-                    <option key={rc} value={rc}>
-                      {rc}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Interests */}
               <div>
                 <p className={labelClass}>What Are You Most Interested In?</p>
@@ -430,11 +346,13 @@ export default function ContactForm() {
                 </p>
               )}
 
-              <Turnstile
-                ref={turnstileRef}
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                options={{ size: "invisible" }}
-              />
+              {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                  options={{ size: "invisible" }}
+                />
+              )}
 
               <Button
                 type="submit"
@@ -488,21 +406,6 @@ export default function ContactForm() {
             </div>
           </AnimatedItem>
 
-          <AnimatedItem>
-            <div className="bg-near-black rounded-lg p-7">
-              <h3 className="font-display text-xl font-semibold text-white mb-3">
-                Not Sure Where to Start?
-              </h3>
-              <p className="font-sans text-sm text-white/65 leading-relaxed mb-5">
-                Request a free resource for your property. We&apos;ll
-                send you a custom analysis of your top opportunities.
-                No call required to get started.
-              </p>
-              <p className="font-sans text-xs text-white/40 italic">
-                Just select &ldquo;Free Resource&rdquo; in the form.
-              </p>
-            </div>
-          </AnimatedItem>
         </div>
       </div>
     </AnimatedSection>

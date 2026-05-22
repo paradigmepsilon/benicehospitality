@@ -2,16 +2,28 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  /* Brand Colors */
-  --color-primary-green: #5b9a2f;
-  --color-primary-green-dark: #4a7d25;
-  --color-charcoal: #3d3d3d;
-  --color-warm-gold: #f5a623;
-  --color-warm-gold-dark: #d4891a;
+  /* Brand colors — canonical palette (locked brand identity).
+     Deep teal + warm gold + cream is the BNHG signature. Use these names
+     in all new code; legacy aliases below remain for unmigrated pages. */
+  --color-deep-teal: #1A4D4F;
+  --color-teal-light: #2D6A6C;
+  --color-warm-gold: #B08D57;
+  --color-gold-light: #D4B894;
+  --color-charcoal: #2C3E50;
+  --color-warm-gray: #4B5563;
+  --color-light-gray: #F3F4F6;
+  --color-cream: #FAF8F3;
   --color-near-black: #1a1a1a;
-  --color-off-white: #f8f6f1;
-  --color-light-gray: #e8e4dd;
   --color-terracotta: #c0674a;
+
+  /* Legacy aliases — old token names mapped to new canonical hex values
+     so existing utility classes (bg-primary-green, text-off-white, etc.)
+     resolve to the new brand. Migrate to canonical names per-section as
+     pages are rebuilt; remove these once no class references remain. */
+  --color-primary-green: #1A4D4F;
+  --color-primary-green-dark: #2D6A6C;
+  --color-warm-gold-dark: #D4B894;
+  --color-off-white: #FAF8F3;
 
   /* Typography */
   --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
@@ -38,12 +50,12 @@ body {
 
 /* Focus states for accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-primary-green);
+  outline: 2px solid var(--color-deep-teal);
   outline-offset: 2px;
 }
 
 /* Selection */
 ::selection {
-  background-color: var(--color-primary-green);
+  background-color: var(--color-deep-teal);
   color: white;
 }

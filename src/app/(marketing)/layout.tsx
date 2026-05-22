@@ -1,7 +1,8 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
-const SITE_URL = "https://benicehospitalitygroup.com";
+const SITE_URL = "https://benicehospitality.com";
 const ORG_ID = `${SITE_URL}/#organization`;
 const PROFESSIONAL_SERVICE_ID = `${SITE_URL}/#professional-service`;
 const ALEX_ID = `${SITE_URL}/#alex-henry`;
@@ -124,8 +125,9 @@ export default function MarketingLayout({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
       />
       <Header />
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="pb-[60px] lg:pb-0">{children}</main>
       <Footer />
+      <MobileBottomNav />
     </>
   );
 }

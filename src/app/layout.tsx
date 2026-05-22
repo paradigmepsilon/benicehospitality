@@ -25,7 +25,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://benicehospitalitygroup.com"),
+  metadataBase: new URL("https://benicehospitality.com"),
   title: {
     default: "Be Nice Hospitality Group",
     template: "%s | Be Nice Hospitality Group",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://benicehospitalitygroup.com",
+    url: "https://benicehospitality.com",
     siteName: "Be Nice Hospitality Group",
     images: [
       {
@@ -97,7 +97,7 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>
