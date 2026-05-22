@@ -118,7 +118,7 @@ export default function DailyApprovalTodayPage() {
           <p className="text-sm text-[#1a1a1a]/60 mb-2">No pending approval batches today.</p>
           <p className="text-xs text-[#1a1a1a]/40">
             Batches are created each morning by the prepare-daily-batches cron. Visit{" "}
-            <Link href="/admin/campaigns" className="text-[#5b9a2f] hover:underline">campaigns</Link>
+            <Link href="/admin/outreach/campaigns" className="text-[#5b9a2f] hover:underline">campaigns</Link>
             {" "}to see scheduled sends.
           </p>
         </div>

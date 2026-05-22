@@ -41,6 +41,9 @@ export async function POST(request: Request) {
       secondary_keywords,
       hashtags,
       tags,
+      post_type,
+      embed_url,
+      embed_platform,
     } = body;
 
     if (!title || !excerpt || !category) {
@@ -51,10 +54,12 @@ export async function POST(request: Request) {
     }
 
     const slug = customSlug || slugify(title);
+    const resolvedPostType =
+      post_type === "build_log" ? "build_log" : "insight";
 
     const result = await sql`
-      INSERT INTO blog_posts (title, slug, excerpt, content, category, featured_image_url, published, published_at, meta_description, target_keyword, secondary_keywords, hashtags, tags)
-      VALUES (${title}, ${slug}, ${excerpt}, ${content || ""}, ${category}, ${featured_image_url || ""}, ${published ?? false}, ${published_at || null}, ${meta_description || null}, ${target_keyword || null}, ${secondary_keywords || []}, ${hashtags || []}, ${tags || []})
+      INSERT INTO blog_posts (title, slug, excerpt, content, category, featured_image_url, published, published_at, meta_description, target_keyword, secondary_keywords, hashtags, tags, post_type, embed_url, embed_platform)
+      VALUES (${title}, ${slug}, ${excerpt}, ${content || ""}, ${category}, ${featured_image_url || ""}, ${published ?? false}, ${published_at || null}, ${meta_description || null}, ${target_keyword || null}, ${secondary_keywords || []}, ${hashtags || []}, ${tags || []}, ${resolvedPostType}, ${embed_url || null}, ${embed_platform || null})
       RETURNING *
     `;
 

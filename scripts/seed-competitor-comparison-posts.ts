@@ -3,6 +3,7 @@ import { neon } from "@neondatabase/serverless";
 interface PostSeed {
   title: string;
   slug: string;
+  featured_image_url: string;
   category: string;
   published: boolean;
   published_at: string;
@@ -19,6 +20,8 @@ const POSTS: PostSeed[] = [
   {
     title: "BNHG vs Xotels: Which Boutique Hotel Consultant Is Right for You?",
     slug: "bnhg-vs-xotels-boutique-hotel-consulting-comparison",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1660557989695-14fac79c086d?auto=format&fit=crop&w=1920&q=80",
     category: "Industry Trends",
     published: true,
     published_at: "2026-04-25T14:00:00Z",
@@ -55,7 +58,7 @@ const POSTS: PostSeed[] = [
       "Competitive Analysis",
     ],
     excerpt:
-      "Both BNHG and Xotels work with independent hotels, but the fit is very different. BNHG is built for 10–50 room U.S. boutique properties that want a strategic partner across commercial, guest experience, and tech. Xotels is a larger revenue-management-led firm with a global footprint. Here is the honest comparison.",
+      "Both BNHG and Xotels work with independent hotels, but the fit is very different. BNHG is built for 10 to 50 room U.S. boutique properties that want a strategic partner across commercial, guest experience, and tech. Xotels is a larger revenue-management-led firm with a global footprint. Here is the honest comparison.",
     content: `<h2>BNHG vs Xotels: Which Boutique Hotel Consultant Is Right for You?</h2>
 
 <p>If you own or operate an independent boutique hotel and you have started shopping for a consulting partner, two names that come up often are Be Nice Hospitality Group (BNHG) and Xotels. They are very different firms, and most of the confusion we see from hotel owners comes from not understanding where each one actually plays.</p>
@@ -64,7 +67,7 @@ const POSTS: PostSeed[] = [
 
 <h2>The Short Version</h2>
 
-<p><strong>BNHG</strong> is a U.S.-based consulting and technology firm purpose-built for independent luxury boutique properties in the 10 to 50 room range. We work across three pillars — commercial performance, guest experience, and hotel technology — and we build our own software (Guestally) for the properties we serve.</p>
+<p><strong>BNHG</strong> is a U.S.-based consulting and technology firm purpose-built for independent luxury boutique properties in the 10 to 50 room range. We work across three pillars (commercial performance, guest experience, and hotel technology), and we build our own software (Guestally) for the properties we serve.</p>
 
 <p><strong>Xotels</strong> is a global revenue management and hotel management firm. They are headquartered in Europe, operate across dozens of countries, and their core service is outsourced revenue management. They work with independent hotels but also with larger properties, resorts, and small chains. Their ideal client is generally larger than BNHG's.</p>
 
@@ -74,15 +77,15 @@ const POSTS: PostSeed[] = [
 
 <p>Xotels' core offering is outsourced revenue management. They also offer hotel management, distribution consulting, and digital marketing, but revenue management is their center of gravity. If your single biggest problem is that you do not have a revenue manager, or that your current one is not performing, Xotels has deep expertise in that specific domain.</p>
 
-<p>BNHG's scope is wider but narrower in terms of property type. We work across three pillars — commercial, guest experience, and tech — but only with independent boutique hotels in the 10 to 50 room range. We do not work with branded chains, resorts above 50 rooms, or properties below 10 rooms. The tradeoff is that we will not go as deep on any single discipline as a firm like Xotels will on revenue management. We will, however, connect the dots across disciplines in a way that a pure revenue management firm cannot.</p>
+<p>BNHG's scope is wider but narrower in terms of property type. We work across three pillars (commercial, guest experience, and tech), but only with independent boutique hotels in the 10 to 50 room range. We do not work with branded chains, resorts above 50 rooms, or properties below 10 rooms. The tradeoff is that we will not go as deep on any single discipline as a firm like Xotels will on revenue management. We will, however, connect the dots across disciplines in a way that a pure revenue management firm cannot.</p>
 
-<p>If you need someone to run your revenue management function full-time, Xotels is likely a better fit. If you need a strategic partner who can tell you whether the problem is revenue, guest experience, tech, or a combination — and then help you fix the real root cause — BNHG is purpose-built for that.</p>
+<p>If you need someone to run your revenue management function full-time, Xotels is likely a better fit. If you need a strategic partner who can tell you whether the problem is revenue, guest experience, tech, or a combination, and then help you fix the real root cause, BNHG is purpose-built for that.</p>
 
 <h2>Engagement Model</h2>
 
 <p>Xotels typically sells retainer-based services. Their revenue management engagement is usually a monthly subscription with a minimum term, often 12 months. Their management services involve a larger commitment, typically a multi-year contract with a percentage of revenue or gross operating profit as the fee structure.</p>
 
-<p>BNHG offers four tiers. Tier 0 is free — eight research-backed resources we deliver with no strings attached. Tier 1 is paid diagnostics, scoped to a specific problem. Tier 2 is implementation work. Tier 3 is ongoing fractional advisory. Most clients start with a Tier 0 resource, which means you can evaluate the quality of our thinking before paying anything. That option does not really exist at larger firms.</p>
+<p>BNHG offers four tiers. Tier 0 is free: eight research-backed resources we deliver with no strings attached. Tier 1 is paid diagnostics, scoped to a specific problem. Tier 2 is implementation work. Tier 3 is ongoing fractional advisory. Most clients start with a Tier 0 resource, which means you can evaluate the quality of our thinking before paying anything. That option does not really exist at larger firms.</p>
 
 <p>If you want a full outsourced function with a long-term commitment, Xotels is structured for that. If you want to start small, see if the thinking fits, and scale up only if it does, BNHG is structured for that.</p>
 
@@ -98,17 +101,17 @@ const POSTS: PostSeed[] = [
 
 <p>Xotels' ideal client is a property or small group with at least 50 rooms (and often many more), a business model that can support an outsourced revenue management function, and a leadership team comfortable with a longer engagement. They serve some smaller properties, but their economics work best at scale.</p>
 
-<p>BNHG's ideal client is a 10 to 50 room independent luxury boutique property in the United States, owner-operated or run by a small leadership team, with a problem that spans revenue, guest experience, or tech — or the owner is not sure which. We are specifically not a fit for larger properties, branded chains, or international resorts.</p>
+<p>BNHG's ideal client is a 10 to 50 room independent luxury boutique property in the United States, owner-operated or run by a small leadership team, with a problem that spans revenue, guest experience, or tech, or the owner is not sure which. We are specifically not a fit for larger properties, branded chains, or international resorts.</p>
 
 <p>If you sit above 50 rooms and your problem is primarily revenue management, Xotels is likely the better partner. If you sit at 10 to 50 rooms and you want a strategic partner who understands the independent boutique segment from the inside, BNHG is built for you.</p>
 
 <h2>Technology</h2>
 
-<p>Xotels does not build their own software. They are a services firm and partner with best-in-class tools in the revenue management and distribution space (pricing tools, channel managers, RMS platforms).</p>
+<p>Xotels does not build their own software. They are a services firm and partner with the leading tools in the revenue management and distribution space (pricing tools, channel managers, RMS platforms).</p>
 
 <p>BNHG builds Guestally, a guest messaging and upsell automation platform for independent boutique hotels. This matters for two reasons. First, if your tech stack is part of your problem, we can evaluate it from the inside out, including building what you need if it doesn't exist. Second, we understand the economics of hotel software from the operator side because we are one. That shows up in the way we audit tech stacks and recommend tools.</p>
 
-<p>If you believe your revenue management function is the core problem and your tech stack is fine, Xotels' lack of in-house software is not an issue. If you suspect your tech stack is actually the problem — or you want a partner who understands both the services and product sides — BNHG is structured for that.</p>
+<p>If you believe your revenue management function is the core problem and your tech stack is fine, Xotels' lack of in-house software is not an issue. If you suspect your tech stack is actually the problem, or you want a partner who understands both the services and product sides, BNHG is structured for that.</p>
 
 <h2>Geographic Fit</h2>
 
@@ -120,7 +123,7 @@ const POSTS: PostSeed[] = [
 
 <p>The decision mostly comes down to three questions:</p>
 
-<p><strong>One: What's the real problem?</strong> If your single biggest problem is that your revenue management function is broken or missing, a revenue-management-led firm is a natural fit. If your problem is broader — guest experience is off, tech is a mess, OTA dependency is too high, and you are not sure where to start — you want a firm that can diagnose across all three pillars.</p>
+<p><strong>One: What's the real problem?</strong> If your single biggest problem is that your revenue management function is broken or missing, a revenue-management-led firm is a natural fit. If your problem is broader (guest experience is off, tech is a mess, OTA dependency is too high, and you are not sure where to start), you want a firm that can diagnose across all three pillars.</p>
 
 <p><strong>Two: How big is your property?</strong> If you are above 50 rooms and running at scale, the economics of a larger firm work. If you are in the 10 to 50 room range, a specialist that understands boutique economics will be more affordable and more relevant.</p>
 
@@ -130,7 +133,7 @@ const POSTS: PostSeed[] = [
 
 <h2>Try Before You Pay</h2>
 
-<p>If you want to evaluate BNHG without any commitment, our <a href="https://benicehospitalitygroup.com/services#tier-0">Tier 0 free resources</a> are the right place to start. Each one is a research-backed deliverable specific to your property. We also keep an up-to-date <a href="https://benicehospitalitygroup.com/faq">FAQ</a> that answers the most common questions we get from hotel operators. The Tier 0 resources and the FAQ together will tell you more about how we think than any sales call would.</p>
+<p>If you want to evaluate BNHG without any commitment, our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a> are the right place to start. Each one is a research-backed deliverable specific to your property. We also keep an up-to-date <a href="https://benicehospitality.com/faq">FAQ</a> that answers the most common questions we get from hotel operators. The Tier 0 resources and the FAQ together will tell you more about how we think than any sales call would.</p>
 
 <p>If you are considering Xotels, their website has a detailed services breakdown and case studies. We recommend reaching out to both firms with the same scoped brief and comparing the responses. That is the fastest way to see which firm matches how you want to work.</p>`,
   },
@@ -138,6 +141,8 @@ const POSTS: PostSeed[] = [
     title:
       "Best Boutique Hotel Consulting Firms for Independent Properties (2026)",
     slug: "best-boutique-hotel-consulting-firms-2026",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1774192621035-20d11389f781?auto=format&fit=crop&w=1920&q=80",
     category: "Industry Trends",
     published: true,
     published_at: "2026-04-28T14:00:00Z",
@@ -179,7 +184,7 @@ const POSTS: PostSeed[] = [
 
 <p>If you search "best boutique hotel consulting firms" you'll find a lot of lists that are either sales pages in disguise or recycled generic content. This is neither. This is an honest breakdown of seven firms that serve independent boutique hotels in 2026, including the kind of property each one is built for, where they genuinely excel, and where they are not the right fit.</p>
 
-<p>Be Nice Hospitality Group (BNHG) is one of the firms on this list. We are a U.S.-based consulting and technology firm for 10 to 50 room independent boutique hotels, and we are publishing this because we would rather help an operator find the right partner — even if it is not us — than watch them waste six months with the wrong firm.</p>
+<p>Be Nice Hospitality Group (BNHG) is one of the firms on this list. We are a U.S.-based consulting and technology firm for 10 to 50 room independent boutique hotels, and we are publishing this because we would rather help an operator find the right partner, even if it is not us, than watch them waste six months with the wrong firm.</p>
 
 <h2>What to Look For</h2>
 
@@ -193,13 +198,13 @@ const POSTS: PostSeed[] = [
 
 <p><strong>Engagement model.</strong> Retainer with long commitment, project-based scopes, or tiered engagements where you can start small. None is inherently better, but the right model for you depends on your cash flow and your comfort with commitment.</p>
 
-<p><strong>Try-before-you-pay.</strong> Any firm that makes you commit before you see the quality of their thinking is relying on the sales pitch instead of the work. Prefer firms that will give you something — a scoped analysis, a free resource, a diagnostic — before asking for money.</p>
+<p><strong>Try-before-you-pay.</strong> Any firm that makes you commit before you see the quality of their thinking is relying on the sales pitch instead of the work. Prefer firms that will give you something (a scoped analysis, a free resource, a diagnostic) before asking for money.</p>
 
 <h2>The Seven Firms</h2>
 
 <h3>1. Be Nice Hospitality Group (BNHG)</h3>
 
-<p><strong>Specialty:</strong> U.S.-based consulting and technology for 10–50 room independent luxury boutique properties. Cross-pillar work across commercial performance, guest experience, and hotel technology.</p>
+<p><strong>Specialty:</strong> U.S.-based consulting and technology for 10 to 50 room independent luxury boutique properties. Cross-pillar work across commercial performance, guest experience, and hotel technology.</p>
 
 <p><strong>Engagement model:</strong> Four tiers. Tier 0 is free (8 research-backed resources). Tier 1 is paid diagnostics. Tier 2 is implementation. Tier 3 is ongoing fractional advisory.</p>
 
@@ -265,7 +270,7 @@ const POSTS: PostSeed[] = [
 
 <p><strong>Engagement model:</strong> Project-based and ongoing advisory.</p>
 
-<p><strong>Ideal client:</strong> Operators where the guest experience is the clear priority — new properties, repositionings, or brands with identity issues.</p>
+<p><strong>Ideal client:</strong> Operators where the guest experience is the clear priority: new properties, repositionings, or brands with identity issues.</p>
 
 <p><strong>Not ideal for:</strong> Operators where the primary problem is commercial (revenue, channels, pricing) or technology.</p>
 
@@ -275,11 +280,11 @@ const POSTS: PostSeed[] = [
 
 <p>If you are running a 10 to 50 room independent boutique hotel in the U.S. and your problem spans multiple disciplines, BNHG is built for you. If you are above 50 rooms and your problem is specifically revenue management, Xotels is probably a better fit. If you are preparing a transaction, HVS. If you know you need a senior individual consultant, Cayuga.</p>
 
-<p>We recommend sending the same scoped brief to two or three firms and comparing the responses. The firm that takes your brief seriously, asks the right follow-up questions, and produces a specific proposal is the firm to work with — regardless of which logo is at the top of the page.</p>
+<p>We recommend sending the same scoped brief to two or three firms and comparing the responses. The firm that takes your brief seriously, asks the right follow-up questions, and produces a specific proposal is the firm to work with, regardless of which logo is at the top of the page.</p>
 
 <h2>Start With a Free Evaluation</h2>
 
-<p>If you want to try BNHG without any commitment, our <a href="https://benicehospitalitygroup.com/services#tier-0">Tier 0 free resources</a> give you a research-backed deliverable specific to your property. The Revenue Opportunity Snapshot, Online Reputation Briefing, and Tech Stack Quick Scan are the three most common starting points. Our <a href="https://benicehospitalitygroup.com/faq">FAQ page</a> covers the rest of the common questions we get.</p>
+<p>If you want to try BNHG without any commitment, our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a> give you a research-backed deliverable specific to your property. The Revenue Opportunity Snapshot, Online Reputation Briefing, and Tech Stack Quick Scan are the three most common starting points. Our <a href="https://benicehospitality.com/faq">FAQ page</a> covers the rest of the common questions we get.</p>
 
 <p>For the other firms on this list, reach out directly and ask for a scoped proposal against a specific problem you are trying to solve. That is the fastest way to see who is the right fit for your property.</p>`,
   },
@@ -287,6 +292,8 @@ const POSTS: PostSeed[] = [
     title:
       "How to Choose a Boutique Hotel Consultant: A 2026 Guide for Independent Owners",
     slug: "how-to-choose-a-hotel-consultant-independent-hotels",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1765611368472-68c35ea7fe55?auto=format&fit=crop&w=1920&q=80",
     category: "Industry Trends",
     published: true,
     published_at: "2026-05-01T14:00:00Z",
@@ -325,17 +332,17 @@ const POSTS: PostSeed[] = [
       "Most boutique hotel owners only hire a consultant once or twice in a decade. That means the hiring process is unfamiliar, high-stakes, and hard to get right. This is the decision framework we wish every independent owner had before they started shopping.",
     content: `<h2>How to Choose a Boutique Hotel Consultant: A 2026 Guide for Independent Owners</h2>
 
-<p>Most boutique hotel owners hire a consultant once, maybe twice, in a decade. That means when the time comes, you are making a high-stakes decision in unfamiliar territory, usually while running a hotel that is already taking up all of your time. The cost of getting it wrong — a long engagement with a firm that does not deliver — is much higher than the cost of the engagement itself.</p>
+<p>Most boutique hotel owners hire a consultant once, maybe twice, in a decade. That means when the time comes, you are making a high-stakes decision in unfamiliar territory, usually while running a hotel that is already taking up all of your time. The cost of getting it wrong (a long engagement with a firm that does not deliver) is much higher than the cost of the engagement itself.</p>
 
 <p>This is the framework we use when we talk to an operator and realize they are shopping. We built Be Nice Hospitality Group (BNHG) specifically for 10 to 50 room independent boutique hotels, so we are one of the firms in the market. But this article is not a pitch. It is the decision framework we wish every independent owner had before they started.</p>
 
 <h2>Step One: Define the Real Problem</h2>
 
-<p>The biggest source of bad consulting engagements is starting with the wrong problem. Owners usually frame their issue in the most visible terms — "we need more bookings," "our revenue is flat," "we are losing to the hotel down the street." Those are symptoms, not problems.</p>
+<p>The biggest source of bad consulting engagements is starting with the wrong problem. Owners usually frame their issue in the most visible terms: "we need more bookings," "our revenue is flat," "we are losing to the hotel down the street." Those are symptoms, not problems.</p>
 
 <p>Before you shop for a firm, spend an afternoon writing down every frustration in the business. Not just revenue. Look at channel mix, review trends, staff turnover, software costs, booking engine conversion, direct booking share, and guest complaints. Cluster the frustrations into categories.</p>
 
-<p>If most of your issues cluster in commercial (revenue, channels, pricing), you want a firm with deep revenue management expertise. If they cluster in guest experience (reviews, reputation, service gaps), you want a firm that specializes in that. If they cluster in technology (clunky booking engine, overlapping tools, no guest messaging), you want a firm with tech experience. If they span all three, you want a firm that works across all three — which is what BNHG is built for.</p>
+<p>If most of your issues cluster in commercial (revenue, channels, pricing), you want a firm with deep revenue management expertise. If they cluster in guest experience (reviews, reputation, service gaps), you want a firm that specializes in that. If they cluster in technology (clunky booking engine, overlapping tools, no guest messaging), you want a firm with tech experience. If they span all three, you want a firm that works across all three. That is what BNHG is built for.</p>
 
 <h2>Step Two: Match the Firm to Your Property Size</h2>
 
@@ -361,7 +368,7 @@ const POSTS: PostSeed[] = [
 
 <p>Any firm worth hiring should be able to show you the quality of their thinking before you commit. That can take several forms:</p>
 
-<p>A free diagnostic or scoped analysis. BNHG's Tier 0 free resources work this way — we deliver a research-backed analysis of your property with no obligation. Some other firms offer scoped discovery engagements for a small fee.</p>
+<p>A free diagnostic or scoped analysis. BNHG's Tier 0 free resources work this way. We deliver a research-backed analysis of your property with no obligation. Some other firms offer scoped discovery engagements for a small fee.</p>
 
 <p>Published content. Look at the firm's blog, podcasts, and public writing. Does it reflect deep thinking about independent hotels, or is it generic SEO content? A firm that writes well about the segment you are in is likely to think well about your property.</p>
 
@@ -377,7 +384,7 @@ const POSTS: PostSeed[] = [
 
 <p><strong>One-size-fits-all playbooks.</strong> A firm that recommends the same set of moves to every client is not doing the diagnostic work. Your property is not interchangeable with a property in a different market, size, or positioning.</p>
 
-<p><strong>Tech and software upsells disguised as strategy.</strong> Some firms are essentially software resellers with a consulting wrapper. That is not inherently bad — we build our own software (Guestally) — but the consulting work should stand on its own, not be a sales funnel for a specific product.</p>
+<p><strong>Tech and software upsells disguised as strategy.</strong> Some firms are essentially software resellers with a consulting wrapper. That is not inherently bad. We build our own software (Guestally). But the consulting work should stand on its own, not be a sales funnel for a specific product.</p>
 
 <p><strong>Pressure to sign quickly.</strong> Good firms are not in a rush. If you are being pushed to commit within a week, something is off.</p>
 
@@ -403,9 +410,9 @@ const POSTS: PostSeed[] = [
 
 <h2>How BNHG Fits Into This</h2>
 
-<p>If you are running a 10 to 50 room independent luxury boutique property in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://benicehospitalitygroup.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question — the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five — and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
+<p>If you are running a 10 to 50 room independent luxury boutique property in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question (the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five), and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
 
-<p>Our <a href="https://benicehospitalitygroup.com/faq">FAQ</a> covers most of the questions owners ask before they engage. Between the free resource and the FAQ, you'll know whether we're the right fit long before there's any pressure to commit.</p>
+<p>Our <a href="https://benicehospitality.com/faq">FAQ</a> covers most of the questions owners ask before they engage. Between the free resource and the FAQ, you'll know whether we're the right fit long before there's any pressure to commit.</p>
 
 <p>If we're not the right fit, we'll tell you. That's how we want to be evaluated. It's also how you should evaluate any firm you are considering.</p>`,
   },
@@ -429,7 +436,7 @@ async function seed() {
         )
         VALUES (
           ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content},
-          ${post.category}, ${""},
+          ${post.category}, ${post.featured_image_url},
           ${post.published}, ${post.published_at},
           ${post.meta_description}, ${post.target_keyword},
           ${post.secondary_keywords}, ${post.hashtags}, ${post.tags}
@@ -439,6 +446,7 @@ async function seed() {
           excerpt = EXCLUDED.excerpt,
           content = EXCLUDED.content,
           category = EXCLUDED.category,
+          featured_image_url = EXCLUDED.featured_image_url,
           published = EXCLUDED.published,
           published_at = EXCLUDED.published_at,
           meta_description = EXCLUDED.meta_description,

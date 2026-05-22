@@ -5,7 +5,11 @@ import { inboundReplyPayloadSchema } from "@/lib/validation/outreach";
 import { internalReplyAlertEmail } from "@/lib/email-templates";
 import { logOutreachEvent } from "@/lib/outreach/events";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let cachedResend: Resend | null = null;
+function getResend(): Resend {
+  if (!cachedResend) cachedResend = new Resend(process.env.RESEND_API_KEY);
+  return cachedResend;
+}
 
 /**
  * Inbound reply webhook. Configure your inbound mail parser (Resend Inbound
@@ -56,7 +60,7 @@ export async function POST(request: Request) {
     // Reply from someone we never emailed via outreach. Still notify Alex —
     // could be a forward, or someone replying to a transactional email.
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
         to: process.env.ADMIN_EMAIL || "admin@benicehospitality.com",
         subject: `Reply received from unknown sender: ${sender}`,
@@ -92,7 +96,7 @@ export async function POST(request: Request) {
   `;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
       to: process.env.ADMIN_EMAIL || "admin@benicehospitality.com",
       replyTo: sender,

@@ -6,12 +6,15 @@ import Link from "next/link";
 
 const NAV_ITEMS = [
   { label: "Overview", href: "/admin", icon: "grid" },
+  { label: "Analytics", href: "/admin/analytics", icon: "chart" },
+  { label: "Enrollments", href: "/admin/enrollments", icon: "briefcase" },
+  { label: "Waitlist", href: "/admin/waitlist", icon: "users" },
+  { label: "Courses", href: "/admin/courses", icon: "book" },
+  { label: "Resources", href: "/admin/resources", icon: "edit" },
   { label: "Daily Approval", href: "/admin/daily-approval/today", icon: "clock" },
-  { label: "Campaigns", href: "/admin/campaigns", icon: "send" },
+  { label: "Outreach", href: "/admin/outreach", icon: "send" },
   { label: "Audits", href: "/admin/audits", icon: "chart" },
   { label: "Audit Requests", href: "/admin/audit-requests", icon: "inbox" },
-  { label: "Leads", href: "/admin/leads", icon: "users" },
-  { label: "CRM", href: "/admin/crm", icon: "briefcase" },
   { label: "Schedule", href: "/admin/schedule", icon: "calendar" },
   { label: "Blog Posts", href: "/admin/posts", icon: "edit" },
   { label: "Subscribers", href: "/admin/subscribers", icon: "mail" },
@@ -79,19 +82,37 @@ function NavIcon({ icon }: { icon: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
         </svg>
       );
+    case "book":
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      );
     default:
       return null;
   }
 }
 
-export default function AdminShell({ children }: { children: React.ReactNode }) {
+export default function AdminShell({
+  children,
+  previewPicker,
+}: {
+  children: React.ReactNode;
+  // Server-rendered preview-mode picker. Slotted in as a prop so this client
+  // component doesn't have to import server actions directly.
+  previewPicker: React.ReactNode;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function handleLogout() {
-    await fetch("/api/admin/auth", { method: "DELETE" });
-    router.push("/admin/login");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // best-effort; the redirect below will land on /login regardless
+    }
+    router.push("/login");
   }
 
   function isActive(href: string) {
@@ -152,19 +173,28 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top bar (mobile) */}
-        <header className="lg:hidden bg-white border-b border-[#e8e4dd] px-4 py-3 flex items-center">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-1 text-[#1a1a1a]"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <span className="ml-3 font-display text-lg font-semibold text-[#1a1a1a]">
-            BNHG Admin
-          </span>
+        {/* Top bar */}
+        <header className="bg-white border-b border-[#e8e4dd] px-4 lg:px-8 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-1 text-[#1a1a1a]"
+              aria-label="Open menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <span className="font-display text-lg font-semibold text-[#1a1a1a]">
+              BNHG Admin
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="hidden lg:inline text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]/55">
+              View as
+            </span>
+            {previewPicker}
+          </div>
         </header>
 
         {/* Page content */}

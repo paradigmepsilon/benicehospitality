@@ -32,6 +32,17 @@ function slugify(text: string): string {
     .trim();
 }
 
+type PostType = "insight" | "build_log";
+type EmbedPlatform = "linkedin" | "youtube" | "instagram" | "x" | "threads";
+
+const EMBED_PLATFORMS: { value: EmbedPlatform; label: string }[] = [
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "youtube", label: "YouTube" },
+  { value: "instagram", label: "Instagram" },
+  { value: "x", label: "X / Twitter" },
+  { value: "threads", label: "Threads" },
+];
+
 interface PostData {
   id?: number;
   title: string;
@@ -47,6 +58,9 @@ interface PostData {
   secondary_keywords?: string[];
   hashtags?: string[];
   tags?: string[];
+  post_type?: PostType;
+  embed_url?: string | null;
+  embed_platform?: EmbedPlatform | null;
 }
 
 async function uploadImage(file: File): Promise<string> {
@@ -577,6 +591,11 @@ export default function PostEditor({ post }: { post?: PostData }) {
   const [secondaryKeywords, setSecondaryKeywords] = useState<string[]>(post?.secondary_keywords || []);
   const [hashtags, setHashtags] = useState<string[]>(post?.hashtags || []);
   const [tags, setTags] = useState<string[]>(post?.tags || []);
+  const [postType, setPostType] = useState<PostType>(post?.post_type || "insight");
+  const [embedUrl, setEmbedUrl] = useState<string>(post?.embed_url || "");
+  const [embedPlatform, setEmbedPlatform] = useState<EmbedPlatform | "">(
+    post?.embed_platform || ""
+  );
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -629,6 +648,9 @@ export default function PostEditor({ post }: { post?: PostData }) {
       secondary_keywords: secondaryKeywords,
       hashtags,
       tags,
+      post_type: postType,
+      embed_url: postType === "build_log" ? embedUrl || null : null,
+      embed_platform: postType === "build_log" ? embedPlatform || null : null,
     };
 
     try {
@@ -725,6 +747,77 @@ export default function PostEditor({ post }: { post?: PostData }) {
         />
       ) : (
         <div className="space-y-4">
+          {/* Post type selector. Drives whether the post lives at /insights/[slug]
+              (default) or feeds the BNHG Labs Build Log at /labs/build-log. */}
+          <div className="bg-[#f8f6f1] border border-[#e8e4dd] rounded p-4">
+            <label className="block text-sm font-medium text-[#1a1a1a] mb-2">
+              Post type
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "insight" as PostType, label: "Insight", body: "Long-form essay. Lives at /insights." },
+                { value: "build_log" as PostType, label: "Build Log entry", body: "Build-in-public update. Lives at /labs/build-log." },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setPostType(opt.value)}
+                  aria-pressed={postType === opt.value}
+                  className={[
+                    "border-2 rounded p-3 text-left transition-colors",
+                    postType === opt.value
+                      ? "border-[#5b9a2f] bg-white"
+                      : "border-[#e8e4dd] bg-white hover:border-[#5b9a2f]/40",
+                  ].join(" ")}
+                >
+                  <span className="block font-medium text-sm text-[#1a1a1a]">{opt.label}</span>
+                  <span className="block text-xs text-[#1a1a1a]/55 mt-0.5">{opt.body}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Build Log embed fields. Only shown when post_type === build_log. */}
+          {postType === "build_log" && (
+            <div className="bg-[#f8f6f1] border border-[#e8e4dd] rounded p-4 space-y-3">
+              <p className="text-sm font-medium text-[#1a1a1a]">Embed source</p>
+              <p className="text-xs text-[#1a1a1a]/55">
+                Optional. If filled, the Build Log card renders the embedded post or video instead of the Tiptap content body.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="md:col-span-1">
+                  <label className="block text-xs font-medium text-[#1a1a1a]/70 mb-1">
+                    Platform
+                  </label>
+                  <select
+                    value={embedPlatform}
+                    onChange={(e) => setEmbedPlatform(e.target.value as EmbedPlatform | "")}
+                    className="w-full border border-[#e8e4dd] px-3 py-2 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors bg-white"
+                  >
+                    <option value="">None</option>
+                    {EMBED_PLATFORMS.map((p) => (
+                      <option key={p.value} value={p.value}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-medium text-[#1a1a1a]/70 mb-1">
+                    Embed URL
+                  </label>
+                  <input
+                    type="url"
+                    value={embedUrl}
+                    onChange={(e) => setEmbedUrl(e.target.value)}
+                    placeholder="https://www.linkedin.com/posts/... or https://youtu.be/..."
+                    className="w-full border border-[#e8e4dd] px-3 py-2 text-sm focus:outline-none focus:border-[#5b9a2f] transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
               Title

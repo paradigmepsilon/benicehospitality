@@ -42,6 +42,9 @@ export async function PUT(
     secondary_keywords,
     hashtags,
     tags,
+    post_type,
+    embed_url,
+    embed_platform,
   } = body;
 
   const result = await sql`
@@ -60,6 +63,9 @@ export async function PUT(
       secondary_keywords = COALESCE(${secondary_keywords !== undefined ? secondary_keywords : null}, secondary_keywords),
       hashtags = COALESCE(${hashtags !== undefined ? hashtags : null}, hashtags),
       tags = COALESCE(${tags !== undefined ? tags : null}, tags),
+      post_type = COALESCE(${post_type === "build_log" || post_type === "insight" ? post_type : null}, post_type),
+      embed_url = ${embed_url !== undefined ? (embed_url || null) : null},
+      embed_platform = ${embed_platform !== undefined ? (embed_platform || null) : null},
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *

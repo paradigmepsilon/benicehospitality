@@ -48,8 +48,8 @@ export default async function AdminDashboard() {
   const cards = [
     { label: "Published Posts", value: stats.publishedPosts, color: "border-[#5b9a2f]", href: "/admin/posts" },
     { label: "Subscribers", value: stats.subscribers, color: "border-[#f5a623]", href: "/admin/subscribers" },
-    { label: "Pipeline Contacts", value: stats.pipelineTotal, color: "border-[#3b82f6]", href: "/admin/crm" },
-    { label: "Prospects", value: stats.pipelineProspects, color: "border-[#8b5cf6]", href: "/admin/crm" },
+    { label: "Pipeline Contacts", value: stats.pipelineTotal, color: "border-[#3b82f6]", href: "/admin/outreach/crm" },
+    { label: "Prospects", value: stats.pipelineProspects, color: "border-[#8b5cf6]", href: "/admin/outreach/crm" },
     { label: "Upcoming Bookings", value: stats.upcomingBookings, color: "border-[#c0674a]", href: "/admin/schedule" },
   ];
 
@@ -84,7 +84,7 @@ export default async function AdminDashboard() {
               CRM Activity
             </h2>
             <Link
-              href="/admin/crm"
+              href="/admin/outreach/crm"
               className="text-xs font-medium text-[#5b9a2f] hover:underline"
             >
               View all

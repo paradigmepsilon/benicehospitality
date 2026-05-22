@@ -231,7 +231,7 @@ export default function AdminAuditDetailPage() {
                   <tr key={v.id} className="border-t border-[#e8e4dd]">
                     <td className="px-3 py-2">
                       <Link
-                        href={`/admin/leads/${encodeURIComponent(v.email)}`}
+                        href={`/admin/outreach/leads/${encodeURIComponent(v.email)}`}
                         className="text-[#1a1a1a] hover:text-[#5b9a2f]"
                       >
                         {v.email}

@@ -7,7 +7,11 @@ import { internalCampaignAlertEmail } from "@/lib/email-templates";
 import { logAuditEvent } from "@/lib/audit/events";
 import { buildAuditUrl } from "@/lib/audit/token";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let cachedResend: Resend | null = null;
+function getResend(): Resend {
+  if (!cachedResend) cachedResend = new Resend(process.env.RESEND_API_KEY);
+  return cachedResend;
+}
 
 interface ApprovedTargetRow {
   id: number;
@@ -27,9 +31,9 @@ async function pauseCampaign(campaignId: number, name: string, reason: string) {
     WHERE id = ${campaignId} AND status != 'paused'
   `;
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
-  const resumeUrl = `${baseUrl}/admin/campaigns/${campaignId}`;
+  const resumeUrl = `${baseUrl}/admin/outreach/campaigns/${campaignId}`;
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
       to: process.env.ADMIN_EMAIL || "admin@benicehospitality.com",
       subject: `Campaign auto-paused: ${name}`,

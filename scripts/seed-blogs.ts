@@ -4,15 +4,17 @@ const BLOG_POSTS = [
   {
     title: "What OTA Dependency Actually Costs a 30-Room Boutique Hotel (The Math Nobody Shows You)",
     slug: "ota-dependency-cost-boutique-hotel",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1553369728-15ec6971afaf?auto=format&fit=crop&w=1920&q=80",
     category: "Revenue Strategy",
-    published: false,
+    published: true,
     published_at: "2026-04-09T12:00:00Z",
     meta_description: "OTA commissions are just the visible cost. For a 30-room boutique hotel, the total annual cost of OTA dependency, including rate erosion, data loss, and cancellations, conservatively exceeds $220,000. Here is the full breakdown.",
     target_keyword: "OTA commission cost boutique hotel",
     secondary_keywords: ["OTA dependency independent hotel", "hotel direct booking strategy", "OTA commission calculator", "reduce OTA commissions boutique hotel", "hotel booking mix optimization"],
     hashtags: ["#OTACommissions", "#HotelRevenue", "#DirectBookings", "#BoutiqueHotels", "#IndependentHotels", "#RevenueManagement", "#HospitalityBusiness", "#HotelMarketing", "#HotelFinance", "#HotelOwners"],
     tags: ["OTA Strategy", "Revenue Management", "Direct Bookings", "Commissions", "Distribution", "Boutique Hotels", "Independent Hotels", "Commercial Performance"],
-    excerpt: "OTA commissions are just the visible cost. For a 30-room boutique hotel, the total annual cost of OTA dependency — including rate erosion, data loss, and cancellations — conservatively exceeds $220,000. Here is the full breakdown.",
+    excerpt: "OTA commissions are just the visible cost. For a 30-room boutique hotel, the total annual cost of OTA dependency, including rate erosion, data loss, and cancellations, conservatively exceeds $220,000. Here is the full breakdown.",
     content: `<h2>What OTA Dependency Actually Costs a 30-Room Boutique Hotel</h2>
 <h3>The Math Nobody Shows You</h3>
 
@@ -90,13 +92,15 @@ const BLOG_POSTS = [
 
 <p>BNHG builds custom revenue snapshots for independent boutique hotels that show exactly where OTA dependency is costing your specific property money and where the highest-ROI fixes are. A 15-minute discovery call is enough to determine whether the math justifies the conversation.</p>
 
-<p>Book a free discovery call at benicehospitalitygroup.com</p>`,
+<p>Book a free discovery call at benicehospitality.com</p>`,
   },
   {
     title: "The Technology Audit Every Boutique Hotel Should Run Before Spending Another Dollar",
     slug: "boutique-hotel-technology-audit",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1677129666186-d29eba893fe3?auto=format&fit=crop&w=1920&q=80",
     category: "Hotel Technology",
-    published: false,
+    published: true,
     published_at: "2026-04-16T12:00:00Z",
     meta_description: "Most independent hotels run 4 to 6 software tools that do not integrate. Here is a five-step technology audit framework that takes two hours and can save thousands per year in redundant subscriptions and lost revenue.",
     target_keyword: "boutique hotel technology audit",
@@ -172,13 +176,15 @@ const BLOG_POSTS = [
 
 <p>BNHG offers a structured technology assessment for independent boutique hotels that goes deeper than this framework, including vendor-specific recommendations, integration architecture planning, and cost-benefit analysis for each tool in the stack. A 15-minute discovery call will help us determine whether a full assessment makes sense for your property.</p>
 
-<p>Book a free discovery call at benicehospitalitygroup.com</p>`,
+<p>Book a free discovery call at benicehospitality.com</p>`,
   },
   {
     title: "Why Your Guests Are Leaving Without Telling You What Went Wrong",
     slug: "guests-leaving-without-feedback",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1560662105-57f8ad6ae2d1?auto=format&fit=crop&w=1920&q=80",
     category: "Guest Experience",
-    published: false,
+    published: true,
     published_at: "2026-04-23T12:00:00Z",
     meta_description: "The most expensive guest feedback is the kind you never receive. Here is why independent boutique hotels lose guests silently and how three automated touchpoints change the outcome.",
     target_keyword: "hotel guest communication gap",
@@ -250,13 +256,15 @@ const BLOG_POSTS = [
 
 <p>BNHG helps independent boutique hotels build guest communication systems that close the gap between booking and checkout. If your property sends a confirmation email and nothing else until the guest arrives, a 15-minute discovery call will show you what that gap is costing and what fixing it looks like.</p>
 
-<p>Book a free discovery call at benicehospitalitygroup.com</p>`,
+<p>Book a free discovery call at benicehospitality.com</p>`,
   },
   {
     title: "The $158 Sitting on the Table at Every Boutique Hotel Stay",
     slug: "ancillary-revenue-boutique-hotel",
+    featured_image_url:
+      "https://images.unsplash.com/photo-1759038085935-b2f14c2c04a7?auto=format&fit=crop&w=1920&q=80",
     category: "Revenue Strategy",
-    published: false,
+    published: true,
     published_at: "2026-04-30T12:00:00Z",
     meta_description: "Ancillary revenue is the most underleveraged income stream at independent hotels. Properties with structured upsell systems capture $35 to $100+ per stay. Most boutique hotels without a system capture close to zero. Here is how to close the gap.",
     target_keyword: "boutique hotel ancillary revenue upsell",
@@ -344,7 +352,7 @@ const BLOG_POSTS = [
 
 <p>BNHG builds custom revenue projections for independent boutique hotels that show exactly how much ancillary revenue your property can capture with a structured upsell system. A 15-minute discovery call is enough to run the initial numbers for your specific property size, ADR, and occupancy.</p>
 
-<p>Book a free discovery call at benicehospitalitygroup.com</p>`,
+<p>Book a free discovery call at benicehospitality.com</p>`,
   },
 ];
 
@@ -363,7 +371,7 @@ async function seedBlogs() {
         )
         VALUES (
           ${post.title}, ${post.slug}, ${post.excerpt}, ${post.content},
-          ${post.category}, ${""},
+          ${post.category}, ${post.featured_image_url},
           ${post.published}, ${post.published_at},
           ${post.meta_description}, ${post.target_keyword},
           ${post.secondary_keywords}, ${post.hashtags}, ${post.tags}
