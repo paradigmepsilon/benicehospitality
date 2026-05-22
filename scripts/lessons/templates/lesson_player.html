@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{HTML_TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BNHG · LESSON 1.2 · EDITORIAL EDITION
+   Photography-led · Magazine spreads · Cinematic typography
+   ============================================================ */
+
+:root {
+  --bnhg-primary: #5b9a2f;
+  --bnhg-primary-dark: #4a7d25;
+  --bnhg-primary-soft: rgba(91, 154, 47, 0.08);
+  --bnhg-secondary: #f5a623;
+  --bnhg-tertiary: #c0674a;
+  --bnhg-bg: #f8f6f1;
+  --bnhg-surface: #ffffff;
+  --bnhg-ink-primary: #1a1a1a;
+  --bnhg-ink-secondary: #3d3d3d;
+  --bnhg-ink-muted: #807868;
+  --bnhg-hairline: rgba(26, 26, 26, 0.10);
+  --bnhg-photo-filter: saturate(0.85) contrast(1.05);
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-script: 'Dancing Script', cursive;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --top-bar-height: 56px;
+  --bottom-bar-height: 72px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #0a0a0a; font-family: var(--font-body); color: var(--bnhg-ink-secondary); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* ============================================================
+   PLAYER CHROME
+   ============================================================ */
+.player { display: flex; flex-direction: column; height: 100vh; }
+.player-top { height: var(--top-bar-height); background: #161614; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,0.06); z-index: 30; }
+.lesson-info { display: flex; align-items: center; gap: 16px; }
+.lesson-info .module-tag { font-family: var(--font-body); font-weight: 600; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bnhg-primary); display: inline-flex; align-items: center; gap: 8px; }
+.lesson-info .module-tag::before { content: ''; width: 16px; height: 1px; background: var(--bnhg-primary); }
+.lesson-info .lesson-title { font-family: var(--font-display); font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.85); font-style: italic; }
+.player-controls-top { display: flex; align-items: center; gap: 4px; }
+.btn-icon { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 10px; border-radius: 4px; color: rgba(255,255,255,0.7); font-family: var(--font-body); font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; transition: background 0.15s, color 0.15s; }
+.btn-icon:hover { background: rgba(255,255,255,0.06); color: white; }
+.btn-icon.active { background: var(--bnhg-primary); color: white; }
+.btn-icon svg { width: 14px; height: 14px; }
+.stage { flex: 1; background: #0a0a0a; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.slide-frame { width: 100%; max-width: calc((100vh - var(--top-bar-height) - var(--bottom-bar-height) - 64px) * 16 / 9); aspect-ratio: 16/9; background: var(--bnhg-bg); position: relative; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04); margin: 32px; border-radius: 4px; color: var(--bnhg-ink-secondary); }
+
+/* ============================================================
+   SLIDE BASE
+   ============================================================ */
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 1; }
+.slide.active { opacity: 1; pointer-events: auto; }
+.corner-mark { position: absolute; top: 24px; right: 28px; width: 36px; height: 36px; z-index: 4; opacity: 0.85; }
+.corner-mark.invert { filter: brightness(0) invert(1); opacity: 0.6; }
+.slide-number { position: absolute; bottom: 20px; left: 28px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--bnhg-ink-muted); z-index: 4; }
+.slide-number.invert { color: rgba(255,255,255,0.55); }
+.slide-number .total { opacity: 0.5; }
+/* When a disclaimer footer is present it sits on top of the slide-number's
+   bottom-left corner. Bump above and recolor so the number stays legible
+   against the dark disclaimer band. */
+.slide:has(.disclaimer-footer) .slide-number { color: rgba(255,255,255,0.8); z-index: 6; }
+.slide:has(.disclaimer-footer) .slide-number .total { opacity: 0.65; }
+
+/* === Eyebrow === */
+.eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--bnhg-primary); display: inline-flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--bnhg-primary); }
+.eyebrow.gold { color: var(--bnhg-secondary); }
+.eyebrow.gold::before { background: var(--bnhg-secondary); }
+.eyebrow.muted { color: var(--bnhg-ink-muted); }
+.eyebrow.muted::before { background: var(--bnhg-ink-muted); }
+.italic-green { font-family: var(--font-display); font-style: italic; color: var(--bnhg-primary); }
+
+/* ============================================================
+   LAYOUT 1 · CINEMATIC COVER
+   ============================================================ */
+.slide-cover .photo { position: absolute; inset: 0; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter) brightness(0.92); }
+.slide-cover .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(248, 246, 241, 0.92) 0%, rgba(248, 246, 241, 0.55) 40%, transparent 70%), linear-gradient(135deg, rgba(248, 246, 241, 0.94) 0%, rgba(248, 246, 241, 0.5) 35%, transparent 65%); }
+.slide-cover .content { position: absolute; inset: 0; padding: 6vh 5vw; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; }
+.slide-cover h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 6.5vw, 92px); line-height: 0.96; color: var(--bnhg-ink-primary); max-width: 78%; letter-spacing: -0.02em; margin: 24px 0; }
+.slide-cover .subtitle { font-family: var(--font-display); font-style: italic; font-size: clamp(18px, 2.4vw, 28px); color: var(--bnhg-ink-secondary); max-width: 55%; line-height: 1.4; margin-bottom: 32px; }
+.slide-cover .meta { font-family: var(--font-mono); font-size: 11px; color: var(--bnhg-ink-muted); letter-spacing: 0.15em; text-transform: uppercase; }
+.slide-cover .meta-divider { display: inline-block; width: 24px; text-align: center; opacity: 0.4; }
+.slide-cover .full-lockup { position: absolute; top: 32px; left: 32px; height: 36px; width: auto; opacity: 0.9; z-index: 3; }
+
+/* ============================================================
+   LAYOUT 2 · HERO STAT (massive numeral + atmospheric photo)
+   ============================================================ */
+.slide-hero-stat { display: grid; grid-template-columns: 1.4fr 1fr; height: 100%; }
+.slide-hero-stat .left { padding: 7vh 4vw 7vh 5vw; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.slide-hero-stat .right { background-size: cover; background-position: center; filter: var(--bnhg-photo-filter) brightness(0.95); position: relative; }
+.slide-hero-stat .right::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(248, 246, 241, 0.45) 0%, transparent 30%); }
+.slide-hero-stat .stat-eyebrow { margin-bottom: 4vh; }
+.slide-hero-stat .figure { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: clamp(140px, 22vw, 280px); line-height: 0.82; color: var(--bnhg-primary); letter-spacing: -0.05em; margin-bottom: 3vh; }
+.slide-hero-stat .figure.gold { color: var(--bnhg-secondary); }
+.slide-hero-stat .supporting { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 32px); line-height: 1.3; color: var(--bnhg-ink-primary); max-width: 92%; font-weight: 400; }
+.slide-hero-stat .source { position: absolute; bottom: 32px; left: 5vw; font-family: var(--font-mono); font-size: 10px; color: var(--bnhg-ink-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.slide-hero-stat .secondary { margin-top: 4vh; padding-top: 3vh; border-top: 1px solid var(--bnhg-hairline); display: flex; justify-content: center; gap: 28px; align-items: baseline; max-width: 95%; }
+.slide-hero-stat .secondary-figure { font-family: var(--font-display); font-style: italic; font-size: clamp(36px, 5vw, 64px); color: var(--bnhg-secondary); line-height: 1; flex-shrink: 0; }
+.slide-hero-stat .secondary-text { font-family: var(--font-body); font-size: clamp(13px, 1.3vw, 16px); color: var(--bnhg-ink-secondary); max-width: 320px; line-height: 1.4; }
+
+/* ============================================================
+   LAYOUT 3 · MAGAZINE SPREAD (asymmetric photo + text)
+   ============================================================ */
+.slide-spread { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.slide-spread.spread-55 { grid-template-columns: 1.1fr 1fr; }
+.slide-spread.reverse { direction: rtl; }
+.slide-spread.reverse > * { direction: ltr; }
+.slide-spread .photo { background-size: cover; background-position: center; filter: var(--bnhg-photo-filter); position: relative; }
+.slide-spread .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 60%, rgba(26, 26, 26, 0.18)); }
+.slide-spread .photo .photo-caption { position: absolute; bottom: 24px; left: 24px; font-family: var(--font-body); font-weight: 500; font-size: 10px; color: rgba(255,255,255,0.92); letter-spacing: 0.18em; text-transform: uppercase; }
+.slide-spread .photo .photo-caption::before { content: ''; display: inline-block; width: 16px; height: 1px; background: white; vertical-align: middle; margin-right: 8px; opacity: 0.7; }
+.slide-spread .text { padding: 7vh 5vw 7vh 4vw; display: flex; flex-direction: column; justify-content: center; background: var(--bnhg-bg); position: relative; }
+.slide-spread .text-eyebrow { margin-bottom: 4vh; }
+.slide-spread h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4.2vw, 56px); line-height: 1.05; color: var(--bnhg-ink-primary); margin-bottom: 4vh; letter-spacing: -0.015em; max-width: 95%; }
+.slide-spread p { font-family: var(--font-body); font-size: clamp(13px, 1.4vw, 16px); line-height: 1.7; color: var(--bnhg-ink-secondary); max-width: 95%; margin-bottom: 14px; }
+.slide-spread .pullout { margin-top: 24px; padding-left: 20px; border-left: 2px solid var(--bnhg-primary); font-family: var(--font-display); font-style: italic; font-size: clamp(15px, 1.6vw, 19px); line-height: 1.3; color: var(--bnhg-primary); max-width: 90%; }
+.slide-spread .text-list { list-style: none; margin-top: 8px; }
+.slide-spread .text-list li { position: relative; padding-left: 28px; margin-bottom: 14px; font-family: var(--font-body); font-size: clamp(13px, 1.3vw, 15px); line-height: 1.55; color: var(--bnhg-ink-secondary); }
+.slide-spread .text-list li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 14px; height: 1px; background: var(--bnhg-primary); }
+.slide-spread .text-list li strong { font-family: var(--font-display); font-style: italic; font-weight: 500; color: var(--bnhg-ink-primary); display: block; margin-bottom: 2px; font-size: 1.04em; }
+
+/* ============================================================
+   LAYOUT 4 · IMMERSIVE QUOTE (full-bleed photo + overlay)
+   ============================================================ */
+.slide-quote .photo { position: absolute; inset: 0; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter) brightness(0.62); }
+.slide-quote .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(13, 13, 13, 0.55) 0%, rgba(13, 13, 13, 0.4) 50%, rgba(13, 13, 13, 0.7) 100%); }
+.slide-quote .content { position: absolute; inset: 0; padding: 7vh 6vw; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+.slide-quote .quote-eyebrow { color: rgba(245, 166, 35, 0.95); margin-bottom: 4vh; }
+.slide-quote .quote-eyebrow::before { background: rgba(245, 166, 35, 0.9); }
+.slide-quote .quote-mark { font-family: var(--font-display); font-style: italic; font-size: clamp(120px, 14vw, 200px); color: rgba(91, 154, 47, 0.55); line-height: 0.4; margin-bottom: -10px; }
+.slide-quote blockquote { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(28px, 4.2vw, 56px); line-height: 1.18; color: white; max-width: 78%; letter-spacing: -0.01em; margin-bottom: 5vh; }
+.slide-quote blockquote em { color: rgba(245, 166, 35, 0.95); font-style: italic; }
+.slide-quote .signature { font-family: var(--font-script); font-weight: 600; font-size: clamp(28px, 3vw, 38px); color: rgb(91, 154, 47); }
+.slide-quote .attribution { font-family: var(--font-body); font-weight: 600; font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 6px; }
+.slide-quote .content.quote-centered { align-items: center; text-align: center; }
+.slide-quote .content.quote-centered .quote-mark { margin-bottom: 0; }
+.slide-quote .content.quote-centered blockquote { max-width: 80%; margin-left: auto; margin-right: auto; }
+
+/* ============================================================
+   LAYOUT 5 · ATMOSPHERIC DIVIDER (photo + numeral overlay)
+   ============================================================ */
+.slide-divider .photo { position: absolute; inset: 0; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter) brightness(0.85); }
+.slide-divider .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(248, 246, 241, 0.95) 0%, rgba(248, 246, 241, 0.6) 35%, rgba(248, 246, 241, 0.15) 60%, transparent 100%); }
+.slide-divider .content { position: absolute; inset: 0; padding: 8vh 5vw; display: flex; align-items: center; gap: 4vw; z-index: 2; }
+.slide-divider .numeral { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(220px, 26vw, 360px); line-height: 0.85; color: var(--bnhg-primary); letter-spacing: -0.06em; }
+.slide-divider .text-block { flex: 1; max-width: 42%; padding-left: 4vw; border-left: 1px solid var(--bnhg-hairline); }
+.slide-divider .text-block .eyebrow { margin-bottom: 20px; }
+.slide-divider .text-block h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.8vw, 48px); line-height: 1.05; color: var(--bnhg-ink-primary); letter-spacing: -0.015em; margin-bottom: 24px; }
+.slide-divider .text-block .lead { font-family: var(--font-display); font-style: italic; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.4; color: var(--bnhg-ink-secondary); max-width: 90%; }
+
+/* ============================================================
+   LAYOUT 6 · EDITORIAL THREE COLUMN
+   ============================================================ */
+.slide-three-col { padding: 6vh 5vw; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+.slide-three-col .header { margin-bottom: 4vh; }
+.slide-three-col .header .eyebrow { margin-bottom: 18px; }
+.slide-three-col .header h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.05; color: var(--bnhg-ink-primary); max-width: 75%; letter-spacing: -0.018em; }
+.slide-three-col .header h2 em { color: var(--bnhg-primary); font-style: italic; }
+.slide-three-col .columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vw; }
+.slide-three-col .col { display: flex; flex-direction: column; }
+.slide-three-col .col-photo { width: 100%; aspect-ratio: 16/10; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter); margin-bottom: 20px; border-radius: 2px; position: relative; }
+.slide-three-col .col-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 70%, rgba(26,26,26,0.2)); }
+.slide-three-col .col-numeral { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(22px, 2.5vw, 32px); color: var(--bnhg-primary); margin-bottom: 10px; }
+.slide-three-col .col-heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(19px, 2.2vw, 26px); color: var(--bnhg-ink-primary); margin-bottom: 14px; line-height: 1.2; letter-spacing: -0.008em; }
+.slide-three-col .col-body { font-family: var(--font-body); font-size: clamp(13px, 1.35vw, 16px); line-height: 1.55; color: var(--bnhg-ink-secondary); }
+.slide-three-col .col-stat { font-family: var(--font-display); font-style: italic; color: var(--bnhg-primary); font-size: clamp(20px, 2.4vw, 28px); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--bnhg-hairline); }
+
+/* ============================================================
+   LAYOUT 7 · EDITORIAL TWO COLUMN
+   ============================================================ */
+.slide-two-col { padding: 6vh 5vw; display: flex; flex-direction: column; height: 100%; }
+.slide-two-col .header { margin-bottom: 4vh; }
+.slide-two-col .header .eyebrow { margin-bottom: 16px; }
+.slide-two-col .header h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.6vw, 48px); line-height: 1.1; color: var(--bnhg-ink-primary); max-width: 75%; letter-spacing: -0.015em; }
+.slide-two-col .header h2 em { color: var(--bnhg-primary); font-style: italic; }
+.slide-two-col .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; flex: 1; position: relative; }
+.slide-two-col .columns::before { content: ''; position: absolute; left: 50%; top: 8%; bottom: 4%; width: 1px; background: var(--bnhg-hairline); }
+.slide-two-col .col { display: flex; flex-direction: column; }
+.slide-two-col .col-photo { width: 100%; aspect-ratio: 2/1; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter); margin-bottom: 22px; border-radius: 2px; }
+.slide-two-col .col-eyebrow { margin-bottom: 14px; }
+.slide-two-col .col-heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(22px, 2.6vw, 32px); color: var(--bnhg-ink-primary); margin-bottom: 18px; line-height: 1.15; letter-spacing: -0.01em; }
+.slide-two-col .col-data { display: grid; grid-template-columns: auto 1fr; gap: 10px 24px; font-family: var(--font-mono); font-size: clamp(12px, 1.25vw, 15px); line-height: 1.4; color: var(--bnhg-ink-secondary); align-items: baseline; }
+.slide-two-col .col-data dt { color: var(--bnhg-ink-muted); font-size: 0.85em; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; font-weight: 500; }
+.slide-two-col .col-data dd { color: var(--bnhg-ink-secondary); font-weight: 400; }
+.slide-two-col .col.highlight .col-eyebrow { color: var(--bnhg-primary); }
+.slide-two-col .col.highlight .col-heading { color: var(--bnhg-primary); font-style: italic; }
+.slide-two-col .col-numeral { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(24px, 2.8vw, 36px); color: var(--bnhg-primary); margin-bottom: 10px; line-height: 1; }
+.slide-two-col .col-body { font-family: var(--font-body); font-size: clamp(14px, 1.4vw, 17px); line-height: 1.55; color: var(--bnhg-ink-secondary); }
+.slide-two-col .col-body strong { color: var(--bnhg-ink-primary); font-weight: 600; }
+.slide-two-col .col.accent-gold { border-top: 3px solid var(--bnhg-secondary); padding-top: 22px; margin-top: -22px; }
+.slide-two-col .col.accent-gold .col-numeral { color: #c08818; }
+.slide-two-col .col.accent-gold .col-heading { color: #c08818; }
+.slide-two-col .col.accent-terracotta { border-top: 3px solid var(--bnhg-tertiary); padding-top: 22px; margin-top: -22px; }
+.slide-two-col .col.accent-terracotta .col-numeral { color: var(--bnhg-tertiary); }
+.slide-two-col .col.accent-terracotta .col-heading { color: var(--bnhg-tertiary); }
+
+/* ============================================================
+   LAYOUT 8 · CARD GRID (3x2 personas, 2x2 preview)
+   ============================================================ */
+.slide-card-grid { padding: 6vh 5vw; display: flex; flex-direction: column; height: 100%; }
+.slide-card-grid .header { margin-bottom: 3.5vh; }
+.slide-card-grid .header .eyebrow { margin-bottom: 16px; }
+.slide-card-grid .header h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.1; color: var(--bnhg-ink-primary); max-width: 75%; letter-spacing: -0.015em; }
+.slide-card-grid .header h2 em { color: var(--bnhg-primary); font-style: italic; }
+.slide-card-grid .grid { display: grid; gap: 16px; flex: 1; }
+.slide-card-grid.cols-3 .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; }
+.slide-card-grid.cols-2 .grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; }
+.slide-card-grid .card { display: flex; flex-direction: column; background: var(--bnhg-surface); border-radius: 3px; overflow: hidden; position: relative; transition: transform 0.2s; }
+.slide-card-grid .card-photo { width: 100%; height: 50%; background-size: cover; background-position: center; filter: var(--bnhg-photo-filter); position: relative; flex-shrink: 0; }
+.slide-card-grid .card-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(26,26,26,0.15)); }
+.slide-card-grid.cols-2 .card-photo { height: 55%; }
+.slide-card-grid .card-content { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+.slide-card-grid .card-numeral { font-family: var(--font-display); font-style: italic; font-size: clamp(14px, 1.5vw, 18px); color: var(--bnhg-primary); margin-bottom: 6px; }
+.slide-card-grid .card-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bnhg-primary); margin-bottom: 8px; }
+.slide-card-grid .card-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(14px, 1.6vw, 19px); color: var(--bnhg-ink-primary); margin-bottom: 6px; line-height: 1.2; letter-spacing: -0.005em; }
+.slide-card-grid.cols-2 .card-title { font-size: clamp(16px, 2vw, 24px); margin-bottom: 8px; }
+.slide-card-grid .card-body { font-family: var(--font-body); font-size: clamp(11px, 1.05vw, 13px); line-height: 1.5; color: var(--bnhg-ink-secondary); }
+.slide-card-grid.cols-2 .card-body { font-size: clamp(12px, 1.15vw, 14px); line-height: 1.55; }
+/* Text-only cards (no card-photo) take the full card height, so scale the
+   type up to fill the available area without crowding the borders. */
+.slide-card-grid.cols-3 .card:not(:has(.card-photo)) .card-content { padding: 28px 28px; justify-content: flex-start; gap: 4px; }
+.slide-card-grid.cols-3 .card:not(:has(.card-photo)) .card-numeral { font-size: clamp(22px, 2.4vw, 32px); margin-bottom: 10px; }
+.slide-card-grid.cols-3 .card:not(:has(.card-photo)) .card-title { font-size: clamp(20px, 2.2vw, 30px); margin-bottom: 12px; line-height: 1.15; }
+.slide-card-grid.cols-3 .card:not(:has(.card-photo)) .card-body { font-size: clamp(14px, 1.4vw, 18px); line-height: 1.5; }
+.slide-card-grid.cols-2 .card:not(:has(.card-photo)) .card-content { padding: 32px 32px; }
+.slide-card-grid.cols-2 .card:not(:has(.card-photo)) .card-numeral { font-size: clamp(26px, 2.8vw, 38px); margin-bottom: 12px; }
+.slide-card-grid.cols-2 .card:not(:has(.card-photo)) .card-title { font-size: clamp(24px, 2.6vw, 36px); margin-bottom: 14px; line-height: 1.15; }
+.slide-card-grid.cols-2 .card:not(:has(.card-photo)) .card-body { font-size: clamp(16px, 1.6vw, 21px); line-height: 1.5; }
+
+/* ============================================================
+   LAYOUT 9 · EDITORIAL ACTION STEP
+   ============================================================ */
+.slide-action { display: grid; grid-template-columns: 1.7fr 1fr; height: 100%; }
+.slide-action .left { padding: 7vh 4vw 7vh 5vw; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.slide-action .right { background-size: cover; background-position: center; filter: var(--bnhg-photo-filter) brightness(0.92); position: relative; }
+.slide-action .right::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(248, 246, 241, 0.4) 0%, transparent 30%); }
+.slide-action .action-eyebrow { margin-bottom: 3vh; }
+.slide-action h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; color: var(--bnhg-ink-primary); margin-bottom: 4vh; max-width: 96%; letter-spacing: -0.012em; }
+.slide-action h2 em { color: var(--bnhg-primary); font-style: italic; }
+.slide-action ol { list-style: none; counter-reset: action-counter; margin-bottom: 5vh; }
+.slide-action ol li { counter-increment: action-counter; position: relative; padding-left: 74px; margin-bottom: 20px; font-family: var(--font-display); font-size: clamp(15px, 1.7vw, 20px); line-height: 1.4; color: var(--bnhg-ink-primary); font-weight: 400; }
+.slide-action ol li::before { content: counter(action-counter, decimal-leading-zero); position: absolute; left: 0; top: 0; font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: clamp(20px, 2.4vw, 30px); color: var(--bnhg-primary); width: 52px; line-height: 1.2; }
+.slide-action ol li strong { font-weight: 500; color: var(--bnhg-ink-primary); }
+.slide-action ol li em { font-style: italic; color: var(--bnhg-primary); }
+.slide-action .up-next { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-body); font-weight: 600; font-size: 11px; color: var(--bnhg-secondary); text-transform: uppercase; letter-spacing: 0.22em; padding-top: 3vh; border-top: 1px solid var(--bnhg-hairline); }
+.slide-action .up-next-target { font-family: var(--font-display); font-style: italic; font-size: 16px; text-transform: none; letter-spacing: normal; color: var(--bnhg-ink-primary); font-weight: 400; }
+
+/* ============================================================
+   PLAYER BOTTOM
+   ============================================================ */
+.player-bottom { height: var(--bottom-bar-height); background: #161614; display: flex; align-items: center; gap: 16px; padding: 0 24px; border-top: 1px solid rgba(255,255,255,0.06); z-index: 30; }
+.btn-nav, .btn-play { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); transition: background 0.15s, border-color 0.15s; }
+.btn-nav:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.24); }
+.btn-play { background: var(--bnhg-primary); color: white; border-color: var(--bnhg-primary); width: 44px; height: 44px; }
+.btn-play:hover { background: var(--bnhg-primary-dark); border-color: var(--bnhg-primary-dark); }
+.btn-nav svg, .btn-play svg { width: 14px; height: 14px; }
+.timeline { flex: 1; height: 28px; position: relative; cursor: pointer; display: flex; align-items: center; }
+.timeline-track { width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; }
+.timeline-progress { position: absolute; left: 0; top: 0; bottom: 0; background: var(--bnhg-primary); border-radius: 2px; width: 0%; transition: width 0.05s linear; }
+.timeline-cues { position: absolute; inset: 0; pointer-events: none; }
+.timeline-cue { position: absolute; width: 2px; height: 8px; background: rgba(255,255,255,0.4); top: 50%; transform: translateY(-50%); }
+.timeline-cue.avatar { background: var(--bnhg-secondary); height: 12px; }
+.timeline-handle { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: white; top: 50%; transform: translate(-50%, -50%); left: 0%; box-shadow: 0 2px 8px rgba(0,0,0,0.4); pointer-events: none; }
+.time-display { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.6); min-width: 92px; text-align: center; letter-spacing: 0.05em; }
+.slide-indicator { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; }
+
+/* === PiP, captions, overview, cue, speed, notice === */
+.avatar-pip { position: absolute; bottom: 32px; right: 32px; width: 200px; aspect-ratio: 9/16; background: var(--bnhg-ink-primary); border-radius: 12px; overflow: hidden; z-index: 10; box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(91,154,47,0.3); opacity: 0; transform: translateY(20px) scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease; pointer-events: none; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+.avatar-pip.visible { opacity: 1; transform: translateY(0) scale(1); }
+.captions { position: absolute; bottom: 6%; left: 50%; transform: translateX(-50%); background: rgba(26, 26, 26, 0.88); color: white; padding: 10px 22px; border-radius: 4px; font-family: var(--font-body); font-size: clamp(15px, 1.5vw, 18px); max-width: 75%; text-align: center; line-height: 1.4; z-index: 8; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.captions.visible { opacity: 1; }
+.overview { position: absolute; inset: 0; background: rgba(13, 13, 13, 0.97); backdrop-filter: blur(8px); z-index: 25; padding: 48px; overflow-y: auto; display: none; }
+.overview.visible { display: block; }
+.overview-header { margin-bottom: 32px; display: flex; align-items: baseline; justify-content: space-between; }
+.overview-header h2 { font-family: var(--font-display); font-size: 24px; font-weight: 400; font-style: italic; color: white; }
+.overview-header .hint { font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; max-width: 1400px; margin: 0 auto; }
+.overview-item { background: var(--bnhg-bg); aspect-ratio: 16/9; border-radius: 4px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 13px; font-style: italic; color: var(--bnhg-ink-primary); border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s; text-align: center; padding: 14px; line-height: 1.3; overflow: hidden; }
+.overview-item:hover { transform: scale(1.02); border-color: rgba(91, 154, 47, 0.5); }
+.overview-item.active { border-color: var(--bnhg-primary); }
+.overview-item .index { position: absolute; top: 8px; left: 10px; font-family: var(--font-mono); font-size: 9px; color: var(--bnhg-ink-muted); font-style: normal; letter-spacing: 0.1em; }
+.overview-item .layout-tag { position: absolute; bottom: 8px; right: 10px; font-family: var(--font-mono); font-size: 8px; color: var(--bnhg-primary); font-style: normal; letter-spacing: 0.1em; text-transform: uppercase; }
+.cue-panel { position: absolute; bottom: calc(var(--bottom-bar-height) + 12px); left: 24px; right: 24px; background: #161614; border: 1px solid var(--bnhg-primary); border-radius: 6px; padding: 16px 20px; z-index: 28; font-family: var(--font-body); font-size: 12px; display: none; color: rgba(255,255,255,0.85); }
+.cue-panel.visible { display: block; }
+.cue-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cue-panel-title { display: flex; align-items: center; gap: 12px; }
+.cue-panel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bnhg-tertiary); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.cue-panel-instructions { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.05em; }
+.cue-panel-instructions kbd { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 3px; font-family: var(--font-mono); font-size: 10px; margin: 0 4px; }
+.cue-panel-cues { max-height: 100px; overflow-y: auto; font-family: var(--font-mono); font-size: 11px; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 3px; color: rgba(255,255,255,0.75); }
+.cue-panel-cues .cue-line { padding: 2px 0; display: flex; justify-content: space-between; }
+.cue-panel-actions { display: flex; gap: 8px; margin-top: 12px; }
+.cue-action-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 3px; padding: 6px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.05em; text-transform: uppercase; }
+.cue-action-btn:hover { background: rgba(255,255,255,0.1); }
+.cue-action-btn.primary { background: var(--bnhg-primary); border-color: var(--bnhg-primary); color: white; }
+.speed-menu { position: absolute; top: calc(var(--top-bar-height) + 4px); right: 80px; background: #161614; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 4px; display: none; flex-direction: column; z-index: 35; min-width: 80px; }
+.speed-menu.visible { display: flex; }
+.speed-menu button { background: transparent; border: none; padding: 8px 14px; text-align: left; cursor: pointer; font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.75); border-radius: 3px; }
+.speed-menu button:hover { background: rgba(255,255,255,0.06); color: white; }
+.speed-menu button.active { background: var(--bnhg-primary); color: white; }
+.notice { position: absolute; top: calc(var(--top-bar-height) + 16px); left: 50%; transform: translateX(-50%); background: rgba(245, 166, 35, 0.95); color: var(--bnhg-ink-primary); padding: 8px 20px; border-radius: 4px; font-family: var(--font-body); font-size: 12px; z-index: 30; display: none; letter-spacing: 0.02em; font-weight: 500; }
+.notice.visible { display: block; }
+
+@media (max-width: 900px) { .lesson-info .lesson-title { display: none; } }
+
+/* Slide 3 specific: larger verbiage */
+.slide-spread.large-text h2 { font-size: clamp(36px, 5vw, 64px); }
+.slide-spread.large-text .text-list li { font-size: clamp(15px, 1.55vw, 18px); }
+.slide-spread.large-text .text-list li strong { font-size: 1.08em; }
+
+/* Slide 17 specific: larger headline */
+.slide-card-grid.large-headline .header h2 { font-size: clamp(34px, 4.4vw, 60px); line-height: 1.05; letter-spacing: -0.018em; }
+
+/* ============================================================
+   TIER 1 · MINI-VIDEO ANIMATIONS
+   Ken Burns photos · entrance reveals · word-by-word headlines · count-up stats
+   ============================================================ */
+
+/* Master controls. Easy to tune globally */
+:root {
+  --anim-ease: cubic-bezier(0.2, 0.65, 0.3, 1);
+  --reveal-distance: 14px;
+  --reveal-duration: 0.9s;
+  --kenburns-duration: 18s;
+}
+
+/* ------- Ken Burns on photos ------- */
+@keyframes kenburns-zoom-in {
+  0%   { transform: scale(1.02) translate(0, 0); }
+  100% { transform: scale(1.10) translate(-1.5%, -1%); }
+}
+@keyframes kenburns-zoom-out {
+  0%   { transform: scale(1.10) translate(0, 0); }
+  100% { transform: scale(1.04) translate(1%, 0.5%); }
+}
+@keyframes kenburns-drift-left {
+  0%   { transform: scale(1.06) translate(1%, 0); }
+  100% { transform: scale(1.06) translate(-2%, 0.5%); }
+}
+@keyframes kenburns-drift-up {
+  0%   { transform: scale(1.05) translate(0, 1%); }
+  100% { transform: scale(1.08) translate(-0.5%, -1.5%); }
+}
+
+/* All photo elements get Ken Burns when their slide activates */
+.slide-cover .photo,
+.slide-quote .photo,
+.slide-divider .photo,
+.slide-spread .photo,
+.slide-hero-stat .right,
+.slide-action .right,
+.slide-three-col .col-photo,
+.slide-two-col .col-photo,
+.slide-card-grid .card-photo {
+  transform-origin: center center;
+}
+
+.slide.active .slide-cover .photo,
+.slide-cover.active .photo {
+  animation: kenburns-zoom-in var(--kenburns-duration) ease-out both;
+}
+.slide.active.slide-cover .photo {
+  animation: kenburns-zoom-in var(--kenburns-duration) ease-out both;
+}
+.slide.active.slide-quote .photo {
+  animation: kenburns-drift-left var(--kenburns-duration) ease-out both;
+}
+.slide.active.slide-divider .photo {
+  animation: kenburns-drift-up var(--kenburns-duration) ease-out both;
+}
+.slide.active.slide-spread .photo {
+  animation: kenburns-zoom-out var(--kenburns-duration) ease-out both;
+}
+.slide.active.slide-hero-stat .right,
+.slide.active.slide-action .right {
+  animation: kenburns-zoom-in var(--kenburns-duration) ease-out both;
+}
+/* Subtler Ken Burns for column / card photos */
+.slide.active .col-photo {
+  animation: kenburns-drift-up calc(var(--kenburns-duration) * 1.2) ease-out both;
+}
+.slide.active .card-photo {
+  animation: kenburns-zoom-in calc(var(--kenburns-duration) * 1.4) ease-out both;
+}
+
+/* ------- Generic fade-up reveal ------- */
+@keyframes reveal-up {
+  0%   { opacity: 0; transform: translateY(var(--reveal-distance)); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* All slides: stagger entrance for common elements
+   (paused by default, played when slide.active) */
+.slide .eyebrow,
+.slide h1,
+.slide h2,
+.slide .subtitle,
+.slide .meta,
+.slide .stat-supporting,
+.slide .figure,
+.slide .secondary,
+.slide .source,
+.slide blockquote,
+.slide .signature,
+.slide .attribution,
+.slide .quote-mark,
+.slide .text > p,
+.slide .text > .pullout,
+.slide .text-list li,
+.slide .col,
+.slide .card,
+.slide .photo-caption,
+.slide .full-lockup,
+.slide ol li,
+.slide .up-next,
+.slide .col-data,
+.slide .stat-secondary {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+}
+
+.slide.active .eyebrow            { animation: reveal-up var(--reveal-duration) 0.20s var(--anim-ease) forwards; }
+.slide.active .full-lockup        { animation: reveal-up var(--reveal-duration) 0.10s var(--anim-ease) forwards; }
+.slide.active h1                  { animation: reveal-up var(--reveal-duration) 0.45s var(--anim-ease) forwards; }
+.slide.active h2                  { animation: reveal-up var(--reveal-duration) 0.45s var(--anim-ease) forwards; }
+.slide.active .subtitle           { animation: reveal-up var(--reveal-duration) 0.85s var(--anim-ease) forwards; }
+.slide.active .meta               { animation: reveal-up var(--reveal-duration) 1.10s var(--anim-ease) forwards; }
+.slide.active .figure             { animation: reveal-up var(--reveal-duration) 0.55s var(--anim-ease) forwards; }
+.slide.active .stat-supporting    { animation: reveal-up var(--reveal-duration) 1.10s var(--anim-ease) forwards; }
+.slide.active .secondary          { animation: reveal-up var(--reveal-duration) 1.50s var(--anim-ease) forwards; }
+.slide.active .source             { animation: reveal-up var(--reveal-duration) 1.80s var(--anim-ease) forwards; }
+.slide.active .quote-mark         { animation: reveal-up var(--reveal-duration) 0.55s var(--anim-ease) forwards; }
+.slide.active blockquote          { animation: reveal-up var(--reveal-duration) 0.75s var(--anim-ease) forwards; }
+.slide.active .signature          { animation: reveal-up var(--reveal-duration) 1.80s var(--anim-ease) forwards; }
+.slide.active .attribution        { animation: reveal-up var(--reveal-duration) 2.10s var(--anim-ease) forwards; }
+.slide.active .text > p           { animation: reveal-up var(--reveal-duration) 0.85s var(--anim-ease) forwards; }
+.slide.active .text > .pullout    { animation: reveal-up var(--reveal-duration) 1.30s var(--anim-ease) forwards; }
+.slide.active .photo-caption      { animation: reveal-up 0.6s 1.40s var(--anim-ease) forwards; }
+.slide.active .up-next            { animation: reveal-up var(--reveal-duration) 1.80s var(--anim-ease) forwards; }
+.slide.active .col-data           { animation: reveal-up var(--reveal-duration) 0.95s var(--anim-ease) forwards; }
+
+/* ------- Stagger reveals for collections ------- */
+.slide.active .text-list li {
+  animation: reveal-up var(--reveal-duration) calc(0.85s + var(--i, 0) * 0.10s) var(--anim-ease) forwards;
+}
+.slide.active .col {
+  animation: reveal-up var(--reveal-duration) calc(0.85s + var(--i, 0) * 0.12s) var(--anim-ease) forwards;
+}
+.slide.active .card {
+  animation: reveal-up var(--reveal-duration) calc(0.75s + var(--i, 0) * 0.08s) var(--anim-ease) forwards;
+}
+.slide.active ol li {
+  animation: reveal-up var(--reveal-duration) calc(0.85s + var(--i, 0) * 0.15s) var(--anim-ease) forwards;
+}
+
+/* ------- Word-by-word reveal for hero headlines ------- */
+.reveal-words .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.reveal-words .word em {
+  font-style: italic;
+}
+.slide.active .reveal-words .word {
+  animation: reveal-up 0.55s var(--anim-ease) forwards;
+  animation-delay: calc(0.45s + var(--word-i, 0) * 0.055s);
+}
+/* When a headline has reveal-words, override the parent block reveal */
+.slide.active h1.reveal-words,
+.slide.active h2.reveal-words,
+.slide.active blockquote.reveal-words {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+/* ------- Count-up stats: keep visible during count, no double-reveal ------- */
+.slide.active .figure[data-count-to] {
+  animation: reveal-up var(--reveal-duration) 0.55s var(--anim-ease) forwards;
+}
+
+/* ------- Slide entry: gentle scale on the whole slide-frame for video feel ------- */
+@keyframes slide-enter {
+  0%   { opacity: 0; transform: scale(0.995); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.slide {
+  transition: opacity 0.6s ease;
+}
+.slide.active {
+  animation: slide-enter 0.7s var(--anim-ease) forwards;
+}
+
+/* ------- Module 2 disclaimer footer (rendered on every content slide) ------- */
+.slide .disclaimer-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 5vw;
+  background: rgba(26, 26, 26, 0.88);
+  border-top: 2px solid var(--bnhg-tertiary);
+  font-family: var(--font-body);
+  font-size: clamp(10px, 0.85vw, 13px);
+  line-height: 1.5;
+  color: rgba(248, 246, 241, 0.92);
+  letter-spacing: 0.2px;
+  z-index: 5;
+  pointer-events: none;
+}
+.slide .disclaimer-footer strong {
+  color: var(--bnhg-secondary);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-right: 10px;
+}
+
+/* ------- Reserve bottom clearance for the disclaimer footer (when present) -------
+   Disclaimer is ~63px tall absolute-bottom. Default layout padding (6-7vh) gets
+   covered by the banner overlay. Bump to ~95px on disclaimer slides only.
+   Cover (#1) and closer (spread.reverse.no-disclaimer) keep their original padding.
+   The layout class (slide-three-col, slide-card-grid, etc.) sits on the .slide
+   itself, so we use :has() directly on the layout class — not as a descendant. */
+.slide-hero-stat:has(.disclaimer-footer) .left,
+.slide-spread:has(.disclaimer-footer) .text,
+.slide-three-col:has(.disclaimer-footer),
+.slide-two-col:has(.disclaimer-footer),
+.slide-card-grid:has(.disclaimer-footer),
+.slide-action:has(.disclaimer-footer) .left {
+  padding-bottom: clamp(80px, 9vh, 110px);
+}
+
+/* Dense spread slides (7+ stat lines) overflow even with the bottom-padding fix above
+   because justify-content: center splits overflow top+bottom, then the slide-frame's
+   overflow:hidden clips the bottom items. Anchor content to the top, tighten the
+   top padding, the headline-to-list gap, and inter-item spacing so packed content fits. */
+.slide-spread:has(.disclaimer-footer) .text {
+  justify-content: flex-start;
+  padding-top: clamp(40px, 4.5vh, 60px);
+}
+.slide-spread:has(.disclaimer-footer) h2 {
+  font-size: clamp(26px, 3.4vw, 44px);
+  line-height: 1.08;
+  margin-bottom: clamp(16px, 2vh, 24px);
+}
+.slide-spread:has(.disclaimer-footer) .text-list li {
+  margin-bottom: 6px;
+  font-size: clamp(12px, 1.2vw, 14px);
+  line-height: 1.5;
+}
+.slide-spread:has(.disclaimer-footer) .text-list li strong:first-child {
+  margin-bottom: 2px;
+}
+.slide-spread:has(.disclaimer-footer) .pullout {
+  margin-top: 12px;
+  font-size: clamp(13px, 1.4vw, 17px);
+  line-height: 1.3;
+}
+.slide-spread:has(.disclaimer-footer) p {
+  margin-bottom: 6px;
+}
+.slide-spread:has(.disclaimer-footer) .eyebrow {
+  margin-bottom: 14px;
+}
+
+/* Reduce motion when user prefers it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* Skip entrance reveals when resuming mid-slide audio.
+   Ken Burns photos keep running; only text/list/card reveals are bypassed. */
+.slide.skip-reveal .eyebrow,
+.slide.skip-reveal .full-lockup,
+.slide.skip-reveal h1,
+.slide.skip-reveal h2,
+.slide.skip-reveal .subtitle,
+.slide.skip-reveal .meta,
+.slide.skip-reveal .figure,
+.slide.skip-reveal .stat-supporting,
+.slide.skip-reveal .secondary,
+.slide.skip-reveal .source,
+.slide.skip-reveal .quote-mark,
+.slide.skip-reveal blockquote,
+.slide.skip-reveal .signature,
+.slide.skip-reveal .attribution,
+.slide.skip-reveal .text > p,
+.slide.skip-reveal .text > .pullout,
+.slide.skip-reveal .photo-caption,
+.slide.skip-reveal .up-next,
+.slide.skip-reveal .reveal-words .word,
+.slide.skip-reveal .text-list > *,
+.slide.skip-reveal .columns > *,
+.slide.skip-reveal .columns .col-data,
+.slide.skip-reveal .columns .col-body,
+.slide.skip-reveal .columns .col-numeral,
+.slide.skip-reveal .columns .col-heading,
+.slide.skip-reveal .grid > *,
+.slide.skip-reveal .slide-action ol > * {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ============================================================
+   CUE-DRIVEN REVEAL MECHANIC
+   Elements with data-reveal-at="X.X" stay hidden until audio.currentTime
+   crosses that threshold; player JS adds .revealed (smooth) or
+   .revealed.cue-instant (no transition, used for resumes & seeks).
+   These rules live AFTER the on-active stagger animations so they win.
+   ============================================================ */
+.slide.active [data-reveal-at] {
+  animation: none !important;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--anim-ease),
+    transform 0.7s var(--anim-ease);
+}
+.slide.active [data-reveal-at].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide.active [data-reveal-at].cue-instant {
+  transition: none !important;
+}
+
+/* Cued reveal-words headlines: keep parent visible so children's
+   word-stagger can play; words wait for the cue, then animate. */
+.slide.active .reveal-words[data-reveal-at] {
+  opacity: 1;
+  transform: none;
+}
+.slide.active .reveal-words[data-reveal-at]:not(.revealed) .word {
+  animation: none !important;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.slide.active .reveal-words[data-reveal-at].revealed .word {
+  animation: reveal-up 0.55s var(--anim-ease) forwards;
+  animation-delay: calc(var(--word-i, 0) * 0.055s);
+}
+.slide.active .reveal-words[data-reveal-at].revealed.cue-instant .word {
+  animation: none !important;
+  opacity: 1;
+  transform: none;
+}
+
+/* Skip-reveal must NOT force-show cued elements . the player JS calls
+   processReveals(slide, currentTime, instant=true) on entry to snap
+   already-passed reveals to visible. Pending reveals stay hidden until
+   audio crosses their threshold. */
+.slide.skip-reveal [data-reveal-at]:not(.revealed) {
+  animation: none !important;
+  opacity: 0 !important;
+  transform: translateY(14px) !important;
+}
+.slide.skip-reveal [data-reveal-at].revealed {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+</style>
+</head>
+<body>
+
+<div class="player">
+
+  <header class="player-top">
+    <div class="lesson-info">
+      <span class="module-tag">{{MODULE_TAG}}</span>
+      <span class="lesson-title">{{LESSON_TITLE}}</span>
+    </div>
+    <div class="player-controls-top">
+      <button class="btn-icon" data-action="overview"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg>Overview</button>
+      <button class="btn-icon" data-action="captions" id="btn-captions"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="8" rx="1"/><line x1="3" y1="7" x2="6" y2="7"/><line x1="8" y1="7" x2="11" y2="7"/></svg>CC</button>
+      <button class="btn-icon" data-action="speed" id="btn-speed"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><polyline points="7,4 7,7 9.5,8"/></svg><span id="speed-label">1x</span></button>
+      <button class="btn-icon" data-action="cue" id="btn-cue"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="3"/><circle cx="7" cy="7" r="6"/></svg>Cue</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="slide-frame" id="slide-frame">
+      <!-- {{SLIDES_HTML}} -->
+    </div>
+
+    <div class="avatar-pip" id="avatar-pip"><span>Della Avatar</span></div>
+    <div class="captions" id="captions"></div>
+    <div class="notice" id="notice"></div>
+
+    <div class="cue-panel" id="cue-panel">
+      <div class="cue-panel-header">
+        <div class="cue-panel-title">
+          <span class="cue-panel-dot"></span>
+          <strong>Debug · Per-Slide State</strong>
+          <span class="cue-panel-instructions">Press <kbd>D</kbd> to toggle · shows current slide / audio / position</span>
+        </div>
+      </div>
+      <div class="cue-panel-cues" id="cue-list"><em>Press play to populate.</em></div>
+    </div>
+
+    <div class="speed-menu" id="speed-menu">
+      <button data-speed="0.75">0.75x</button>
+      <button data-speed="1" class="active">1x</button>
+      <button data-speed="1.25">1.25x</button>
+      <button data-speed="1.5">1.5x</button>
+      <button data-speed="2">2x</button>
+    </div>
+
+    <div class="overview" id="overview">
+      <div class="overview-header">
+        <h2>Slide Overview</h2>
+        <span class="hint">Click any slide to jump · Press O to close</span>
+      </div>
+      <div class="overview-grid" id="overview-grid"></div>
+    </div>
+
+  </main>
+
+  <footer class="player-bottom">
+    <button class="btn-nav" data-action="prev"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,2 4,7 9,12"/></svg></button>
+    <button class="btn-play" data-action="playpause" id="btn-play">
+      <svg viewBox="0 0 14 14" fill="currentColor" id="play-icon"><polygon points="3,2 12,7 3,12"/></svg>
+      <svg viewBox="0 0 14 14" fill="currentColor" id="pause-icon" style="display:none"><rect x="3" y="2" width="3" height="10"/><rect x="8" y="2" width="3" height="10"/></svg>
+    </button>
+    <button class="btn-nav" data-action="next"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,2 10,7 5,12"/></svg></button>
+    <span class="time-display" id="time-display">0:00 / 0:00</span>
+    <div class="timeline" id="timeline">
+      <div class="timeline-track">
+        <div class="timeline-progress" id="timeline-progress"></div>
+        <div class="timeline-cues" id="timeline-cues"></div>
+        <div class="timeline-handle" id="timeline-handle"></div>
+      </div>
+    </div>
+    <span class="slide-indicator" id="slide-indicator">1 / 18</span>
+  </footer>
+
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+/* ============================================================
+   PLAYER · SLIDE-OWNS-AUDIO ARCHITECTURE
+   Each slide loads its own MP3 from the data-audio attribute.
+   On audio.ended → 400ms pause → auto-advance.
+   Resume: returning to a partially-played slide picks up where it left off.
+   Completed slides restart from 0 on revisit.
+   ============================================================ */
+
+const LESSON_CONFIG = {{LESSON_CONFIG_JSON}};
+
+const state = {
+  currentSlide: 0,
+  isPlaying: false,
+  speed: 1,
+  captionsEnabled: true,
+  audioReady: false,
+  slidePositions: new Map(),    // slideIndex → currentTime
+  completedSlides: new Set(),   // slides that played to end
+  pendingAdvance: null,         // setTimeout handle for auto-advance
+  loadedSrc: null,              // currently loaded audio src
+  debugMode: false
+};
+
+const slides = document.querySelectorAll('.slide');
+const audio = document.getElementById('audio');
+const timelineProgress = document.getElementById('timeline-progress');
+const timelineHandle = document.getElementById('timeline-handle');
+const timelineEl = document.getElementById('timeline');
+const timelineCuesEl = document.getElementById('timeline-cues');
+const timeDisplay = document.getElementById('time-display');
+const slideIndicator = document.getElementById('slide-indicator');
+const playIcon = document.getElementById('play-icon');
+const pauseIcon = document.getElementById('pause-icon');
+const captionsEl = document.getElementById('captions');
+const captionsBtn = document.getElementById('btn-captions');
+const cuePanel = document.getElementById('cue-panel');
+const cueBtn = document.getElementById('btn-cue');
+const cueListEl = document.getElementById('cue-list');
+const overviewEl = document.getElementById('overview');
+const overviewGridEl = document.getElementById('overview-grid');
+const speedMenu = document.getElementById('speed-menu');
+const speedLabel = document.getElementById('speed-label');
+const noticeEl = document.getElementById('notice');
+const avatarPip = document.getElementById('avatar-pip');
+
+function getSlideAudioSrc(idx) {
+  return slides[idx]?.dataset.audio || null;
+}
+
+function loadSlideAudio(idx, opts = {}) {
+  const src = getSlideAudioSrc(idx);
+  if (!src) { showNotice('No audio for this slide'); return; }
+
+  if (state.pendingAdvance) {
+    clearTimeout(state.pendingAdvance);
+    state.pendingAdvance = null;
+  }
+
+  if (state.loadedSrc === src && state.audioReady) {
+    applyResumeAndPlay(idx, opts);
+    return;
+  }
+
+  state.loadedSrc = src;
+  state.audioReady = false;
+  audio.pause();
+  audio.src = src;
+  audio.load();
+
+  let ready = false;
+  const onReady = () => {
+    if (ready) return;
+    ready = true;
+    audio.removeEventListener('loadedmetadata', onReady);
+    audio.removeEventListener('canplay', onReady);
+    audio.removeEventListener('loadeddata', onReady);
+    state.audioReady = true;
+    hideNotice();
+    applyResumeAndPlay(idx, opts);
+  };
+  audio.addEventListener('loadedmetadata', onReady);
+  audio.addEventListener('canplay', onReady);
+  audio.addEventListener('loadeddata', onReady);
+}
+
+function applyResumeAndPlay(idx, opts = {}) {
+  let resumeTime = 0;
+
+  if (state.completedSlides.has(idx)) {
+    // Returning to a completed slide → restart fresh
+    resumeTime = 0;
+    state.completedSlides.delete(idx);
+    state.slidePositions.set(idx, 0);
+  } else {
+    resumeTime = state.slidePositions.get(idx) || 0;
+  }
+
+  try { audio.currentTime = resumeTime; } catch (e) { /* ignore seek errors */ }
+
+  // Reset cue-driven reveals for this slide so they fire fresh as audio plays.
+  // Already-passed reveals (resume mid-slide) get snapped to visible below.
+  resetReveals(slides[idx]);
+
+  // Decide whether to play entrance animations
+  const shouldAnimate = (resumeTime < 0.05) || opts.forceAnimate;
+  if (shouldAnimate) {
+    slides[idx].classList.remove('skip-reveal');
+    triggerSlideAnimations(slides[idx]);
+  } else {
+    slides[idx].classList.add('skip-reveal');
+    showSlideAtFinalState(slides[idx]);
+  }
+
+  // Catch up any cue reveals that should already be visible at resumeTime.
+  processReveals(slides[idx], resumeTime, true);
+
+  if (opts.autoPlay) {
+    const playPromise = audio.play();
+    if (playPromise) playPromise.catch(() => { /* autoplay blocked */ });
+  }
+
+  updateTimeDisplay();
+}
+
+function showSlideAtFinalState(slideEl) {
+  // For count-up stats, jump to final value . but only when not cue-driven.
+  // Cue-driven count-ups stay at "0" until their data-reveal-at fires.
+  slideEl.querySelectorAll('[data-count-to]').forEach(el => {
+    if (el.hasAttribute('data-reveal-at')) return;
+    el.textContent = el.dataset.countTo + (el.dataset.countSuffix || '');
+  });
+}
+
+/* ============================================================
+   CUE-DRIVEN REVEAL ENGINE
+   Each slide can declare elements with data-reveal-at="X.X" (seconds into
+   that slide's audio). On timeupdate we add `.revealed` when the audio
+   crosses each threshold. On resume / seek we snap already-passed reveals
+   to visible without transition (`.cue-instant`). Once revealed, sticky
+   for the remainder of the session . scrubbing back does NOT re-hide.
+   ============================================================ */
+function resetReveals(slideEl) {
+  if (!slideEl) return;
+  slideEl.querySelectorAll('[data-reveal-at]').forEach(el => {
+    el.classList.remove('revealed', 'cue-instant');
+    if (el.dataset.countTo) {
+      el.textContent = '0' + (el.dataset.countSuffix || '');
+    }
+  });
+}
+
+function processReveals(slideEl, currentTime, instant) {
+  if (!slideEl) return;
+  slideEl.querySelectorAll('[data-reveal-at]').forEach(el => {
+    if (el.classList.contains('revealed')) return;
+    const t = parseFloat(el.dataset.revealAt);
+    if (!isFinite(t) || currentTime < t) return;
+    el.classList.add('revealed');
+    if (instant) el.classList.add('cue-instant');
+    if (el.dataset.countTo) {
+      if (instant) {
+        el.textContent = el.dataset.countTo + (el.dataset.countSuffix || '');
+      } else {
+        animateCount(el);
+      }
+    }
+  });
+}
+
+function goToSlide(idx, opts = {}) {
+  if (idx < 0 || idx >= slides.length) return;
+  if (idx === state.currentSlide && !opts.force) {
+    loadSlideAudio(idx, opts);
+    return;
+  }
+
+  // Save position of slide we're leaving
+  if (state.audioReady && !state.completedSlides.has(state.currentSlide)) {
+    state.slidePositions.set(state.currentSlide, audio.currentTime);
+  }
+
+  audio.pause();
+
+  slides[state.currentSlide].classList.remove('active');
+  slides[state.currentSlide].classList.remove('skip-reveal');
+  state.currentSlide = idx;
+  slides[idx].classList.add('active');
+  slideIndicator.textContent = `${idx + 1} / ${slides.length}`;
+  updateOverviewActive();
+
+  loadSlideAudio(idx, opts);
+}
+
+function nextSlide(opts = {}) {
+  goToSlide(state.currentSlide + 1, { autoPlay: state.isPlaying, ...opts });
+}
+function prevSlide(opts = {}) {
+  goToSlide(state.currentSlide - 1, { autoPlay: state.isPlaying, ...opts });
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    if (!state.audioReady) {
+      loadSlideAudio(state.currentSlide, { autoPlay: true });
+    } else {
+      const p = audio.play();
+      if (p) p.catch(() => {});
+    }
+  } else {
+    audio.pause();
+  }
+}
+
+audio.addEventListener('play', () => {
+  state.isPlaying = true;
+  playIcon.style.display = 'none';
+  pauseIcon.style.display = 'block';
+});
+
+// 'playing' is the canonical "audio is actually producing sound" signal.
+// Use it as a backstop so the timeline + reveals never get stuck because of
+// a stale or out-of-order ready-state flag.
+audio.addEventListener('playing', () => {
+  state.audioReady = true;
+  hideNotice();
+});
+
+audio.addEventListener('pause', () => {
+  state.isPlaying = false;
+  playIcon.style.display = 'block';
+  pauseIcon.style.display = 'none';
+  if (state.audioReady && !audio.ended) {
+    state.slidePositions.set(state.currentSlide, audio.currentTime);
+  }
+});
+
+audio.addEventListener('ended', () => {
+  state.completedSlides.add(state.currentSlide);
+  state.slidePositions.set(state.currentSlide, 0);
+
+  if (state.currentSlide < slides.length - 1) {
+    state.pendingAdvance = setTimeout(() => {
+      state.pendingAdvance = null;
+      goToSlide(state.currentSlide + 1, { autoPlay: true });
+    }, LESSON_CONFIG.interSlidePauseMs);
+  }
+});
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.readyState < 1) return;
+  if (!audio.paused) {
+    state.slidePositions.set(state.currentSlide, audio.currentTime);
+  }
+  processReveals(slides[state.currentSlide], audio.currentTime, false);
+});
+
+audio.addEventListener('seeked', () => {
+  // Scrubbing forward: snap any already-passed reveals to visible without
+  // transition. Backward scrub leaves earlier reveals as-is (sticky).
+  processReveals(slides[state.currentSlide], audio.currentTime, true);
+});
+
+audio.addEventListener('error', () => {
+  // Ignore NETWORK_NO_SOURCE (3) and NETWORK_EMPTY (0): those fire during
+  // src reassignment and don't indicate a real load failure for the new src.
+  if (audio.networkState === 0 || audio.networkState === 3) return;
+  // Only flag if the error matches the src we expect to be loading.
+  if (!state.loadedSrc || !audio.src.endsWith(state.loadedSrc)) return;
+  state.audioReady = false;
+  showNotice(`Audio failed to load: ${audio.src.split('/').pop()}`);
+});
+
+function tick() {
+  // Decouple from state.audioReady; rely on the element's own readyState so
+  // the timeline keeps moving even if a stale 'error' event toggled our flag.
+  if (audio.readyState >= 1 && isFinite(audio.duration) && audio.duration > 0) {
+    const t = audio.currentTime, d = audio.duration;
+    timelineProgress.style.width = `${(t / d) * 100}%`;
+    timelineHandle.style.left = `${(t / d) * 100}%`;
+    updateTimeDisplay();
+  }
+  requestAnimationFrame(tick);
+}
+
+function updateTimeDisplay() {
+  if (audio.readyState < 1 || !isFinite(audio.duration)) {
+    timeDisplay.textContent = '0:00 / 0:00';
+    return;
+  }
+  timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration || 0)}`;
+}
+function formatTime(sec) { if (!isFinite(sec)) return '0:00'; const m = Math.floor(sec / 60); const s = Math.floor(sec % 60); return `${m}:${String(s).padStart(2, '0')}`; }
+
+timelineEl.addEventListener('click', (e) => {
+  if (audio.readyState < 1 || !isFinite(audio.duration)) return;
+  const rect = timelineEl.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+});
+
+function toggleCaptions() {
+  state.captionsEnabled = !state.captionsEnabled;
+  captionsBtn.classList.toggle('active', state.captionsEnabled);
+  if (!state.captionsEnabled) captionsEl.classList.remove('visible');
+}
+
+/* Cue button is repurposed as a debug panel showing per-slide playback state */
+function toggleDebugMode() {
+  state.debugMode = !state.debugMode;
+  cuePanel.classList.toggle('visible', state.debugMode);
+  cueBtn.classList.toggle('active', state.debugMode);
+  if (state.debugMode) renderDebugPanel();
+}
+function renderDebugPanel() {
+  const lines = [`<div class="cue-line"><span><strong>#</strong></span><span><strong>Audio</strong></span><span><strong>Position</strong></span><span><strong>Status</strong></span></div>`];
+  for (let i = 0; i < slides.length; i++) {
+    const src = getSlideAudioSrc(i) || '...';
+    const pos = state.slidePositions.get(i) || 0;
+    const status = state.completedSlides.has(i) ? '✓ done' : i === state.currentSlide ? '▶ now' : '·';
+    lines.push(`<div class="cue-line"><span>${String(i+1).padStart(2,'0')}</span><span>${src.split('/').pop()}</span><span>${formatTime(pos)}</span><span>${status}</span></div>`);
+  }
+  cueListEl.innerHTML = lines.join('');
+}
+setInterval(() => { if (state.debugMode) renderDebugPanel(); }, 500);
+
+function setSpeed(speed) {
+  state.speed = parseFloat(speed);
+  audio.playbackRate = state.speed;
+  speedLabel.textContent = `${state.speed}x`;
+  speedMenu.querySelectorAll('button').forEach(b => b.classList.toggle('active', parseFloat(b.dataset.speed) === state.speed));
+}
+
+function buildOverview() {
+  overviewGridEl.innerHTML = '';
+  slides.forEach((slide, i) => {
+    const item = document.createElement('div');
+    item.className = 'overview-item' + (i === state.currentSlide ? ' active' : '');
+    item.innerHTML = `<span class="index">${String(i+1).padStart(2,'0')}</span><span>${LESSON_CONFIG.slideTitles[i] || `Slide ${i+1}`}</span><span class="layout-tag">${slide.dataset.layout || ''}</span>`;
+    item.addEventListener('click', () => { goToSlide(i, { autoPlay: state.isPlaying }); toggleOverview(); });
+    overviewGridEl.appendChild(item);
+  });
+}
+function updateOverviewActive() { overviewGridEl.querySelectorAll('.overview-item').forEach((el, i) => el.classList.toggle('active', i === state.currentSlide)); }
+function toggleOverview() { overviewEl.classList.toggle('visible'); }
+function showNotice(text) { noticeEl.textContent = text; noticeEl.classList.add('visible'); }
+function hideNotice() { noticeEl.classList.remove('visible'); }
+
+document.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', () => {
+  const a = btn.dataset.action;
+  if (a === 'prev') prevSlide();
+  else if (a === 'next') nextSlide();
+  else if (a === 'playpause') togglePlay();
+  else if (a === 'overview') toggleOverview();
+  else if (a === 'captions') toggleCaptions();
+  else if (a === 'speed') speedMenu.classList.toggle('visible');
+  else if (a === 'cue') toggleDebugMode();
+}));
+document.querySelectorAll('[data-speed]').forEach(btn => btn.addEventListener('click', () => { setSpeed(btn.dataset.speed); speedMenu.classList.remove('visible'); }));
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  else if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  else if (e.key.toLowerCase() === 'c') toggleCaptions();
+  else if (e.key.toLowerCase() === 'o') toggleOverview();
+  else if (e.key.toLowerCase() === 'd') toggleDebugMode();
+  else if (e.key === 'Escape') { overviewEl.classList.remove('visible'); speedMenu.classList.remove('visible'); cuePanel.classList.remove('visible'); state.debugMode = false; cueBtn.classList.remove('active'); }
+});
+
+/* ============================================================
+   TIER 1 ANIMATION ENGINE
+   Word-splitting, stagger indices, count-up animations.
+   ============================================================ */
+
+function splitWords() {
+  document.querySelectorAll('.reveal-words').forEach(el => {
+    if (el.dataset.wordsSplit) return;
+    const html = el.innerHTML;
+    const tokens = [];
+    let i = 0;
+    while (i < html.length) {
+      if (html[i] === '<') {
+        const close = html.indexOf('>', i);
+        const tag = html.substring(i, close + 1);
+        if (tag.startsWith('<em')) {
+          const endTag = html.indexOf('</em>', close);
+          const inner = html.substring(close + 1, endTag);
+          const words = inner.split(/\s+/).filter(Boolean);
+          tokens.push(...words.map(w => `<em>${w}</em>`));
+          i = endTag + 5;
+        } else {
+          tokens.push(tag);
+          i = close + 1;
+        }
+      } else {
+        const next = html.indexOf('<', i);
+        const chunk = next === -1 ? html.substring(i) : html.substring(i, next);
+        const words = chunk.split(/\s+/).filter(Boolean);
+        tokens.push(...words);
+        i = next === -1 ? html.length : next;
+      }
+    }
+    el.innerHTML = tokens.map((tok, idx) => `<span class="word" style="--word-i:${idx}">${tok}</span>`).join(' ');
+    el.dataset.wordsSplit = '1';
+  });
+}
+
+function setStaggerIndices() {
+  const containers = document.querySelectorAll('.text-list, .columns, .grid, .slide-action ol');
+  containers.forEach(c => {
+    const children = c.children;
+    for (let i = 0; i < children.length; i++) {
+      children[i].style.setProperty('--i', i);
+    }
+  });
+}
+
+function animateCount(el, duration = 1800) {
+  const to = parseFloat(el.dataset.countTo);
+  const from = parseFloat(el.dataset.countFrom || 0);
+  const suffix = el.dataset.countSuffix || '';
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const value = from + (to - from) * eased;
+    el.textContent = Math.round(value) + suffix;
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function triggerSlideAnimations(slideEl) {
+  // Reset & restart count-ups. Cue-driven count-ups (data-reveal-at) are
+  // handled in processReveals . leave them at "0" until the cue fires.
+  slideEl.querySelectorAll('[data-count-to]').forEach(el => {
+    if (el.hasAttribute('data-reveal-at')) return;
+    el.textContent = '0' + (el.dataset.countSuffix || '');
+    setTimeout(() => animateCount(el), 800);
+  });
+}
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+slideIndicator.textContent = `1 / ${slides.length}`;
+splitWords();
+setStaggerIndices();
+buildOverview();
+triggerSlideAnimations(slides[0]);
+
+// Pre-load slide 1 audio (no autoplay; browser policy requires user gesture)
+loadSlideAudio(0, { autoPlay: false });
+
+requestAnimationFrame(tick);
+setTimeout(() => { if (!state.audioReady) showNotice("Place the audio/ folder next to this HTML"); }, 1500);
+
+</script>
+
+</body>
+</html>

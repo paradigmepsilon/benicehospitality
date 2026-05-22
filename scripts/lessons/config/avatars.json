@@ -1,0 +1,23 @@
+{
+  "_comment": "Per-module avatar IDs and the locked voice clone ID. Read by Claude Code at the start of every lesson build. When a new module needs a new avatar, generate one in HeyGen and add it here BEFORE invoking the lesson build.",
+
+  "voice": {
+    "id": "13baf65f739742068cb912c60784c680",
+    "name": "Be Nice Hospitality",
+    "engine": "starfish"
+  },
+
+  "modules": {
+    "1": {
+      "primary": "3b4169a21ffe4ab0a1b3336c67d8add9",
+      "side_angle": "9e3d44858d994af4b2c899d0ba8d4302",
+      "tone_note": "Casual, welcoming first impressions. Della on camera frequently.",
+      "scene_description": "Della facing camera or in 3/4 angle, neutral backdrop"
+    },
+    "2": {
+      "primary": "ac61ab42480e40ab816dc2104d41425e",
+      "tone_note": "Operator-to-operator. 'Responsible adult in the room' for legal, tax, insurance, regulatory content.",
+      "scene_description": "Della at podcast desk, green blazer, LIVE neon visible behind her"
+    }
+  }
+}

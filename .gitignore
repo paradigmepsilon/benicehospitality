@@ -20,7 +20,7 @@ bnhg-deep-research-*.csv
 
 # course lesson bundles — large generated assets served from Neon via import-lesson.ts
 # filesystem is build-time source of truth, but too large for git
-Courses/
+/Courses/
 
 # debug
 npm-debug.log*
