@@ -1,83 +1,72 @@
-import { SignJWT, jwtVerify } from "jose";
-import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import {
+  SESSION_COOKIE,
+  getSessionWithUser,
+  type Role,
+} from "@/lib/community-auth";
 
-const SESSION_COOKIE = "admin_session";
-const SESSION_DURATION = 60 * 60 * 24; // 24 hours
+// Backwards-compatible auth surface for the existing /api/admin/* routes.
+// Internally these now read the unified `bnhg_session` cookie + DB-backed
+// session table introduced in community-auth.ts. The shape returned by
+// getSession preserves the `{ sub: string }` contract expected by older
+// callers (sub === user email under the new scheme).
 
-function getSecret() {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET is not set");
-  return new TextEncoder().encode(secret);
+export interface AdminSession {
+  sub: string;
+  email: string;
+  name: string;
+  role: Role;
 }
 
-export async function verifyPassword(
-  plain: string,
-  hash: string
-): Promise<boolean> {
-  return bcrypt.compare(plain, hash);
-}
-
-export async function createSession(username: string): Promise<string> {
-  return new SignJWT({ sub: username })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_DURATION}s`)
-    .sign(getSecret());
-}
-
-export async function verifySession(
-  token: string
-): Promise<{ sub: string } | null> {
-  try {
-    const { payload } = await jwtVerify(token, getSecret());
-    return payload as { sub: string };
-  } catch {
-    return null;
-  }
-}
-
-export async function getSession(): Promise<{ sub: string } | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!token) return null;
-  return verifySession(token);
-}
-
-export function setSessionCookie(response: NextResponse, token: string) {
-  response.cookies.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_DURATION,
-  });
-}
-
-export function clearSessionCookie(response: NextResponse) {
-  response.cookies.set(SESSION_COOKIE, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-}
-
-export async function requireAuth(request: Request): Promise<NextResponse | null> {
+function readSessionCookie(request: Request): string | null {
   const cookieHeader = request.headers.get("cookie") || "";
-  const match = cookieHeader.match(/admin_session=([^;]+)/);
-  const token = match?.[1];
+  const match = cookieHeader.match(
+    new RegExp(`(?:^|; )${SESSION_COOKIE}=([^;]+)`),
+  );
+  return match?.[1] ?? null;
+}
 
-  if (!token) {
+/**
+ * Returns null when authenticated as an admin (so callers can early-return on
+ * a non-null response). Returns a 401/403 NextResponse otherwise.
+ *
+ * Usage stays identical to the previous implementation:
+ *   const authError = await requireAuth(request);
+ *   if (authError) return authError;
+ */
+export async function requireAuth(
+  request: Request,
+): Promise<NextResponse | null> {
+  const sessionId = readSessionCookie(request);
+  if (!sessionId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const session = await verifySession(token);
+  const session = await getSessionWithUser(sessionId);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  if (session.user.role !== "admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  return null;
+}
 
-  return null; // Authenticated
+/**
+ * Returns the active admin session, or null. Use this when you need the actor
+ * identity for audit columns. Older callers expect a `sub` string; that's now
+ * the user's email.
+ */
+export async function getSession(): Promise<AdminSession | null> {
+  const { cookies } = await import("next/headers");
+  const store = await cookies();
+  const sessionId = store.get(SESSION_COOKIE)?.value;
+  if (!sessionId) return null;
+  const session = await getSessionWithUser(sessionId);
+  if (!session) return null;
+  return {
+    sub: session.user.email,
+    email: session.user.email,
+    name: session.user.name,
+    role: session.user.role,
+  };
 }
