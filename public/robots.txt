@@ -1,4 +1,102 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
 
-Sitemap: https://benicehospitalitygroup.com/sitemap.xml
+# AI training and answer-engine crawlers
+# Explicitly allowed so the brand is discoverable inside AI assistants.
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /preview/
+Disallow: /education
+
+Sitemap: https://benicehospitality.com/sitemap.xml
