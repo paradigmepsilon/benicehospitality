@@ -7,8 +7,24 @@ import { verifyTurnstileToken } from "@/lib/turnstile";
 import { FOCUS_DIMENSION_KEYS } from "@/lib/constants/dimensions";
 import { getAuditByToken } from "@/lib/audit/token";
 import { logAuditEvent, cancelPendingNurture } from "@/lib/audit/events";
+import {
+  CANONICAL_CALL_TYPE,
+  CALL_BLOCK_MINUTES,
+  callDurationLabel,
+} from "@/lib/constants/call-types";
+import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let cachedResend: Resend | null = null;
+function getResend(): Resend {
+  if (!cachedResend) cachedResend = new Resend(process.env.RESEND_API_KEY);
+  return cachedResend;
+}
+
+const VALID_FOUNDERS = new Set(["alex", "della"]);
+const FOUNDER_LABELS: Record<string, string> = {
+  alex: "Alex Henry",
+  della: "Della Henry",
+};
 
 export async function POST(req: Request) {
   try {
@@ -33,7 +49,28 @@ export async function POST(req: Request) {
       turnstileToken,
       focus_dimension: focusDimension,
       audit_token: auditToken,
+      call_type: callTypeRaw,
+      requested_founder: requestedFounderRaw,
+      click_source: clickSourceRaw,
     } = body;
+
+    const requestedFounder =
+      typeof requestedFounderRaw === "string" &&
+      VALID_FOUNDERS.has(requestedFounderRaw)
+        ? requestedFounderRaw
+        : null;
+
+    const clickSource =
+      typeof clickSourceRaw === "string" &&
+      VALID_BOOKING_SOURCES.has(clickSourceRaw)
+        ? clickSourceRaw
+        : null;
+
+    const callType: string = callTypeRaw ?? CANONICAL_CALL_TYPE;
+    const slotDuration = CALL_BLOCK_MINUTES[callType];
+    if (!slotDuration) {
+      return NextResponse.json({ error: "Invalid call_type." }, { status: 400 });
+    }
 
     if (!focusDimension) {
       return NextResponse.json(
@@ -45,7 +82,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid focus_dimension." }, { status: 400 });
     }
 
-    // Honeypot check — silently reject bots
+    // Honeypot check. Silently reject bots that fill in the hidden field.
     if (website) {
       return NextResponse.json({ success: true });
     }
@@ -64,13 +101,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
-    // Check slot is still available
-    const existing = await sql`
-      SELECT id FROM bookings
-      WHERE booking_date = ${date} AND booking_time = ${time} AND status = 'confirmed'
+    // Range-aware conflict check: existing bookings of any call_type on this date
+    // could partially overlap the requested slot (e.g., a 40-min Signal call starting
+    // at 10:30 conflicts with a 60-min advisory at 10:00).
+    const [reqH, reqM] = String(time).split(":").map(Number);
+    const requestedStart = reqH * 60 + reqM;
+    const requestedEnd = requestedStart + slotDuration;
+
+    const sameDayBookings = await sql`
+      SELECT booking_time, call_type FROM bookings
+      WHERE booking_date = ${date} AND status = 'confirmed'
     `;
 
-    if (existing.length > 0) {
+    const conflict = sameDayBookings.find((b) => {
+      const [bh, bm] = String(b.booking_time).split(":").map(Number);
+      const start = bh * 60 + bm;
+      const end = start + (CALL_BLOCK_MINUTES[String(b.call_type)] ?? 60);
+      return requestedStart < end && requestedEnd > start;
+    });
+
+    if (conflict) {
       return NextResponse.json({ error: "This time slot is no longer available. Please choose another." }, { status: 409 });
     }
 
@@ -83,8 +133,8 @@ export async function POST(req: Request) {
 
     // Insert booking
     const result = await sql`
-      INSERT INTO bookings (name, email, phone, hotel_name, message, booking_date, booking_time, focus_dimension, audit_id)
-      VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${message || null}, ${date}, ${time}, ${focusDimension || null}, ${auditId})
+      INSERT INTO bookings (name, email, phone, hotel_name, message, booking_date, booking_time, focus_dimension, audit_id, call_type, requested_founder, click_source)
+      VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, ${message || null}, ${date}, ${time}, ${focusDimension || null}, ${auditId}, ${callType}, ${requestedFounder}, ${clickSource})
       RETURNING *
     `;
 
@@ -124,6 +174,7 @@ export async function POST(req: Request) {
     const ampm = hour >= 12 ? "PM" : "AM";
     const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
     const formattedTime = `${hour12}:${m} ${ampm} ET`;
+    const durationLabel = callDurationLabel(callType);
 
     // Create/update pipeline contact
     try {
@@ -151,11 +202,11 @@ export async function POST(req: Request) {
 
     // Send confirmation email to guest
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: "BNHG Website <onboarding@resend.dev>",
         to: email,
-        subject: `Your Discovery Call is Confirmed — ${formattedDate}`,
-        html: bookingConfirmationEmail({ name, formattedDate, formattedTime }),
+        subject: `Your Discovery Call is Confirmed for ${formattedDate}`,
+        html: bookingConfirmationEmail({ name, formattedDate, formattedTime, durationLabel }),
       });
     } catch (emailError) {
       console.error("Failed to send guest confirmation email:", emailError);
@@ -163,11 +214,11 @@ export async function POST(req: Request) {
 
     // Send notification email to admin
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: "BNHG Website <onboarding@resend.dev>",
         to: process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
         replyTo: email,
-        subject: `New Booking: ${hotelName} — ${name} on ${formattedDate}`,
+        subject: `New Booking: ${name} at ${hotelName}, ${formattedDate}`,
         html: `
           <h2>New Discovery Call Booking</h2>
           <table style="border-collapse:collapse;width:100%;max-width:600px;">
@@ -177,6 +228,9 @@ export async function POST(req: Request) {
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Hotel</td><td style="padding:8px;border-bottom:1px solid #eee;">${hotelName}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${formattedDate}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Time</td><td style="padding:8px;border-bottom:1px solid #eee;">${formattedTime}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Type</td><td style="padding:8px;border-bottom:1px solid #eee;">Discovery call (45 min, blocks 60 min)</td></tr>
+            ${requestedFounder ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Requested founder</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-weight:600;">${FOUNDER_LABELS[requestedFounder]}</td></tr>` : ""}
+            ${clickSource ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Click source</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-family:monospace;">${clickSource}</td></tr>` : ""}
             ${message ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Message</td><td style="padding:8px;border-bottom:1px solid #eee;">${message}</td></tr>` : ""}
           </table>
         `,

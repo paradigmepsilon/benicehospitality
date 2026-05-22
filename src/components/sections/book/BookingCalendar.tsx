@@ -9,8 +9,29 @@ import Button from "@/components/ui/Button";
 import FocusDimensionStep from "@/components/sections/book/FocusDimensionStep";
 import { DIMENSIONS } from "@/lib/constants/dimensions";
 import type { FocusDimensionKey, LetterGrade } from "@/lib/types/audit";
+import {
+  CANONICAL_CALL_TYPE,
+  callDurationLabel,
+} from "@/lib/constants/call-types";
+import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
 
 type Step = "date" | "time" | "focus" | "details" | "success";
+
+type CallType =
+  | "discovery_call_45"
+  | "advisory_discovery_60"
+  | "signal_discovery_40";
+
+type RequestedFounder = "alex" | "della";
+
+const FOUNDER_LABELS: Record<RequestedFounder, string> = {
+  alex: "Alex Henry",
+  della: "Della Henry",
+};
+
+function durationLabel(callType: CallType): string {
+  return callDurationLabel(callType);
+}
 
 interface FormState {
   name: string;
@@ -53,7 +74,11 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default function BookingCalendar() {
+interface BookingCalendarProps {
+  callType?: CallType;
+}
+
+export default function BookingCalendar({ callType: callTypeProp }: BookingCalendarProps = {}) {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -65,6 +90,11 @@ export default function BookingCalendar() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [availableDays, setAvailableDays] = useState<Set<number>>(new Set());
+  const [callType, setCallType] = useState<CallType>(
+    callTypeProp ?? (CANONICAL_CALL_TYPE as CallType),
+  );
+  const [requestedFounder, setRequestedFounder] = useState<RequestedFounder | null>(null);
+  const [clickSource, setClickSource] = useState<string | null>(null);
 
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [honeypot, setHoneypot] = useState("");
@@ -80,6 +110,34 @@ export default function BookingCalendar() {
   const [auditToken, setAuditToken] = useState<string | null>(null);
   const [auditTeaser, setAuditTeaser] = useState<AuditTeaser | null>(null);
   const [recommendedDimension, setRecommendedDimension] = useState<FocusDimensionKey | null>(null);
+
+  // call_type: prefer the explicit prop; otherwise let legacy CTAs route via
+  // ?call_type=... in the URL. Legacy aliases still resolve to the same
+  // 45-min visible / 60-min block call.
+  useEffect(() => {
+    if (callTypeProp || typeof window === "undefined") return;
+    const ct = new URLSearchParams(window.location.search).get("call_type");
+    if (
+      ct === "discovery_call_45" ||
+      ct === "signal_discovery_40" ||
+      ct === "advisory_discovery_60"
+    ) {
+      setCallType(ct);
+    }
+  }, [callTypeProp]);
+
+  // Founder + click-source attribution: marketing CTAs append
+  // ?founder=alex|della and ?source=<page_section> so the booking row and
+  // admin notification record who the visitor intended to talk to and which
+  // CTA on which page they clicked.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const f = params.get("founder");
+    if (f === "alex" || f === "della") setRequestedFounder(f);
+    const s = params.get("source");
+    if (s && VALID_BOOKING_SOURCES.has(s)) setClickSource(s);
+  }, []);
 
   // Read audit_token from URL once on mount and fetch the teaser to display the
   // hotel-specific score banner. We don't fail the booking flow if this errors.
@@ -129,7 +187,7 @@ export default function BookingCalendar() {
     setLoadingSlots(true);
     setSlots([]);
     try {
-      const res = await fetch(`/api/bookings/slots?date=${date}`);
+      const res = await fetch(`/api/bookings/slots?date=${date}&call_type=${callType}`);
       const data = await res.json();
       setSlots(data.slots || []);
     } catch {
@@ -137,7 +195,7 @@ export default function BookingCalendar() {
     } finally {
       setLoadingSlots(false);
     }
-  }, []);
+  }, [callType]);
 
   const handleDateSelect = (day: number) => {
     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -213,6 +271,9 @@ export default function BookingCalendar() {
           turnstileToken: turnstileRef.current?.getResponse(),
           focus_dimension: focusDimension,
           audit_token: auditToken,
+          call_type: callType,
+          requested_founder: requestedFounder,
+          click_source: clickSource,
         }),
       });
 
@@ -286,7 +347,31 @@ export default function BookingCalendar() {
                   {auditTeaser.hotel_name}
                 </p>
                 <p className="text-white/60 text-xs sm:text-sm mt-0.5">
-                  Pick a dimension to focus this 40-minute call on.
+                  Pick a dimension to focus this 45-minute call on.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Founder attribution banner (shown when arriving from /alex or /della) */}
+        {requestedFounder && step !== "success" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="max-w-2xl mx-auto mb-8 bg-cream border border-warm-gold/40 rounded-lg p-4 sm:p-5 flex items-center gap-4">
+              <div
+                aria-hidden
+                className="shrink-0 w-2 h-10 bg-warm-gold rounded-full"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-warm-gold text-[10px] font-semibold uppercase tracking-[0.18em] mb-1">
+                  Booking request
+                </p>
+                <p className="font-sans text-sm text-charcoal/85 leading-snug">
+                  You&rsquo;re booking with{" "}
+                  <span className="font-semibold text-near-black">
+                    {FOUNDER_LABELS[requestedFounder]}
+                  </span>
+                  . We&rsquo;ll route this directly to them.
                 </p>
               </div>
             </div>
@@ -546,7 +631,7 @@ export default function BookingCalendar() {
                   {formatDate(selectedDate)}
                 </p>
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
-                  {formatTime(selectedTime)} ET &middot; 1 hour
+                  {formatTime(selectedTime)} ET &middot; {durationLabel(callType)}
                 </p>
                 <p className="font-sans text-xs text-charcoal/60 mt-2">
                   Focus:{" "}
@@ -578,7 +663,7 @@ export default function BookingCalendar() {
               </h3>
 
               <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                {/* Honeypot — hidden from real users */}
+                {/* Honeypot. Hidden from real users; only bots fill it in. */}
                 <input
                   type="text"
                   name="website"
@@ -688,11 +773,13 @@ export default function BookingCalendar() {
                   </p>
                 )}
 
-                <Turnstile
-                  ref={turnstileRef}
-                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                  options={{ size: "invisible" }}
-                />
+                {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                    options={{ size: "invisible" }}
+                  />
+                )}
 
                 <Button
                   type="submit"
@@ -728,7 +815,7 @@ export default function BookingCalendar() {
                   {formatDate(selectedDate)}
                 </p>
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
-                  {formatTime(selectedTime)} ET &middot; 1 hour
+                  {formatTime(selectedTime)} ET &middot; {durationLabel(callType)}
                 </p>
               </div>
               <p className="font-sans text-sm text-charcoal/60 mb-8">

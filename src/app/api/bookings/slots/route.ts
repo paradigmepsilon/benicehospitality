@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
+import {
+  CANONICAL_CALL_TYPE,
+  CALL_BLOCK_MINUTES,
+} from "@/lib/constants/call-types";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get("date");
+  const callType = searchParams.get("call_type") ?? CANONICAL_CALL_TYPE;
 
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: "Valid date parameter required (YYYY-MM-DD)." }, { status: 400 });
+  }
+
+  const slotDuration = CALL_BLOCK_MINUTES[callType];
+  if (!slotDuration) {
+    return NextResponse.json({ error: "Unknown call_type." }, { status: 400 });
   }
 
   const requestedDate = new Date(date + "T00:00:00");
@@ -44,7 +54,7 @@ export async function GET(request: Request) {
   // Get existing confirmed bookings, time-range overrides, and calendar events in parallel
   const [bookings, timeOverrides, calendarEvents] = await Promise.all([
     sql`
-      SELECT booking_time FROM bookings
+      SELECT booking_time, call_type FROM bookings
       WHERE booking_date = ${date} AND status = 'confirmed'
     `,
     sql`
@@ -58,12 +68,17 @@ export async function GET(request: Request) {
     `,
   ]);
 
-  const bookedTimes = new Set(
-    bookings.map((b) => String(b.booking_time).slice(0, 5))
-  );
-
-  // Build blocked time ranges (in minutes) from overrides and calendar events
+  // Build blocked time ranges (in minutes) from existing bookings, overrides, and calendar events.
+  // Bookings vary in duration by call_type, so block the actual interval. That way a 40-min
+  // slot won't overlap a 60-min booking, or vice versa.
   const blockedRanges: Array<{ start: number; end: number }> = [];
+
+  for (const b of bookings) {
+    const [bh, bm] = String(b.booking_time).split(":").map(Number);
+    const start = bh * 60 + bm;
+    const dur = CALL_BLOCK_MINUTES[String(b.call_type)] ?? 60;
+    blockedRanges.push({ start, end: start + dur });
+  }
 
   for (const ov of timeOverrides) {
     const [sh, sm] = String(ov.start_time).split(":").map(Number);
@@ -77,7 +92,7 @@ export async function GET(request: Request) {
     blockedRanges.push({ start: sh * 60 + sm, end: eh * 60 + em });
   }
 
-  // Generate 1-hour slots within each window (40-minute meeting + 20-minute buffer)
+  // Generate slots of the requested call_type's duration within each window.
   const slots: string[] = [];
   const nowET = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
   const nowTime = new Date(nowET);
@@ -91,26 +106,20 @@ export async function GET(request: Request) {
     let currentMinutes = startH * 60 + startM;
     const endMinutes = endH * 60 + endM;
 
-    while (currentMinutes + 60 <= endMinutes) {
+    while (currentMinutes + slotDuration <= endMinutes) {
       const hours = Math.floor(currentMinutes / 60);
       const mins = currentMinutes % 60;
       const timeStr = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
       const slotStart = currentMinutes;
-      const slotEnd = currentMinutes + 60;
+      const slotEnd = currentMinutes + slotDuration;
 
-      // Skip if already booked
-      if (bookedTimes.has(timeStr)) {
-        currentMinutes += 60;
-        continue;
-      }
-
-      // Skip if overlaps with any blocked range
+      // Skip if overlaps with any blocked range (existing bookings, overrides, calendar events)
       const isBlocked = blockedRanges.some(
         (range) => slotStart < range.end && slotEnd > range.start
       );
 
       if (isBlocked) {
-        currentMinutes += 60;
+        currentMinutes += slotDuration;
         continue;
       }
 
@@ -118,13 +127,13 @@ export async function GET(request: Request) {
       if (isToday) {
         const currentETMinutes = nowTime.getHours() * 60 + nowTime.getMinutes();
         if (slotStart <= currentETMinutes) {
-          currentMinutes += 60;
+          currentMinutes += slotDuration;
           continue;
         }
       }
 
       slots.push(timeStr);
-      currentMinutes += 60;
+      currentMinutes += slotDuration;
     }
   }
 
