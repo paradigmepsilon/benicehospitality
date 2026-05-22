@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import SectionLabel from "@/components/ui/SectionLabel";
 import FAQSchema from "@/components/sections/faq/FAQSchema";
 import PageCTA from "@/components/sections/shared/PageCTA";
 import {
+  STOCK_HOTEL_EXTERIOR,
+  STOCK_DASHBOARD,
+  STOCK_LAPTOP_WORK,
+} from "@/lib/stock-images";
+import {
   TIER_ZERO_RESOURCES,
   getTierZeroResource,
   getAllTierZeroSlugs,
 } from "@/lib/tier-zero-resources";
 
-const SITE_URL = "https://benicehospitalitygroup.com";
+const SITE_URL = "https://benicehospitality.com";
 
 export async function generateStaticParams() {
   return getAllTierZeroSlugs().map((slug) => ({ slug }));
@@ -56,6 +62,15 @@ export default async function ResourcePage({
     (r) => r.slug !== resource.slug,
   ).slice(0, 3);
 
+  // Hero image keyed to the resource's pillar so the imagery feels on-topic
+  // without needing a per-resource asset.
+  const heroImage =
+    resource.pillar === "Tech"
+      ? STOCK_DASHBOARD
+      : resource.pillar === "Guest Experience"
+        ? STOCK_LAPTOP_WORK
+        : STOCK_HOTEL_EXTERIOR;
+
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -89,18 +104,26 @@ export default async function ResourcePage({
             Our new flagship is the Tier 0 Comprehensive Audit, which covers all seven dimensions in one report.
           </p>
           <Link
-            href="/audit/request"
+            href="/login"
             className="font-sans text-sm font-semibold text-primary-green hover:text-primary-green-dark inline-flex items-center gap-1.5 shrink-0"
           >
-            Get Your Free Audit
+            Community Login
             <span aria-hidden>→</span>
           </Link>
         </div>
       </section>
 
       {/* Hero */}
-      <section className="relative bg-near-black py-28 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-near-black to-near-black/90" />
+      <section className="relative bg-near-black pt-28 md:pt-32 pb-24 md:pb-28 px-6 overflow-hidden">
+        <Image
+          src={heroImage.src}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-near-black/75 via-near-black/85 to-near-black/95" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
             Tier 0 Free Resource · {resource.pillar}
@@ -115,7 +138,7 @@ export default async function ResourcePage({
             <Button href={ctaHref} variant="primary" size="lg">
               Request {resource.name}
             </Button>
-            <Button href="/services#tier-0" variant="secondary" size="lg">
+            <Button href="/resources" variant="secondary" size="lg">
               See All Free Resources
             </Button>
           </div>
@@ -175,28 +198,6 @@ export default async function ResourcePage({
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      {/* Who it's for */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <SectionLabel>Who It&apos;s For</SectionLabel>
-          <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-10 leading-tight">
-            Built For Operators Who…
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {resource.whoItsFor.map((item, i) => (
-              <div
-                key={i}
-                className="border border-light-gray rounded-lg p-6 hover:border-primary-green/50 transition-colors"
-              >
-                <p className="font-sans text-base text-charcoal leading-relaxed">
-                  {item}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

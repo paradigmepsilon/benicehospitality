@@ -40,7 +40,7 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <AnimatedSection theme="dark" className="py-20 px-6">
+    <AnimatedSection id="newsletter" theme="dark" className="py-20 px-6">
       <div className="max-w-2xl mx-auto text-center">
         <AnimatedItem>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-white mb-4">
@@ -90,11 +90,13 @@ export default function NewsletterSignup() {
               >
                 {status === "loading" ? "Subscribing..." : "Subscribe"}
               </button>
-              <Turnstile
-                ref={turnstileRef}
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                options={{ size: "invisible" }}
-              />
+              {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                  options={{ size: "invisible" }}
+                />
+              )}
             </form>
           )}
           {status === "error" && (

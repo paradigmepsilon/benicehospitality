@@ -35,13 +35,13 @@ export async function generateMetadata({
     description,
     ...(keywords.length > 0 && { keywords }),
     alternates: {
-      canonical: `https://benicehospitalitygroup.com/insights/${slug}`,
+      canonical: `https://benicehospitality.com/insights/${slug}`,
     },
     openGraph: {
       type: "article",
       title: `${post.title} | Be Nice Hospitality Group`,
       description,
-      url: `https://benicehospitalitygroup.com/insights/${slug}`,
+      url: `https://benicehospitality.com/insights/${slug}`,
       images: post.featured_image_url ? [{ url: post.featured_image_url }] : undefined,
       publishedTime: post.published_at || post.created_at,
       modifiedTime: post.updated_at,
@@ -85,7 +85,7 @@ export default async function BlogPostPage({
       name: "Be Nice Hospitality Group",
       logo: {
         "@type": "ImageObject",
-        url: "https://benicehospitalitygroup.com/images/logo.png",
+        url: "https://benicehospitality.com/images/logo.png",
       },
     },
   };
