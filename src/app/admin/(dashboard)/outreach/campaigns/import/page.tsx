@@ -51,7 +51,7 @@ export default function CampaignImportPage() {
   if (result) {
     return (
       <div className="max-w-2xl">
-        <Link href="/admin/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Campaigns</Link>
+        <Link href="/admin/outreach/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Campaigns</Link>
         <div className="bg-white border border-[#e8e4dd] rounded-lg p-6 mt-4">
           <div className="w-12 h-12 rounded-full bg-[#5b9a2f]/10 flex items-center justify-center mb-4">
             <svg className="w-6 h-6 text-[#5b9a2f]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@ export default function CampaignImportPage() {
           )}
           <div className="mt-6 flex gap-3">
             <button
-              onClick={() => router.push(`/admin/campaigns/${result.campaign_id}`)}
+              onClick={() => router.push(`/admin/outreach/campaigns/${result.campaign_id}`)}
               className="px-4 py-2 bg-[#5b9a2f] text-white text-sm font-medium rounded-lg hover:bg-[#4e8528]"
             >
               View campaign
@@ -113,7 +113,7 @@ export default function CampaignImportPage() {
 
   return (
     <div className="max-w-3xl">
-      <Link href="/admin/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Campaigns</Link>
+      <Link href="/admin/outreach/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Campaigns</Link>
       <h1 className="font-display text-2xl font-semibold text-[#1a1a1a] mt-4 mb-2">
         Import a weekly batch
       </h1>

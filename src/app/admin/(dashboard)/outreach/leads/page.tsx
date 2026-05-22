@@ -151,7 +151,7 @@ export default function AdminLeadsPage() {
                     <tr key={lead.email} className="border-t border-[#e8e4dd] hover:bg-[#f8f6f1]/40">
                       <td className="px-4 py-3">
                         <Link
-                          href={`/admin/leads/${encodeURIComponent(lead.email)}`}
+                          href={`/admin/outreach/leads/${encodeURIComponent(lead.email)}`}
                           className="font-medium text-[#1a1a1a] hover:text-[#5b9a2f]"
                         >
                           {lead.email}
@@ -184,7 +184,7 @@ export default function AdminLeadsPage() {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <Link
-                          href={`/admin/leads/${encodeURIComponent(lead.email)}`}
+                          href={`/admin/outreach/leads/${encodeURIComponent(lead.email)}`}
                           className="text-xs text-[#5b9a2f] hover:text-[#4e8528] font-medium"
                         >
                           Detail →

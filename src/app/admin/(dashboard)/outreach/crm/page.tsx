@@ -49,6 +49,8 @@ const SOURCE_LABELS: Record<string, string> = {
   booking: "Booking",
   manual: "Manual",
   csv_import: "CSV Import",
+  audit_request: "Audit Request",
+  viability_scorecard: "Viability Scorecard",
 };
 
 const ACTIVITY_ICONS: Record<string, string> = {
@@ -286,7 +288,7 @@ export default function CrmPage() {
     if (data.next) {
       router.push(data.next);
     } else if (data.campaign_id) {
-      router.push(`/admin/campaigns/${data.campaign_id}`);
+      router.push(`/admin/outreach/campaigns/${data.campaign_id}`);
     }
   }
 

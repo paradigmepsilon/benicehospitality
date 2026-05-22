@@ -153,6 +153,6 @@ export async function POST(request: Request) {
     target_count: targetIds.length,
     drafted_count: drafts.filter((d) => d.draft).length,
     errors,
-    next: `/admin/campaigns/${campaignId}`,
+    next: `/admin/outreach/campaigns/${campaignId}`,
   });
 }

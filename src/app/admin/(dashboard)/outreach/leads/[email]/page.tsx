@@ -138,7 +138,7 @@ export default function AdminLeadDetailPage() {
   if (error || !data) {
     return (
       <div className="max-w-2xl">
-        <Link href="/admin/leads" className="text-sm text-[#5b9a2f] hover:text-[#4e8528]">
+        <Link href="/admin/outreach/leads" className="text-sm text-[#5b9a2f] hover:text-[#4e8528]">
           ← Back to leads
         </Link>
         <p className="mt-6 text-sm text-[#1a1a1a]/60">{error || "Failed to load lead."}</p>
@@ -151,7 +151,7 @@ export default function AdminLeadDetailPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/admin/leads" className="text-sm text-[#5b9a2f] hover:text-[#4e8528]">
+        <Link href="/admin/outreach/leads" className="text-sm text-[#5b9a2f] hover:text-[#4e8528]">
           ← Back to leads
         </Link>
       </div>

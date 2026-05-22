@@ -77,7 +77,7 @@ export default function AdminCampaignsPage() {
           </p>
         </div>
         <Link
-          href="/admin/campaigns/import"
+          href="/admin/outreach/campaigns/import"
           className="px-4 py-2 bg-[#5b9a2f] text-white text-sm font-medium rounded-lg hover:bg-[#4e8528] transition-colors"
         >
           + Import Batch
@@ -129,7 +129,7 @@ export default function AdminCampaignsPage() {
               ) : campaigns.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-sm text-[#1a1a1a]/40">
-                    No campaigns yet. <Link href="/admin/campaigns/import" className="text-[#5b9a2f] hover:underline">Import your first batch</Link>.
+                    No campaigns yet. <Link href="/admin/outreach/campaigns/import" className="text-[#5b9a2f] hover:underline">Import your first batch</Link>.
                   </td>
                 </tr>
               ) : (
@@ -139,7 +139,7 @@ export default function AdminCampaignsPage() {
                     <tr key={c.id} className="border-t border-[#e8e4dd] hover:bg-[#f8f6f1]/40">
                       <td className="px-4 py-3">
                         <Link
-                          href={`/admin/campaigns/${c.id}`}
+                          href={`/admin/outreach/campaigns/${c.id}`}
                           className="font-medium text-[#1a1a1a] hover:text-[#5b9a2f]"
                         >
                           {c.name}
@@ -178,7 +178,7 @@ export default function AdminCampaignsPage() {
                       <td className="px-4 py-3 text-[#1a1a1a]/60 text-xs">{timeAgo(c.created_at)}</td>
                       <td className="px-4 py-3 text-right">
                         <Link
-                          href={`/admin/campaigns/${c.id}`}
+                          href={`/admin/outreach/campaigns/${c.id}`}
                           className="text-xs text-[#5b9a2f] hover:text-[#4e8528] font-medium"
                         >
                           Detail →

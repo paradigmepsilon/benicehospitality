@@ -380,7 +380,7 @@ export default function AdminCampaignDetailPage() {
   if (!data) {
     return (
       <div>
-        <Link href="/admin/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Back</Link>
+        <Link href="/admin/outreach/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Back</Link>
         <p className="mt-6 text-sm text-[#1a1a1a]/60">Campaign not found.</p>
       </div>
     );
@@ -391,7 +391,7 @@ export default function AdminCampaignDetailPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/admin/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Back to campaigns</Link>
+        <Link href="/admin/outreach/campaigns" className="text-sm text-[#5b9a2f] hover:underline">← Back to campaigns</Link>
       </div>
 
       <div className="bg-white border border-[#e8e4dd] rounded-lg p-6">
