@@ -2,13 +2,34 @@ export interface NavLink {
   label: string;
   href: string;
   external?: boolean;
+  description?: string;
+}
+
+/**
+ * A primary nav slot. Either points directly at an href (single-item nav)
+ * or contains a list of children rendered as a dropdown on desktop and an
+ * accordion on mobile.
+ */
+export interface NavGroup {
+  label: string;
+  href?: string;
+  children?: NavLink[];
+}
+
+export interface UtilityNav {
+  communityLogin: NavLink;
+  freeAudit: NavLink;
 }
 
 export interface PillarCard {
   icon?: string;
   title: string;
   tagline: string;
-  points: string[];
+  // Editorial paragraph — canonical for the Host-to-Operator Method pillars.
+  body?: string;
+  // Legacy bullet list — kept optional for backward-compat with any unmigrated
+  // section that still passes points. New methodology pillars use `body`.
+  points?: string[];
   stat?: string;
 }
 

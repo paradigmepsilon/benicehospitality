@@ -1,8 +1,6 @@
 import type {
-  NavLink,
   PainPoint,
   PillarCard,
-  ServiceTier,
   Testimonial,
   CaseStudy,
   InsightPost,
@@ -16,15 +14,8 @@ import type {
   FAQItem,
 } from "./types";
 
-export const NAV_LINKS: NavLink[] = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Free Audit", href: "/audit/request" },
-  { label: "Insights", href: "/insights" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
-];
+// NAV_LINKS retired in the IA migration. The primary nav now lives in
+// src/lib/nav.ts as NAV_TREE. Header and Footer consume NAV_TREE directly.
 
 export const PAIN_POINTS: PainPoint[] = [
   {
@@ -53,44 +44,27 @@ export const PAIN_POINTS: PainPoint[] = [
   },
 ];
 
+// The three pillars of the Host-to-Operator Method. Locked names from the
+// brand brief; do not rename. Editorial body paragraphs replace the legacy
+// bullet-list pattern. No stat kickers — invented operational claims violate
+// the brand's no-income-claims rule and real outcome data does not yet exist.
 export const PILLARS: PillarCard[] = [
   {
-    title: "Commercial Performance",
-    tagline: "We help you increase profitable revenue, not just occupancy.",
-    points: [
-      "Direct booking strategy and conversion optimization",
-      "OTA rebalancing and channel distribution",
-      "Package and ancillary revenue design",
-      "Pricing strategy and yield management",
-      "KPI dashboards that show what actually matters",
-    ],
-    stat:
-      "37% of travelers planned to book direct in 2025. We make sure they book with you.",
+    title: "Operate Like a Business",
+    tagline:
+      "Numbers, systems, and accountability. Not just hospitality instincts.",
+    body: "If you can't pull your direct booking percentage, your revenue per available night, and your cost per booking in under a minute, you're hosting, not operating. Our methods teaches you how to create and use dashboards, SOPs, and weekly review cadence that turn a portfolio into a P&L.",
   },
   {
-    title: "Guest Experience & Operations",
-    tagline: "Deliver a luxury feel without bloated labor costs.",
-    points: [
-      "Guest journey mapping from search to checkout",
-      "Standard operating procedures and service standards",
-      "Staff training and service excellence programs",
-      "Service recovery frameworks that turn complaints into loyalty",
-      "Review management and reputation strategy",
-    ],
-    stat:
-      "In boutique luxury, consistency isn't optional. It's the product.",
+    title: "Automate With Intelligence",
+    tagline: "Automation that knows when to stop.",
+    body: "Cleaner SMS that fires when the cleaner's running late. Pricing that adjusts when the comp set moves. Replenishment that orders before you're out of supplies. The right automation handles those tasks you'd otherwise forget, but stays out of the conversations that need you in them.",
   },
   {
-    title: "Tech & Automation",
-    tagline: "Technology should save you time, not create more work.",
-    points: [
-      "PMS, CRM, and channel manager audit",
-      "Vendor selection and implementation support",
-      "Workflow automation design",
-      "Guestally SMS guest engagement platform",
-      "Analytics setup and reporting dashboards",
-    ],
-    stat: "Stop overpaying for tools you underuse.",
+    title: "Own Your Guests",
+    tagline:
+      "OTAs are a discovery channel. They are not your customer list.",
+    body: "Every booking that comes through Airbnb, VRBO, Booking.com or Turo belongs to them. You have to make it yours. Direct booking pages that convert, post-stay capture flows, owned email lists, and a reason to come back. Without these, you're paying 15–20% commission for a customer relationship you don't actually own.",
   },
 ];
 
@@ -138,7 +112,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "A focused audit that identifies your highest-impact opportunities, with enough specificity to act on immediately.",
     cta: "Learn More",
-    ctaHref: "/services",
+    ctaHref: "/advisory",
   },
   {
     tier: 2,
@@ -147,7 +121,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "From direct booking campaigns to full SOP libraries. We configure, build, and train so your team can execute from day one.",
     cta: "Learn More",
-    ctaHref: "/services",
+    ctaHref: "/advisory",
   },
   {
     tier: 3,
@@ -156,7 +130,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "Ongoing strategic partnership. We embed into your operation on a retainer basis and act as your commercial leadership team.",
     cta: "Learn More",
-    ctaHref: "/services",
+    ctaHref: "/advisory",
   },
 ];
 
@@ -183,29 +157,11 @@ export const GUESTALLY_FEATURES: GuestallyFeature[] = [
   },
 ];
 
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      "We were losing direct bookings to OTAs and didn't even realize how much it was costing us until BNHG showed us the numbers. Within 90 days we had a real direct booking strategy.",
-    author: "Sarah M.",
-    title: "Owner-Operator",
-    property: "18-Room Urban Boutique, Charleston, SC",
-  },
-  {
-    quote:
-      "The tech audit alone was worth it. We were paying for three tools that overlapped and missing the one we actually needed. They sorted it in two weeks.",
-    author: "James T.",
-    title: "General Manager",
-    property: "32-Room Destination Property, Asheville, NC",
-  },
-  {
-    quote:
-      "Having a strategic partner who understands both the hospitality side and the business side is rare. BNHG is the first firm that's talked to me like a peer, not a client.",
-    author: "Patricia L.",
-    title: "Owner & Founder",
-    property: "22-Room Historic Inn, Savannah, GA",
-  },
-];
+// Real testimonials only. Placeholder/composite quotes are off-brief. The
+// homepage TestimonialsSection early-returns null on an empty array, so the
+// whole social-proof block is gated until real RRR student or Signal client
+// quotes exist.
+export const TESTIMONIALS: Testimonial[] = [];
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
