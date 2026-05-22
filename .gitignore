@@ -18,6 +18,10 @@ build/
 # prospect data — lives in the DB, do not commit raw CSVs
 bnhg-deep-research-*.csv
 
+# course lesson bundles — large generated assets served from Neon via import-lesson.ts
+# filesystem is build-time source of truth, but too large for git
+Courses/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
