@@ -92,7 +92,7 @@ export default function SignalProblems() {
                   .filter(Boolean)
                   .join(" ")}
               >
-                <div className="font-display font-light text-6xl md:text-8xl lg:text-9xl text-near-black leading-none transition-colors duration-300 group-hover:text-terracotta">
+                <div className="font-display font-light text-5xl md:text-8xl lg:text-9xl text-near-black leading-none transition-colors duration-300 group-hover:text-terracotta">
                   {p.num}
                 </div>
 

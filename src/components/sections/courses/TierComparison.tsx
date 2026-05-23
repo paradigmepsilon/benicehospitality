@@ -84,12 +84,116 @@ export default function TierComparison() {
 
   return (
     <>
+      {/* Mobile: stacked tier cards. The 4-column comparison grid does not
+          fit on phones at any usable column width, so each tier becomes its
+          own card showing the full feature list as a definition list. */}
       <AnimatedItem>
-        <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
+        <div className="md:hidden space-y-5">
+          {TIERS.map((t, i) => (
+            <div
+              key={t.name}
+              className={[
+                "bg-white border rounded-lg overflow-hidden shadow-sm",
+                t.featured ? "border-warm-gold" : "border-light-gray",
+              ].join(" ")}
+            >
+              <div
+                className={[
+                  "px-5 py-5 text-center",
+                  t.featured ? "bg-warm-gold/10" : "",
+                ].join(" ")}
+              >
+                {t.featured && (
+                  <p className="font-sans text-[10px] font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
+                    Most popular
+                  </p>
+                )}
+                <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
+                  {t.name}
+                </h3>
+                <p className="font-display text-4xl font-semibold text-charcoal mt-2 mb-1">
+                  {t.price}
+                </p>
+                <p className="font-sans text-sm text-charcoal/65 italic leading-tight">
+                  {t.cadence}
+                </p>
+              </div>
+
+              <dl className="divide-y divide-light-gray">
+                {COMPARISON.map((row) => {
+                  const value = row.values[i];
+                  return (
+                    <div
+                      key={row.label}
+                      className="px-5 py-3 flex items-center justify-between gap-4"
+                    >
+                      <dt className="font-sans text-sm font-semibold text-deep-teal flex-1">
+                        {row.label}
+                      </dt>
+                      <dd className="text-right">
+                        {value === true ? (
+                          <span
+                            aria-label="included"
+                            className="flex-shrink-0 w-6 h-6 rounded-full bg-deep-teal/10 inline-flex items-center justify-center"
+                          >
+                            <Check
+                              className="w-3.5 h-3.5 text-deep-teal"
+                              strokeWidth={3}
+                              aria-hidden
+                            />
+                          </span>
+                        ) : value === false ? (
+                          <span
+                            aria-label="not included"
+                            className="font-display text-xl text-charcoal/25 leading-none"
+                          >
+                            &mdash;
+                          </span>
+                        ) : (
+                          <span className="font-sans text-sm text-charcoal leading-tight">
+                            {value}
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+
+              <div
+                className={[
+                  "px-5 py-4 border-t border-light-gray",
+                  t.featured ? "bg-warm-gold/5" : "bg-cream/40",
+                ].join(" ")}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenTier(i)}
+                  className={[
+                    "w-full inline-flex items-center justify-center rounded-lg",
+                    "font-sans text-sm font-semibold tracking-wide",
+                    "px-4 py-3 min-h-[48px] transition-all duration-200",
+                    "border-2",
+                    t.featured
+                      ? "bg-warm-gold text-near-black border-warm-gold hover:bg-warm-gold-dark hover:border-warm-gold-dark shadow-sm"
+                      : "bg-transparent text-deep-teal border-deep-teal hover:bg-deep-teal hover:text-white",
+                  ].join(" ")}
+                >
+                  Join the waitlist
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AnimatedItem>
+
+      {/* Desktop ≥ md: the existing 4-column comparison grid. */}
+      <AnimatedItem>
+        <div className="hidden md:block">
           <div
             role="table"
             aria-label="Compare the three tiers"
-            className="min-w-[760px] bg-white border border-light-gray rounded-lg overflow-hidden shadow-sm"
+            className="bg-white border border-light-gray rounded-lg overflow-hidden shadow-sm"
           >
             {/* Header row */}
             <div
@@ -98,36 +202,30 @@ export default function TierComparison() {
             >
               <div
                 role="columnheader"
-                className="hidden md:block p-6 md:p-8"
+                className="p-8"
                 aria-hidden
               />
-              <div
-                role="columnheader"
-                className="md:hidden p-6 font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/55"
-              >
-                What you get
-              </div>
               {TIERS.map((t) => (
                 <div
                   key={t.name}
                   role="columnheader"
                   className={[
-                    "p-6 md:p-8 text-center border-l border-light-gray",
+                    "p-8 text-center border-l border-light-gray",
                     t.featured ? "bg-warm-gold/10 relative" : "",
                   ].join(" ")}
                 >
                   {t.featured && (
-                    <p className="font-sans text-[10px] md:text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
+                    <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
                       Most popular
                     </p>
                   )}
-                  <h3 className="font-display text-xl md:text-2xl font-semibold text-deep-teal leading-tight">
+                  <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
                     {t.name}
                   </h3>
-                  <p className="font-display text-3xl md:text-4xl font-semibold text-charcoal mt-2 mb-2">
+                  <p className="font-display text-4xl font-semibold text-charcoal mt-2 mb-2">
                     {t.price}
                   </p>
-                  <p className="font-sans text-xs md:text-sm text-charcoal/65 italic leading-tight">
+                  <p className="font-sans text-sm text-charcoal/65 italic leading-tight">
                     {t.cadence}
                   </p>
                 </div>
@@ -143,7 +241,7 @@ export default function TierComparison() {
               >
                 <div
                   role="rowheader"
-                  className="p-4 md:p-6 font-sans text-sm md:text-base font-semibold text-deep-teal flex items-center"
+                  className="p-6 font-sans text-base font-semibold text-deep-teal flex items-center"
                 >
                   {row.label}
                 </div>
@@ -154,7 +252,7 @@ export default function TierComparison() {
                       key={tier.name}
                       role="cell"
                       className={[
-                        "p-4 md:p-6 text-center flex items-center justify-center border-l border-light-gray",
+                        "p-6 text-center flex items-center justify-center border-l border-light-gray",
                         tier.featured ? "bg-warm-gold/5" : "",
                       ].join(" ")}
                     >
@@ -177,7 +275,7 @@ export default function TierComparison() {
                           &mdash;
                         </span>
                       ) : (
-                        <span className="font-sans text-sm md:text-base text-charcoal leading-tight">
+                        <span className="font-sans text-base text-charcoal leading-tight">
                           {value}
                         </span>
                       )}
@@ -194,13 +292,7 @@ export default function TierComparison() {
             >
               <div
                 role="rowheader"
-                className="hidden md:flex p-4 md:p-6 font-sans text-xs font-semibold tracking-[0.3em] uppercase text-charcoal/55 items-center"
-              >
-                Reserve a seat
-              </div>
-              <div
-                role="rowheader"
-                className="md:hidden p-4 font-sans text-xs font-semibold tracking-[0.3em] uppercase text-charcoal/55 flex items-center"
+                className="p-6 font-sans text-xs font-semibold tracking-[0.3em] uppercase text-charcoal/55 flex items-center"
               >
                 Reserve a seat
               </div>
@@ -209,7 +301,7 @@ export default function TierComparison() {
                   key={t.name}
                   role="cell"
                   className={[
-                    "p-3 md:p-5 border-l border-light-gray flex items-stretch",
+                    "p-5 border-l border-light-gray flex items-stretch",
                     t.featured ? "bg-warm-gold/5" : "",
                   ].join(" ")}
                 >
@@ -218,8 +310,8 @@ export default function TierComparison() {
                     onClick={() => setOpenTier(i)}
                     className={[
                       "w-full inline-flex items-center justify-center rounded-lg",
-                      "font-sans text-xs md:text-sm font-semibold tracking-wide",
-                      "px-3 py-2.5 md:px-4 md:py-3 transition-all duration-200",
+                      "font-sans text-sm font-semibold tracking-wide",
+                      "px-4 py-3 transition-all duration-200",
                       "border-2",
                       t.featured
                         ? "bg-warm-gold text-near-black border-warm-gold hover:bg-warm-gold-dark hover:border-warm-gold-dark shadow-sm"

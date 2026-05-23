@@ -126,6 +126,7 @@ export default async function BlogPostPage({
             src={post.featured_image_url}
             alt={post.title}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />

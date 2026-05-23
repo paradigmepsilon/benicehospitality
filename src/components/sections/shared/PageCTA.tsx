@@ -93,6 +93,7 @@ export default function PageCTA({
                   href={preset.secondary.href}
                   variant="primary"
                   size="lg"
+                  className="w-full sm:w-auto"
                 >
                   {preset.secondary.label}
                 </Button>
@@ -100,19 +101,26 @@ export default function PageCTA({
                   href={preset.primary.href}
                   variant="secondary"
                   size="lg"
+                  className="w-full sm:w-auto"
                 >
                   {preset.primary.label}
                 </Button>
               </>
             ) : (
               <>
-                <Button href={preset.primary.href} variant="primary" size="lg">
+                <Button
+                  href={preset.primary.href}
+                  variant="primary"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
                   {preset.primary.label}
                 </Button>
                 <Button
                   href={preset.secondary.href}
                   variant="secondary"
                   size="lg"
+                  className="w-full sm:w-auto"
                 >
                   {preset.secondary.label}
                 </Button>

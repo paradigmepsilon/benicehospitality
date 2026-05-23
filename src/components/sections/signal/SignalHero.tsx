@@ -35,7 +35,7 @@ export default function SignalHero() {
             variants={itemVariants}
             className="mb-6 inline-flex items-baseline gap-3"
           >
-            <span className="font-script text-7xl md:text-8xl lg:text-9xl leading-none text-terracotta">
+            <span className="font-script text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-none text-terracotta">
               Signal
             </span>
             <span className="font-display text-xl md:text-2xl tracking-tight text-near-black">

@@ -349,7 +349,7 @@ export default function AdvisoryApplicationForm() {
 
       <div>
         <label className={labelClass}>When would you want to start?</label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           {TIMING_OPTIONS.map((opt) => (
             <button
               key={opt.value}

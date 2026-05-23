@@ -38,14 +38,14 @@ export default function MobileBottomNav() {
               <Link
                 href={item.href}
                 className={[
-                  "flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px]",
-                  "font-sans text-[10px] font-medium uppercase tracking-wider",
+                  "flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] px-1",
+                  "font-sans text-[10px] font-medium uppercase tracking-normal",
                   "transition-colors duration-200",
                   active ? "text-warm-gold" : "text-white/70 hover:text-white",
                 ].join(" ")}
               >
                 {ICONS[item.label] ?? null}
-                <span>{item.label}</span>
+                <span className="truncate max-w-full">{item.label}</span>
               </Link>
             </li>
           );

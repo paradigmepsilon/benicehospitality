@@ -19,7 +19,7 @@ export default function InsightsHero() {
         <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-8">
           Insights
         </p>
-        <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
           Insights for{" "}
           <span className="text-warm-gold italic">
             Hospitality and the Sharing Economy

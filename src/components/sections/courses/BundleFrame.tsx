@@ -157,7 +157,7 @@ export default function BundleFrame({
           title="Lesson content"
           allow="autoplay; fullscreen; encrypted-media"
           allowFullScreen
-          className="block w-full min-h-[80vh] border-0"
+          className="block w-full min-h-[60vh] md:min-h-[80vh] border-0"
         />
       </div>
     );

@@ -70,6 +70,7 @@ export default function FoundersBand() {
                     alt={f.name}
                     width={800}
                     height={800}
+                    sizes="(min-width: 768px) 45vw, 100vw"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </div>

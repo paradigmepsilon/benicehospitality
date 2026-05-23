@@ -253,6 +253,7 @@ export default function Header() {
               alt="Be Nice Hospitality Group"
               width={400}
               height={150}
+              sizes="(min-width: 640px) 213px, 170px"
               className="h-16 sm:h-20 w-auto"
               priority
             />
@@ -307,6 +308,7 @@ export default function Header() {
               alt="Be Nice Hospitality Group"
               width={400}
               height={150}
+              sizes="213px"
               className={[
                 "w-auto transition-all duration-300",
                 scrolled ? "h-0 opacity-0 absolute" : "h-20 opacity-100",
@@ -320,6 +322,7 @@ export default function Header() {
               aria-hidden="true"
               width={400}
               height={400}
+              sizes="56px"
               className={[
                 "w-auto transition-all duration-300",
                 scrolled ? "h-14 opacity-100" : "h-0 opacity-0 absolute",

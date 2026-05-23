@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ServicesHero() {
   return (
-    <section className="relative h-[60vh] min-h-[480px] overflow-hidden bg-near-black">
+    <section className="relative h-[60svh] min-h-[480px] overflow-hidden bg-near-black">
       <Image
         src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1920&q=80"
         alt="Luxury hotel suite"

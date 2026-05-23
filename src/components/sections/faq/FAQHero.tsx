@@ -6,7 +6,7 @@ export default function FAQHero() {
         <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
           Frequently Asked Questions
         </p>
-        <h1 className="font-display text-5xl md:text-6xl font-semibold text-white leading-tight">
+        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-tight">
           Answers for{" "}
           <span className="text-warm-gold italic">Independent Operators</span>
         </h1>

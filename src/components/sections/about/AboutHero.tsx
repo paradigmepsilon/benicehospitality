@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function AboutHero() {
   return (
-    <section className="relative h-[60vh] min-h-[480px] overflow-hidden bg-near-black">
+    <section className="relative h-[60svh] min-h-[480px] overflow-hidden bg-near-black">
       <Image
         src="https://images.unsplash.com/photo-1527853787696-f7be74f2e39a?auto=format&fit=crop&w=1920&q=80"
         alt="Hotel team working together"

@@ -76,6 +76,7 @@ export default function Footer() {
                 alt="Be Nice Hospitality Group"
                 width={80}
                 height={80}
+                sizes="64px"
                 className="h-16 w-16 object-contain"
               />
             </Link>
@@ -141,7 +142,10 @@ export default function Footer() {
             <h3 className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-5">
               Company
             </h3>
-            <div className="grid grid-cols-2 gap-x-6">
+            {/* On md (when the parent grid becomes 2-col, halving this column's
+                width), collapse to a single column so the small links don't
+                compress. lg restores the 2-col split. */}
+            <div className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-1 md:gap-y-0">
               <ul className="space-y-3">
                 {COMPANY_LINKS.map((link) => (
                   <li key={link.label}>

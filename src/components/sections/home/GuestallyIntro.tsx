@@ -28,6 +28,7 @@ export default function GuestallyIntro() {
                   alt="Guestally"
                   width={600}
                   height={160}
+                  sizes="(min-width: 768px) 360px, 260px"
                   className="h-28 md:h-36 w-auto brightness-0 invert"
                 />
               </div>
