@@ -315,13 +315,8 @@ export default function AboutPage() {
               <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0">
                 <div className="absolute inset-0 bg-warm-gold/30 rounded-sm translate-x-4 translate-y-4" />
                 <div className="relative w-full h-full overflow-hidden rounded-sm">
-                  {/*
-                    PLACEHOLDER: Della candid portrait
-                    A warm, candid Della shot — at the property, in
-                    workspace, hosting Truth Be Told. Replace as desired.
-                  */}
                   <Image
-                    src="/images/Website%20Images/Della%20Casual.png"
+                    src="/images/Website%20Images/hf_20260524_000326_0729b041-7c0a-48b5-9241-bf16ce0362f5.png"
                     alt="Della Henry, co-founder of Be Nice Hospitality Group"
                     fill
                     className="object-cover"
