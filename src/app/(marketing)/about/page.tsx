@@ -113,7 +113,7 @@ export default function AboutPage() {
           </div>
 
           <div className="max-w-2xl mx-auto lg:max-w-none lg:mx-0">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-sm">
+            <div className="relative aspect-[3/2] w-full">
               <div className="absolute inset-0 bg-warm-gold/30 rounded-sm translate-x-3 translate-y-3" />
               <div className="relative w-full h-full overflow-hidden rounded-sm">
                 <Image
