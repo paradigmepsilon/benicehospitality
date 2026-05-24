@@ -140,7 +140,7 @@ export default function AboutPage() {
       <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] lg:grid-rows-[auto_1fr] gap-10 lg:gap-x-16 lg:gap-y-10 items-start">
-            <div className="lg:col-start-1 lg:row-start-1 lg:sticky lg:top-28">
+            <div className="lg:col-start-1 lg:row-start-1">
               <AnimatedItem>
                 <SectionLabel>Our story</SectionLabel>
               </AnimatedItem>
