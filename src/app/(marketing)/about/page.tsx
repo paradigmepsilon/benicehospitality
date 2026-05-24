@@ -113,15 +113,16 @@ export default function AboutPage() {
           </div>
 
           <div className="max-w-2xl mx-auto lg:max-w-none lg:mx-0">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-sm">
+            <div className="relative">
               <div className="absolute inset-0 bg-warm-gold/30 rounded-sm translate-x-3 translate-y-3" />
-              <div className="relative w-full h-full overflow-hidden rounded-sm">
+              <div className="relative overflow-hidden rounded-sm">
                 <Image
                   src="/images/Website%20Images/hf_20260523_234948_572e0ebd-8748-4e21-84cd-68f9e2e2b41e.png"
                   alt="Della and Alex Henry, co-founders of Be Nice Hospitality Group"
-                  fill
+                  width={5120}
+                  height={2880}
                   priority
-                  className="object-cover"
+                  className="block w-full h-auto"
                   style={{ filter: "saturate(0.9) contrast(1.05)" }}
                   sizes="(min-width: 1024px) 45vw, 90vw"
                 />
