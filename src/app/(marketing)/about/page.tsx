@@ -153,16 +153,10 @@ export default function AboutPage() {
               </AnimatedItem>
 
               <AnimatedItem>
-                {/*
-                  PLACEHOLDER: TRAD property photo
-                  A warm interior, exterior at golden hour, or a detail
-                  shot from TRAD — the romantic getaway property near
-                  Atlanta. Currently using a stand-in.
-                */}
                 <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm">
                   <Image
-                    src="/images/Website%20Images/Golden%20hour%20Atlanta%20Neighborhood.png"
-                    alt="A warm Atlanta neighborhood at golden hour, a placeholder for TRAD, our working laboratory property"
+                    src="/images/Website%20Images/pexels-katie-cerami-110690626-12284843.jpg"
+                    alt="TRAD, our working laboratory property near Atlanta"
                     fill
                     className="object-cover"
                     style={{ filter: "saturate(0.9) contrast(1.05)" }}
