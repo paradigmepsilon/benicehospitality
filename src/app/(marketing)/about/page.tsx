@@ -112,38 +112,18 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/*
-            PLACEHOLDER: Hero couple shot
-            Replace the two stacked portraits below with a single candid
-            photo of Alex and Della together (4/5 or square crop). Until
-            then, we show their two existing portraits side-by-side.
-          */}
-          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto lg:max-w-none lg:mx-0">
-            <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+          <div className="max-w-md mx-auto lg:max-w-none lg:mx-0">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
               <div className="absolute inset-0 bg-warm-gold/30 rounded-sm translate-x-3 translate-y-3" />
               <div className="relative w-full h-full overflow-hidden rounded-sm">
                 <Image
-                  src="/images/Website%20Images/Dee.png"
-                  alt="Della Henry, co-founder of Be Nice Hospitality Group"
+                  src="/images/Website%20Images/hf_20260523_234948_572e0ebd-8748-4e21-84cd-68f9e2e2b41e.png"
+                  alt="Della and Alex Henry, co-founders of Be Nice Hospitality Group"
                   fill
                   priority
                   className="object-cover"
                   style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                  sizes="(min-width: 1024px) 22vw, 45vw"
-                />
-              </div>
-            </div>
-            <div className="relative aspect-[3/4] overflow-hidden rounded-sm mt-8">
-              <div className="absolute inset-0 bg-primary-green/25 rounded-sm translate-x-3 translate-y-3" />
-              <div className="relative w-full h-full overflow-hidden rounded-sm">
-                <Image
-                  src="/images/Website%20Images/Lex.png"
-                  alt="Alex Henry, co-founder of Be Nice Hospitality Group"
-                  fill
-                  priority
-                  className="object-cover"
-                  style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                  sizes="(min-width: 1024px) 22vw, 45vw"
+                  sizes="(min-width: 1024px) 45vw, 90vw"
                 />
               </div>
             </div>
