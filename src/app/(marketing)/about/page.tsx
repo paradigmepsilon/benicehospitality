@@ -522,13 +522,8 @@ export default function AboutPage() {
               <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
                 <div className="absolute inset-0 bg-primary-green/25 rounded-sm translate-x-4 translate-y-4" />
                 <div className="relative w-full h-full overflow-hidden rounded-sm">
-                  {/*
-                    PLACEHOLDER: Alex candid portrait
-                    A working/candid Alex shot. Currently using an
-                    existing portrait.
-                  */}
                   <Image
-                    src="/images/Website%20Images/alex%20at%20his%20computer.png"
+                    src="/images/Website%20Images/hf_20260524_000935_2ba24c6a-cd5e-4828-a6f6-71214622f97e.png"
                     alt="Alex Henry, co-founder of Be Nice Hospitality Group"
                     fill
                     className="object-cover"
