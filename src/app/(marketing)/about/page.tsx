@@ -103,9 +103,7 @@ export default function AboutPage() {
             <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
               BNHG is the company we built to help independent hospitality
               brands run smarter, market sharper, and deliver the kind of
-              guest experience people actually talk about. If you own or run
-              a boutique hotel, vacation rental, or small hospitality group,
-              you&rsquo;re who we built this for.
+              guest experience people actually talk about.
             </p>
             <p className="font-script text-2xl md:text-3xl text-warm-gold">
               &mdash; Alex &amp; Della
