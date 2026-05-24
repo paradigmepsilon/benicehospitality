@@ -17,12 +17,6 @@ const SURFACES: Surface[] = [
     href: "/education",
   },
   {
-    name: "Advisory",
-    audience: "Multi-asset operators",
-    body: "The Operator's Boardroom. Fractional COO partnership for operators with 5 to 25 units across asset classes.",
-    href: "/advisory",
-  },
-  {
     name: "Signal",
     audience: "Boutique luxury hotels",
     body: "Productized AI services for 10 to 50 room independent properties. Quick Wins, Sprints, Retainers, Custom Builds.",

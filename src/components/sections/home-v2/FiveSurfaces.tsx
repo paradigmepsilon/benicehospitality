@@ -27,20 +27,13 @@ const SURFACES: Surface[] = [
   },
   {
     number: "03",
-    title: "Advisory",
-    body: "The Operator's Boardroom. Fractional COO partnership for operators ready to scale, not just survive.",
-    cta: "Apply for Advisory",
-    href: "/advisory",
-  },
-  {
-    number: "04",
     title: "Signal",
     body: "AI services for boutique luxury hotels. Productized engagements with outcome guarantees, 10 to 50 rooms.",
     cta: "Explore Signal",
     href: "/signal",
   },
   {
-    number: "05",
+    number: "04",
     title: "Labs",
     body: "Where Alex builds the next generation of operator tech. Home of Guestally and the rest of the Labs portfolio.",
     cta: "Visit Labs",
@@ -58,17 +51,17 @@ export default function FiveSurfaces() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-near-black mt-4 leading-tight">
-              Five surfaces. One operating system.
+              Four surfaces. One operating system.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/70 mt-4 leading-relaxed">
-              Education and community feed advisory. Advisory feeds Signal. Labs ships software all three sell against. Pick the entry that maps to where you are.
+              Education and community feed Signal. Labs ships software all of it sells against. Pick the entry that maps to where you are.
             </p>
           </AnimatedItem>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {SURFACES.map((s) => (
             <AnimatedItem key={s.title}>
               <Link

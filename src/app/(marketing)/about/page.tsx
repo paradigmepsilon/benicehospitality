@@ -72,7 +72,7 @@ const BELIEFS = [
   },
   {
     title: "Be nice.",
-    body: "It's literally the name of the company. It's also how we try to show up — for clients, for guests, and for each other.",
+    body: "It's literally the name of the company. It's also how we try to show up: for clients, for guests, and for each other.",
   },
 ];
 
@@ -106,7 +106,7 @@ export default function AboutPage() {
               guest experience people actually talk about.
             </p>
             <p className="font-script text-2xl md:text-3xl text-warm-gold">
-              &mdash; Alex &amp; Della
+              Alex &amp; Della
             </p>
           </div>
 
@@ -338,51 +338,48 @@ export default function AboutPage() {
               <AnimatedDiv stagger className="space-y-5">
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal leading-relaxed">
-                    Della &mdash; or{" "}
-                    <span className="italic text-deep-teal">Dee</span> to most
-                    people who know her &mdash; is the heart of BNHG&rsquo;s
-                    hospitality, guest experience, and client work.
+                    To most people who know her, she&rsquo;s{" "}
+                    <span className="italic text-deep-teal">Dee</span>. Wife,
+                    mom, host, friend, and the warmth at the center of how
+                    BNHG shows up for guests and clients.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                    Her background is unusually well-matched to the job. She
-                    holds degrees in{" "}
+                    Her background fits the work in a way that took us both a
+                    while to fully appreciate. Della holds degrees in{" "}
                     <span className="font-semibold text-deep-teal">
                       Psychology and Tourism
-                    </span>{" "}
-                    &mdash; a combination that means she&rsquo;s spent her
-                    academic life studying both how people actually behave and
-                    how the travel industry actually works. That dual lens
-                    shows up in everything she touches. When Della builds a
-                    guest persona, she isn&rsquo;t guessing. When she designs
-                    a guest journey, she&rsquo;s pulling from real frameworks.
-                    When she sits with a client to understand what they want
-                    their property to feel like, she listens the way trained
-                    psychologists do.
+                    </span>
+                    . That combination means she has spent her academic life
+                    studying both how people actually behave and how the
+                    travel industry actually works, and you can feel it in the
+                    room. When she sits down with a client to understand what
+                    they want their property to feel like, she listens the way
+                    trained psychologists do. When she designs a guest
+                    journey, she is pulling from frameworks, not vibes.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                    Clients call her when something&rsquo;s off, when a season
-                    feels flat, when a launch needs a steady hand. Her work
-                    spans property management, on-property operations, guest
-                    experience design, brand storytelling, and the kind of
-                    detail work that separates a five-star stay from a
-                    forgettable one.
+                    Clients call her when something feels off. When a season
+                    goes flat. When a launch needs a steady hand. Her work
+                    covers property management, on-property operations, guest
+                    experience design, brand storytelling, and the small,
+                    careful detail work that separates a five-star stay from
+                    one nobody remembers.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                    Day-to-day, Della also runs TRAD, hosts the{" "}
+                    Day-to-day, Della runs TRAD, hosts the{" "}
                     <span className="italic">Truth Be Told</span> show, and
                     leads the{" "}
                     <span className="font-semibold text-deep-teal">
                       Date Night Circle
-                    </span>{" "}
-                    &mdash; which keeps her close to the real, hands-on work
-                    of welcoming guests and building experiences worth
-                    returning to.
+                    </span>
+                    . All of it keeps her in the room with real guests and
+                    real operators, which is exactly where she wants to be.
                   </p>
                 </AnimatedItem>
               </AnimatedDiv>
@@ -421,7 +418,26 @@ export default function AboutPage() {
           ───────────────────────────────────────────────────────────── */}
       <AnimatedSection theme="off-white" className="bg-cream py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-16 items-start">
+            <AnimatedItem className="lg:order-2">
+              <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
+                <div className="absolute inset-0 bg-primary-green/25 rounded-sm translate-x-4 translate-y-4" />
+                <div className="relative w-full h-full overflow-hidden rounded-sm">
+                  <Image
+                    src="/images/Website%20Images/hf_20260524_000935_2ba24c6a-cd5e-4828-a6f6-71214622f97e.png"
+                    alt="Alex Henry, co-founder of Be Nice Hospitality Group"
+                    fill
+                    className="object-cover"
+                    style={{ filter: "saturate(0.9) contrast(1.05)" }}
+                    sizes="(min-width: 1024px) 40vw, 90vw"
+                  />
+                </div>
+              </div>
+              <p className="mt-3 font-sans text-xs text-charcoal/55 italic text-center lg:text-left">
+                Alex &middot; Co-founder, technology &amp; operations
+              </p>
+            </AnimatedItem>
+
             <div className="lg:order-1">
               <AnimatedItem>
                 <SectionLabel>Meet Alex</SectionLabel>
@@ -441,37 +457,39 @@ export default function AboutPage() {
               <AnimatedDiv stagger className="space-y-5">
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal leading-relaxed">
-                    Alex is the operations and technology side of the
-                    partnership. He has spent years working across technology
-                    and operations roles, and BNHG is where all of that
-                    experience comes together.
+                    Alex is the kind of person who cannot watch a broken
+                    process keep running. Husband, dad, and the operator on
+                    our team who turns a problem on its side until he can see
+                    how to fix it. He has spent years working across
+                    technology and operations roles, and BNHG is where all of
+                    that experience comes together.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
                     If something needs to be built, integrated, automated, or
-                    fixed, that&rsquo;s Alex&rsquo;s lane. He&rsquo;s the
-                    person who maps the workflow, chooses the tools, wires
-                    them together, and makes sure they&rsquo;re still working
-                    six months later &mdash; when most consultants have moved
-                    on.
+                    fixed, that is Alex&rsquo;s lane. He is the one who maps
+                    the workflow, chooses the tools, wires them together, and
+                    sticks around to make sure they are still working six
+                    months later, when most consultants have already moved on.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
                   <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
                     Inside BNHG, his work covers technical strategy, systems
-                    architecture, AI integration, and day-to-day operational
-                    problem-solving for clients. He&rsquo;s also the founder
-                    of{" "}
+                    architecture, AI integration, and the day-to-day
+                    problem-solving that keeps clients moving forward. He is
+                    also the founder of{" "}
                     <span className="font-semibold text-deep-teal">
                       Be Nice Autos
-                    </span>{" "}
-                    &mdash; the family&rsquo;s vehicle and Turo fleet
-                    operation, which has given him a working understanding of
-                    two-sided service businesses, asset-light operations, and
-                    the realities of generating revenue on someone else&rsquo;s
-                    platform. Lessons that translate directly to running a
-                    hospitality business in an OTA-dominated world.
+                    </span>
+                    , our family&rsquo;s vehicle and Turo fleet operation.
+                    Running that business has taught him a lot about
+                    two-sided platforms, asset-light operations, and what it
+                    really takes to earn a living when someone else owns the
+                    front door. Those lessons translate directly to running a
+                    hospitality business that depends on Airbnb, Booking, and
+                    the OTAs for most of its inbound demand.
                   </p>
                 </AnimatedItem>
                 <AnimatedItem>
@@ -506,25 +524,6 @@ export default function AboutPage() {
                 </div>
               </AnimatedItem>
             </div>
-
-            <AnimatedItem className="lg:order-2">
-              <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
-                <div className="absolute inset-0 bg-primary-green/25 rounded-sm translate-x-4 translate-y-4" />
-                <div className="relative w-full h-full overflow-hidden rounded-sm">
-                  <Image
-                    src="/images/Website%20Images/hf_20260524_000935_2ba24c6a-cd5e-4828-a6f6-71214622f97e.png"
-                    alt="Alex Henry, co-founder of Be Nice Hospitality Group"
-                    fill
-                    className="object-cover"
-                    style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                    sizes="(min-width: 1024px) 40vw, 90vw"
-                  />
-                </div>
-              </div>
-              <p className="mt-3 font-sans text-xs text-charcoal/55 italic text-center lg:text-left">
-                Alex &middot; Co-founder, technology &amp; operations
-              </p>
-            </AnimatedItem>
           </div>
         </div>
       </AnimatedSection>
@@ -613,19 +612,11 @@ export default function AboutPage() {
             </p>
           </AnimatedItem>
           <AnimatedItem>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button href="/book" variant="primary" size="lg">
                 Book a Discovery Call
               </Button>
-              <Button href="/services" variant="secondary" size="lg">
-                See Our Services
-              </Button>
             </div>
-          </AnimatedItem>
-          <AnimatedItem>
-            <p className="mt-12 font-script text-3xl md:text-4xl text-warm-gold-dark">
-              &mdash; Alex &amp; Della
-            </p>
           </AnimatedItem>
         </div>
       </section>

@@ -37,20 +37,11 @@ const nextConfig: NextConfig = {
   /**
    * IA migration redirects.
    *
-   * /services retired in favor of the four primary product surfaces
-   * (Courses, Advisory, Signal, Labs). The closest semantic match for
-   * paid engagement seekers is /advisory, so /services 301s there.
-   * The Tier 0 resources at /resources/[slug] are unaffected.
+   * Catalog page renamed from /courses to /education. Nested course detail
+   * routes (/courses/room-rental-riches/*) are unaffected.
    */
   async redirects() {
     return [
-      {
-        source: "/services",
-        destination: "/advisory",
-        permanent: true,
-      },
-      // Catalog page renamed from /courses to /education. Nested course
-      // detail routes (/courses/room-rental-riches/*) are unaffected.
       {
         source: "/courses",
         destination: "/education",

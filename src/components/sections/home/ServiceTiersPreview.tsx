@@ -123,14 +123,6 @@ export default function ServiceTiersPreview() {
             </AnimatedItem>
           ))}
         </AnimatedDiv>
-
-        <AnimatedItem>
-          <div className="text-center">
-            <Button href="/advisory" variant="secondary" size="md">
-              See Advisory Engagements →
-            </Button>
-          </div>
-        </AnimatedItem>
       </div>
     </AnimatedSection>
   );

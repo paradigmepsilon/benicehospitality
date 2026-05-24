@@ -112,7 +112,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "A focused audit that identifies your highest-impact opportunities, with enough specificity to act on immediately.",
     cta: "Learn More",
-    ctaHref: "/advisory",
+    ctaHref: "/book",
   },
   {
     tier: 2,
@@ -121,7 +121,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "From direct booking campaigns to full SOP libraries. We configure, build, and train so your team can execute from day one.",
     cta: "Learn More",
-    ctaHref: "/advisory",
+    ctaHref: "/book",
   },
   {
     tier: 3,
@@ -130,7 +130,7 @@ export const SERVICE_TIERS_PREVIEW = [
     description:
       "Ongoing strategic partnership. We embed into your operation on a retainer basis and act as your commercial leadership team.",
     cta: "Learn More",
-    ctaHref: "/advisory",
+    ctaHref: "/book",
   },
 ];
 
