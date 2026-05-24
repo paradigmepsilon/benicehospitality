@@ -141,36 +141,23 @@ export default function AboutPage() {
           ───────────────────────────────────────────────────────────── */}
       <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-10 lg:gap-16 items-start">
-            <div className="lg:sticky lg:top-28">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] lg:grid-rows-[auto_1fr] gap-10 lg:gap-x-16 lg:gap-y-10 items-start">
+            <div className="lg:col-start-1 lg:row-start-1 lg:sticky lg:top-28">
               <AnimatedItem>
                 <SectionLabel>Our story</SectionLabel>
               </AnimatedItem>
               <AnimatedItem>
-                <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-8">
+                <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4">
                   How we got{" "}
                   <span className="italic text-warm-gold-dark">here</span>.
                 </h2>
               </AnimatedItem>
-
-              <AnimatedItem>
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm">
-                  <Image
-                    src="/images/Website%20Images/pexels-katie-cerami-110690626-12284843.jpg"
-                    alt="TRAD, our working laboratory property near Atlanta"
-                    fill
-                    className="object-cover"
-                    style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                    sizes="(min-width: 1024px) 40vw, 100vw"
-                  />
-                </div>
-                <p className="mt-3 font-sans text-xs text-charcoal/55 italic">
-                  TRAD &middot; our working laboratory near Atlanta
-                </p>
-              </AnimatedItem>
             </div>
 
-            <AnimatedDiv stagger className="space-y-6">
+            <AnimatedDiv
+              stagger
+              className="space-y-6 lg:col-start-2 lg:row-start-1 lg:row-span-2"
+            >
               <AnimatedItem>
                 <p className="font-sans text-lg md:text-xl text-charcoal leading-relaxed">
                   Hospitality wasn&rsquo;t where we started. We met in the
@@ -225,6 +212,25 @@ export default function AboutPage() {
                 </p>
               </AnimatedItem>
             </AnimatedDiv>
+
+            {/* Property photo — on lg sits in the left column under the
+                section header; on small screens flows to the bottom of
+                the section as its own row. */}
+            <AnimatedItem className="lg:col-start-1 lg:row-start-2">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm">
+                <Image
+                  src="/images/Website%20Images/pexels-katie-cerami-110690626-12284843.jpg"
+                  alt="TRAD, our working laboratory property near Atlanta"
+                  fill
+                  className="object-cover"
+                  style={{ filter: "saturate(0.9) contrast(1.05)" }}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                />
+              </div>
+              <p className="mt-3 font-sans text-xs text-charcoal/55 italic">
+                TRAD &middot; our working laboratory near Atlanta
+              </p>
+            </AnimatedItem>
           </div>
         </div>
       </AnimatedSection>
@@ -281,24 +287,6 @@ export default function AboutPage() {
               </AnimatedItem>
             ))}
           </AnimatedDiv>
-
-          {/*
-            PLACEHOLDER: Optional workspace / lifestyle image band
-            A wide image that warms the bottom of this section.
-            Currently using an existing workspace shot.
-          */}
-          <AnimatedItem>
-            <div className="relative aspect-[21/9] w-full overflow-hidden rounded-sm mt-12 md:mt-14">
-              <Image
-                src="/images/Website%20Images/Workspace%20Nook.png"
-                alt="A quiet workspace nook representing the thinking and building behind BNHG"
-                fill
-                className="object-cover"
-                style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                sizes="(min-width: 1280px) 1280px, 100vw"
-              />
-            </div>
-          </AnimatedItem>
         </div>
       </AnimatedSection>
 
