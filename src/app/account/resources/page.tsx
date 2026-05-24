@@ -54,7 +54,7 @@ export default async function ResourcesIndexPage() {
           Templates and references.
         </h1>
         <p className="font-sans text-base text-charcoal/85 leading-relaxed max-w-2xl mb-10">
-          SOPs, P&amp;L sheets, hiring scorecards, pricing rule sets — the
+          SOPs, P&amp;L sheets, hiring scorecards, pricing rule sets: the
           documents the curriculum points at. New uploads land here as
           modules ship.
         </p>

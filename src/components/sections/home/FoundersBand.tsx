@@ -62,7 +62,7 @@ export default function FoundersBand() {
               <Link
                 href={f.href}
                 className="group flex flex-col"
-                aria-label={`${f.name} — visit personal page`}
+                aria-label={`${f.name}, visit personal page`}
               >
                 <div className="aspect-square overflow-hidden mb-6 bg-light-gray">
                   <Image
@@ -77,6 +77,15 @@ export default function FoundersBand() {
                 <h3 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight group-hover:text-warm-gold transition-colors duration-200">
                   {f.name}
                 </h3>
+                <p className="mt-3 font-sans text-sm font-semibold tracking-wide text-warm-gold-dark inline-flex items-center gap-1.5">
+                  Learn more about {f.name.split(" ")[0]}
+                  <span
+                    aria-hidden
+                    className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </p>
               </Link>
             </AnimatedItem>
           ))}

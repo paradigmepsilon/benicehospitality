@@ -43,7 +43,7 @@ export default function Header() {
 
   // Resolve auth state from /api/auth/me on mount. Header is "use client", so
   // SSR renders the logged-out state; this swap-in happens once the cookie is
-  // resolved server-side. Acceptable flicker — chrome surface, not critical
+  // resolved server-side. Acceptable flicker, chrome surface, not critical
   // content. Re-runs whenever the route changes (covers post-login navs).
   useEffect(() => {
     let cancelled = false;
@@ -240,7 +240,7 @@ export default function Header() {
             : "bg-white py-5",
         ].join(" ")}
       >
-        {/* Mobile row — logo left, hamburger right */}
+        {/* Mobile row: logo left, hamburger right */}
         <div className="lg:hidden max-w-7xl mx-auto px-6 flex items-center justify-between gap-4 relative z-10">
           <Link
             href="/"
@@ -287,7 +287,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Desktop row — 3-col grid: left nav | centered logo | right nav + login */}
+        {/* Desktop row: 3-col grid with left nav, centered logo, right nav + login */}
         <div
           ref={navRef}
           className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center max-w-7xl mx-auto px-6 gap-8 relative z-10"
@@ -302,7 +302,7 @@ export default function Header() {
             className="flex items-center justify-center flex-shrink-0"
             aria-label="Be Nice Hospitality Group home"
           >
-            {/* Full lockup — visible at top of page */}
+            {/* Full lockup, visible at top of page */}
             <Image
               src="/images/logo.png"
               alt="Be Nice Hospitality Group"
@@ -315,7 +315,7 @@ export default function Header() {
               ].join(" ")}
               priority
             />
-            {/* Transparent letter mark — visible once scrolled */}
+            {/* Transparent letter mark, visible once scrolled */}
             <Image
               src="/images/logo-mark-transparent.png"
               alt=""

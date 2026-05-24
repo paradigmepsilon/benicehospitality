@@ -1,7 +1,7 @@
 import { sql } from "@/lib/db";
 
 // Catalog/commerce data layer. Sits alongside src/lib/lms.ts (which handles
-// runtime course access — lessons, enrollments, progress) and is responsible
+// runtime course access: lessons, enrollments, progress) and is responsible
 // for the purchasable side of the course system: thumbnails, asset-class
 // categorization, tier pricing, and Stripe price/product IDs.
 

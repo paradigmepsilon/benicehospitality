@@ -82,7 +82,7 @@ const PROPERTY_RESOURCES: Resource[] = [
     name: "Tech Stack Quick Scan",
     body: "What you're paying for, what's redundant, what's missing. URL in, audit out.",
     bullets: [
-      "Inferred stack from a single URL — no integrations required",
+      "Inferred stack from a single URL, no integrations required",
       "Redundant tools flagged with annual cost",
       "Gaps flagged by impact on revenue, ops, or guest experience",
       "A prioritized 90-day stack plan",
@@ -171,7 +171,7 @@ const HOTEL_RESOURCES: Resource[] = [
     bullets: [
       "Real prompts tested in ChatGPT, Perplexity, and Google AI Overviews",
       "Whether you appear in the answer for travel queries in your market",
-      "What to fix if not — schema, listings, content, or links",
+      "What to fix if not: schema, listings, content, or links",
       "Benchmarks against the top competitors in your area",
     ],
     access: "free-email",
@@ -257,7 +257,7 @@ const AUTO_RESOURCES: Resource[] = [
     bullets: [
       "Per-vehicle utilization across the trailing twelve months",
       "Day-of-week and seasonal demand patterns",
-      "Fleet-mix recommendations — which cars to add or retire",
+      "Fleet-mix recommendations: which cars to add or retire",
       "Built for operators running three or more vehicles",
     ],
     access: "labs-pass",

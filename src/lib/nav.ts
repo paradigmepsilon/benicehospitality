@@ -1,7 +1,7 @@
 import type { NavGroup, NavLink, UtilityNav } from "./types";
 
 /**
- * Primary nav — six top-level items split around a centered logo. Left of
+ * Primary nav: six top-level items split around a centered logo. Left of
  * logo: discovery (Courses, Resources, Community). Right of logo: brand
  * (Insights, About, Contact) plus the Login utility CTA.
  *
@@ -35,11 +35,11 @@ export const NAV_TREE: NavGroup[] = [...NAV_LEFT, ...NAV_RIGHT];
 
 export const UTILITY_NAV: UtilityNav = {
   communityLogin: {
-    label: "Community Login",
+    label: "Login",
     href: "/login",
   },
   freeAudit: {
-    label: "Community Login",
+    label: "Login",
     href: "/login",
   },
 };

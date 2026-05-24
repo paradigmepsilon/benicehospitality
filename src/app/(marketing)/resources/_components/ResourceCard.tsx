@@ -66,12 +66,21 @@ function AccessBadge({
 function cardContainerClass(variant: "light" | "dark", inactive: boolean) {
   if (variant === "light") {
     return inactive
-      ? "w-full text-left bg-light-gray/60 border border-light-gray rounded-lg p-6 h-full opacity-75 transition-all duration-200 hover:opacity-90 hover:border-warm-gold/40 cursor-pointer"
-      : "group block bg-white border border-light-gray rounded-lg p-6 h-full transition-all duration-200 hover:border-warm-gold hover:bg-warm-gold/10 hover:shadow-lg hover:-translate-y-1";
+      ? "w-full text-left bg-light-gray/60 border border-light-gray rounded-lg p-6 h-full flex flex-col opacity-75 transition-all duration-200 hover:opacity-90 hover:border-warm-gold/40 cursor-pointer"
+      : "group flex flex-col bg-white border border-light-gray rounded-lg p-6 h-full transition-all duration-200 hover:border-warm-gold hover:bg-warm-gold/10 hover:shadow-lg hover:-translate-y-1";
   }
   return inactive
-    ? "w-full text-left border-l-2 border-white/25 pl-6 md:pl-8 h-full opacity-60 transition-all duration-200 hover:opacity-80 cursor-pointer"
-    : "group block border-l-2 border-warm-gold pl-6 md:pl-8 h-full transition-all duration-200 hover:bg-warm-gold/15 hover:translate-x-1";
+    ? "w-full text-left border-l-2 border-white/25 pl-6 md:pl-8 h-full flex flex-col opacity-60 transition-all duration-200 hover:opacity-80 cursor-pointer"
+    : "group flex flex-col border-l-2 border-warm-gold pl-6 md:pl-8 h-full transition-all duration-200 hover:bg-warm-gold/15 hover:translate-x-1";
+}
+
+function cardCtaClass(variant: "light" | "dark", inactive: boolean) {
+  const base =
+    "mt-auto pt-5 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide";
+  if (variant === "light") {
+    return `${base} ${inactive ? "text-charcoal/55" : "text-warm-gold-dark"}`;
+  }
+  return `${base} ${inactive ? "text-white/55" : "text-warm-gold"}`;
 }
 
 function cardHeadingClass(variant: "light" | "dark", inactive: boolean) {
@@ -100,27 +109,26 @@ function CardInner({
   r,
   variant,
   inactive,
-  showArrow,
 }: {
   r: Resource;
   variant: "light" | "dark";
   inactive: boolean;
-  showArrow: boolean;
 }) {
   return (
     <>
       <h3 className={`${cardHeadingClass(variant, inactive)} mb-3`}>
         {r.name}
-        {showArrow && (
-          <span
-            aria-hidden
-            className="ml-1.5 opacity-70 inline-block transition-transform duration-200 group-hover:translate-x-1 group-hover:opacity-100"
-          >
-            →
-          </span>
-        )}
       </h3>
       <p className={cardBodyClass(variant, inactive)}>{r.body}</p>
+      <span className={cardCtaClass(variant, inactive)}>
+        Learn more
+        <span
+          aria-hidden
+          className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+        >
+          →
+        </span>
+      </span>
     </>
   );
 }
@@ -144,7 +152,7 @@ export default function ResourceCard({
         href={r.href}
         className={cardContainerClass(variant, false)}
       >
-        <CardInner r={r} variant={variant} inactive={false} showArrow />
+        <CardInner r={r} variant={variant} inactive={false} />
       </Link>
     );
   }
@@ -190,12 +198,7 @@ function ModalCard({
         }
         aria-haspopup="dialog"
       >
-        <CardInner
-          r={r}
-          variant={variant}
-          inactive={greyed}
-          showArrow={!greyed}
-        />
+        <CardInner r={r} variant={variant} inactive={greyed} />
       </button>
 
       <AnimatePresence>

@@ -24,7 +24,7 @@ const AUDIENCE_PRESETS: Record<PageCTAAudience, AudiencePreset> = {
     headline: "Already in? Sign in.",
     subtext:
       "Members log in here for course access, the Nice Host Network, and the resources you've enrolled in. New here? Book a discovery call and we'll figure out the right way in.",
-    primary: { href: "/login", label: "Community Login" },
+    primary: { href: "/login", label: "Login" },
     secondary: {
       href: bookingUrl({ source: BOOKING_SOURCES.PAGECTA_DEFAULT }),
       label: "Book a Discovery Call",

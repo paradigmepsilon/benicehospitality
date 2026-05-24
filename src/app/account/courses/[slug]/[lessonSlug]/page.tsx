@@ -82,7 +82,7 @@ export default async function LessonPage({ params }: PageProps) {
 
   // Compute "M.L" identifier from sort-order indices. Admin preview hides
   // unpublished modules from non-admins, but the lesson's own number doesn't
-  // shift with viewer — count against the full published-module list.
+  // shift with viewer; count against the full published-module list.
   const visibleModules = modules.filter(
     (m) => m.isPublished || ctx.effectiveIsAdmin,
   );

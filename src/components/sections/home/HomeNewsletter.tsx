@@ -66,7 +66,7 @@ export default function HomeNewsletter() {
               onSubmit={handleSubmit}
               className="flex flex-col gap-3 max-w-md mx-auto text-left"
             >
-              {/* Honeypot — hidden from real users */}
+              {/* Honeypot, hidden from real users */}
               <input
                 type="text"
                 name="website"

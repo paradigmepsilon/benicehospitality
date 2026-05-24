@@ -38,7 +38,7 @@ const NETWORK_FEATURES = [
   },
   {
     title: "Bundled with every course tier",
-    body: "Buy any Room Rental Riches tier — self-paced, cohort, or operator — and you're in. Self-paced gets one year. Cohort gets one year plus the cohort. Operator gets lifetime.",
+    body: "Buy any Room Rental Riches tier (self-paced, cohort, or operator) and you're in. Self-paced gets one year. Cohort gets one year plus the cohort. Operator gets lifetime.",
   },
   {
     title: "Asset-class channels",
@@ -71,7 +71,7 @@ export default function CommunityPage() {
               Get In Through a Course
             </Button>
             <Button href="/login" variant="secondary" size="lg">
-              Community Login
+              Login
             </Button>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function CommunityPage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-white/85 leading-relaxed">
-              The members in this network are running real operations — three
+              The members in this network are running real operations: three
               units to thirty, STR to LTR to co-living. They show up because
               the work is good, the founders are in it, and the conversation
               stays operator-class. Marketers don&rsquo;t last in here.

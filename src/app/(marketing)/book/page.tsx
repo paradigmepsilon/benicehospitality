@@ -5,7 +5,7 @@ import BookingCalendar from "@/components/sections/book/BookingCalendar";
 export const metadata: Metadata = {
   title: "Book a Discovery Call",
   description:
-    "Schedule a free 40-minute discovery call with Be Nice Hospitality Group. Pick a date and time that works for you — no sales pressure, just a genuine conversation about your boutique hotel.",
+    "Schedule a free 40-minute discovery call with Be Nice Hospitality Group. Pick a date and time that works for you, no sales pressure, just a genuine conversation about your boutique hotel.",
   alternates: {
     canonical: "https://benicehospitality.com/book",
   },

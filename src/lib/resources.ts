@@ -3,8 +3,8 @@ import { uniqueSlug } from "@/lib/slug";
 import { listEnrollmentsForUser, type EnrollmentTier } from "@/lib/lms";
 
 // Member-resources data layer. Each row is a downloadable template / reference
-// doc gated by enrollment tier. Files live in the existing `uploads` table —
-// this table only stores the metadata + a FK to the upload row.
+// doc gated by enrollment tier. Files live in the existing `uploads` table.
+// This table only stores the metadata + a FK to the upload row.
 
 export type ResourceTier = "any" | "cohort" | "operator";
 
@@ -39,7 +39,7 @@ interface ResourceRow {
   updated_at: string;
 }
 
-// Uploads are served by /api/images/[id] regardless of content-type — that
+// Uploads are served by /api/images/[id] regardless of content-type. That
 // route just streams whatever bytes the upload row holds with the stored
 // content_type header.
 function uploadUrlFor(id: number | null): string | null {
@@ -85,9 +85,9 @@ function tierIncludes(
 
 /**
  * Maps an LMS EnrollmentTier (from a synthesized "preview as tier" view) to
- * the resources access tier. Resources only differentiate three levels —
+ * the resources access tier. Resources only differentiate three levels:
  * "any" (logged-in member at the lowest paid tier or below), "cohort", and
- * "operator" — so self-paced collapses to "any".
+ * "operator", so self-paced collapses to "any".
  */
 export function effectiveTierFromEnrollmentTier(
   tier: EnrollmentTier,

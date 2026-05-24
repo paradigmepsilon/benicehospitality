@@ -30,7 +30,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     shortDescription:
       "A property-specific look at where your top revenue opportunities are hiding right now.",
     metaTitle:
-      "Free Hotel Revenue Audit — Revenue Opportunity Snapshot | BNHG",
+      "Free Hotel Revenue Audit: Revenue Opportunity Snapshot | BNHG",
     metaDescription:
       "Free boutique hotel revenue audit. We identify OTA leakage, rate parity gaps, and ancillary revenue opportunities specific to your property. No strings attached.",
     targetKeywords: [
@@ -59,7 +59,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         step: "Share your URL",
         description:
-          "You send us your hotel website. That's it — no spreadsheets, no intake call.",
+          "You send us your hotel website. That's it. No spreadsheets, no intake call.",
       },
       {
         step: "We research",
@@ -76,12 +76,12 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Is the Revenue Opportunity Snapshot really free?",
         answer:
-          "Yes. It's a Tier 0 resource — we deliver it to you with no charge and no obligation. We built this layer because most boutique hotels have never seen a real revenue audit and we want to earn your attention before asking for anything.",
+          "Yes. It's a Tier 0 resource, so we deliver it to you with no charge and no obligation. We built this layer because most boutique hotels have never seen a real revenue audit and we want to earn your attention before asking for anything.",
       },
       {
         question: "What information do I need to provide?",
         answer:
-          "Just your hotel website URL. We do all the research from public data (OTAs, reviews, rate shopping, competitor listings). If you want us to go deeper, we can request specific PMS or booking engine data — but the baseline snapshot doesn't require it.",
+          "Just your hotel website URL. We do all the research from public data (OTAs, reviews, rate shopping, competitor listings). If you want us to go deeper, we can request specific PMS or booking engine data, but the baseline snapshot doesn't require it.",
       },
       {
         question: "How long does it take?",
@@ -152,7 +152,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Will you share the raw review data?",
         answer:
-          "We quote anonymized snippets as evidence in the report. The full reviews are public, so you already have access to them — we just synthesize the patterns.",
+          "We quote anonymized snippets as evidence in the report. The full reviews are public, so you already have access to them. We just synthesize the patterns.",
       },
       {
         question: "Can you do this for a specific competitor?",
@@ -228,7 +228,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Can you include a competitor in a different market?",
         answer:
-          "Yes — tell us which one. Typically people want one aspirational comp outside their local market.",
+          "Yes. Tell us which one. Typically people want one aspirational comp outside their local market.",
       },
       {
         question: "How long does it take?",
@@ -288,7 +288,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Where does the persona data come from?",
         answer:
-          "From public review patterns, OTA listing data, your website's own messaging, and market benchmarks. If you give us PMS data, we can go deeper — but the baseline version works without it.",
+          "From public review patterns, OTA listing data, your website's own messaging, and market benchmarks. If you give us PMS data, we can go deeper, but the baseline version works without it.",
       },
       {
         question: "How accurate are the personas?",
@@ -315,7 +315,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Hotel Tech Audit | Tech Stack Quick Scan | BNHG",
     metaDescription:
-      "Free boutique hotel tech audit. We evaluate your website, booking engine, mobile, OTA listings, guest messaging, and social — assign letter grades, and flag guest-facing friction.",
+      "Free boutique hotel tech audit. We evaluate your website, booking engine, mobile, OTA listings, guest messaging, and social, assign letter grades, and flag guest-facing friction.",
     targetKeywords: [
       "free hotel tech audit",
       "hotel tech stack review",
@@ -359,12 +359,12 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Do I need to share my PMS login?",
         answer:
-          "No. The Quick Scan is guest-facing only — what a real guest would experience. A deeper Tier 1 tech audit covers back-of-house systems.",
+          "No. The Quick Scan is guest-facing only: what a real guest would experience. A deeper Tier 1 tech audit covers back-of-house systems.",
       },
       {
         question: "Will you pitch me on Guestally?",
         answer:
-          "If Guestally fits, we'll mention it. But the scan is honest — if your current guest messaging tool is working, we'll say so.",
+          "If Guestally fits, we'll mention it. But the scan is honest: if your current guest messaging tool is working, we'll say so.",
       },
       {
         question: "How long does it take?",
@@ -386,7 +386,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Guestally ROI Estimate | Hotel Upsell Automation ROI | BNHG",
     metaDescription:
-      "Free personalized Guestally ROI estimate. Based on your room count, ADR, and occupancy — we project monthly upsell revenue and staff hours saved. Payback timeline included.",
+      "Free personalized Guestally ROI estimate. Based on your room count, ADR, and occupancy, we project monthly upsell revenue and staff hours saved. Payback timeline included.",
     targetKeywords: [
       "Guestally ROI",
       "hotel upsell automation ROI",
@@ -435,7 +435,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "What if Guestally isn't a fit?",
         answer:
-          "We'll tell you. The report includes an honest fit assessment — we'd rather tell you no than sell you software you don't need.",
+          "We'll tell you. The report includes an honest fit assessment. We'd rather tell you no than sell you software you don't need.",
       },
       {
         question: "Is this a sales pitch in disguise?",
@@ -453,7 +453,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "visibility-discoverability-audit",
     name: "Visibility & Discoverability Audit",
     shortDescription:
-      "How easily can travelers find your property — including in ChatGPT, Perplexity, and Google AI Overviews? Full channel + AEO audit with a 0–120 score.",
+      "How easily can travelers find your property, including in ChatGPT, Perplexity, and Google AI Overviews? Full channel + AEO audit with a 0–120 score.",
     metaTitle:
       "Free Hotel Visibility & AEO Audit | BNHG",
     metaDescription:
@@ -475,7 +475,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     featuredCallout: {
       label: "NEW: AEO Module",
       title: "Now with Answer Engine Optimization",
-      body: "Travelers increasingly ask ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Most boutique properties are completely invisible in those answers. We now audit AI search visibility as a featured 7th category worth 20 points — the biggest single opportunity on the page.",
+      body: "Travelers increasingly ask ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Most boutique properties are completely invisible in those answers. We now audit AI search visibility as a featured 7th category worth 20 points, the biggest single opportunity on the page.",
       ctaText: "See the dedicated AEO page",
       ctaHref: "/resources/aeo-optimization",
     },
@@ -616,7 +616,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free AEO Audit for Hotels | Answer Engine Optimization | BNHG",
     metaDescription:
-      "Free AEO (Answer Engine Optimization) snapshot for independent boutique hotels and luxury short-term rentals. See whether ChatGPT, Perplexity, Google AI Overviews, and Gemini recommend your property — and exactly what's missing.",
+      "Free AEO (Answer Engine Optimization) snapshot for independent boutique hotels and luxury short-term rentals. See whether ChatGPT, Perplexity, Google AI Overviews, and Gemini recommend your property, and exactly what's missing.",
     targetKeywords: [
       "hotel AEO",
       "answer engine optimization hotels",

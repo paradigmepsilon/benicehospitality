@@ -71,7 +71,7 @@ export default function HeroSection() {
         <AnimatedItem>
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <Button href="/login" variant="secondary" size="lg">
-              Community Login
+              Login
             </Button>
             <Link
               href="#ecosystem"

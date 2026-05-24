@@ -63,7 +63,7 @@ export default function NewsletterSignup() {
               onSubmit={handleSubmit}
               className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
             >
-              {/* Honeypot — hidden from real users */}
+              {/* Honeypot, hidden from real users */}
               <input
                 type="text"
                 name="website"

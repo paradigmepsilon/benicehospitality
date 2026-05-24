@@ -19,7 +19,7 @@ interface PageProps {
 }
 
 function fmtRelative(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const ms = Date.now() - new Date(iso).getTime();
   const min = Math.floor(ms / 60000);
   if (min < 1) return "just now";

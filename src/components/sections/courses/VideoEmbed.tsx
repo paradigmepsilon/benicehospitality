@@ -1,5 +1,5 @@
 // Lightweight video embed helper. Detects YouTube / Vimeo IDs and falls
-// back to <video> for raw mp4-style URLs. Server component — no JS.
+// back to <video> for raw mp4-style URLs. Server component, no JS.
 
 function youtubeId(url: string): string | null {
   try {

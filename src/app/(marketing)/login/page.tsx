@@ -8,7 +8,7 @@ import { getEnabledProviders } from "@/lib/oauth/providers";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
-  title: "Community Login",
+  title: "Login",
   description:
     "Sign in to access your courses, the Nice Host Network, and the resources you've enrolled in.",
   alternates: { canonical: "https://benicehospitality.com/login" },
@@ -28,7 +28,7 @@ export default async function LoginPage() {
       <div className="max-w-md mx-auto">
         <div className="text-center mb-10">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-charcoal/70 mb-6">
-            Community Login
+            Login
           </p>
           <h1 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mb-4">
             Welcome back.

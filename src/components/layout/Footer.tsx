@@ -47,6 +47,11 @@ const AFFILIATES_COLUMN: FooterColumn = {
     { label: "Guestally", href: "https://guestally.ai", external: true },
     { label: "Be Nice Properties", href: "#", external: true },
     { label: "Be Nice Autos", href: "#", external: true },
+    {
+      label: "The Retreat at Douglasville",
+      href: "https://www.theretreatatdouglasville.com",
+      external: true,
+    },
   ],
 };
 

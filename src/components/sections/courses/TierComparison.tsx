@@ -147,7 +147,7 @@ export default function TierComparison() {
                             aria-label="not included"
                             className="font-display text-xl text-charcoal/25 leading-none"
                           >
-                            &mdash;
+                            &ndash;
                           </span>
                         ) : (
                           <span className="font-sans text-sm text-charcoal leading-tight">
@@ -272,7 +272,7 @@ export default function TierComparison() {
                           aria-label="not included"
                           className="font-display text-2xl text-charcoal/25 leading-none"
                         >
-                          &mdash;
+                          &ndash;
                         </span>
                       ) : (
                         <span className="font-sans text-base text-charcoal leading-tight">

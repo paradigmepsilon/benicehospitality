@@ -219,7 +219,7 @@ export default function ContactForm() {
 
           <AnimatedItem>
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-              {/* Honeypot — hidden from real users */}
+              {/* Honeypot, hidden from real users */}
               <input
                 type="text"
                 name="website"

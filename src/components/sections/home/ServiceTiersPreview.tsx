@@ -44,7 +44,7 @@ export default function ServiceTiersPreview() {
           </AnimatedItem>
         </div>
 
-        {/* Tier 0 — prominent flagship card */}
+        {/* Tier 0: prominent flagship card */}
         <AnimatedItem>
           <div className="border-2 border-primary-green/50 rounded-lg p-7 sm:p-10 mb-6 bg-gradient-to-br from-primary-green/10 to-transparent">
             <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10">

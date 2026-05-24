@@ -12,13 +12,13 @@ const PAGE_PATH = "/resources/mtr-viability-scorecard";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "MTR Viability Scorecard — Free Property Assessment | BNHG",
+    absolute: "MTR Viability Scorecard: Free Property Assessment | BNHG",
   },
   description:
     "A free, weighted scorecard that grades any property's fit for mid-term rentals. 40 questions across 7 sections. Built for owners, investors, and operators in the Southeast.",
   alternates: { canonical: `${SITE_URL}${PAGE_PATH}` },
   openGraph: {
-    title: "MTR Viability Scorecard — Free Property Assessment | BNHG",
+    title: "MTR Viability Scorecard: Free Property Assessment | BNHG",
     description:
       "Score any property on its fit for mid-term rentals. 40 weighted questions, instant report, recommendations from a working MTR operator.",
     url: `${SITE_URL}${PAGE_PATH}`,

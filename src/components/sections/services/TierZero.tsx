@@ -109,7 +109,7 @@ export default function TierZero() {
           <AnimatedItem>
             <div className="mt-8 flex justify-center">
               <Button href="/login" variant="primary" size="lg">
-                Community Login
+                Login
               </Button>
             </div>
           </AnimatedItem>

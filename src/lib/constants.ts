@@ -46,7 +46,7 @@ export const PAIN_POINTS: PainPoint[] = [
 
 // The three pillars of the Host-to-Operator Method. Locked names from the
 // brand brief; do not rename. Editorial body paragraphs replace the legacy
-// bullet-list pattern. No stat kickers — invented operational claims violate
+// bullet-list pattern. No stat kickers, since invented operational claims violate
 // the brand's no-income-claims rule and real outcome data does not yet exist.
 export const PILLARS: PillarCard[] = [
   {
@@ -591,7 +591,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Revenue & Direct Booking",
     question: "What's a realistic direct booking percentage for a boutique hotel?",
     answer:
-      "A healthy direct booking percentage for an independent boutique hotel is 45–60%. Properties that lean heavily on OTAs for discovery often sit at 25–35% direct. Properties with strong brands, repeat guests, and a well-optimized website can push 60–70%. Direct booking as a percentage of total bookings is more important than total volume — every direct booking saves 15–25% in OTA commission.",
+      "A healthy direct booking percentage for an independent boutique hotel is 45–60%. Properties that lean heavily on OTAs for discovery often sit at 25–35% direct. Properties with strong brands, repeat guests, and a well-optimized website can push 60–70%. Direct booking as a percentage of total bookings is more important than total volume. Every direct booking saves 15–25% in OTA commission.",
   },
   {
     category: "Revenue & Direct Booking",
@@ -615,7 +615,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Revenue & Direct Booking",
     question: "What's included in a hotel revenue audit?",
     answer:
-      "A hotel revenue audit from BNHG covers OTA dependency and channel mix, direct booking conversion, rate parity and positioning, ancillary revenue capture, guest segmentation and acquisition cost, and benchmark comparison against comparable properties. The output is a short written report with specific, prioritized actions — not a generic scorecard. The free Tier 0 Revenue Opportunity Snapshot is a lighter version of this audit.",
+      "A hotel revenue audit from BNHG covers OTA dependency and channel mix, direct booking conversion, rate parity and positioning, ancillary revenue capture, guest segmentation and acquisition cost, and benchmark comparison against comparable properties. The output is a short written report with specific, prioritized actions, not a generic scorecard. The free Tier 0 Revenue Opportunity Snapshot is a lighter version of this audit.",
   },
 
   // Hotel Technology
@@ -635,7 +635,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Hotel Technology",
     question: "Do independent hotels need a PMS, booking engine, and channel manager?",
     answer:
-      "Yes. An independent hotel needs a property management system (PMS) to run reservations and operations, a booking engine to accept direct reservations on your website, and a channel manager to keep rates and inventory in sync across OTAs. Modern platforms like Mews, Cloudbeds, and Little Hotelier bundle these together for small properties. The wrong combination is usually where small hotels bleed money — either through overlapping tools or missing integrations.",
+      "Yes. An independent hotel needs a property management system (PMS) to run reservations and operations, a booking engine to accept direct reservations on your website, and a channel manager to keep rates and inventory in sync across OTAs. Modern platforms like Mews, Cloudbeds, and Little Hotelier bundle these together for small properties. The wrong combination is usually where small hotels bleed money, either through overlapping tools or missing integrations.",
   },
   {
     category: "Hotel Technology",
@@ -653,7 +653,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Hotel Technology",
     question: "Can small hotels use the same tech as major brands?",
     answer:
-      "Not usually. Major brand tech stacks are priced for 100+ room properties and require dedicated operations and IT resources to run. Small independent hotels need simpler, integrated platforms built for owner-operators. The right stack for a 20-room boutique is very different from a 200-room Hilton — and trying to run enterprise tools at that scale usually costs more than the revenue lift.",
+      "Not usually. Major brand tech stacks are priced for 100+ room properties and require dedicated operations and IT resources to run. Small independent hotels need simpler, integrated platforms built for owner-operators. The right stack for a 20-room boutique is very different from a 200-room Hilton, and trying to run enterprise tools at that scale usually costs more than the revenue lift.",
   },
 
   // Working with BNHG
@@ -661,25 +661,25 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Working with BNHG",
     question: "What's the difference between Tier 0, 1, 2, and 3 services?",
     answer:
-      "Tier 0 is our free layer: 8 research-backed resources (Revenue Opportunity Snapshot, Online Reputation Briefing, Tech Stack Quick Scan, and more) that we deliver with no strings attached. Tier 1 is paid diagnostics — scoped audits of a specific problem area. Tier 2 is implementation — we do the work alongside your team. Tier 3 is ongoing fractional advisory — monthly strategic partnership with one of our principals. Most clients start at Tier 0, move to Tier 1, and decide from there.",
+      "Tier 0 is our free layer: 8 research-backed resources (Revenue Opportunity Snapshot, Online Reputation Briefing, Tech Stack Quick Scan, and more) that we deliver with no strings attached. Tier 1 is paid diagnostics: scoped audits of a specific problem area. Tier 2 is implementation, where we do the work alongside your team. Tier 3 is ongoing fractional advisory, a monthly strategic partnership with one of our principals. Most clients start at Tier 0, move to Tier 1, and decide from there.",
   },
   {
     category: "Working with BNHG",
     question: "How do I start working with BNHG?",
     answer:
-      "The fastest way to start with BNHG is to request a free Tier 0 resource — it gives you a research-backed deliverable specific to your property with no commitment. If you prefer to talk first, book a 40-minute discovery call. Both paths are free. We'll never pitch you until we understand your property, your goals, and what kind of partner (if any) you actually need.",
+      "The fastest way to start with BNHG is to request a free Tier 0 resource. It gives you a research-backed deliverable specific to your property with no commitment. If you prefer to talk first, book a 40-minute discovery call. Both paths are free. We'll never pitch you until we understand your property, your goals, and what kind of partner (if any) you actually need.",
   },
   {
     category: "Working with BNHG",
     question: "Do you work with hotels outside the Southeast U.S.?",
     answer:
-      "Yes. BNHG is based in Hapeville, Georgia, but we work with independent boutique hotels across the United States. Most of our engagements are remote-first with occasional on-site visits depending on scope. If you are outside the U.S. and running an independent boutique hotel in the 10–50 room range, reach out — we evaluate engagements case by case.",
+      "Yes. BNHG is based in Hapeville, Georgia, but we work with independent boutique hotels across the United States. Most of our engagements are remote-first with occasional on-site visits depending on scope. If you are outside the U.S. and running an independent boutique hotel in the 10–50 room range, reach out. We evaluate engagements case by case.",
   },
   {
     category: "Working with BNHG",
     question: "What happens on a discovery call?",
     answer:
-      "A BNHG discovery call is 40 minutes, booked into a 1-hour slot so we never have to rush. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation — either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
+      "A BNHG discovery call is 40 minutes, booked into a 1-hour slot so we never have to rush. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation: either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
   },
   {
     category: "Working with BNHG",

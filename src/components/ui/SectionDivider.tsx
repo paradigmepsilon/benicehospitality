@@ -3,7 +3,7 @@ interface SectionDividerProps {
   fromColor: string;
   /** Hex color of the section below (fills the area below the curve). */
   toColor: string;
-  /** Mirror the curve horizontally — use to alternate direction between dividers. */
+  /** Mirror the curve horizontally, used to alternate direction between dividers. */
   flip?: boolean;
 }
 

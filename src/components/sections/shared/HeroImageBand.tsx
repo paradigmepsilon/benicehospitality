@@ -8,7 +8,7 @@ interface HeroImageBandProps {
 /**
  * Wide editorial image band that flows directly under a centered hero. The
  * hero supplies its own top + bottom padding; this component supplies its own
- * bottom padding to space the next section. Renders via next/image — add new
+ * bottom padding to space the next section. Renders via next/image; add new
  * hostnames in next.config.ts before sourcing from a new provider.
  */
 export default function HeroImageBand({ src, alt }: HeroImageBandProps) {

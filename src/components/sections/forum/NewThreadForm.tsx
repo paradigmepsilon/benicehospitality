@@ -124,7 +124,7 @@ export default function NewThreadForm({ categories }: NewThreadFormProps) {
           onChange={(e) => setBody(e.target.value)}
           placeholder={`Specifics. Numbers, dates, what you tried, what didn't work.
 
-Markdown isn't rendered in v1 — line breaks are preserved.`}
+Markdown isn't rendered in v1; line breaks are preserved.`}
           className="w-full bg-white border border-light-gray rounded-md px-4 py-3 font-sans text-base text-near-black placeholder:text-charcoal/40 focus:outline-none focus:border-primary-green resize-y"
         />
       </div>

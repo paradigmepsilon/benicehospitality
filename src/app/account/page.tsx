@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 // The layout (src/app/account/layout.tsx) already gates auth and decides
 // whether an admin is allowed in (preview mode only). This page just renders
-// the dashboard for whatever viewer context applies — real member, admin in
+// the dashboard for whatever viewer context applies: real member, admin in
 // god-view preview, or admin previewing as a specific tier.
 export default async function AccountPage() {
   const ctx = await getViewerContext();
@@ -28,7 +28,7 @@ export default async function AccountPage() {
   // For tier impersonation, synthesize one enrollment row per published course
   // at the previewed tier so the dashboard renders as a real member would see
   // it. God view (effectiveTier === null while effectiveIsAdmin) keeps the
-  // admin's actual enrollments — typically empty, which is fine.
+  // admin's actual enrollments, typically empty, which is fine.
   const enrollments =
     ctx.effectiveTier !== null
       ? await synthesizeEnrollmentsForTier(ctx.effectiveTier)

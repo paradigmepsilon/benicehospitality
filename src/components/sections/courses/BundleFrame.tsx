@@ -7,7 +7,7 @@ import { Maximize2, Minimize2, RotateCw } from "lucide-react";
 // The slide bundle ships its own 100vw / 100vh / clamp(...,vw,...) typography.
 // Those units resolve against the iframe's own viewport, so the only way to
 // guarantee headlines, stats, and grids land at design intent is to give the
-// iframe a fixed "design" viewport — 1920 × 1080 — and visually scale the
+// iframe a fixed "design" viewport of 1920 by 1080 and visually scale the
 // rendered iframe with CSS transform to fit whatever container we put it in.
 // Bundle author can design at 1920 × 1080 forever; we just shrink the output.
 const DESIGN_WIDTH = 1920;
@@ -18,8 +18,8 @@ const DESIGN_HEIGHT = 1080;
 // listen for { kind: 'goToSlide', slide } messages.
 //
 // `aspect` controls the iframe's outer layout:
-//   "slide" — fixed-canvas player scaled to fit. Decks like Lesson 1.2.
-//   "page"  — full container width, tall scroll area (workbooks, articles).
+//   "slide": fixed-canvas player scaled to fit. Decks like Lesson 1.2.
+//   "page":  full container width, tall scroll area (workbooks, articles).
 export default function BundleFrame({
   src,
   aspect = "slide",
@@ -89,7 +89,7 @@ export default function BundleFrame({
     return () => ro.disconnect();
   }, [aspect]);
 
-  // Portrait-mobile detection — drives the "rotate your phone" overlay.
+  // Portrait-mobile detection drives the "rotate your phone" overlay.
   useEffect(() => {
     if (aspect !== "slide") return;
     const mq = window.matchMedia(
@@ -144,7 +144,7 @@ export default function BundleFrame({
         await el.requestFullscreen();
       }
     } catch {
-      // Browser refused (permissions, unsupported) — silently ignore.
+      // Browser refused (permissions, unsupported), silently ignore.
     }
   }, []);
 

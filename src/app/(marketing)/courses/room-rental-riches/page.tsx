@@ -149,7 +149,7 @@ export default function RRRPage() {
         body="Run your portfolio like a real business. The Host-to-Operator method, taught at three commitment tiers. Same curriculum in all three. What changes is how much support, accountability, and time with Della you get."
         primaryCta={{ label: "Compare the Tiers", href: "#tiers" }}
         secondaryCta={{
-          label: "Community Login",
+          label: "Login",
           href: "/login",
         }}
         backgroundImage={{
@@ -179,7 +179,7 @@ export default function RRRPage() {
         ]}
       />
 
-      {/* Editorial image strip — four full-bleed property photos */}
+      {/* Editorial image strip: four full-bleed property photos */}
       <section aria-hidden className="w-full bg-white p-2 md:p-3">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
           {[

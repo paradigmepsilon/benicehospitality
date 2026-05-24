@@ -187,7 +187,7 @@ export function dailyApprovalNotificationEmail(p: DailyApprovalNotificationPaylo
     .join("");
 
   return auditLayout({
-    preheader: `${p.targetCount} sends ready for your morning approval — ${p.campaignName}`,
+    preheader: `${p.targetCount} sends ready for your morning approval: ${p.campaignName}`,
     bodyHtml: `
       <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;">${p.targetCount} sends ready for your morning approval</h1>
       ${goldDivider()}
@@ -624,7 +624,7 @@ export interface WaitlistAdminEmailPayload {
 
 export function waitlistAdminNotificationEmail(p: WaitlistAdminEmailPayload) {
   return auditLayout({
-    preheader: `New waitlist signup: ${p.tierName} — ${p.name}`,
+    preheader: `New waitlist signup: ${p.tierName}, ${p.name}`,
     bodyHtml: `
       <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New waitlist signup</h1>
       ${goldDivider()}

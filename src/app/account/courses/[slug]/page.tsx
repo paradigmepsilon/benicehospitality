@@ -107,7 +107,7 @@ export default async function CourseDetailPage({
   // If the user just came back from a successful Stripe checkout, reconcile
   // before deciding what to render. This makes the post-purchase experience
   // feel instant instead of "your enrollment is processing, refresh in 30s".
-  // Skip in any preview mode — admins aren't actually purchasing.
+  // Skip in any preview mode; admins aren't actually purchasing.
   let welcomeRibbon: { tier: string } | null = null;
   if (stripeSessionId && ctx.previewMode === null) {
     const result = await reconcilePostCheckout(stripeSessionId, ctx.userId);

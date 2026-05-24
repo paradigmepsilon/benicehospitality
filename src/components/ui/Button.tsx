@@ -22,7 +22,7 @@ interface ButtonProps {
 const variantClasses: Record<ButtonVariant, string> = {
   // Primary: warm-gold bg, near-black text. Brief calls for white text on gold,
   // but #B08D57 + white only reaches 3.1:1 (fails WCAG AA at most button sizes).
-  // Near-black on gold is 5.6:1 — passes AA for normal text and reads more
+  // Near-black on gold is 5.6:1. It passes AA for normal text and reads more
   // editorial than the high-contrast gold/white combo would.
   primary:
     "bg-warm-gold text-near-black hover:bg-warm-gold-dark border-2 border-warm-gold hover:border-warm-gold-dark",

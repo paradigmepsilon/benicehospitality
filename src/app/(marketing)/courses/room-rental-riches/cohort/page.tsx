@@ -9,7 +9,7 @@ import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
-  title: "Room Rental Riches — Cohort ($2,497)",
+  title: "Room Rental Riches: Cohort ($2,497)",
   description:
     "Eight weeks of live, guided work + the full curriculum + a year in the network. The cohort tier of Room Rental Riches.",
   alternates: {
@@ -23,13 +23,13 @@ const COHORT_WEEKS = [
     week: "01",
     modules: "Modules 1 & 2",
     title: "Foundation: opportunity + legal",
-    body: "Mindset alignment on the 2026 MTR opportunity. Legal and regulatory deep dive — state-by-state matrix workshopped live. Attorney recommendations shared.",
+    body: "Mindset alignment on the 2026 MTR opportunity. Legal and regulatory deep dive: state-by-state matrix workshopped live. Attorney recommendations shared.",
   },
   {
     week: "02",
     modules: "Module 3",
     title: "Path commitment",
-    body: "The forced-commitment exercise — live. Each student commits to arbitrage, ownership, or co-host with cohort accountability before market analysis begins.",
+    body: "The forced-commitment exercise, live. Each student commits to arbitrage, ownership, or co-host with cohort accountability before market analysis begins.",
   },
   {
     week: "03",
@@ -47,7 +47,7 @@ const COHORT_WEEKS = [
     week: "05",
     modules: "Module 6",
     title: "Hospitality-grade design review",
-    body: "The flagship module, applied. Mood-board reviews. Persona-alignment workshop. Will Guidara's Unreasonable Hospitality framework — translated to your specific property.",
+    body: "The flagship module, applied. Mood-board reviews. Persona-alignment workshop. Will Guidara's Unreasonable Hospitality framework, translated to your specific property.",
   },
   {
     week: "06",
@@ -69,7 +69,7 @@ const COHORT_WEEKS = [
   },
   {
     week: "Bonus 09",
-    modules: "Bonus Pack — Tier 2/3 Deep Dive",
+    modules: "Bonus Pack: Tier 2/3 Deep Dive",
     title: "AI visibility live workshop",
     body: "GEO/AEO content strategy. Third-party citation strategy. MCP readiness. Live AI-visibility audits on each student's direct booking site. The 2026-2030 competitive moat.",
   },
@@ -79,30 +79,30 @@ export default function CohortPage() {
   return (
     <>
       <CourseHero
-        eyebrow="Room Rental Riches — Cohort · Most popular"
+        eyebrow="Room Rental Riches · Cohort · Most popular"
         headline={<>$2,497.</>}
         body="Eight weeks of live, guided work. The full Host-to-Operator curriculum, applied to your portfolio in real time, alongside other operators doing the same work."
-        primaryCta={{ label: "Community Login", href: "/login" }}
+        primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",
           href: "/courses/room-rental-riches",
         }}
         previewTitle="What's included"
         previewItems={[
-          "Everything in the Self-paced tier — all twelve modules, the Bonus Pack intro, lifetime updates, one year of the Nice Host Network",
-          "Plus the Bonus Pack Tier 2/3 Deep Dive — eight additional lessons on GEO/AEO, third-party citations, MCP readiness, and direct-booking conversion",
+          "Everything in the Self-paced tier: all twelve modules, the Bonus Pack intro, lifetime updates, one year of the Nice Host Network",
+          "Plus the Bonus Pack Tier 2/3 Deep Dive: eight additional lessons on GEO/AEO, third-party citations, MCP readiness, and direct-booking conversion",
           "Eight weekly live sessions (90 minutes each) led by Della and Alex, plus a bonus AI-visibility workshop in week nine",
           "Cohort-only channel for working through the modules with up to fifteen other operators in real time",
-          "Weekly hot-seat slots — bring a real situation, get a working answer in front of the whole cohort",
+          "Weekly hot-seat slots: bring a real situation, get a working answer in front of the whole cohort",
           "Module-specific live work: forced-commitment exercise (W2), AI market-analysis hot seats (W3), property-pitch role-plays (W4), mood-board review (W5), pricing-calculator review (W7)",
           "Direct messaging with Della and Alex during cohort weeks",
-          "Permanent cohort archive — recordings, transcripts, and shared docs stay yours after the cohort ends",
+          "Permanent cohort archive: recordings, transcripts, and shared docs stay yours after the cohort ends",
         ]}
       />
 
       <SectionDivider fromColor={C.cream} toColor={C.white} />
 
-      {/* Eight-week arc + bonus week — perk-card grid */}
+      {/* Eight-week arc + bonus week: perk-card grid */}
       <AnimatedSection theme="light" className="py-20 md:py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
@@ -172,7 +172,7 @@ export default function CohortPage() {
                 time. The eight weeks structure the work.
               </p>
               <p>
-                You also want Della and Alex live for the harder questions —
+                You also want Della and Alex live for the harder questions,
                 the ones that don&rsquo;t fit in a video. Cohort gets that.
                 Self-paced doesn&rsquo;t.
               </p>
@@ -194,7 +194,7 @@ export default function CohortPage() {
           <p className="font-sans text-sm text-charcoal/70 italic">
             Founding pricing: the first 100 cohort students get $2,497. Then it
             moves to $3,497. The cohort cap per cycle is set so the room stays
-            useful — when a cycle fills, the next one opens.
+            useful. When a cycle fills, the next one opens.
           </p>
         </div>
       </AnimatedSection>

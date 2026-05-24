@@ -96,7 +96,7 @@ export default async function ResourcePage({
       />
       <FAQSchema items={resource.faq} />
 
-      {/* Consolidation banner — points users to the new flagship audit */}
+      {/* Consolidation banner: points users to the new flagship audit */}
       <section className="bg-warm-gold/10 border-b border-warm-gold/30 py-4 px-6">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
           <p className="font-sans text-sm text-charcoal/80 leading-relaxed flex-1">
@@ -107,7 +107,7 @@ export default async function ResourcePage({
             href="/login"
             className="font-sans text-sm font-semibold text-primary-green hover:text-primary-green-dark inline-flex items-center gap-1.5 shrink-0"
           >
-            Community Login
+            Login
             <span aria-hidden>→</span>
           </Link>
         </div>

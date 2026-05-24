@@ -35,7 +35,7 @@ export default function FreeAuditCTABanner() {
         </AnimatedItem>
         <AnimatedItem>
           <Button href="/login" variant="secondary" size="lg">
-            Community Login
+            Login
           </Button>
         </AnimatedItem>
         <AnimatedItem>

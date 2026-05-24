@@ -41,7 +41,7 @@ export default function AuditPageClient({
 
   return (
     <div className="bg-off-white min-h-[calc(100vh-200px)]">
-      {/* Hero band — visible in both states for stable layout */}
+      {/* Hero band, visible in both states for stable layout */}
       <section className="bg-near-black text-white py-12 md:py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start lg:items-center">
