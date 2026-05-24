@@ -219,7 +219,7 @@ export default function AboutPage() {
             <AnimatedItem className="lg:col-start-1 lg:row-start-2">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm">
                 <Image
-                  src="/images/Website%20Images/pexels-katie-cerami-110690626-12284843.jpg"
+                  src="/images/Website%20Images/hf_20260522_020323_3fe26e09-0861-4b3d-9eb0-e7e222785751.jpeg"
                   alt="TRAD, our working laboratory property near Atlanta"
                   fill
                   className="object-cover"
