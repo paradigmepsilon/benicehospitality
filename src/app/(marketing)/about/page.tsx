@@ -25,19 +25,19 @@ export const metadata: Metadata = {
 
 const HOW_WE_HELP = [
   {
-    eyebrow: "01 · Technology",
-    title: "Tech that takes work off your plate",
-    body: "We pick, set up, and run the systems that make your property easier to operate and more profitable. PMS, booking engines, guest messaging, AI visibility, automations, and the integrations that hold it together. We've also built our own products — Guestally for guest messaging, Signal by BNHG for AI search visibility — because we couldn't find tools that fit how independents actually work.",
+    eyebrow: "01 · What we do",
+    title: "Build the systems independent operators actually use",
+    body: "We design, install, and operate the technology, commercial strategy, and guest experience playbooks that small operators need to compete with the brands. Every recommendation is one we've already run on our own properties and fleet first. No theory; just the work, the math, and the systems that hold it together.",
   },
   {
-    eyebrow: "02 · Commercial Strategy",
-    title: "Pricing, distribution, and the math",
-    body: "Pricing, channels, direct booking, and the math behind your revenue. We help you stop leaking margin to OTAs and start owning your guest relationships, with a plan you can actually run.",
+    eyebrow: "02 · Who we work with",
+    title: "Independent operators across hospitality and the sharing economy",
+    body: "Independent property owners running boutique hotels and vacation rentals. Short-term rental and co-living operators. Turo and small vehicle-fleet owners. Aspiring operators preparing to launch their first unit. If you run independently, or are getting ready to, you're who we built this for.",
   },
   {
-    eyebrow: "03 · Guest Experience",
-    title: "The kind of stay people text their friends about",
-    body: "From the first time a guest sees your property online to the post-stay note that earns the rebook, we design experiences that compound into repeat business and word of mouth.",
+    eyebrow: "03 · Services we offer",
+    title: "Courses, advisory, AI visibility, and operator software",
+    body: "Room Rental Riches is our operating-system course for new and growing STR and co-living operators. Advisory engagements bring us in one-on-one with established teams. Signal makes hotels and rentals discoverable inside ChatGPT, Perplexity, and Google's AI answers. Labs ships Guestally and other software built for independents. A free Tier 0 audit is where most engagements start.",
   },
 ];
 
@@ -250,19 +250,19 @@ export default function AboutPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                What we do for{" "}
+                What we do, who we serve, and{" "}
                 <span className="italic text-warm-gold-dark">
-                  independent hospitality brands
+                  how we help
                 </span>
                 .
               </h2>
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                Three lanes of work, all built around the same idea &mdash;
-                meeting you where you actually are. A full strategic
-                partnership, a focused project, or an honest second opinion.
-                Whatever fits.
+                Three things to know up front: the work itself, the
+                operators we do it for, and the surfaces you can engage
+                with. All of it grounded in our own operating experience,
+                not a slide deck.
               </p>
             </AnimatedItem>
           </div>
