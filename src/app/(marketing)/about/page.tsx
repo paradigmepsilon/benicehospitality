@@ -36,8 +36,8 @@ const HOW_WE_HELP = [
   },
   {
     eyebrow: "03 · Services we offer",
-    title: "Courses, advisory, AI visibility, and operator software",
-    body: "Room Rental Riches is our operating-system course for new and growing STR and co-living operators. Advisory engagements bring us in one-on-one with established teams. Signal makes hotels and rentals discoverable inside ChatGPT, Perplexity, and Google's AI answers. Labs ships Guestally and other software built for independents. A free Tier 0 audit is where most engagements start.",
+    title: "Courses, advisory, and operator systems and software",
+    body: "We offer courses for growing and aspiring operators of independent properties and vehicle fleets, and our advisory engagements bring us in one-on-one with established teams. We have services that make hotels and rentals discoverable inside ChatGPT, Perplexity, and Google's AI answers, and free resources that help operators start the initial engagements.",
   },
 ];
 
