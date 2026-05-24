@@ -80,12 +80,12 @@ export default function AboutPage() {
   return (
     <>
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 1 — HERO INTRO
+          SECTION 1: HERO INTRO
           Dark hero with a curvy SectionDivider transitioning into the
           warmer Our Story section below. Matches the hero treatment
           used on Signal, Insights, and the other primary surfaces.
           ───────────────────────────────────────────────────────────── */}
-      <section className="bg-near-black pt-24 md:pt-32 lg:pt-36 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
+      <section className="bg-near-black pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
           <div>
             <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
@@ -133,7 +133,7 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.nearBlack} toColor={C.offWhite} />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 2 — OUR STORY
+          SECTION 2: OUR STORY
           Asymmetric narrative + property photo. Pull quote in the
           middle for emotional anchor.
           ───────────────────────────────────────────────────────────── */}
@@ -213,7 +213,7 @@ export default function AboutPage() {
               </AnimatedItem>
             </AnimatedDiv>
 
-            {/* Property photo — on lg sits in the left column under the
+            {/* Property photo: on lg sits in the left column under the
                 section header; on small screens flows to the bottom of
                 the section as its own row. */}
             <AnimatedItem className="lg:col-start-1 lg:row-start-2">
@@ -238,7 +238,7 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.white} />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 3 — HOW WE HELP
+          SECTION 3: HOW WE HELP
           Three-card editorial grid with numerals. Sits on white for
           a clean breath between the warmer sections.
           ───────────────────────────────────────────────────────────── */}
@@ -293,7 +293,7 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.white} toColor={C.offWhite} flip />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 4 — MEET DELLA
+          SECTION 4: MEET DELLA
           Photo left, narrative + skills right. Pull quote and a
           warm signature line.
           ───────────────────────────────────────────────────────────── */}
@@ -413,8 +413,8 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.cream} />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 5 — MEET ALEX
-          Mirrored layout — photo on the right this time.
+          SECTION 5: MEET ALEX
+          Mirrored layout, photo on the right this time.
           ───────────────────────────────────────────────────────────── */}
       <AnimatedSection theme="off-white" className="bg-cream py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
@@ -531,7 +531,7 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.cream} toColor={C.primaryGreen} flip />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 6 — WHAT WE BELIEVE
+          SECTION 6: WHAT WE BELIEVE
           Four values on a warm dark green ground. Slight italic
           touches in the headings for personal voice.
           ───────────────────────────────────────────────────────────── */}
@@ -586,7 +586,7 @@ export default function AboutPage() {
       <SectionDivider fromColor={C.primaryGreen} toColor={C.cream} />
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 7 — CLOSING / CTA
+          SECTION 7: CLOSING / CTA
           Warm cream, intimate copy, signature line, two CTAs.
           ───────────────────────────────────────────────────────────── */}
       <section className="bg-cream py-10 md:py-14 px-6">

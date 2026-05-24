@@ -125,7 +125,7 @@ export default function MarketingLayout({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
       />
       <Header />
-      <main id="main-content" className="pb-[60px] lg:pb-0">{children}</main>
+      <main id="main-content">{children}</main>
       <Footer />
       <MobileBottomNav />
     </>

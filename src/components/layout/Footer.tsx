@@ -64,7 +64,10 @@ const COMPANY_LINKS_SECONDARY = [
 
 export default function Footer() {
   return (
-    <footer className="bg-near-black text-white" role="contentinfo">
+    <footer
+      className="bg-near-black text-white pb-[60px] lg:pb-0"
+      role="contentinfo"
+    >
       <HomeNewsletter />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 mb-12">
@@ -137,7 +140,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company — two stacked columns */}
+          {/* Company, two stacked columns */}
           <div>
             <h3 className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-5">
               Company
