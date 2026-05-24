@@ -167,8 +167,9 @@ export default function AboutPage() {
               <AnimatedItem>
                 <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
                   Real estate and travel kept pulling us in. We bought our
-                  first property, then another. We learned the work the hard
-                  way &mdash; by doing it.
+                  first property in 2018, then another shortly
+                  after&hellip; then another. We learned the work the hard
+                  way, by doing it ourselves.
                 </p>
               </AnimatedItem>
 
@@ -183,7 +184,8 @@ export default function AboutPage() {
 
               <AnimatedItem>
                 <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                  We own and operate our own properties, including{" "}
+                  We own and operate our own co-living and short-term rental
+                  properties and vehicle fleet, including{" "}
                   <span className="font-semibold text-deep-teal">TRAD</span>, a
                   romantic getaway property near Atlanta that has become our
                   working laboratory for everything we now teach. Bookings,
