@@ -81,33 +81,33 @@ export default function AboutPage() {
     <>
       {/* ─────────────────────────────────────────────────────────────
           SECTION 1 — HERO INTRO
-          Warm cream background, asymmetric layout. Two stacked
-          portraits on the right. Replace with a candid couple shot
-          when one is available.
+          Dark hero with a curvy SectionDivider transitioning into the
+          warmer Our Story section below. Matches the hero treatment
+          used on Signal, Insights, and the other primary surfaces.
           ───────────────────────────────────────────────────────────── */}
-      <section className="bg-cream pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
+      <section className="bg-near-black pt-24 md:pt-32 lg:pt-36 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
           <div>
             <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
               About Be Nice Hospitality
             </p>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-deep-teal leading-[1.05] tracking-tight mb-7">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.05] tracking-tight mb-7">
               We&rsquo;re{" "}
               <span className="italic text-warm-gold">Alex and Della</span>{" "}
               Henry.
             </h1>
-            <p className="font-sans text-lg md:text-xl text-charcoal leading-snug mb-6 max-w-xl">
+            <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-xl">
               The husband-and-wife team behind BNHG. Two U.S. military veterans,
               lifelong partners, and lifelong operators.
             </p>
-            <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed max-w-xl mb-8">
+            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
               BNHG is the company we built to help independent hospitality
               brands run smarter, market sharper, and deliver the kind of
               guest experience people actually talk about. If you own or run
               a boutique hotel, vacation rental, or small hospitality group,
               you&rsquo;re who we built this for.
             </p>
-            <p className="font-script text-2xl md:text-3xl text-warm-gold-dark">
+            <p className="font-script text-2xl md:text-3xl text-warm-gold">
               &mdash; Alex &amp; Della
             </p>
           </div>
@@ -132,14 +132,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <SectionDivider fromColor={C.cream} toColor={C.offWhite} />
+      <SectionDivider fromColor={C.nearBlack} toColor={C.offWhite} />
 
       {/* ─────────────────────────────────────────────────────────────
           SECTION 2 — OUR STORY
           Asymmetric narrative + property photo. Pull quote in the
           middle for emotional anchor.
           ───────────────────────────────────────────────────────────── */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] lg:grid-rows-[auto_1fr] gap-10 lg:gap-x-16 lg:gap-y-10 items-start">
             <div className="lg:col-start-1 lg:row-start-1 lg:sticky lg:top-28">
@@ -242,7 +242,7 @@ export default function AboutPage() {
           Three-card editorial grid with numerals. Sits on white for
           a clean breath between the warmer sections.
           ───────────────────────────────────────────────────────────── */}
-      <AnimatedSection theme="light" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-12 md:mb-14">
             <AnimatedItem>
@@ -297,7 +297,7 @@ export default function AboutPage() {
           Photo left, narrative + skills right. Pull quote and a
           warm signature line.
           ───────────────────────────────────────────────────────────── */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-16 items-start">
             <AnimatedItem>
@@ -419,7 +419,7 @@ export default function AboutPage() {
           SECTION 5 — MEET ALEX
           Mirrored layout — photo on the right this time.
           ───────────────────────────────────────────────────────────── */}
-      <AnimatedSection theme="off-white" className="bg-cream py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="bg-cream py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-start">
             <div className="lg:order-1">
@@ -538,7 +538,7 @@ export default function AboutPage() {
           ───────────────────────────────────────────────────────────── */}
       <AnimatedSection
         theme="none"
-        className="bg-primary-green text-white py-16 md:py-20 px-6"
+        className="bg-primary-green text-white py-10 md:py-14 px-6"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-12 md:mb-14">
@@ -590,7 +590,7 @@ export default function AboutPage() {
           SECTION 7 — CLOSING / CTA
           Warm cream, intimate copy, signature line, two CTAs.
           ───────────────────────────────────────────────────────────── */}
-      <section className="bg-cream py-16 md:py-20 px-6">
+      <section className="bg-cream py-10 md:py-14 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedItem>
             <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
