@@ -145,7 +145,7 @@ export default function ScorecardReport({
             Each percentage is how much of that section your property covers.
             Your overall percentage weighs Operations and Location more than
             Community and Legal, so the overall is not a simple average of the
-            seven.
+            7.
           </p>
           <div className="space-y-5">
             {SCORECARD_SECTIONS.map((section) => {

@@ -20,7 +20,7 @@ export default function BNHGFramework() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 max-w-xl mx-auto">
-              Every engagement follows the same five-phase methodology,
+              Every engagement follows the same 5-phase methodology,
               adapted to your property&apos;s specific needs.
             </p>
           </AnimatedItem>

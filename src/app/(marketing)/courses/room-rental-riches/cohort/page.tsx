@@ -11,7 +11,7 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Room Rental Riches: Cohort ($2,497)",
   description:
-    "Eight weeks of live, guided work + the full curriculum + a year in the network. The cohort tier of Room Rental Riches.",
+    "8 weeks of live, guided work + the full curriculum + a year in the network. The cohort tier of Room Rental Riches.",
   alternates: {
     canonical:
       "https://benicehospitality.com/courses/room-rental-riches/cohort",
@@ -59,7 +59,7 @@ const COHORT_WEEKS = [
     week: "07",
     modules: "Modules 9 & 10",
     title: "Pricing + guest experience",
-    body: "MTR Pricing Calculator V3 reviewed live with each student's numbers. Message-template workshop across the six guest-journey phases. The contrarian discount strategy applied.",
+    body: "MTR Pricing Calculator V3 reviewed live with each student's numbers. Message-template workshop across the 6 guest-journey phases. The contrarian discount strategy applied.",
   },
   {
     week: "08",
@@ -81,7 +81,7 @@ export default function CohortPage() {
       <CourseHero
         eyebrow="Room Rental Riches · Cohort · Most popular"
         headline={<>$2,497.</>}
-        body="Eight weeks of live, guided work. The full Host-to-Operator curriculum, applied to your portfolio in real time, alongside other operators doing the same work."
+        body="8 weeks of live, guided work. The full Host-to-Operator curriculum, applied to your portfolio in real time, alongside other operators doing the same work."
         primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",
@@ -89,10 +89,10 @@ export default function CohortPage() {
         }}
         previewTitle="What's included"
         previewItems={[
-          "Everything in the Self-paced tier: all twelve modules, the Bonus Pack intro, lifetime updates, one year of the Nice Host Network",
-          "Plus the Bonus Pack Tier 2/3 Deep Dive: eight additional lessons on GEO/AEO, third-party citations, MCP readiness, and direct-booking conversion",
-          "Eight weekly live sessions (90 minutes each) led by Della and Alex, plus a bonus AI-visibility workshop in week nine",
-          "Cohort-only channel for working through the modules with up to fifteen other operators in real time",
+          "Everything in the Self-paced tier: all 12 modules, the Bonus Pack intro, lifetime updates, 1 year of the Nice Host Network",
+          "Plus the Bonus Pack Tier 2/3 Deep Dive: 8 additional lessons on GEO/AEO, third-party citations, MCP readiness, and direct-booking conversion",
+          "8 weekly live sessions (90 minutes each) led by Della and Alex, plus a bonus AI-visibility workshop in week 9",
+          "Cohort-only channel for working through the modules with up to 15 other operators in real time",
           "Weekly hot-seat slots: bring a real situation, get a working answer in front of the whole cohort",
           "Module-specific live work: forced-commitment exercise (W2), AI market-analysis hot seats (W3), property-pitch role-plays (W4), mood-board review (W5), pricing-calculator review (W7)",
           "Direct messaging with Della and Alex during cohort weeks",
@@ -107,11 +107,11 @@ export default function CohortPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
-              <SectionLabel>The eight-week arc + bonus week</SectionLabel>
+              <SectionLabel>The 8-week arc + bonus week</SectionLabel>
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4">
-                Twelve modules, mapped to eight weeks of live work. Plus the AI-visibility workshop.
+                12 modules, mapped to 8 weeks of live work. Plus the AI-visibility workshop.
               </h2>
             </AnimatedItem>
           </div>
@@ -169,7 +169,7 @@ export default function CohortPage() {
                 Cohort is the right pick if you implement better with peer
                 pressure than alone. You want a deadline, a cadence, and a
                 room of operators going through the same modules at the same
-                time. The eight weeks structure the work.
+                time. The 8 weeks structure the work.
               </p>
               <p>
                 You also want Della and Alex live for the harder questions,
@@ -178,7 +178,7 @@ export default function CohortPage() {
               </p>
               <p className="text-warm-gold font-semibold">
                 Most students who buy any tier pick Cohort. It&rsquo;s the best
-                value-per-dollar entry point if you can clear eight weeks of
+                value-per-dollar entry point if you can clear 8 weeks of
                 Tuesday and Thursday evenings.
               </p>
             </div>

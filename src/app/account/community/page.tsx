@@ -45,7 +45,7 @@ export default async function CommunityIndexPage() {
             </h1>
             <p className="font-sans text-base text-charcoal/85 leading-relaxed mt-3 max-w-2xl">
               Operator-class conversation. Ask the room a question, share what
-              worked, post a problem before it gets bigger. Six rooms; pick
+              worked, post a problem before it gets bigger. 6 rooms; pick
               the one closest to your operation.
             </p>
           </div>

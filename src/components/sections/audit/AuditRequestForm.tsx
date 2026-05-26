@@ -77,7 +77,7 @@ export default function AuditRequestForm() {
         Request your audit
       </h2>
       <p className="font-sans text-sm text-charcoal/70 mb-7 leading-relaxed">
-        Three fields. We send the finished audit to your email within 48 hours.
+        3 fields. We send the finished audit to your email within 48 hours.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">

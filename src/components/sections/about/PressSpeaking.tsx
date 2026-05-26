@@ -75,7 +75,7 @@ export default function PressSpeaking() {
             >
               admin@benicehospitality.com
             </a>{" "}
-            with the audience and the format. We answer within one business day.
+            with the audience and the format. We answer within 1 business day.
           </p>
         </AnimatedItem>
       </div>

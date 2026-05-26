@@ -170,7 +170,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "competitive-position-map",
     name: "Competitive Position Map",
     shortDescription:
-      "How you stack up against your top three competitors on price, positioning, and perceived value.",
+      "How you stack up against your top 3 competitors on price, positioning, and perceived value.",
     metaTitle:
       "Free Hotel Competitive Analysis | Competitive Position Map | BNHG",
     metaDescription:
@@ -228,7 +228,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Can you include a competitor in a different market?",
         answer:
-          "Yes. Tell us which one. Typically people want one aspirational comp outside their local market.",
+          "Yes. Tell us which one. Typically people want 1 aspirational comp outside their local market.",
       },
       {
         question: "How long does it take?",
@@ -518,7 +518,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Is this the same as an SEO audit?",
         answer:
-          "No. SEO is one sub-category. This is a broader discoverability view across seven categories including AI Search & Answer Engines (AEO). AEO is distinct from SEO: SEO is about ranking in search results; AEO is about being cited in AI-generated answers.",
+          "No. SEO is 1 sub-category. This is a broader discoverability view across 7 categories including AI Search & Answer Engines (AEO). AEO is distinct from SEO: SEO is about ranking in search results; AEO is about being cited in AI-generated answers.",
       },
       {
         question: "What is AEO and why does it matter for hotels?",
@@ -541,7 +541,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "quick-win-action-list",
     name: "Quick Win Action List",
     shortDescription:
-      "Five to ten specific, implementable actions you could take this month to improve performance.",
+      "5 to 10 specific, implementable actions you could take this month to improve performance.",
     metaTitle:
       "Free Hotel Quick Win Action List | Boutique Hotel Improvements | BNHG",
     metaDescription:
@@ -552,9 +552,9 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       "boutique hotel action list",
       "hotel low-hanging fruit",
     ],
-    heroHeadline: "Five Things You Could Do This Month",
+    heroHeadline: "5 Things You Could Do This Month",
     heroSubhead:
-      "A free, cross-pillar action list for independent boutique hotels. Five high-impact wins with estimated revenue impact and a total annual gap estimate.",
+      "A free, cross-pillar action list for independent boutique hotels. 5 high-impact wins with estimated revenue impact and a total annual gap estimate.",
     pillar: "Commercial",
     whatYouGet: [
       "5 specific, implementable actions ranked by revenue impact",
@@ -684,7 +684,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Can you help me actually fix the AEO gaps?",
         answer:
-          "Yes. Tier 1 AEO Readiness Diagnostic goes deeper (brand-query testing across four engines, competitor AEO benchmark, 90-day roadmap). Tier 2 AEO Implementation is the full build: schema markup, llms.txt, FAQ library, content restructuring, citation-earning outreach, and ongoing AI search monitoring.",
+          "Yes. Tier 1 AEO Readiness Diagnostic goes deeper (brand-query testing across 4 engines, competitor AEO benchmark, 90-day roadmap). Tier 2 AEO Implementation is the full build: schema markup, llms.txt, FAQ library, content restructuring, citation-earning outreach, and ongoing AI search monitoring.",
       },
       {
         question: "How long does the free snapshot take?",

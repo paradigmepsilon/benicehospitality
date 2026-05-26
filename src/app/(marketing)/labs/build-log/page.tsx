@@ -124,7 +124,7 @@ export default async function BuildLogPage() {
                   The first post: how we shipped the Audit Generator with Claude Code.
                 </h2>
                 <p className="font-sans text-sm text-charcoal/75 leading-relaxed mb-3">
-                  The audit generator at /audit/request goes from URL input to branded report in about ninety seconds. The first Build Log post walks through the prompt design, the n8n flow, and the failure modes that almost killed it twice.
+                  The audit generator at /audit/request goes from URL input to branded report in about 90 seconds. The first Build Log post walks through the prompt design, the n8n flow, and the failure modes that almost killed it twice.
                 </p>
                 <p className="font-sans text-xs text-charcoal/55 italic">
                   Once the first entry ships, this page lists every post with embedded video and the original LinkedIn or YouTube link.
@@ -138,14 +138,14 @@ export default async function BuildLogPage() {
       <AnimatedSection theme="light" className="py-16 px-6">
         <div className="max-w-md mx-auto text-center">
           <p className="font-sans text-base text-charcoal/75 mb-5 leading-relaxed">
-            Get a one-line note when a new Build Log entry drops.
+            Get a 1-line note when a new Build Log entry drops.
           </p>
           <EmailCaptureForm
             source="build_log_subscribers"
             variant="card"
             buttonLabel="Subscribe"
             placeholder="you@yourbusiness.com"
-            helperText="One email per release. Unsubscribe in one click."
+            helperText="1 email per release. Unsubscribe in 1 click."
             successMessage="You're subscribed. Watch for the next entry."
           />
           <div className="mt-10">

@@ -96,7 +96,7 @@ export function auditReadyEmail(p: AuditEmailPayload) {
       <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your Tier 0 audit is unlocked</h1>
       ${goldDivider()}
       <p style="margin:0 0 16px;">Hi there,</p>
-      <p style="margin:0 0 8px;">Thanks for unlocking your Tier 0 Comprehensive Audit. Here's where you landed across the seven dimensions:</p>
+      <p style="margin:0 0 8px;">Thanks for unlocking your Tier 0 Comprehensive Audit. Here's where you landed across the 7 dimensions:</p>
       ${scoreCallout({ hotelName: p.hotelName, overallScore: p.overallScore, overallGrade: p.overallGrade })}
       <p style="margin:0 0 16px;">Your full report is yours to keep. The link stays active for 90 days, so come back any time.</p>
       ${primaryButton(p.auditUrl, "View My Audit")}
@@ -115,7 +115,7 @@ export function nurtureDay3Email(p: AuditEmailPayload) {
     bodyHtml: `
       <p style="margin:0 0 16px;">Hi there,</p>
       <p style="margin:0 0 16px;">You opened your Tier 0 audit a few days back. Anything jump out?</p>
-      <p style="margin:0 0 16px;">If one of the seven dimensions felt like it deserved more attention, that's exactly what our 40-minute strategy call is for. You pick the dimension at booking, we run a deeper analysis before the call, and you walk away with a clearer view of your highest-impact next move.</p>
+      <p style="margin:0 0 16px;">If one of the 7 dimensions felt like it deserved more attention, that's exactly what our 40-minute strategy call is for. You pick the dimension at booking, we run a deeper analysis before the call, and you walk away with a clearer view of your highest-impact next move.</p>
       <p style="margin:0 0 16px;">Free, no commitment. ${secondaryLink(p.auditUrl, "Re-open your audit")} if you want to refresh the context first.</p>
       ${primaryButton(p.bookingUrl, "Book My Strategy Call")}
       <p style="margin:32px 0 0;color:#1a1a1a;font-weight:500;">Alex</p>
@@ -604,7 +604,7 @@ export function waitlistStudentThankYouEmail(p: WaitlistStudentEmailPayload) {
       ${goldDivider()}
       <p style="margin:0 0 16px;">${intro}</p>
       <p style="margin:0 0 16px;">We&rsquo;re finishing the curriculum now. The moment enrollment opens, I&rsquo;ll send a note straight to this inbox so you can claim your seat before the public link goes out.</p>
-      <p style="margin:0 0 16px;">No drip campaign, no upsells in the meantime. One note when the doors unlock.</p>
+      <p style="margin:0 0 16px;">No drip campaign, no upsells in the meantime. 1 note when the doors unlock.</p>
       <p style="margin:24px 0 0;">If you have questions before then, just reply to this email and I&rsquo;ll answer myself.</p>
       <p style="margin:24px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:16px;color:#1a1a1a;">${signoffName}</p>
       <p style="margin:2px 0 0;font-size:13px;color:#3d3d3d;">${signoffTitle}</p>

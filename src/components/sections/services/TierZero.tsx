@@ -50,9 +50,9 @@ const REPORT_PARTS = [
   },
   {
     label: "Synthesis",
-    title: "Three Quick Wins",
+    title: "3 Quick Wins",
     description:
-      "Three specific, prioritized actions you can take this week, this month, or this quarter. Each one tied to a finding, a pillar, and a concrete next step.",
+      "3 specific, prioritized actions you can take this week, this month, or this quarter. Each one tied to a finding, a pillar, and a concrete next step.",
   },
 ];
 
@@ -86,15 +86,15 @@ export default function TierZero() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-6 leading-tight">
-              Your Hotel, Scored in Eight Sections
+              Your Hotel, Scored in 8 Sections
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 leading-relaxed">
               Our flagship Tier 0 deliverable is a Comprehensive Audit: a
-              two-page diagnostic that opens with an overall score, breaks your
-              property down across six dimensions of boutique hotel
-              performance, and closes with three prioritized quick wins. We
+              2-page diagnostic that opens with an overall score, breaks your
+              property down across 6 dimensions of boutique hotel
+              performance, and closes with 3 prioritized quick wins. We
               pull real market data, real competitor intelligence, and real
               industry benchmarks, then translate it into a scored report you
               can act on immediately.
@@ -122,7 +122,7 @@ export default function TierZero() {
             </AnimatedItem>
             <AnimatedItem>
               <h3 className="font-display text-2xl md:text-3xl font-semibold text-near-black leading-tight">
-                Eight sections, one cohesive picture.
+                8 sections, 1 cohesive picture.
               </h3>
             </AnimatedItem>
           </div>

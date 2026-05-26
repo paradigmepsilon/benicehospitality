@@ -56,7 +56,7 @@ const AUDIENCE_COPY: Record<Audience, AudienceCopy> = {
   operator: {
     headline: "You have gaps. The Host-to-Operator Method closes them.",
     subtext: () =>
-      "The Foundation and Flagship courses use the same framework this audit just walked you through. Nice Host Network adds two live sessions every week to put it into practice.",
+      "The Foundation and Flagship courses use the same framework this audit just walked you through. Nice Host Network adds 2 live sessions every week to put it into practice.",
     buttonLabel: "See the Courses",
     destination: (token) =>
       `/education?audit_token=${token}&utm_source=tier-0-audit&utm_medium=audit-cta`,

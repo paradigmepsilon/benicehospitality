@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Boutique Hotel Consulting Services & Pricing | BNHG",
     description:
-      "Four tiers of hotel consulting, from no-cost resources to full strategic partnership for independent boutique hotels.",
+      "4 tiers of hotel consulting, from no-cost resources to full strategic partnership for independent boutique hotels.",
     url: "https://benicehospitality.com/services",
     type: "website",
     images: [

@@ -14,7 +14,7 @@ const SURFACES: Surface[] = [
   {
     number: "01",
     title: "Community",
-    body: "The Nice Host Network. Two live, founder-led sessions every week, 47 weeks a year.",
+    body: "The Nice Host Network. 2 live, founder-led sessions every week, 47 weeks a year.",
     cta: "Join the Network",
     href: "/community",
   },
@@ -51,7 +51,7 @@ export default function FiveSurfaces() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-near-black mt-4 leading-tight">
-              Four surfaces. One operating system.
+              4 surfaces. 1 operating system.
             </h2>
           </AnimatedItem>
           <AnimatedItem>

@@ -14,14 +14,14 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Room Rental Riches",
   description:
-    "Run your portfolio like a real business. Three commitment tiers from $497 self-paced to $7,497 ninety-day Operator. Founding pricing for the first 100 students.",
+    "Run your portfolio like a real business. 3 commitment tiers from $497 self-paced to $7,497 90-day Operator. Founding pricing for the first 100 students.",
   alternates: {
     canonical: "https://benicehospitality.com/courses/room-rental-riches",
   },
   openGraph: {
     title: "Room Rental Riches | BNHG",
     description:
-      "The Host-to-Operator method for property operators. Three commitment tiers. Same curriculum.",
+      "The Host-to-Operator method for property operators. 3 commitment tiers. Same curriculum.",
     url: "https://benicehospitality.com/courses/room-rental-riches",
     type: "website",
   },
@@ -34,7 +34,7 @@ const CURRICULUM = [
     number: "01",
     phase: "Phase 1 · Foundation",
     title: "The MTR + Co-Living Opportunity",
-    body: "Why now. The 2026 mid-term and co-living market. 19% MTR share. 136% growth since 2019. Atlanta as the case study. The seven-Southeast-metro opportunity map.",
+    body: "Why now. The 2026 mid-term and co-living market. 19% MTR share. 136% growth since 2019. Atlanta as the case study. The 7-Southeast-metro opportunity map.",
     image: `${MODULE_IMAGE_BASE}/module-01-opportunity.png`,
     imageAlt: "Atlanta craftsman bungalow exterior at golden hour",
   },
@@ -52,13 +52,13 @@ const CURRICULUM = [
     title: "Choosing Your Path",
     body: "Arbitrage vs. ownership vs. co-host. The decision matrix and capital calculator. The forced-commitment exercise that gates the rest of the course. Pick a path before market analysis.",
     image: `${MODULE_IMAGE_BASE}/module-03-choosing-path.png`,
-    imageAlt: "Three brass keys on a wooden surface beside a folded map",
+    imageAlt: "3 brass keys on a wooden surface beside a folded map",
   },
   {
     number: "04",
     phase: "Phase 2 · Acquisition",
     title: "Market Analysis & Property Selection",
-    body: "AI-powered market research the competitors don't teach. 25+ prompts. Demand-driver mapping for seven Southeast metros. AirDNA and Furnished Finder Pro integrated.",
+    body: "AI-powered market research the competitors don't teach. 25+ prompts. Demand-driver mapping for 7 Southeast metros. AirDNA and Furnished Finder Pro integrated.",
     image: `${MODULE_IMAGE_BASE}/module-04-market-analysis.png`,
     imageAlt: "Laptop on a linen desk showing a stylized city map",
   },
@@ -66,7 +66,7 @@ const CURRICULUM = [
     number: "05",
     phase: "Phase 2 · Acquisition",
     title: "Securing Your First Property",
-    body: "Five email pitch versions. 25+ landlord objection handlers. 15+ owner objection handlers. Attorney-reviewed lease addendum templates. The outreach work that lands the first deal.",
+    body: "5 email pitch versions. 25+ landlord objection handlers. 15+ owner objection handlers. Attorney-reviewed lease addendum templates. The outreach work that lands the first deal.",
     image: `${MODULE_IMAGE_BASE}/module-05-securing-property.png`,
     imageAlt: "Hands signing a lease document with a fountain pen and brass key",
   },
@@ -74,7 +74,7 @@ const CURRICULUM = [
     number: "06",
     phase: "Phase 3 · Setup",
     title: "Hospitality-Grade Design",
-    body: "Five tenant personas. Will Guidara's Unreasonable Hospitality framework, applied. 50+ signature touches. The BNHG welcome basket. Room-by-room design that earns five stars.",
+    body: "5 tenant personas. Will Guidara's Unreasonable Hospitality framework, applied. 50+ signature touches. The BNHG welcome basket. Room-by-room design that earns 5 stars.",
     image: `${MODULE_IMAGE_BASE}/module-06-design.png`,
     imageAlt: "Linen armchair reading nook with stacked books and an olive plant",
   },
@@ -98,7 +98,7 @@ const CURRICULUM = [
     number: "09",
     phase: "Phase 4 · Launch",
     title: "Pricing for Profit (MTR Math)",
-    body: "MTR Pricing Calculator V3. The length-of-stay framework other operators get wrong. 15 to 25% discounts vs. an industry that runs 35 to 46%. Seven Southeast seasonal calendars. The math behind a $9,720 per year per property delta.",
+    body: "MTR Pricing Calculator V3. The length-of-stay framework other operators get wrong. 15 to 25% discounts vs. an industry that runs 35 to 46%. 7 Southeast seasonal calendars. The math behind a $9,720 per year per property delta.",
     image: `${MODULE_IMAGE_BASE}/module-09-pricing.png`,
     imageAlt: "Open leather notebook with handwritten number columns, calculator and coffee",
   },
@@ -106,7 +106,7 @@ const CURRICULUM = [
     number: "10",
     phase: "Phase 5 · Operations",
     title: "Guest Experience Systems",
-    body: "23+ message templates across six phases. 25-scenario issue-resolution playbook. Repeat-guest rebooking funnel. Difficult-guest scripts. The communication cadence that holds 4.85+ stars.",
+    body: "23+ message templates across 6 phases. 25-scenario issue-resolution playbook. Repeat-guest rebooking funnel. Difficult-guest scripts. The communication cadence that holds 4.85+ stars.",
     image: `${MODULE_IMAGE_BASE}/module-10-guest-experience.png`,
     imageAlt: "Handwritten welcome card propped against a vase of fresh herbs on a bedside table",
   },
@@ -114,7 +114,7 @@ const CURRICULUM = [
     number: "11",
     phase: "Phase 5 · Operations",
     title: "Cleaning, Maintenance & Vendor Management",
-    body: "70+ item hospitality-grade cleaning checklist. Six-vendor essential network. Preventive-maintenance calendar. Emergency response protocol. The operations layer that doesn't break.",
+    body: "70+ item hospitality-grade cleaning checklist. 6-vendor essential network. Preventive-maintenance calendar. Emergency response protocol. The operations layer that doesn't break.",
     image: `${MODULE_IMAGE_BASE}/module-11-cleaning.png`,
     imageAlt: "Folded cream linen towels on a wooden bench beside a woven basket of supplies",
   },
@@ -146,7 +146,7 @@ export default function RRRPage() {
             Riches.
           </>
         }
-        body="Run your portfolio like a real business. The Host-to-Operator method, taught at three commitment tiers. Same curriculum in all three. What changes is how much support, accountability, and time with Della you get."
+        body="Run your portfolio like a real business. The Host-to-Operator method, taught at 3 commitment tiers. Same curriculum in all 3. What changes is how much support, accountability, and time with Della you get."
         primaryCta={{ label: "Compare the Tiers", href: "#tiers" }}
         secondaryCta={{
           label: "Login",
@@ -222,7 +222,7 @@ export default function RRRPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4 mb-6">
-                Two operators. One course.
+                2 operators. 1 course.
               </h2>
             </AnimatedItem>
           </div>
@@ -234,12 +234,12 @@ export default function RRRPage() {
               <p>
                 You&rsquo;re looking at MTR and co-living because the math
                 works and the W-2 doesn&rsquo;t. At least not for the next
-                twenty years. You want to operate in the Southeast (Atlanta,
+                20 years. You want to operate in the Southeast (Atlanta,
                 Tampa, Charlotte, Raleigh, Nashville, Houston, somewhere on
                 that map). You haven&rsquo;t signed your first lease or closed
                 your first property yet, and you want a structured path from
                 &ldquo;reading about this on Reddit&rdquo; to &ldquo;first
-                booking in sixty days.&rdquo; Phases 1 and 2 are built for
+                booking in 60 days.&rdquo; Phases 1 and 2 are built for
                 you. Opportunity framing, legal setup, path commitment, then
                 AI-powered market analysis and the outreach work that lands
                 the first deal.
@@ -248,7 +248,7 @@ export default function RRRPage() {
                 The operator past hosting.
               </p>
               <p>
-                You have between three and thirty units. Some mix of
+                You have between 3 and 30 units. Some mix of
                 short-term, mid-term, long-term, or co-living. Your revenue is
                 real. Your time is the bottleneck. You&rsquo;ve outgrown the
                 spreadsheet phase, you&rsquo;re tired of Sunday-night
@@ -260,7 +260,7 @@ export default function RRRPage() {
                 W-2 replacement.
               </p>
               <p className="text-warm-gold font-semibold pt-2">
-                Same curriculum, both directions. Maya runs five units in
+                Same curriculum, both directions. Maya runs 5 units in
                 suburban Atlanta and started in Phase 3. James was a travel
                 nurse with no property yet and started in Phase 1. The course
                 was built for both of them.
@@ -281,7 +281,7 @@ export default function RRRPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4">
-                Six phases. Twelve modules. Plus the Bonus Pack.
+                6 phases. 12 modules. Plus the Bonus Pack.
               </h2>
             </AnimatedItem>
             <AnimatedItem>
@@ -364,16 +364,16 @@ export default function RRRPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
-              <SectionLabel>The three tiers</SectionLabel>
+              <SectionLabel>The 3 tiers</SectionLabel>
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4">
-                Same curriculum. Three commitment levels.
+                Same curriculum. 3 commitment levels.
               </h2>
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base md:text-lg text-charcoal/75 leading-relaxed mt-5">
-                Every tier ships the full twelve-module curriculum and the
+                Every tier ships the full 12-module curriculum and the
                 Bonus Pack. What changes is how much support, accountability,
                 and time with Della you get.
               </p>

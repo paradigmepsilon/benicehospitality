@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Della Henry. Southeast Mid-Term Rental Coach.",
     description:
-      "Twelve MTR units. Five Southeast markets. One operating system. Book a working call, take the Room to Rental Riches Masterclass, or pull from the free resource library.",
+      "12 MTR units. 5 Southeast markets. 1 operating system. Book a working call, take the Room to Rental Riches Masterclass, or pull from the free resource library.",
     url: "https://benicehospitality.com/della",
     type: "profile",
     images: [
@@ -47,11 +47,11 @@ export const metadata: Metadata = {
 const EXPERTISE = [
   {
     title: "Mid-Term Rental Operations",
-    body: "Cleaning, turns, vendor SLAs, maintenance routes. Built for 30 day plus stays, not weekend Airbnbs. The same playbook keeps a twelve-unit Southeast portfolio running with one full-time hire.",
+    body: "Cleaning, turns, vendor SLAs, maintenance routes. Built for 30 day plus stays, not weekend Airbnbs. The same playbook keeps a 12-unit Southeast portfolio running with 1 full-time hire.",
   },
   {
     title: "Demand Sourcing Beyond the OTAs",
-    body: "Travel nurse agencies, corporate housing brokers, insurance displacement contracts, and direct relocation channels. Where the real MTR money lives in Atlanta, Charlotte, Nashville, Savannah, and Birmingham. How to turn an inbound inquiry into a six-month contract.",
+    body: "Travel nurse agencies, corporate housing brokers, insurance displacement contracts, and direct relocation channels. Where the real MTR money lives in Atlanta, Charlotte, Nashville, Savannah, and Birmingham. How to turn an inbound inquiry into a 6-month contract.",
   },
   {
     title: "Southeast Regulatory Navigation",
@@ -59,15 +59,15 @@ const EXPERTISE = [
   },
   {
     title: "Pricing & Length-of-Stay Math",
-    body: "When to discount for 90 days. When to hold. How to model the trade-off in five minutes on a napkin. The math that keeps a portfolio at 92 percent occupancy without becoming a commodity.",
+    body: "When to discount for 90 days. When to hold. How to model the trade-off in 5 minutes on a napkin. The math that keeps a portfolio at 92 percent occupancy without becoming a commodity.",
   },
   {
     title: "Guest Experience Systems",
-    body: "Pre-arrival, mid-stay, departure. The touchpoints that turn a six-month medical contract into a renewal plus a referral. Tech stack and SOPs included.",
+    body: "Pre-arrival, mid-stay, departure. The touchpoints that turn a 6-month medical contract into a renewal plus a referral. Tech stack and SOPs included.",
   },
   {
     title: "Underwriting Southeast Properties",
-    body: "What to actually look for when you are buying or leasing for MTR. The three numbers that matter, the five neighborhoods worth a hard look right now, and the deal-breakers that never show up on a pro forma.",
+    body: "What to actually look for when you are buying or leasing for MTR. The 3 numbers that matter, the 5 neighborhoods worth a hard look right now, and the deal-breakers that never show up on a pro forma.",
   },
 ];
 
@@ -85,23 +85,23 @@ const FAQS = [
   },
   {
     q: "What is the difference between booking a call and buying the course?",
-    a: "The course is the system. Twelve modules, $500, lifetime access, fully self-paced. A call is one focused hour on your actual portfolio. A deal you are underwriting. A unit bleeding cash. A regulatory question you cannot get a straight answer to. Most people take the course first and book a call once they have specific questions.",
+    a: "The course is the system. 12 modules, $500, lifetime access, fully self-paced. A call is 1 focused hour on your actual portfolio. A deal you are underwriting. A unit bleeding cash. A regulatory question you cannot get a straight answer to. Most people take the course first and book a call once they have specific questions.",
   },
   {
     q: "I am brand new. Do I need to own units already?",
-    a: "No. The first three modules of the Room to Rental Riches Masterclass walk you through property selection and underwriting for people who do not own a single door yet. The free resource library has a starter checklist if you want to see how Della thinks before you spend a dollar.",
+    a: "No. The first 3 modules of the Room to Rental Riches Masterclass walk you through property selection and underwriting for people who do not own a single door yet. The free resource library has a starter checklist if you want to see how Della thinks before you spend a dollar.",
   },
   {
     q: "Why Della instead of any other MTR coach?",
-    a: "Because she runs the units she teaches you about. Twelve units. Five Southeast cities. All mid-term. All hers or under her management. When she tells you how a corporate housing inquiry converts in Atlanta in October, it is because she just closed one.",
+    a: "Because she runs the units she teaches you about. 12 units. 5 Southeast cities. All mid-term. All hers or under her management. When she tells you how a corporate housing inquiry converts in Atlanta in October, it is because she just closed one.",
   },
   {
     q: "How fast can I expect to see results?",
-    a: "Depends where you start. Operators with units already running see pricing and length-of-stay wins inside 30 days of applying the course. Acquisition-stage operators are working a longer clock. Three to six months to a first MTR-ready unit is realistic. Faster if your capital is ready.",
+    a: "Depends where you start. Operators with units already running see pricing and length-of-stay wins inside 30 days of applying the course. Acquisition-stage operators are working a longer clock. 3 to 6 months to a first MTR-ready unit is realistic. Faster if your capital is ready.",
   },
   {
     q: "Will Della work with me long term?",
-    a: "Not as a traditional coach with a six-month retainer. She does one-off working calls because that is honestly what most operators need. If you want ongoing eyes on a portfolio, the Be Nice Hospitality team offers that separately. Ask on the call.",
+    a: "Not as a traditional coach with a 6-month retainer. She does one-off working calls because that is honestly what most operators need. If you want ongoing eyes on a portfolio, the Be Nice Hospitality team offers that separately. Ask on the call.",
   },
 ];
 
@@ -119,13 +119,13 @@ export default function DellaPage() {
               Run profitable mid-term rentals in the Southeast.
             </h1>
             <p className="font-sans text-lg md:text-xl text-charcoal leading-snug mb-8 max-w-xl">
-              Twelve MTR units. Five cities. Eight years of doing this every
+              12 MTR units. 5 cities. 8 years of doing this every
               single day. If you are trying to build a mid-term rental
               portfolio in Atlanta, Charlotte, Nashville, Savannah, or
               Birmingham, you are in the right place.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
-              You have three doors. Book a working call with Della. Take the
+              You have 3 doors. Book a working call with Della. Take the
               full course. Or pull what you need from the free resource
               library. Pick the one that fits where you actually are right
               now.
@@ -251,7 +251,7 @@ export default function DellaPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <AnimatedItem>
-              <SectionLabel>Three doors</SectionLabel>
+              <SectionLabel>3 doors</SectionLabel>
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
@@ -285,7 +285,7 @@ export default function DellaPage() {
                   Book a 1:1 Call
                 </h3>
                 <p className="font-sans text-base text-white/85 leading-snug mb-8 flex-grow">
-                  Thirty focused minutes on your portfolio, your underwriting,
+                  30 focused minutes on your portfolio, your underwriting,
                   or your operating question. No upsell theater. If she
                   cannot help, she tells you on the call.
                 </p>
@@ -327,8 +327,8 @@ export default function DellaPage() {
                   Room to Rental Riches Masterclass
                 </h3>
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
-                  The full operating manual. Twelve modules, video led, fully
-                  self-paced. Five hundred dollars, lifetime access, no
+                  The full operating manual. 12 modules, video led, fully
+                  self-paced. 500 dollars, lifetime access, no
                   cohort schedule pressuring you. Watch on your couch in
                   pajamas.
                 </p>
@@ -404,7 +404,7 @@ export default function DellaPage() {
               </AnimatedItem>
               <AnimatedItem>
                 <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                  From one Atlanta unit to a Southeast operating system.
+                  From 1 Atlanta unit to a Southeast operating system.
                 </h2>
               </AnimatedItem>
               <AnimatedItem>
@@ -473,7 +473,7 @@ export default function DellaPage() {
                     The portfolio today
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
-                    Twelve units. Five Southeast cities. One playbook.
+                    12 units. 5 Southeast cities. 1 playbook.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
                     The portfolio is mixed. A handful of owned units. A
@@ -517,7 +517,7 @@ export default function DellaPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4">
-                Six skills. All earned in the field.
+                6 skills. All earned in the field.
               </h2>
             </AnimatedItem>
           </div>
@@ -647,7 +647,7 @@ export default function DellaPage() {
             Stop reading. Get on the calendar.
           </h2>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
-            The next thirty minutes with Della will save you months of
+            The next 30 minutes with Della will save you months of
             guessing on Southeast MTR. Bring the question, the deal, or the
             unit that is keeping you up. Walk away with a plan.
           </p>

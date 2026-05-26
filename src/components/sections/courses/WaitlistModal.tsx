@@ -198,7 +198,7 @@ export default function WaitlistModal({
                   <p className="font-sans text-base text-charcoal/75 leading-relaxed mb-6">
                     Drop your name and email. We&rsquo;ll reach out the moment{" "}
                     {tier.name.toLowerCase()} enrollment opens. No drip
-                    campaign, no upsells, just one note when the doors unlock.
+                    campaign, no upsells, just 1 note when the doors unlock.
                   </p>
 
                   <form onSubmit={handleSubmit} noValidate>
@@ -299,7 +299,7 @@ export default function WaitlistModal({
                     </div>
 
                     <p className="mt-4 font-sans text-xs text-charcoal/50 leading-relaxed">
-                      One note when enrollment opens. Nothing else.
+                      1 note when enrollment opens. Nothing else.
                     </p>
                   </form>
                 </>

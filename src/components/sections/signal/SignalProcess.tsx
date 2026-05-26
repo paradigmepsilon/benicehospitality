@@ -42,7 +42,7 @@ export default function SignalProcess() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-display italic text-xl md:text-2xl text-charcoal/70 leading-snug mt-6">
-              Four steps. No surprises. Every engagement begins the same way.
+              4 steps. No surprises. Every engagement begins the same way.
             </p>
           </AnimatedItem>
         </div>

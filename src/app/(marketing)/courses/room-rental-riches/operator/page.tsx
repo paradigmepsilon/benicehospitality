@@ -11,7 +11,7 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Room Rental Riches: Operator ($7,497)",
   description:
-    "Ninety days with Della. Twelve sixty-minute 1:1 sessions. Lifetime community. The deepest version of the Host-to-Operator method, capped at five students per cycle.",
+    "90 days with Della. 12 60-minute 1:1 sessions. Lifetime community. The deepest version of the Host-to-Operator method, capped at 5 students per cycle.",
   alternates: {
     canonical:
       "https://benicehospitality.com/courses/room-rental-riches/operator",
@@ -22,17 +22,17 @@ const NINETY_DAY_ARC = [
   {
     phase: "Days 1–14",
     title: "Diagnose",
-    body: "Onboarding plus the Modules 1 & 2 deep dive in 1:1. Portfolio (or pre-portfolio) review with Della. Where the leverage actually is. The two or three moves that matter most for the ninety days. We don't try to fix everything. We pick the right things and execute them.",
+    body: "Onboarding plus the Modules 1 & 2 deep dive in 1:1. Portfolio (or pre-portfolio) review with Della. Where the leverage actually is. The 2 or 3 moves that matter most for the 90 days. We don't try to fix everything. We pick the right things and execute them.",
   },
   {
     phase: "Days 15–60",
     title: "Build",
-    body: "The eight-week cohort runs during this window. You're in the room with the cohort group across all twelve modules, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. Eight sessions land in this phase.",
+    body: "The 8-week cohort runs during this window. You're in the room with the cohort group across all 12 modules, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. 8 sessions land in this phase.",
   },
   {
     phase: "Days 61–90",
     title: "Operationalize",
-    body: "Module 12 scaling work plus the Bonus Pack T2/T3 deep dive: AI visibility audit on your direct booking site. The handoff from project mode to operating mode. Capstone, year-two strategic plan, and a written ninety-day playbook of what got built and what's running.",
+    body: "Module 12 scaling work plus the Bonus Pack T2/T3 deep dive: AI visibility audit on your direct booking site. The handoff from project mode to operating mode. Capstone, year-2 strategic plan, and a written 90-day playbook of what got built and what's running.",
   },
 ];
 
@@ -42,7 +42,7 @@ export default function OperatorPage() {
       <CourseHero
         eyebrow="Room Rental Riches · Operator · 5 seats per cycle"
         headline={<>$7,497.</>}
-        body="Ninety days. Twelve sessions with Della. Cohort included. Lifetime in the Nice Host Network. Capped at five students per cycle, two cycles a year."
+        body="90 days. 12 sessions with Della. Cohort included. Lifetime in the Nice Host Network. Capped at 5 students per cycle, 2 cycles a year."
         primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",
@@ -50,15 +50,15 @@ export default function OperatorPage() {
         }}
         previewTitle="What's included"
         previewItems={[
-          "Everything in the Cohort tier: all twelve modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the eight-week guided cohort, the cohort archive",
-          "Twelve sixty-minute 1:1 sessions with Della, one per module, spread across ninety days",
-          "Lifetime access to the Nice Host Network: not one year, not three, lifetime",
+          "Everything in the Cohort tier: all 12 modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the 8-week guided cohort, the cohort archive",
+          "12 60-minute 1:1 sessions with Della, 1 per module, spread across 90 days",
+          "Lifetime access to the Nice Host Network: not 1 year, not 3, lifetime",
           "Direct messaging access to Della between sessions for the duration of the engagement",
-          "A custom portfolio (or pre-portfolio) review at kickoff: where your operation actually is, where the highest-leverage moves are, what the ninety days will focus on",
+          "A custom portfolio (or pre-portfolio) review at kickoff: where your operation actually is, where the highest-leverage moves are, what the 90 days will focus on",
           "Della's pre-launch property reviews: listing copy, pricing strategy, photo selection, vendor-network audit, direct-booking site optimization audit",
           "Direct attorney and CPA referrals from Della's network",
           "Year 2 strategic planning session as a bonus, post-90-days",
-          "A written ninety-day playbook at the end: what got built, what's running, and what to do next",
+          "A written 90-day playbook at the end: what got built, what's running, and what to do next",
         ]}
       />
 
@@ -69,11 +69,11 @@ export default function OperatorPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
-              <SectionLabel>The ninety-day arc</SectionLabel>
+              <SectionLabel>The 90-day arc</SectionLabel>
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4">
-                Three phases. Twelve sessions. One portfolio transformed.
+                3 phases. 12 sessions. 1 portfolio transformed.
               </h2>
             </AnimatedItem>
           </div>
@@ -127,11 +127,11 @@ export default function OperatorPage() {
                 portfolio, real revenue, and a real list of things that have
                 been on your &ldquo;I&rsquo;ll get to it&rdquo; list for too
                 long. You don&rsquo;t need to be convinced the method works.
-                You need someone to do the ninety days with you and make sure
+                You need someone to do the 90 days with you and make sure
                 it ships.
               </p>
               <p>
-                Della takes five operators per cycle. Two cycles a year. The
+                Della takes 5 operators per cycle. 2 cycles a year. The
                 cap isn&rsquo;t a marketing line. It&rsquo;s the math of how
                 much 1:1 work is sustainable while keeping the cohort and
                 community running.
@@ -154,8 +154,8 @@ export default function OperatorPage() {
         <div className="max-w-2xl mx-auto text-center">
           <p className="font-sans text-sm text-charcoal/70 italic">
             Founding pricing: the first 100 Operator students (across all
-            cycles) get $7,497. Then it moves to $9,997. With a five-student
-            cap and two cycles a year, that&rsquo;s ten years of founding
+            cycles) get $7,497. Then it moves to $9,997. With a 5-student
+            cap and 2 cycles a year, that&rsquo;s 10 years of founding
             pricing, and we expect it to fill faster than that.
           </p>
         </div>

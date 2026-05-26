@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title:
     "Signal | AI Services for Boutique Luxury Hotels | Be Nice Hospitality",
   description:
-    "Signal is the AI services arm of Be Nice Hospitality, built for boutique luxury hotels with ten to fifty rooms. Direct booking lift, AI search visibility, OTA commission recovery, and ops automation. Scope written down before kickoff. Money-back if we miss.",
+    "Signal is the AI services arm of Be Nice Hospitality, built for boutique luxury hotels with 10 to 50 rooms. Direct booking lift, AI search visibility, OTA commission recovery, and ops automation. Scope written down before kickoff. Money-back if we miss.",
   keywords: [
     "AI services for boutique hotels",
     "boutique luxury hotel marketing",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Signal | AI Services for Boutique Luxury Hotels",
     description:
-      "Direct booking lift, AI search visibility, OTA recovery, and ops automation for boutique luxury hotels with ten to fifty rooms. Built by operators.",
+      "Direct booking lift, AI search visibility, OTA recovery, and ops automation for boutique luxury hotels with 10 to 50 rooms. Built by operators.",
     url: "https://benicehospitality.com/signal",
     type: "website",
     images: [
@@ -52,8 +52,8 @@ const ENGAGEMENTS = [
     priceFrom: "$1,500",
     priceTo: "$4,500",
     timeline: "1 to 2 weeks",
-    tagline: "One problem solved fast.",
-    body: "AEO foundations. AI search readiness checks. OTA reconciliation audits. Focused work that finishes inside two weeks and ships with a thirty-day money-back guarantee.",
+    tagline: "1 problem solved fast.",
+    body: "AEO foundations. AI search readiness checks. OTA reconciliation audits. Focused work that finishes inside 2 weeks and ships with a 30-day money-back guarantee.",
     highlights: [
       "AEO and schema foundations",
       "OTA reconciliation audit",
@@ -65,8 +65,8 @@ const ENGAGEMENTS = [
     priceFrom: "$5,000",
     priceTo: "$10,000",
     timeline: "30 days",
-    tagline: "One outcome inside a month.",
-    body: "A focused engagement against one measurable goal. Direct booking accelerators. Voice agent rollouts. Ops automation passes. The success criterion is written into the contract before we kick off.",
+    tagline: "1 outcome inside a month.",
+    body: "A focused engagement against 1 measurable goal. Direct booking accelerators. Voice agent rollouts. Ops automation passes. The success criterion is written into the contract before we kick off.",
     highlights: [
       "Direct booking accelerator",
       "Voice agent rollout",
@@ -113,7 +113,7 @@ const PROCESS = [
   {
     step: "01",
     title: "Discovery call",
-    body: "Forty minutes on your property, your stack, and the number you actually want to move. If Signal is not the right fit, we tell you on the call.",
+    body: "40 minutes on your property, your stack, and the number you actually want to move. If Signal is not the right fit, we tell you on the call.",
   },
   {
     step: "02",
@@ -134,7 +134,7 @@ const GUARANTEES = [
   },
   {
     title: "30-day money-back",
-    body: "Every productized engagement under five thousand dollars comes with a thirty-day money-back guarantee. No questions.",
+    body: "Every productized engagement under 5,000 dollars comes with a 30-day money-back guarantee. No questions.",
   },
   {
     title: "Cancel any month",
@@ -149,10 +149,10 @@ const GUARANTEES = [
 const FAQS = [
   {
     q: "What makes Signal different from a regular hotel marketing agency?",
-    a: "Agencies sell decks and dashboards. Signal ships software. Every engagement ends with a working system, a measurable result, and a hand-off document. And every productized engagement carries a thirty-day money-back guarantee in writing.",
+    a: "Agencies sell decks and dashboards. Signal ships software. Every engagement ends with a working system, a measurable result, and a hand-off document. And every productized engagement carries a 30-day money-back guarantee in writing.",
   },
   {
-    q: "Why are you focused on ten-to-fifty room boutique hotels?",
+    q: "Why are you focused on 10-to-50 room boutique hotels?",
     a: "That is the sweet spot where the work is technical enough to need real engineering and small enough that you still talk to the operator. Larger portfolios usually need a custom build. Smaller properties are better served by the free resource library or the Room Rental Riches Masterclass.",
   },
   {
@@ -165,7 +165,7 @@ const FAQS = [
   },
   {
     q: "How does the money-back guarantee actually work?",
-    a: "Every Quick Win and every productized engagement under five thousand dollars comes with a thirty-day money-back guarantee. If the outcome we wrote into the contract is not delivered, you ask, we refund. No claw-back clauses, no fine print.",
+    a: "Every Quick Win and every productized engagement under 5,000 dollars comes with a 30-day money-back guarantee. If the outcome we wrote into the contract is not delivered, you ask, we refund. No claw-back clauses, no fine print.",
   },
 ];
 
@@ -202,7 +202,7 @@ export default function SignalPage() {
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-2xl">
             Direct booking lift. AI search visibility. OTA commission recovery.
             Ops automation. Built for independent boutique luxury hotels with
-            ten to fifty rooms.
+            10 to 50 rooms.
           </p>
           <p className="font-sans text-base md:text-lg text-white/70 leading-snug mb-10 max-w-2xl">
             We write the success criterion into the contract before kickoff.
@@ -224,7 +224,7 @@ export default function SignalPage() {
           </div>
 
           <p className="font-sans text-sm text-white/55 mt-6 italic">
-            Forty-five minutes. No discovery-call sales theater.
+            45 minutes. No discovery-call sales theater.
           </p>
         </div>
       </section>
@@ -267,10 +267,10 @@ export default function SignalPage() {
               </p>
               <p>
                 Your ADR is slipping. Your direct booking percentage has not
-                moved in two years. The last agency you hired walked away
-                with a five-figure invoice and a dashboard nobody opens. The
+                moved in 2 years. The last agency you hired walked away
+                with a 5-figure invoice and a dashboard nobody opens. The
                 vendor who set up your tech stack stopped returning emails
-                six months ago.
+                6 months ago.
               </p>
               <p>
                 And now travelers are asking ChatGPT and Perplexity for hotel
@@ -298,7 +298,7 @@ export default function SignalPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                Four ways to work together. All priced in plain English.
+                4 ways to work together. All priced in plain English.
               </h2>
             </AnimatedItem>
             <AnimatedItem>
@@ -400,7 +400,7 @@ export default function SignalPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                Three steps. Then a working system.
+                3 steps. Then a working system.
               </h2>
             </AnimatedItem>
           </div>
@@ -442,7 +442,7 @@ export default function SignalPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.1] tracking-tight mt-4 mb-6">
-                Four promises. All in writing.
+                4 promises. All in writing.
               </h2>
             </AnimatedItem>
             <AnimatedItem>

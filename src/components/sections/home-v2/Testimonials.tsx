@@ -28,7 +28,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "The audit alone was worth it. We were paying for three tools that overlapped and missing the one we actually needed. Sorted in two weeks.",
+      "The audit alone was worth it. We were paying for 3 tools that overlapped and missing the one we actually needed. Sorted in 2 weeks.",
     author: "James T.",
     role: "General Manager",
     context: "32-room destination property, Asheville NC",
@@ -36,18 +36,18 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "I went from juggling four cleaners and two VAs to one part-time ops assistant and Guestally running my messaging. First weekend off in two years.",
+      "I went from juggling 4 cleaners and 2 VAs to 1 part-time ops assistant and Guestally running my messaging. First weekend off in 2 years.",
     author: "Maya L.",
     role: "Property Operator",
-    context: "Five units (STR + LTR), suburban Atlanta",
+    context: "5 units (STR + LTR), suburban Atlanta",
     avatar: STOCK_PORTRAIT_F2,
   },
   {
     quote:
-      "I treated Turo like a hobby until I found BNHG. Now I have a documented turnover protocol, a fleet handler, and seven vehicles. Net is up 110 percent.",
+      "I treated Turo like a hobby until I found BNHG. Now I have a documented turnover protocol, a fleet handler, and 7 vehicles. Net is up 110 percent.",
     author: "Marcus K.",
     role: "Auto Operator",
-    context: "Seven Turo vehicles, urban market",
+    context: "7 Turo vehicles, urban market",
     avatar: STOCK_PORTRAIT_M2,
   },
 ];

@@ -28,7 +28,7 @@ export default function QuickWinsCard({ wins }: QuickWinsCardProps) {
         <h3 className="font-display text-xl md:text-2xl font-semibold">Quick Wins</h3>
       </div>
       <p className="text-white/60 text-sm leading-relaxed">
-        The three highest-impact, lowest-friction actions across your seven dimensions.
+        The 3 highest-impact, lowest-friction actions across your 7 dimensions.
       </p>
 
       <ol className="space-y-4 flex-1">

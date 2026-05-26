@@ -32,13 +32,13 @@ export default function Manifesto() {
 
           <AnimatedItem>
             <p>
-              These people are operators. They run distributed operations across multiple properties or vehicles, often with revenue in the high six and low seven figures. They make hiring decisions, vendor decisions, software decisions, and pricing decisions every single day. They lose more sleep over staffing and OTA dependency than most small business owners lose over anything. And yet the industry built around them has spent a decade pretending they are hobbyists.
+              These people are operators. They run distributed operations across multiple properties or vehicles, often with revenue in the high 6 and low 7 figures. They make hiring decisions, vendor decisions, software decisions, and pricing decisions every single day. They lose more sleep over staffing and OTA dependency than most small business owners lose over anything. And yet the industry built around them has spent a decade pretending they are hobbyists.
             </p>
           </AnimatedItem>
 
           <AnimatedItem>
             <p>
-              Be Nice Hospitality Group exists because that gap, between the work and the language, has finally become untenable. The math has changed. AirDNA called 2026 the best year to invest in short-term rentals since 2021, but only for operators who understand market selection, dynamic pricing, and operational efficiency. Eighty-four percent of operators report using AI in their business. Most of them are using it badly: a chatbot here, a pricing tool there, more software, same chaos. Sixty-one percent of independent bookings still flow through OTAs at fifteen to twenty-five percent commission. Seventy percent of operators have a direct booking site. Only thirty-eight percent get meaningful direct bookings out of it.
+              Be Nice Hospitality Group exists because that gap, between the work and the language, has finally become untenable. The math has changed. AirDNA called 2026 the best year to invest in short-term rentals since 2021, but only for operators who understand market selection, dynamic pricing, and operational efficiency. 84 percent of operators report using AI in their business. Most of them are using it badly: a chatbot here, a pricing tool there, more software, same chaos. 61 percent of independent bookings still flow through OTAs at 15 to 25 percent commission. 70 percent of operators have a direct booking site. Only 38 percent get meaningful direct bookings out of it.
             </p>
           </AnimatedItem>
 
@@ -50,13 +50,13 @@ export default function Manifesto() {
 
           <AnimatedItem>
             <p>
-              The companies serving this audience today fall into three buckets. The first is the guru tier: people selling get-rich-on-Airbnb courses to first-time buyers at the top of the market. They are the loudest and the least useful. The second is the general business advisor tier: smart people who do not understand the specific math of the sharing economy and end up giving generic advice that does not survive contact with a 2 a.m. guest text. The third is the enterprise consulting tier: large firms built for hotel chains and large fleets, completely uninterested in the operator running five units or eight vehicles.
+              The companies serving this audience today fall into 3 buckets. The first is the guru tier: people selling get-rich-on-Airbnb courses to first-time buyers at the top of the market. They are the loudest and the least useful. The second is the general business advisor tier: smart people who do not understand the specific math of the sharing economy and end up giving generic advice that does not survive contact with a 2 a.m. guest text. The third is the enterprise consulting tier: large firms built for hotel chains and large fleets, completely uninterested in the operator running 5 units or 8 vehicles.
             </p>
           </AnimatedItem>
 
           <AnimatedItem>
             <p>
-              We sit in the gap between those three. Not loud. Not generic. Not enterprise. Built for the operator with five to fifty units who has outgrown the YouTube tutorials and is not yet ready for a full COO hire. Built around a method we run ourselves before we teach it to anyone else.
+              We sit in the gap between those 3. Not loud. Not generic. Not enterprise. Built for the operator with 5 to 50 units who has outgrown the YouTube tutorials and is not yet ready for a full COO hire. Built around a method we run ourselves before we teach it to anyone else.
             </p>
           </AnimatedItem>
 

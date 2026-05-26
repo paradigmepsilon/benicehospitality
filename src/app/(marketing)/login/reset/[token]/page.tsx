@@ -25,7 +25,7 @@ export default async function ResetPasswordPage({ params }: PageProps) {
             Set a new password.
           </h1>
           <p className="font-sans text-base text-charcoal leading-relaxed">
-            Pick something you haven&rsquo;t used elsewhere. At least ten
+            Pick something you haven&rsquo;t used elsewhere. At least 10
             characters.
           </p>
         </div>

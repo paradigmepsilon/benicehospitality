@@ -15,7 +15,7 @@ const OFFERINGS: Offering[] = [
   {
     name: "AI Visibility Audit",
     price: "$2,500",
-    body: "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your hotel today. Five business days.",
+    body: "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your hotel today. 5 business days.",
   },
   {
     name: "MCP Readiness Package",

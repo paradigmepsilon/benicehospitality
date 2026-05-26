@@ -174,7 +174,7 @@ export default function MtrViabilityScorecardPage() {
               {
                 step: "1",
                 title: "Walk the property",
-                body: "Open the scorecard, give the property a nickname, and work through the seven sections. About 10 minutes if you know the place well.",
+                body: "Open the scorecard, give the property a nickname, and work through the 7 sections. About 10 minutes if you know the place well.",
               },
               {
                 step: "2",

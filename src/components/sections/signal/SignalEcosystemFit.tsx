@@ -44,12 +44,12 @@ export default function SignalEcosystemFit() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mt-4 leading-tight">
-              Signal is one of four surfaces inside Be Nice Hospitality Group.
+              Signal is one of 4 surfaces inside Be Nice Hospitality Group.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/70 mt-4 leading-relaxed">
-              The other three serve different audiences. We surface the structure on purpose so you can see who you are buying from and what else is available if Signal is not quite the fit.
+              The other 3 serve different audiences. We surface the structure on purpose so you can see who you are buying from and what else is available if Signal is not quite the fit.
             </p>
           </AnimatedItem>
         </div>

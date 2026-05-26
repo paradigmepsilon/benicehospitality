@@ -104,7 +104,7 @@ export default function NewThreadForm({ categories }: NewThreadFormProps) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="What's the one-line version?"
+          placeholder="What's the 1-line version?"
           className="w-full bg-white border border-light-gray rounded-md px-4 py-3 font-sans text-base text-near-black placeholder:text-charcoal/40 focus:outline-none focus:border-primary-green"
           maxLength={140}
         />

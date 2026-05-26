@@ -111,7 +111,7 @@ export default function WaitlistInlineForm({
         Join the waitlist
       </p>
       <p className="font-sans text-sm text-charcoal/75 leading-relaxed mb-5">
-        Drop your name and email. One note when the doors open, nothing else.
+        Drop your name and email. 1 note when the doors open, nothing else.
       </p>
 
       {/* Honeypot */}

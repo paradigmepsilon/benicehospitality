@@ -101,7 +101,7 @@ export default async function ResourcePage({
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
           <p className="font-sans text-sm text-charcoal/80 leading-relaxed flex-1">
             <span className="font-semibold text-near-black">We&apos;ve consolidated our outreach.</span>{" "}
-            Our new flagship is the Tier 0 Comprehensive Audit, which covers all seven dimensions in one report.
+            Our new flagship is the Tier 0 Comprehensive Audit, which covers all 7 dimensions in 1 report.
           </p>
           <Link
             href="/login"
@@ -206,7 +206,7 @@ export default async function ResourcePage({
         <div className="max-w-4xl mx-auto">
           <SectionLabel>How It Works</SectionLabel>
           <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-10 leading-tight">
-            Three Steps. Nothing You Have to Prepare.
+            3 Steps. Nothing You Have to Prepare.
           </h2>
           <ol className="space-y-6">
             {resource.howItWorks.map((step, i) => (

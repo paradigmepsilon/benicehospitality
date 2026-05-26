@@ -46,7 +46,7 @@ export default function FoundersBand() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/85 leading-relaxed">
-              Atlanta-headquartered. Veteran-founded. Two operators who built
+              Atlanta-headquartered. Veteran-founded. 2 operators who built
               the company they wished existed when they were running their own
               portfolios.
             </p>

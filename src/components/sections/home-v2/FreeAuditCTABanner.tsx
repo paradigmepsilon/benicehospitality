@@ -40,7 +40,7 @@ export default function FreeAuditCTABanner() {
         </AnimatedItem>
         <AnimatedItem>
           <p className="font-sans text-xs text-white/45 mt-6">
-            We answer within one business day. No spam follow-up sequence.
+            We answer within 1 business day. No spam follow-up sequence.
           </p>
         </AnimatedItem>
       </div>

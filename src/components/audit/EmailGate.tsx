@@ -58,7 +58,7 @@ export default function EmailGate({ token, hotelName, onUnlock }: EmailGateProps
         Unlock the full audit
       </h2>
       <p className="text-charcoal text-sm md:text-base leading-relaxed mb-6 text-center">
-        We analyzed {hotelName} across seven dimensions of boutique hotel performance. The full report shows your strengths, your gaps, and the three highest-impact actions you can take.
+        We analyzed {hotelName} across 7 dimensions of boutique hotel performance. The full report shows your strengths, your gaps, and the 3 highest-impact actions you can take.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">

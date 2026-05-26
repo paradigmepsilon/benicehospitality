@@ -99,9 +99,9 @@ export const SERVICE_TIERS_PREVIEW = [
   {
     tier: 0,
     label: "Free Comprehensive Audit",
-    headline: "Your hotel, scored across seven dimensions.",
+    headline: "Your hotel, scored across 7 dimensions.",
     description:
-      "A two-page diagnostic of your property: revenue opportunity, online reputation, competitive position, guest personas, tech stack, visibility, and quick wins. Free, custom, and yours to keep.",
+      "A 2-page diagnostic of your property: revenue opportunity, online reputation, competitive position, guest personas, tech stack, visibility, and quick wins. Free, custom, and yours to keep.",
     cta: "Get Your Free Audit",
     ctaHref: "/audit/request",
   },
@@ -148,7 +148,7 @@ export const GUESTALLY_FEATURES: GuestallyFeature[] = [
   {
     title: "Unified Messaging Hub",
     description:
-      "SMS, email, and webchat in one dashboard. Your team sees every conversation, no matter where it started.",
+      "SMS, email, and webchat in 1 dashboard. Your team sees every conversation, no matter where it started.",
   },
   {
     title: "Revenue & Efficiency Analytics",
@@ -242,7 +242,7 @@ export const TEAM: TeamMember[] = [
   {
     name: "Della Henry",
     title: "Co-Founder & Director of Guest Experience",
-    bio: "Della is a U.S. Army veteran who brings the same leadership discipline from her military career into the guest experience and operations side of BNHG. Her background in behavioral psychology sets her apart from traditional hospitality trainers. She does not teach staff to follow a script. She teaches them to read guests, anticipate needs, and recover service failures before they become one-star reviews. Della leads guest journey mapping, SOP development, front desk and housekeeping service standards, pre-arrival and in-stay touchpoint design, staff training programs, and post-checkout loyalty workflows. She builds the human operating system that sits underneath everything else. Your PMS can track a guest preference, but Della makes sure your team actually acts on it. From turndown service details to the language your front desk uses during check-in, she designs every service moment to feel intentional rather than transactional. Hotels that work with Della do not just get higher review scores. They get repeat guests who book direct.",
+    bio: "Della is a U.S. Army veteran who brings the same leadership discipline from her military career into the guest experience and operations side of BNHG. Her background in behavioral psychology sets her apart from traditional hospitality trainers. She does not teach staff to follow a script. She teaches them to read guests, anticipate needs, and recover service failures before they become 1-star reviews. Della leads guest journey mapping, SOP development, front desk and housekeeping service standards, pre-arrival and in-stay touchpoint design, staff training programs, and post-checkout loyalty workflows. She builds the human operating system that sits underneath everything else. Your PMS can track a guest preference, but Della makes sure your team actually acts on it. From turndown service details to the language your front desk uses during check-in, she designs every service moment to feel intentional rather than transactional. Hotels that work with Della do not just get higher review scores. They get repeat guests who book direct.",
     image: "/images/Dee.jpeg",
   },
 ];
@@ -312,7 +312,7 @@ export const FREE_RESOURCES: FreeResource[] = [
   {
     name: "Competitive Position Map",
     description:
-      "How you stack up against your top three competitors on price, positioning, and perceived value.",
+      "How you stack up against your top 3 competitors on price, positioning, and perceived value.",
   },
   {
     name: "Guest Persona Highlights",
@@ -337,7 +337,7 @@ export const FREE_RESOURCES: FreeResource[] = [
   {
     name: "Quick Win Action List",
     description:
-      "Five to ten specific, implementable actions you could take this month to improve performance.",
+      "5 to 10 specific, implementable actions you could take this month to improve performance.",
   },
 ];
 
@@ -559,13 +559,13 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "About BNHG & Consulting Basics",
     question: "How much does boutique hotel consulting cost?",
     answer:
-      "Boutique hotel consulting typically ranges from a few thousand dollars for a targeted diagnostic to $5,000–$15,000+ per month for ongoing fractional advisory. BNHG uses a four-tier model: Tier 0 resources are free, Tier 1 diagnostics are scoped engagements, Tier 2 is implementation work, and Tier 3 is ongoing fractional advisory. Pricing depends on scope, property size, and timeline. The cheapest way to start is with a free Tier 0 resource so you can evaluate the quality of our thinking before committing.",
+      "Boutique hotel consulting typically ranges from a few thousand dollars for a targeted diagnostic to $5,000–$15,000+ per month for ongoing fractional advisory. BNHG uses a 4-tier model: Tier 0 resources are free, Tier 1 diagnostics are scoped engagements, Tier 2 is implementation work, and Tier 3 is ongoing fractional advisory. Pricing depends on scope, property size, and timeline. The cheapest way to start is with a free Tier 0 resource so you can evaluate the quality of our thinking before committing.",
   },
   {
     category: "About BNHG & Consulting Basics",
     question: "Who is Be Nice Hospitality Group?",
     answer:
-      "Be Nice Hospitality Group (BNHG) is a boutique hotel consulting and technology firm for independent luxury hotels with 10–50 rooms. Based in Hapeville, Georgia, BNHG was co-founded by Alex and Della Henry, two military veterans who combine enterprise operations experience with deep hospitality expertise. The firm also builds Guestally, a guest messaging and upsell automation platform for independent hotels.",
+      "Be Nice Hospitality Group (BNHG) is a boutique hotel consulting and technology firm for independent luxury hotels with 10–50 rooms. Based in Hapeville, Georgia, BNHG was co-founded by Alex and Della Henry, 2 military veterans who combine enterprise operations experience with deep hospitality expertise. The firm also builds Guestally, a guest messaging and upsell automation platform for independent hotels.",
   },
   {
     category: "About BNHG & Consulting Basics",
@@ -585,7 +585,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Revenue & Direct Booking",
     question: "How do I reduce OTA dependency at my independent hotel?",
     answer:
-      "Reducing OTA dependency at an independent hotel requires three things working together: a high-converting direct booking website, a parity and rate strategy that rewards direct guests, and retargeting of OTA-acquired guests into direct channels on repeat stays. In practice that means auditing your booking engine, tightening rate parity, launching a best-rate guarantee, improving on-site SEO, and capturing email on every booking. Most boutique hotels we work with move from 60%+ OTA dependency to under 40% within 6–9 months.",
+      "Reducing OTA dependency at an independent hotel requires 3 things working together: a high-converting direct booking website, a parity and rate strategy that rewards direct guests, and retargeting of OTA-acquired guests into direct channels on repeat stays. In practice that means auditing your booking engine, tightening rate parity, launching a best-rate guarantee, improving on-site SEO, and capturing email on every booking. Most boutique hotels we work with move from 60%+ OTA dependency to under 40% within 6–9 months.",
   },
   {
     category: "Revenue & Direct Booking",
@@ -609,7 +609,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Revenue & Direct Booking",
     question: "How long does it take to see revenue improvements from consulting?",
     answer:
-      "Revenue improvements at a boutique hotel show up in three waves. Quick wins (tech consolidation, OTA parity fixes, ancillary upsells) appear within 30–60 days. Direct booking shifts and conversion improvements take 90–120 days. Compounding revenue (brand strength, repeat guests, rate positioning) takes 6–12 months. Most BNHG clients see measurable revenue impact within the first 90 days.",
+      "Revenue improvements at a boutique hotel show up in 3 waves. Quick wins (tech consolidation, OTA parity fixes, ancillary upsells) appear within 30–60 days. Direct booking shifts and conversion improvements take 90–120 days. Compounding revenue (brand strength, repeat guests, rate positioning) takes 6–12 months. Most BNHG clients see measurable revenue impact within the first 90 days.",
   },
   {
     category: "Revenue & Direct Booking",
@@ -641,7 +641,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Hotel Technology",
     question: "How do I know if my hotel tech stack is overbuilt?",
     answer:
-      "Your hotel tech stack is probably overbuilt if you pay for more than one tool that does the same job (two booking engines, multiple upsell tools, overlapping CRMs), if you have software nobody on staff uses, or if the total monthly cost exceeds 3–4% of your revenue. Most boutique hotels we audit are overpaying for 2–4 redundant tools. A Tech Stack Quick Scan will surface this in about a week.",
+      "Your hotel tech stack is probably overbuilt if you pay for more than 1 tool that does the same job (2 booking engines, multiple upsell tools, overlapping CRMs), if you have software nobody on staff uses, or if the total monthly cost exceeds 3–4% of your revenue. Most boutique hotels we audit are overpaying for 2–4 redundant tools. A Tech Stack Quick Scan will surface this in about a week.",
   },
   {
     category: "Hotel Technology",

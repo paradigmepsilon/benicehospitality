@@ -53,7 +53,7 @@ const guestallyProductSchema = {
         unitText: "MONTH",
       },
       availability: "https://schema.org/InStock",
-      category: "One to three units",
+      category: "1 to 3 units",
       url: "https://guestally.ai",
     },
     {
@@ -69,7 +69,7 @@ const guestallyProductSchema = {
         unitText: "MONTH",
       },
       availability: "https://schema.org/InStock",
-      category: "Four to ten units",
+      category: "4 to 10 units",
       url: "https://guestally.ai",
     },
     {
@@ -85,7 +85,7 @@ const guestallyProductSchema = {
         unitText: "MONTH",
       },
       availability: "https://schema.org/InStock",
-      category: "Eleven units and up, or a co-living building",
+      category: "11 units and up, or a co-living building",
       url: "https://guestally.ai",
     },
   ],
@@ -103,7 +103,7 @@ const PLANS: Plan[] = [
   {
     name: "Starter",
     price: 179,
-    positioning: "One to three units. Bernice runs guest messaging end to end.",
+    positioning: "1 to 3 units. Bernice runs guest messaging end to end.",
     features: [
       "Pre-arrival and post-checkout flows",
       "Smart reply with operator override",
@@ -114,7 +114,7 @@ const PLANS: Plan[] = [
   {
     name: "Growth",
     price: 299,
-    positioning: "Four to ten units. Operations layer added on top of messaging.",
+    positioning: "4 to 10 units. Operations layer added on top of messaging.",
     highlighted: true,
     features: [
       "Everything in Starter",
@@ -127,7 +127,7 @@ const PLANS: Plan[] = [
   {
     name: "Premium",
     price: 349,
-    positioning: "Eleven units and up, or a co-living building. Concierge-grade for the door count that needs it.",
+    positioning: "11 units and up, or a co-living building. Concierge-grade for the door count that needs it.",
     features: [
       "Everything in Growth",
       "Custom workflows on request",
@@ -189,7 +189,7 @@ export default function GuestallyPage() {
           <div className="text-center mb-12">
             <SectionLabel>Pricing</SectionLabel>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mt-3 leading-tight">
-              Three plans. No annual lock-in.
+              3 plans. No annual lock-in.
             </h2>
           </div>
 

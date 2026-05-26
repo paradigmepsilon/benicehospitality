@@ -95,7 +95,7 @@ export default function EmailCaptureModal({
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg my-8 max-h-[calc(100vh-4rem)] overflow-y-auto">
         <div className="p-6 sm:p-8">
           <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold mb-2">
-            One last step
+            1 last step
           </p>
           <h2
             id="scorecard-capture-title"

@@ -50,15 +50,15 @@ export const metadata: Metadata = {
 const EXPERTISE = [
   {
     title: "Vehicle Fleet Operations",
-    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running three to thirty economy vehicles. The same operating discipline Della brings to property, applied to the cars sitting in your driveway.",
+    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running 3 to 30 economy vehicles. The same operating discipline Della brings to property, applied to the cars sitting in your driveway.",
   },
   {
     title: "Turo and Direct Channel Strategy",
-    body: "When to lean into Turo, when to diversify, and how to honestly model the trade-off. Most fleet teachers online treat Turo as the whole game. It is one channel. Building the others is where small fleets quietly outgrow the side-hustle bracket.",
+    body: "When to lean into Turo, when to diversify, and how to honestly model the trade-off. Most fleet teachers online treat Turo as the whole game. It is 1 channel. Building the others is where small fleets quietly outgrow the side-hustle bracket.",
   },
   {
     title: "Tech Stack and Integrations",
-    body: "When the off-the-shelf tools stop talking to each other, Alex builds the bridge. PMS integrations, fleet management dashboards, the small automations that let one person run what used to take three. You keep the code and the keys.",
+    body: "When the off-the-shelf tools stop talking to each other, Alex builds the bridge. PMS integrations, fleet management dashboards, the small automations that let 1 person run what used to take 3. You keep the code and the keys.",
   },
   {
     title: "AI Search and Visibility",
@@ -84,11 +84,11 @@ const STATS = [
 const FAQS = [
   {
     q: "What does Alex actually focus on at BNHG?",
-    a: "Two things, mostly. He runs the vehicle management side of the company, which is where Car Rental Riches lives. And he leads the technology work that touches everything else, including Signal services for boutique hotels. Della handles the property coaching. Alex handles the cars, the tools, and the systems underneath all of it.",
+    a: "2 things, mostly. He runs the vehicle management side of the company, which is where Car Rental Riches lives. And he leads the technology work that touches everything else, including Signal services for boutique hotels. Della handles the property coaching. Alex handles the cars, the tools, and the systems underneath all of it.",
   },
   {
     q: "How is Car Rental Riches different from Room Rental Riches?",
-    a: "Same operating method, applied to a different asset. Della's course is for people running property. Alex's is for people running cars. Pricing logic, channel strategy, ops cadence, customer flow. If you have three vehicles on Turo and you are tired of running the whole thing from your phone, this is the one.",
+    a: "Same operating method, applied to a different asset. Della's course is for people running property. Alex's is for people running cars. Pricing logic, channel strategy, ops cadence, customer flow. If you have 3 vehicles on Turo and you are tired of running the whole thing from your phone, this is the one.",
   },
   {
     q: "Do I need to operate vehicles to work with Alex?",
@@ -96,7 +96,7 @@ const FAQS = [
   },
   {
     q: "What is Signal and who is it for?",
-    a: "Signal is the services arm Alex leads. It is built for independent boutique hotels with ten to fifty rooms that want real engineering work instead of another agency proposal. Quick Wins, 30-Day Sprints, monthly retainers, and custom builds. Every engagement has a written success criterion before kickoff, and a money-back guarantee on productized work.",
+    a: "Signal is the services arm Alex leads. It is built for independent boutique hotels with 10 to 50 rooms that want real engineering work instead of another agency proposal. Quick Wins, 30-Day Sprints, monthly retainers, and custom builds. Every engagement has a written success criterion before kickoff, and a money-back guarantee on productized work.",
   },
   {
     q: "Why work with Alex instead of an agency?",
@@ -128,7 +128,7 @@ export default function AlexPage() {
               not quite fit, you are in the right place.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
-              You have three doors. Book a working call. Get on the Car Rental
+              You have 3 doors. Book a working call. Get on the Car Rental
               Riches waitlist. Or see what Signal can do for your property.
               Pick the one that fits where you actually are right now.
             </p>
@@ -205,9 +205,9 @@ export default function AlexPage() {
           <AnimatedItem>
             <div className="space-y-5 font-sans text-lg text-charcoal leading-snug">
               <p>
-                A five-vehicle Turo fleet runs on the same patchwork as a
-                twenty-room boutique hotel. A notes app. Two spreadsheets.
-                Three messaging threads. Prayer.
+                A 5-vehicle Turo fleet runs on the same patchwork as a
+                20-room boutique hotel. A notes app. 2 spreadsheets.
+                3 messaging threads. Prayer.
               </p>
               <p>
                 It works until it does not. A booking gets missed. A vendor
@@ -254,7 +254,7 @@ export default function AlexPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <AnimatedItem>
-              <SectionLabel>Three doors</SectionLabel>
+              <SectionLabel>3 doors</SectionLabel>
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
@@ -287,7 +287,7 @@ export default function AlexPage() {
                   Book a 1:1 Call
                 </h3>
                 <p className="font-sans text-base text-white/85 leading-snug mb-8 flex-grow">
-                  Thirty focused minutes on your fleet, your property, or the
+                  30 focused minutes on your fleet, your property, or the
                   one piece of the stack that is driving you crazy. If Alex is
                   not the right fit, he tells you on the call.
                 </p>
@@ -331,7 +331,7 @@ export default function AlexPage() {
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
                   The vehicle version of Della&rsquo;s course. Pricing logic,
                   channel mix, ops cadence, and customer flow for operators
-                  running three to thirty economy vehicles. In production
+                  running 3 to 30 economy vehicles. In production
                   now, opens later this year.
                 </p>
                 <div className="space-y-3 mb-8">
@@ -369,7 +369,7 @@ export default function AlexPage() {
                 </h3>
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
                   Productized engagements and custom builds for independent
-                  hotels with ten to fifty rooms. Quick Wins, Sprints,
+                  hotels with 10 to 50 rooms. Quick Wins, Sprints,
                   retainers, and bespoke work. Every scope written down
                   before kickoff and backed by a money-back guarantee on
                   productized work.
@@ -409,7 +409,7 @@ export default function AlexPage() {
               </AnimatedItem>
               <AnimatedItem>
                 <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                  Program management to building two arms of one company.
+                  Program management to building 2 arms of one company.
                 </h2>
               </AnimatedItem>
               <AnimatedItem>
@@ -529,7 +529,7 @@ export default function AlexPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4">
-                Six skills. All earned doing the work.
+                6 skills. All earned doing the work.
               </h2>
             </AnimatedItem>
           </div>
@@ -569,7 +569,7 @@ export default function AlexPage() {
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedItem>
             <p className="font-display text-3xl md:text-4xl lg:text-5xl text-white leading-[1.25] italic mb-5">
-              &ldquo;Alex spent the first thirty minutes asking about my
+              &ldquo;Alex spent the first 30 minutes asking about my
               actual day. Not my goals. Not my brand. My day. That is when I
               knew this was different.&rdquo;
             </p>
@@ -651,7 +651,7 @@ export default function AlexPage() {
             Stop reading. Get on the calendar.
           </h2>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
-            Thirty minutes with Alex will save you weeks of guessing. Bring
+            30 minutes with Alex will save you weeks of guessing. Bring
             the fleet, the property, or the integration that has been driving
             you crazy. Walk away with a plan you can actually run.
           </p>

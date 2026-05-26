@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Get Your Free Audit | Be Nice Hospitality Group",
     description:
-      "Two-page diagnostic across seven dimensions. Custom to your property, yours to keep, no commitment.",
+      "2-page diagnostic across 7 dimensions. Custom to your property, yours to keep, no commitment.",
     url: "https://benicehospitality.com/audit/request",
     type: "website",
   },
@@ -48,10 +48,10 @@ export default function AuditRequestPage() {
             Tier 0 · Free Comprehensive Audit
           </p>
           <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight">
-            Your operation, scored across seven dimensions.
+            Your operation, scored across 7 dimensions.
           </h1>
           <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl leading-relaxed">
-            We analyze your property or fleet, score it across seven dimensions, and send back a two-page diagnostic with the three highest-impact next moves. Free, custom, and yours to keep.
+            We analyze your property or fleet, score it across 7 dimensions, and send back a 2-page diagnostic with the 3 highest-impact next moves. Free, custom, and yours to keep.
           </p>
           <p className="font-sans text-sm text-white/55 mt-4">
             Built for boutique hotel owners and sharing-economy operators. Tell us your role and we route the report to the right next step.
@@ -74,7 +74,7 @@ export default function AuditRequestPage() {
                 What you&apos;ll get
               </p>
               <h2 className="font-display text-xl font-semibold text-near-black leading-snug mb-5">
-                A scored audit across seven dimensions
+                A scored audit across 7 dimensions
               </h2>
               <ul className="space-y-2.5 mb-6">
                 {SEVEN_DIMENSIONS.map((dim) => (

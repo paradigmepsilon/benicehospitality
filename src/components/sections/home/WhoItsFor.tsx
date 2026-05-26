@@ -21,7 +21,7 @@ const OPERATORS: Operator[] = [
     eyebrow: "Property",
     heading: "If you operate property",
     body:
-      "New Operators, three STRs, a co-living building, or a portfolio that mixes them. The math is the same. Direct bookings, automation, owned guest lists. The operators we work with are the ones who got tired of running their portfolios on Sunday nights and finally want their evenings back.",
+      "New Operators, 3 STRs, a co-living building, or a portfolio that mixes them. The math is the same. Direct bookings, automation, owned guest lists. The operators we work with are the ones who got tired of running their portfolios on Sunday nights and finally want their evenings back.",
     ctaLabel: "Join the Room Rental Riches Masterclass",
     ctaHref: "/courses/room-rental-riches",
     image: {
@@ -31,7 +31,7 @@ const OPERATORS: Operator[] = [
   },
   {
     eyebrow: "Boutique Hotels",
-    heading: "If you run an independent property with ten to fifty rooms",
+    heading: "If you run an independent property with 10 to 50 rooms",
     body:
       "The OTAs are eating into your revenue, your tech stack is held together by a vendor who half-quit, and the last agency you hired left you with slides and an invoice. Signal works the way you'd actually want a partner to work. Outcome-tied, transparent, willing to be measured.",
     ctaLabel: "Explore Signal Offerings",
@@ -45,12 +45,12 @@ const OPERATORS: Operator[] = [
     eyebrow: "Autos",
     heading: "If you operate auto",
     body:
-      "Aspiring Turo hosts and small fleet operators running three to thirty economy vehicles can use our same methods, applied to vehicles: pricing, channel mix, ops cadence, customer flow. Car Rental Riches is in production now.",
+      "Aspiring Turo hosts and small fleet operators running 3 to 30 economy vehicles can use our same methods, applied to vehicles: pricing, channel mix, ops cadence, customer flow. Car Rental Riches is in production now.",
     ctaLabel: "Join the Car Rental Riches Waitlist",
     ctaHref: "/alex",
     image: {
       src: "/images/Website Images/image5.png",
-      alt: "A small fleet of three economy vehicles parked in a line",
+      alt: "A small fleet of 3 economy vehicles parked in a line",
     },
   },
 ];

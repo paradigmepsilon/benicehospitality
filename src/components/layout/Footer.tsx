@@ -140,7 +140,7 @@ export default function Footer() {
               </li>
               <li className="font-sans text-sm text-white/65">Hapeville, Georgia</li>
               <li className="font-sans text-xs text-white/40 italic">
-                We answer within one business day.
+                We answer within 1 business day.
               </li>
             </ul>
           </div>

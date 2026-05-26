@@ -7,13 +7,13 @@ import WaitlistInlineForm from "./WaitlistInlineForm";
 
 const CRR_BULLETS = [
   "The Host-to-Operator method retuned for Turo",
-  "Three commitment tiers, same operator-grade depth",
+  "3 commitment tiers, same operator-grade depth",
   "Fleet-mix templates and SOPs included",
   "Drops in 2026",
 ];
 
 const CRR_BODY =
-  "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same three commitment tiers, same operator-grade depth.";
+  "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same 3 commitment tiers, same operator-grade depth.";
 
 interface CarRentalRichesWaitlistTriggerProps {
   children: ReactNode;

@@ -20,11 +20,11 @@ interface Tier {
 
 const TIERS: Tier[] = [
   {
-    layer: "Layer One",
+    layer: "Layer 1",
     name: "Quick Wins",
     price: "$1,500 to $4,500",
     timeline: "1 to 2 weeks",
-    desc: "Productized one-shots that solve a single specific problem. Designed to produce a tangible artifact in under two weeks. Every Quick Win includes the 30-day money-back guarantee.",
+    desc: "Productized one-shots that solve a single specific problem. Designed to produce a tangible artifact in under 2 weeks. Every Quick Win includes the 30-day money-back guarantee.",
     offers: [
       {
         name: "AI Visibility Audit + AEO Foundation",
@@ -45,7 +45,7 @@ const TIERS: Tier[] = [
     more: "+ 5 more Quick Wins. See the full menu on your discovery call.",
   },
   {
-    layer: "Layer Two",
+    layer: "Layer 2",
     name: "30-Day Sprints",
     price: "$5,000 to $10,000",
     timeline: "30 days",
@@ -69,7 +69,7 @@ const TIERS: Tier[] = [
     ],
   },
   {
-    layer: "Layer Three",
+    layer: "Layer 3",
     name: "Monthly Retainers",
     price: "$2,000 to $10,000 per month",
     timeline: "Ongoing",
@@ -78,7 +78,7 @@ const TIERS: Tier[] = [
       {
         name: "Signal Visibility Retainer",
         price: "$2,000 to $3,500/mo",
-        desc: "Monthly AEO and GEO optimization. Citation tracking across five AI engines. Content and schema updates monthly.",
+        desc: "Monthly AEO and GEO optimization. Citation tracking across 5 AI engines. Content and schema updates monthly.",
       },
       {
         name: "Visibility + Revenue Retainer",
@@ -95,7 +95,7 @@ const TIERS: Tier[] = [
 ];
 
 const CUSTOM = {
-  layer: "Layer Four",
+  layer: "Layer 4",
   name: "Custom Builds",
   price: "$5,000 to $20,000+",
   desc: "Bespoke AI agents, custom automations, and MCP integrations for properties with specific needs that don't fit a productized layer. Hybrid revenue-share options available on builds that generate directly attributable revenue.",
@@ -124,7 +124,7 @@ export default function SignalOfferings() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-display italic text-xl md:text-2xl text-charcoal/70 leading-snug mt-6">
-                Four engagement layers. Priced for staged commitment. Most clients begin
+                4 engagement layers. Priced for staged commitment. Most clients begin
                 with a Quick Win and expand as results compound.
               </p>
             </AnimatedItem>

@@ -147,7 +147,7 @@ export default function ScorecardForm({
             How this works
           </p>
           <p className="font-sans text-sm text-near-black leading-relaxed">
-            Walk through one section at a time. <strong>Tick only what is true</strong> for this property. Anything you leave unchecked counts as a &ldquo;no.&rdquo; You can move between sections freely and submit whenever you&apos;re ready.
+            Walk through 1 section at a time. <strong>Tick only what is true</strong> for this property. Anything you leave unchecked counts as a &ldquo;no.&rdquo; You can move between sections freely and submit whenever you&apos;re ready.
           </p>
         </div>
 

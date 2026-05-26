@@ -8,7 +8,7 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Room Rental Riches: Self-paced ($497)",
   description:
-    "Lifetime course access. One year of community. The full Host-to-Operator curriculum on your timeline.",
+    "Lifetime course access. 1 year of community. The full Host-to-Operator curriculum on your timeline.",
   alternates: {
     canonical:
       "https://benicehospitality.com/courses/room-rental-riches/self-paced",
@@ -21,7 +21,7 @@ export default function SelfPacedPage() {
       <CourseHero
         eyebrow="Room Rental Riches · Self-paced"
         headline={<>$497.</>}
-        body="Lifetime course access. One year of the Nice Host Network. The full Host-to-Operator method on your own schedule."
+        body="Lifetime course access. 1 year of the Nice Host Network. The full Host-to-Operator method on your own schedule."
         primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",
@@ -29,11 +29,11 @@ export default function SelfPacedPage() {
         }}
         previewTitle="What's included"
         previewItems={[
-          "Lifetime access to all twelve modules of the Room Rental Riches curriculum, organized across six phases: Foundation, Acquisition, Setup, Launch, Operations, Growth",
-          "The Bonus Pack intro: four lessons on direct booking and AI visibility (the deep-dive eight lessons unlock at Cohort and Operator)",
+          "Lifetime access to all 12 modules of the Room Rental Riches curriculum, organized across 6 phases: Foundation, Acquisition, Setup, Launch, Operations, Growth",
+          "The Bonus Pack intro: 4 lessons on direct booking and AI visibility (the deep-dive 8 lessons unlock at Cohort and Operator)",
           "All 100+ downloadable resources: 25+ AI prompts, the MTR Pricing Calculator V3, lease addendum templates, the 70+ item cleaning checklist, the SOP template library",
           "Lifetime access to module updates: quarterly regulatory refreshes, semi-annual tech-stack updates, annual market data refreshes",
-          "One full year of access to the Nice Host Network: two live founder-led sessions a week, forty-seven weeks live",
+          "1 full year of access to the Nice Host Network: 2 live founder-led sessions a week, 47 weeks live",
           "Quarterly office hours with Della",
           "Course completion certificate when you ship your first booking",
         ]}
@@ -65,12 +65,12 @@ export default function SelfPacedPage() {
               </p>
               <p>
                 The community access matters. You don&rsquo;t need the
-                eight-week cohort, but you do want to be in a room with
+                8-week cohort, but you do want to be in a room with
                 operators doing the same work, for the moments when a question
                 comes up that can&rsquo;t be answered by a video.
               </p>
               <p className="text-warm-gold font-semibold">
-                Self-paced is also the cleanest upgrade path. Two of the first
+                Self-paced is also the cleanest upgrade path. 2 of the first
                 cohort students started here, finished the modules, then
                 upgraded to Cohort for the live work.
               </p>

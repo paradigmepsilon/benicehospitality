@@ -22,7 +22,7 @@ export default function AuditReport({ token, data, requesterRole }: AuditReportP
           id="dimensions-page-1"
           className="font-display text-2xl md:text-3xl font-semibold text-near-black mb-6 md:mb-8"
         >
-          Your Seven Dimensions
+          Your 7 Dimensions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           <DimensionCard title="Revenue Opportunity" data={data.dimensions.revenue_opportunity} />

@@ -25,7 +25,7 @@ const AUDIENCES: Audience[] = [
   },
   {
     title: "Auto Operators",
-    body: "Turo, rental car businesses, fleet operators going from three to fifteen vehicles.",
+    body: "Turo, rental car businesses, fleet operators going from 3 to 15 vehicles.",
     detail: "Foundation and Flagship, Auto edition. Built for fleet realities, not rebranded property content.",
     image: STOCK_AUTO_FLEET,
   },
@@ -38,7 +38,7 @@ const AUDIENCES: Audience[] = [
   {
     title: "Multi-Asset Innovators",
     body: "Operators running across categories: property plus auto, plus co-living, plus experiences.",
-    detail: "The Operator's Boardroom advisory engagement, twelve-month commitment.",
+    detail: "The Operator's Boardroom advisory engagement, 12-month commitment.",
     image: STOCK_COLIVING,
   },
 ];

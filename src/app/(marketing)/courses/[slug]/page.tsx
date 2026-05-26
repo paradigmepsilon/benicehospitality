@@ -219,7 +219,7 @@ function WaitlistCoursePage({ course }: { course: Course }) {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/70 mb-8 leading-relaxed">
-              We send one email when this course goes live. Founding pricing is reserved for this list.
+              We send 1 email when this course goes live. Founding pricing is reserved for this list.
             </p>
           </AnimatedItem>
           <AnimatedItem>
@@ -229,7 +229,7 @@ function WaitlistCoursePage({ course }: { course: Course }) {
                 variant="card"
                 buttonLabel="Notify Me"
                 placeholder="you@yourbusiness.com"
-                helperText="One announcement, no follow-up sequence."
+                helperText="1 announcement, no follow-up sequence."
                 successMessage="You're on the list. The next email comes when this course goes live."
               />
             </div>
@@ -318,7 +318,7 @@ function LiveCoursePage({ course }: { course: Course }) {
           <div className="text-center mb-12">
             <SectionLabel>What changes for you</SectionLabel>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mt-3 leading-tight">
-              You&apos;ll leave with three concrete things.
+              You&apos;ll leave with 3 concrete things.
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -342,7 +342,7 @@ function LiveCoursePage({ course }: { course: Course }) {
           <div className="text-center mb-12">
             <SectionLabel>The Curriculum</SectionLabel>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mt-3 leading-tight">
-              Five modules. Built around the work.
+              5 modules. Built around the work.
             </h2>
           </div>
           <div className="space-y-4">

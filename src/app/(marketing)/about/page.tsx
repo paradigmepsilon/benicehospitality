@@ -12,7 +12,7 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "About Alex and Della Henry | Be Nice Hospitality Group",
   description:
-    "We're Alex and Della Henry, the husband-and-wife team behind BNHG. Two U.S. military veterans helping independent hospitality brands run smarter, market sharper, and deliver guest experiences worth talking about.",
+    "We're Alex and Della Henry, the husband-and-wife team behind BNHG. 2 U.S. military veterans helping independent hospitality brands run smarter, market sharper, and deliver guest experiences worth talking about.",
   alternates: { canonical: "https://benicehospitality.com/about" },
   openGraph: {
     title: "About Alex and Della Henry | Be Nice Hospitality Group",
@@ -259,7 +259,7 @@ export default function AboutPage() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base md:text-lg text-charcoal/85 leading-relaxed">
-                Three things to know up front: the work itself, the
+                3 things to know up front: the work itself, the
                 operators we do it for, and the surfaces you can engage
                 with. All of it grounded in our own operating experience,
                 not a slide deck.
@@ -366,7 +366,7 @@ export default function AboutPage() {
                     goes flat. When a launch needs a steady hand. Her work
                     covers property management, on-property operations, guest
                     experience design, brand storytelling, and the small,
-                    careful detail work that separates a five-star stay from
+                    careful detail work that separates a 5-star stay from
                     one nobody remembers.
                   </p>
                 </AnimatedItem>
@@ -470,7 +470,7 @@ export default function AboutPage() {
                     If something needs to be built, integrated, automated, or
                     fixed, that is Alex&rsquo;s lane. He is the one who maps
                     the workflow, chooses the tools, wires them together, and
-                    sticks around to make sure they are still working six
+                    sticks around to make sure they are still working 6
                     months later, when most consultants have already moved on.
                   </p>
                 </AnimatedItem>
@@ -485,7 +485,7 @@ export default function AboutPage() {
                     </span>
                     , our family&rsquo;s vehicle and Turo fleet operation.
                     Running that business has taught him a lot about
-                    two-sided platforms, asset-light operations, and what it
+                    2-sided platforms, asset-light operations, and what it
                     really takes to earn a living when someone else owns the
                     front door. Those lessons translate directly to running a
                     hospitality business that depends on Airbnb, Booking, and
@@ -553,7 +553,7 @@ export default function AboutPage() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base md:text-lg text-white/85 leading-relaxed">
-                Not a manifesto. Not a poster on the wall. Just the four ideas
+                Not a manifesto. Not a poster on the wall. Just the 4 ideas
                 that keep showing up when we choose what to build and how to
                 work.
               </p>

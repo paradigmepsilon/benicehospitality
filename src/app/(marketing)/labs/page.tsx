@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "BNHG Labs",
     description:
-      "Where Alex builds the next generation of operator tools. Guestally, the Labs Pass, and eight free diagnostics.",
+      "Where Alex builds the next generation of operator tools. Guestally, the Labs Pass, and 8 free diagnostics.",
     url: "https://benicehospitality.com/labs",
     type: "website",
   },
@@ -92,7 +92,7 @@ export default function LabsPage() {
           </h1>
           <p className="font-sans text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mb-10">
             BNHG Labs is the innovation arm. Guestally is the flagship. The
-            Labs Pass unlocks Pro versions of all eight diagnostic tools. The
+            Labs Pass unlocks Pro versions of all 8 diagnostic tools. The
             build is public, the code is on screen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -139,7 +139,7 @@ export default function LabsPage() {
               <AnimatedItem>
                 <p className="font-sans text-base text-white/65 leading-relaxed mb-6">
                   Founded by Alex Henry as a separate company. Integrated with
-                  the BNHG curriculum. Three plans: Starter ($179/mo), Pro
+                  the BNHG curriculum. 3 plans: Starter ($179/mo), Pro
                   ($299/mo), Operator ($349/mo).
                 </p>
               </AnimatedItem>
@@ -189,7 +189,7 @@ export default function LabsPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4 mb-6">
-              $49 a month. All eight tools, Pro versions.
+              $49 a month. All 8 tools, Pro versions.
             </h2>
           </AnimatedItem>
           <AnimatedItem>

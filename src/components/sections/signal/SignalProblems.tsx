@@ -36,7 +36,7 @@ const PROBLEMS = [
     title: "Connect disconnected systems.",
     body: [
       "91% of hoteliers still do manual reporting even when their underlying systems are automated. Only 11% have a fully integrated stack. Data lives in the PMS, booking engine, CRM, reviews, and accounting, and none of them speak the same language.",
-      "Signal is the connective tissue. One layer of AI-readable intelligence across everything you already have, without a migration project.",
+      "Signal is the connective tissue. 1 layer of AI-readable intelligence across everything you already have, without a migration project.",
     ],
     related:
       "AI Guest Intelligence Sprint · AI Operations Automation Sprint · Signal Full Stack Retainer",
@@ -45,8 +45,8 @@ const PROBLEMS = [
     num: "05",
     title: "Do what was previously impossible.",
     body: [
-      "AEO citation monitoring across five AI engines. Real-time competitor rate and review intelligence. A voice agent that sounds like a luxury concierge instead of a robot. Getting bookable inside ChatGPT via MCP.",
-      "These are things your property could not do twelve months ago at any price. Today they cost four figures a month, which separates the properties that win the next three years from the ones that watch.",
+      "AEO citation monitoring across 5 AI engines. Real-time competitor rate and review intelligence. A voice agent that sounds like a luxury concierge instead of a robot. Getting bookable inside ChatGPT via MCP.",
+      "These are things your property could not do 12 months ago at any price. Today they cost 4 figures a month, which separates the properties that win the next 3 years from the ones that watch.",
     ],
     related:
       "AI Visibility Audit · MCP Readiness Package · Voice AI Deployment · Signal Visibility Retainer",
@@ -63,9 +63,9 @@ export default function SignalProblems() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-near-black leading-[1.05] tracking-tight">
-              Five kinds of work.
+              5 kinds of work.
               <br />
-              One operating partner.
+              1 operating partner.
             </h2>
           </AnimatedItem>
           <AnimatedItem>

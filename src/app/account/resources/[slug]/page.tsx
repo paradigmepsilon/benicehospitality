@@ -55,7 +55,7 @@ export default async function ResourceDetailPage({ params }: PageProps) {
         <p className="font-sans text-base text-charcoal leading-relaxed mb-8">
           Required tier:{" "}
           <strong>{TIER_BADGE[resource.requiredTier]}</strong>. Your current
-          access is one tier below.
+          access is 1 tier below.
         </p>
         <Link
           href="/account/resources"

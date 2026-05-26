@@ -9,7 +9,7 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 export const metadata: Metadata = {
   title: "Free AI Visibility Audit",
   description:
-    "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your boutique hotel today. Five-business-day turnaround. No commitment.",
+    "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your boutique hotel today. 5-business-day turnaround. No commitment.",
   alternates: {
     canonical: "https://benicehospitality.com/signal/free-audit",
   },
@@ -30,7 +30,7 @@ interface AuditDeliverable {
 const DELIVERABLES: AuditDeliverable[] = [
   {
     title: "AI search query test",
-    body: "We run twenty traveler-intent queries against ChatGPT, Perplexity, Gemini, and Google AI Mode. You see the raw output, not a summary.",
+    body: "We run 20 traveler-intent queries against ChatGPT, Perplexity, Gemini, and Google AI Mode. You see the raw output, not a summary.",
   },
   {
     title: "Citation gap analysis",
@@ -41,8 +41,8 @@ const DELIVERABLES: AuditDeliverable[] = [
     body: "What structured data the engines could not find on your site. The technical layer that determines whether AI can read you at all.",
   },
   {
-    title: "Three-action priority list",
-    body: "The three highest-leverage moves you can make in the next 30 days, ranked by effort. Yours to implement on your own or with anyone you choose.",
+    title: "3-action priority list",
+    body: "The 3 highest-leverage moves you can make in the next 30 days, ranked by effort. Yours to implement on your own or with anyone you choose.",
   },
 ];
 
@@ -54,7 +54,7 @@ interface AuditFAQ {
 const AUDIT_FAQ: AuditFAQ[] = [
   {
     q: "Is it really free?",
-    a: "Yes. The AI Visibility Audit is the top of the Signal funnel. We deliver it because boutique hotel owners have been burned by agencies before, and we want to show you the work before we ask for a dollar. No upsell sequence. No drip emails. One audit, one report, one optional discovery call if you want one.",
+    a: "Yes. The AI Visibility Audit is the top of the Signal funnel. We deliver it because boutique hotel owners have been burned by agencies before, and we want to show you the work before we ask for a dollar. No upsell sequence. No drip emails. 1 audit, 1 report, 1 optional discovery call if you want one.",
   },
   {
     q: "What do you need from me?",
@@ -62,7 +62,7 @@ const AUDIT_FAQ: AuditFAQ[] = [
   },
   {
     q: "How long does it take?",
-    a: "Five business days from request to delivery. We send the report as a written PDF to the email you provide.",
+    a: "5 business days from request to delivery. We send the report as a written PDF to the email you provide.",
   },
   {
     q: "What if my hotel is not a fit for Signal?",
@@ -70,7 +70,7 @@ const AUDIT_FAQ: AuditFAQ[] = [
   },
   {
     q: "How is this different from the BNHG Tier 0 audit?",
-    a: "The Tier 0 audit at /audit/request is broader: seven dimensions across revenue, ops, tech, and visibility. The AI Visibility Audit is narrower and deeper: it goes one layer below the visibility dimension and tests how the AI engines actually describe your property right now.",
+    a: "The Tier 0 audit at /audit/request is broader: 7 dimensions across revenue, ops, tech, and visibility. The AI Visibility Audit is narrower and deeper: it goes 1 layer below the visibility dimension and tests how the AI engines actually describe your property right now.",
   },
 ];
 
@@ -89,7 +89,7 @@ export default function SignalFreeAuditPage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-white/75 leading-relaxed mb-8">
-              We test your property across ChatGPT, Perplexity, Gemini, and Google AI Mode, then send you a written audit with the citations you are getting, the citations you are missing, and the three highest-leverage moves to make in the next 30 days. Five business days, free.
+              We test your property across ChatGPT, Perplexity, Gemini, and Google AI Mode, then send you a written audit with the citations you are getting, the citations you are missing, and the 3 highest-leverage moves to make in the next 30 days. 5 business days, free.
             </p>
           </AnimatedItem>
           <AnimatedItem>
@@ -140,12 +140,12 @@ export default function SignalFreeAuditPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mt-4 mb-4 leading-tight">
-              Two fields. Five business days.
+              2 fields. 5 business days.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/70 mb-8 leading-relaxed">
-              Drop your email and we follow up to confirm your hotel URL and any specifics you want us to focus on. The audit lands in your inbox five business days later.
+              Drop your email and we follow up to confirm your hotel URL and any specifics you want us to focus on. The audit lands in your inbox 5 business days later.
             </p>
           </AnimatedItem>
           <AnimatedItem>
@@ -155,8 +155,8 @@ export default function SignalFreeAuditPage() {
                 variant="card"
                 buttonLabel="Request Audit"
                 placeholder="you@yourhotel.com"
-                helperText="We will email you within one business day to confirm your URL and queue the audit."
-                successMessage="Got it. We will follow up within one business day to confirm your URL and start the audit."
+                helperText="We will email you within 1 business day to confirm your URL and queue the audit."
+                successMessage="Got it. We will follow up within 1 business day to confirm your URL and start the audit."
               />
             </div>
           </AnimatedItem>

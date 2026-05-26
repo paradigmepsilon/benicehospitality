@@ -59,7 +59,7 @@ export default function AccountDashboard({
         </h1>
         <p className="font-sans text-base text-charcoal/80 leading-relaxed mt-3 max-w-2xl">
           Pick up where you left off. Your courses, resources, and the Nice
-          Host Network are all one click in.
+          Host Network are all 1 click in.
         </p>
       </header>
 
@@ -195,7 +195,7 @@ function UserPanels({ enrollments }: { enrollments: EnrollmentSummary[] }) {
               Tuesday workshop · Thursday hot seats.
             </h3>
             <p className="font-sans text-base text-white/85 leading-relaxed">
-              Two live sessions a week, forty-seven weeks a year. Drop in,
+              2 live sessions a week, 47 weeks a year. Drop in,
               bring a real situation, leave with the next move.
             </p>
           </div>

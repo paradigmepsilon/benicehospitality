@@ -38,7 +38,7 @@ export default function ProductSurfaces() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.15] tracking-tight">
-              3 Offerings One Company
+              3 Offerings 1 Company
             </h2>
           </AnimatedItem>
           <AnimatedItem>

@@ -52,11 +52,11 @@ export default function AboutPillars() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14 max-w-2xl mx-auto">
           <AnimatedItem>
-            <SectionLabel light>The Three Pillars</SectionLabel>
+            <SectionLabel light>The 3 Pillars</SectionLabel>
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-white mt-4 leading-tight">
-              The method, in three pillars.
+              The method, in 3 pillars.
             </h2>
           </AnimatedItem>
           <AnimatedItem>

@@ -64,7 +64,7 @@ export default function ThreePillars() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-white mt-4 leading-tight">
-              Host to Operator, in three pillars.
+              Host to Operator, in 3 pillars.
             </h2>
           </AnimatedItem>
         </div>

@@ -28,14 +28,14 @@ const TIERS: readonly Tier[] = [
     name: "Cohort",
     slug: "cohort",
     price: "$2,497",
-    cadence: "Eight-week guided",
+    cadence: "8-week guided",
     featured: true,
   },
   {
     name: "Operator",
     slug: "operator",
     price: "$7,497",
-    cadence: "Ninety-day 1:1 with Della",
+    cadence: "90-day 1:1 with Della",
     featured: false,
   },
 ] as const;
@@ -61,7 +61,7 @@ const COMPARISON: Array<{
     values: ["1 year", "1 year", "Lifetime"],
   },
   {
-    label: "Eight-week guided cohort",
+    label: "8-week guided cohort",
     values: [false, true, true],
   },
   {
@@ -69,12 +69,12 @@ const COMPARISON: Array<{
     values: [false, true, true],
   },
   {
-    label: "Twelve 1:1 sessions with Della",
-    values: [false, false, "Ninety days"],
+    label: "12 1:1 sessions with Della",
+    values: [false, false, "90 days"],
   },
   {
     label: "Seats per cycle",
-    values: ["Open", "Open", "Capped at five"],
+    values: ["Open", "Open", "Capped at 5"],
   },
 ];
 
@@ -192,7 +192,7 @@ export default function TierComparison() {
         <div className="hidden md:block">
           <div
             role="table"
-            aria-label="Compare the three tiers"
+            aria-label="Compare the 3 tiers"
             className="bg-white border border-light-gray rounded-lg overflow-hidden shadow-sm"
           >
             {/* Header row */}

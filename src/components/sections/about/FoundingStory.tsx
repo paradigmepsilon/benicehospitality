@@ -15,7 +15,7 @@ export default function FoundingStory() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black leading-tight">
-              Two Disciplines. One Purpose.
+              2 Disciplines. 1 Purpose.
             </h2>
           </AnimatedItem>
         </div>
