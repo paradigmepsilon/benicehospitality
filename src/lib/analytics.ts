@@ -8,6 +8,9 @@ import { sql } from "@/lib/db";
 export type EventType =
   | "auth.login"
   | "auth.logout"
+  | "auth.signup"
+  | "auth.email_verified"
+  | "auth.onboarded"
   | "lesson.complete"
   | "forum.thread_create"
   | "forum.post_create";

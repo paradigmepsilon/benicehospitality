@@ -163,14 +163,17 @@ export async function GET(
 
   // Link or create the local user, then create a session.
   let user;
+  let isNew = false;
   try {
-    user = await findOrCreateOAuthUser({
+    const result = await findOrCreateOAuthUser({
       provider,
       providerAccountId: profile.providerAccountId,
       email: profile.email,
       name: profile.name,
       emailVerified: profile.emailVerified,
     });
+    user = result.user;
+    isNew = result.isNew;
   } catch (err) {
     if (err instanceof OAuthLinkError) {
       return errorRedirect(request, err.code, next);
@@ -189,6 +192,28 @@ export async function GET(
     eventType: "auth.login",
     metadata: { role: user.role, method: "oauth", provider },
   });
+
+  // Brand-new OAuth users always go through intake before /account. We
+  // forward the inbound `next` as a query param so the onboarding form's
+  // submit lands them on the page they originally wanted (e.g. a deep
+  // /account/courses/... link). Returning users follow the existing
+  // admin/finalNext logic below.
+  if (isNew) {
+    void recordEvent({
+      userId: user.id,
+      eventType: "auth.signup",
+      metadata: { method: "oauth", provider },
+    });
+    const onboardingUrl = new URL("/onboarding", request.url);
+    if (next && next !== "/account") {
+      onboardingUrl.searchParams.set("next", next);
+    }
+    const response = NextResponse.redirect(onboardingUrl);
+    response.headers.set("x-robots-tag", "noindex");
+    setUserSessionCookie(response, sessionId);
+    clearOAuthCookies(response);
+    return response;
+  }
 
   // Admins go to /admin if the caller didn't ask for somewhere specific.
   const finalNext =

@@ -51,10 +51,10 @@ export default async function LoginPage() {
           <p className="font-sans text-sm text-charcoal/70">
             New here?{" "}
             <Link
-              href="/education"
+              href="/signup"
               className="font-semibold text-primary-green hover:text-primary-green-dark"
             >
-              See the courses
+              Create an account
             </Link>{" "}
             or{" "}
             <Link

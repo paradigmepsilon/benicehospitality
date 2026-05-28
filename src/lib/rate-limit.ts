@@ -62,6 +62,13 @@ export const loginLimiter = createLimiter(5, 15 * 60 * 1000);
 export const passwordResetRequestLimiter = createLimiter(3, 15 * 60 * 1000);
 export const passwordResetConsumeLimiter = createLimiter(10, 15 * 60 * 1000);
 
+// Signup / onboarding limiters. Signup is per-IP because the email is user-
+// supplied and we don't want a flood of fake accounts. Verification consumes
+// a single-use token so the limit is lax; onboarding is per IP+user.
+export const signupLimiter = createLimiter(5, 15 * 60 * 1000);
+export const emailVerifyLimiter = createLimiter(10, 15 * 60 * 1000);
+export const onboardingLimiter = createLimiter(10, 15 * 60 * 1000);
+
 // Pull the client IP out of standard proxy headers. Returns "unknown" instead
 // of null so it can safely be used as part of a limiter key.
 export function getClientIp(request: Request): string {

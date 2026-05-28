@@ -48,6 +48,18 @@ export async function POST(request: Request) {
     if (!userRow || userRow.disabled_at) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    // OAuth-only accounts (Google/LinkedIn) have password_hash NULL — they
+    // can't change a password they don't have. Tell them to use the reset
+    // flow which sets a password instead.
+    if (!userRow.password_hash) {
+      return NextResponse.json(
+        {
+          error:
+            "This account uses social sign-in. Use the password reset flow to add a password first.",
+        },
+        { status: 400 },
+      );
+    }
 
     const ok = await bcrypt.compare(currentPassword, userRow.password_hash);
     if (!ok) {

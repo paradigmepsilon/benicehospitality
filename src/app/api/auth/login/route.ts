@@ -4,6 +4,7 @@ import {
   createUserSession,
   setUserSessionCookie,
   AuthBackendUnavailableError,
+  EmailNotVerifiedError,
 } from "@/lib/community-auth";
 import { loginLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
@@ -44,6 +45,19 @@ export async function POST(request: Request) {
     try {
       user = await authenticate(email, password);
     } catch (err) {
+      if (err instanceof EmailNotVerifiedError) {
+        // Password matched but they haven't clicked the verification link
+        // yet. Use a distinct status + code so the form can render the
+        // "check your inbox" message instead of "invalid credentials."
+        return NextResponse.json(
+          {
+            error:
+              "Check your inbox to verify your email before signing in.",
+            code: "verify_email",
+          },
+          { status: 403 },
+        );
+      }
       if (err instanceof AuthBackendUnavailableError) {
         // Clear, actionable message in development; production never lands
         // here because production NODE_ENV refuses the dev fallback path.

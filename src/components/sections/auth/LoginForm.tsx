@@ -31,6 +31,14 @@ function errorCopy(code: string | null): string {
       return "That sign-in option is not available right now.";
     case "oauth_failed":
       return "Authentication failed. Please try again.";
+    // Emitted when an unverified password account tries to sign in. The
+    // signup verification email is the unblocker.
+    case "verify_email":
+      return "Check your inbox to verify your email before signing in.";
+    // Emitted by the /api/auth/verify-email route when the token is missing,
+    // expired, or already consumed.
+    case "verification_failed":
+      return "That verification link is invalid or has expired. Sign up again to get a fresh one.";
     default:
       return "";
   }

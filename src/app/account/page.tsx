@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import AccountDashboard from "@/components/sections/auth/AccountDashboard";
+import WelcomeModal from "@/components/member/WelcomeModal";
 import { getViewerContext } from "@/lib/preview";
 import {
   listEnrollmentsForUser,
@@ -35,23 +37,31 @@ export default async function AccountPage() {
       : await listEnrollmentsForUser(ctx.userId);
 
   return (
-    <AccountDashboard
-      initialUser={{
-        email: ctx.userEmail,
-        name: ctx.userName,
-        role: ctx.realIsAdmin ? "admin" : "user",
-      }}
-      enrollments={enrollments.map((e) => ({
-        id: e.id,
-        tier: e.tier,
-        course: {
-          slug: e.course.slug,
-          title: e.course.title,
-          summary: e.course.summary,
-        },
-        totalLessons: e.totalLessons,
-        completedLessons: e.completedLessons,
-      }))}
-    />
+    <>
+      {/* Suspense boundary required because WelcomeModal reads useSearchParams.
+          The modal renders only when ?welcome=1 is in the URL — set by the
+          onboarding submit redirect — and self-clears the query string. */}
+      <Suspense fallback={null}>
+        <WelcomeModal userName={ctx.userName} />
+      </Suspense>
+      <AccountDashboard
+        initialUser={{
+          email: ctx.userEmail,
+          name: ctx.userName,
+          role: ctx.realIsAdmin ? "admin" : "user",
+        }}
+        enrollments={enrollments.map((e) => ({
+          id: e.id,
+          tier: e.tier,
+          course: {
+            slug: e.course.slug,
+            title: e.course.title,
+            summary: e.course.summary,
+          },
+          totalLessons: e.totalLessons,
+          completedLessons: e.completedLessons,
+        }))}
+      />
+    </>
   );
 }

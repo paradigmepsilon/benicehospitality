@@ -643,6 +643,48 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_user_oauth_accounts_user_id ON user_oauth_accounts(user_id)`;
   console.log("  ✓ user_oauth_accounts table created");
 
+  // Intake / onboarding profile. One row per user; presence of `onboarded_at`
+  // is the canonical "this user finished intake" signal. `service_interests`
+  // is a fixed 3-value vocabulary (rental_properties / independent_hotels /
+  // autos) — TEXT[] beats a join table for an enum this small. The row may
+  // be created at signup with just phone + service_interests, then completed
+  // when the user submits the /onboarding form.
+  await sql`
+    CREATE TABLE IF NOT EXISTS user_profiles (
+      user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+      phone TEXT,
+      service_interests TEXT[] NOT NULL DEFAULT '{}',
+      why_joining TEXT,
+      goals TEXT,
+      business_stage TEXT CHECK (business_stage IS NULL OR business_stage IN ('none', 'one', 'multiple')),
+      heard_from TEXT,
+      marketing_opt_in BOOLEAN NOT NULL DEFAULT false,
+      marketing_opt_in_at TIMESTAMPTZ,
+      onboarded_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_user_profiles_onboarded_at ON user_profiles(onboarded_at)`;
+  console.log("  ✓ user_profiles table created");
+
+  // Email verification — separate table from password_reset_tokens because the
+  // two token lifecycles are semantically different and mixing them invites
+  // bugs. Same shape; 24h TTL by convention (set at create time).
+  await sql`
+    CREATE TABLE IF NOT EXISTS email_verification_tokens (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      token_hash TEXT UNIQUE NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      expires_at TIMESTAMPTZ NOT NULL,
+      consumed_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_email_verification_tokens_user_id ON email_verification_tokens(user_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_email_verification_tokens_expires_at ON email_verification_tokens(expires_at)`;
+  console.log("  ✓ email_verification_tokens table created");
+
   // ---------------------------------------------------------------------------
   // Courses + enrollments
   // ---------------------------------------------------------------------------

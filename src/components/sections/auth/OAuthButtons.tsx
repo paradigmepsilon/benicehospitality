@@ -110,6 +110,10 @@ export default function OAuthButtons({ next, enabledProviders }: Props) {
           );
         })}
       </div>
+      <p className="text-center font-sans text-xs text-charcoal/55">
+        First time? Continuing with a social account creates your profile
+        automatically.
+      </p>
       <div
         className="flex items-center gap-4 pt-1"
         role="separator"

@@ -75,3 +75,56 @@ ${url}
 Didn't request this? You can ignore this email — your password stays the same.`,
   });
 }
+
+// Sent right after a /signup submission. The token URL points at the
+// verify-email GET route, which consumes the token, marks the user verified,
+// creates a session, and redirects them into /onboarding to finish intake.
+export async function sendVerificationEmail(opts: {
+  to: string;
+  name: string;
+  rawToken: string;
+}): Promise<void> {
+  const { to, name, rawToken } = opts;
+  const url = `${getBaseUrl()}/api/auth/verify-email?token=${encodeURIComponent(rawToken)}`;
+  const greeting = name ? `Hi ${name.split(" ")[0]},` : "Hi,";
+
+  await getResend().emails.send({
+    from: getFrom(),
+    to,
+    subject: "Verify your BNHG email",
+    html: `
+      <div style="font-family:Helvetica,Arial,sans-serif;color:#2C3E50;max-width:560px;margin:0 auto;padding:24px;">
+        <p style="font-size:14px;letter-spacing:0.2em;text-transform:uppercase;color:#1A4D4F;margin:0 0 16px;">Be Nice Hospitality Group</p>
+        <h1 style="font-size:22px;color:#1A4D4F;margin:0 0 16px;">Welcome — let's verify your email</h1>
+        <p style="font-size:15px;line-height:1.55;margin:0 0 20px;">${greeting}</p>
+        <p style="font-size:15px;line-height:1.55;margin:0 0 20px;">
+          Thanks for joining the Nice Host Network. Click the button below to
+          confirm your email address and finish setting up your account. The
+          link expires in 24 hours.
+        </p>
+        <p style="margin:28px 0;">
+          <a href="${url}" style="background:#B08D57;color:#1a1a1a;padding:14px 24px;text-decoration:none;font-weight:600;border-radius:8px;display:inline-block;">
+            Verify email
+          </a>
+        </p>
+        <p style="font-size:13px;line-height:1.55;color:#4B5563;margin:0 0 12px;">
+          If the button doesn't work, paste this URL into your browser:
+        </p>
+        <p style="font-size:13px;line-height:1.4;color:#4B5563;word-break:break-all;margin:0 0 24px;">
+          ${url}
+        </p>
+        <hr style="border:none;border-top:1px solid #F3F4F6;margin:24px 0;" />
+        <p style="font-size:12px;line-height:1.55;color:#4B5563;margin:0;">
+          Didn't sign up? You can safely ignore this email — no account will
+          be created without verification.
+        </p>
+      </div>
+    `,
+    text: `${greeting}
+
+Welcome to the Nice Host Network. Verify your email by visiting this link (expires in 24 hours):
+${url}
+
+Didn't sign up? You can ignore this email — nothing will happen.`,
+  });
+}
