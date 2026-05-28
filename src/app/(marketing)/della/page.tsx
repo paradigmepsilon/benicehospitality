@@ -235,8 +235,8 @@ export default function DellaPage() {
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
-              src="/images/Website%20Images/Golden%20hour%20Atlanta%20Neighborhood.png"
-              alt="Golden hour over an Atlanta neighborhood where Della operates mid-term rentals"
+              src="/images/Website%20Images/hf_20260528_162140_0ee925d0-fbc6-4a93-af15-0c4174b02574.png"
+              alt="Southeast neighborhood scene where Della operates mid-term rentals"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -550,20 +550,6 @@ export default function DellaPage() {
         </div>
       </AnimatedSection>
 
-      {/* IMAGE BAND: full-bleed workspace nook */}
-      <section className="bg-light-gray">
-        <div className="relative aspect-video lg:aspect-[21/9] w-full overflow-hidden">
-          <Image
-            src="/images/Website%20Images/Workspace%20Nook.png"
-            alt="Styled workspace nook in a Della Henry mid-term rental unit, designed for traveling nurses and corporate housing guests"
-            fill
-            className="object-cover"
-            style={{ filter: "saturate(0.9) contrast(1.05)" }}
-            sizes="100vw"
-          />
-        </div>
-      </section>
-
       {/* TESTIMONIAL / PULL QUOTE */}
       <AnimatedSection theme="green" className="py-9 md:py-12 px-6">
         <div className="max-w-4xl mx-auto text-center">
@@ -576,7 +562,7 @@ export default function DellaPage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-sm text-warm-gold tracking-[0.2em] uppercase font-semibold">
-              Course graduate · Charlotte, NC
+              1:1 client · Charlotte, NC
             </p>
           </AnimatedItem>
         </div>
