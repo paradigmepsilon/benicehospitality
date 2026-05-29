@@ -1052,7 +1052,7 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_lesson_assets_lesson ON lesson_assets(lesson_id)`;
   console.log("  ✓ lesson_assets table created");
 
-  // MTR Viability Scorecard — gated lead-magnet results stored as JSONB.
+  // MTR Viability Calculator — gated lead-magnet results stored as JSONB.
   // Token-addressable so guests can revisit via emailed magic-link.
   await sql`
     CREATE TABLE IF NOT EXISTS viability_scorecards (
@@ -1150,6 +1150,339 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS course_waitlist_created_idx ON course_waitlist(created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS course_waitlist_tier_idx ON course_waitlist(tier)`;
   console.log("  ✓ course_waitlist table created");
+
+  // ---------------------------------------------------------------------------
+  // Marketplace products. Admin-managed catalog feeding /marketplace. tab_id
+  // groups by audience (property / hotel / auto / back-office). position
+  // controls display order within the tab. Slug doubles as the click-tracking
+  // product_id so existing marketplace_clicks rows keep working when a row
+  // is renamed in admin (id stays stable on update).
+  // ---------------------------------------------------------------------------
+  await sql`
+    CREATE TABLE IF NOT EXISTS marketplace_products (
+      id SERIAL PRIMARY KEY,
+      slug TEXT UNIQUE NOT NULL,
+      tab_id TEXT NOT NULL CHECK (tab_id IN ('property','hotel','auto','back-office')),
+      name TEXT NOT NULL,
+      body TEXT NOT NULL DEFAULT '',
+      bullets TEXT[] NOT NULL DEFAULT '{}',
+      image_url TEXT NOT NULL DEFAULT '',
+      image_alt TEXT NOT NULL DEFAULT '',
+      price_range TEXT NOT NULL DEFAULT '',
+      network TEXT NOT NULL CHECK (network IN ('amazon','lowes','wayfair','direct','other')),
+      affiliate_url TEXT NOT NULL,
+      badge TEXT,
+      status TEXT NOT NULL DEFAULT 'live' CHECK (status IN ('live','out-of-stock','soon')),
+      tags TEXT[] NOT NULL DEFAULT '{}',
+      position INT NOT NULL DEFAULT 0,
+      is_published BOOLEAN NOT NULL DEFAULT true,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_products_tab ON marketplace_products(tab_id, position)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_products_published ON marketplace_products(is_published) WHERE is_published = true`;
+  console.log("  ✓ marketplace_products table created");
+
+  // Seed the 12 placeholder rows from the original typed catalog. ON CONFLICT
+  // on slug keeps the seed idempotent — re-running the migration won't
+  // overwrite admin edits.
+  const MARKETPLACE_SEED: Array<{
+    slug: string;
+    tab_id: string;
+    name: string;
+    body: string;
+    bullets: string[];
+    image_url: string;
+    image_alt: string;
+    price_range: string;
+    network: string;
+    affiliate_url: string;
+    badge: string | null;
+    status: string;
+    tags: string[];
+    position: number;
+  }> = [
+    {
+      slug: "property-smart-lockbox",
+      tab_id: "property",
+      name: "Smart Lockbox (4-Digit Combo)",
+      body: "The unattended-checkin workhorse. Weatherproof, rotatable code, mounts to a doorknob or a permanent bracket.",
+      bullets: [
+        "Rotatable code means no key handoff ever",
+        "Survives Southeast humidity without rust",
+        "Backup we keep at every Be Nice Property",
+      ],
+      image_url: "/images/Website Images/module-11-cleaning.png",
+      image_alt: "Outdoor smart lockbox mounted by a front door",
+      price_range: "$24–$40",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Della Uses This",
+      status: "live",
+      tags: ["lockbox", "access", "check-in", "smart lock"],
+      position: 10,
+    },
+    {
+      slug: "property-linen-set",
+      tab_id: "property",
+      name: "Hotel-Grade White Linen Set (Queen)",
+      body: "The same percale we put on every MTR bed. White only — so bleach and rotation works. Holds up past 100 washes.",
+      bullets: [
+        "300 thread count percale, white only",
+        "Per-bed pricing pencils out under $1/night",
+        "Order three sets per bed for the rotation",
+      ],
+      image_url: "/images/Website Images/module-06-design.png",
+      image_alt: "Folded white hotel-grade linens stacked on a wooden surface",
+      price_range: "$80–$110",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Best Value",
+      status: "live",
+      tags: ["linen", "bedding", "sheets", "housekeeping"],
+      position: 20,
+    },
+    {
+      slug: "property-mattress-topper",
+      tab_id: "property",
+      name: "Cooling Mattress Topper",
+      body: "The single highest-leverage upgrade for an MTR bed. Turns a $400 mattress into a 5-star review.",
+      bullets: [
+        "Cooling gel, not cheap memory foam",
+        "Hides wear on older mattresses",
+        "Costs less than one bad review",
+      ],
+      image_url: "/images/Website Images/module-10-guest-experience.png",
+      image_alt: "Bed made with a cooling mattress topper and white sheets",
+      price_range: "$60–$95",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Editor's Pick",
+      status: "live",
+      tags: ["mattress", "topper", "bedding", "sleep"],
+      position: 30,
+    },
+    {
+      slug: "hotel-bathroom-amenity-set",
+      tab_id: "hotel",
+      name: "Refillable Bathroom Amenity Set",
+      body: "Stop buying single-use bottles. Refillable shampoo, conditioner, and body wash that looks more upscale than the disposable stuff anyway.",
+      bullets: [
+        "Cuts amenity cost roughly 60% in year one",
+        "Quietly improves guest reviews on sustainability",
+        "Pairs with a bulk-fill program — we'll link both",
+      ],
+      image_url: "/images/Website Images/Workspace Nook.png",
+      image_alt: "Refillable bathroom amenity bottles arranged on a stone tray",
+      price_range: "$45–$80",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "New",
+      status: "live",
+      tags: ["amenities", "bathroom", "sustainability"],
+      position: 10,
+    },
+    {
+      slug: "hotel-front-desk-tablet",
+      tab_id: "hotel",
+      name: "Front Desk Tablet Stand (Secure)",
+      body: "Locking, swiveling tablet stand for self-check-in and digital concierge. Same model we recommend in Signal teardowns.",
+      bullets: [
+        "Locks to the counter, no overnight removal",
+        "Swivels for guest-facing kiosk mode",
+        "Fits iPad and most 10–11\" Android tablets",
+      ],
+      image_url: "/images/Website Images/alex in hotel lobby.png",
+      image_alt: "Tablet mounted on a secure stand at a boutique hotel front desk",
+      price_range: "$120–$180",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: null,
+      status: "live",
+      tags: ["front desk", "tablet", "kiosk", "tech"],
+      position: 20,
+    },
+    {
+      slug: "hotel-luggage-cart",
+      tab_id: "hotel",
+      name: "Bellhop-Style Luggage Cart",
+      body: "Looks the part, rolls quietly, doesn't dent a hardwood floor. The detail that makes a 12-room property feel like a hotel.",
+      bullets: [
+        "Carpeted deck, brass rails",
+        "Rolls on hardwood without scuffing",
+        "Foldable footprint for compact lobbies",
+      ],
+      image_url:
+        "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
+      image_alt: "Brass luggage cart in a warmly lit boutique hotel lobby",
+      price_range: "$280–$420",
+      network: "wayfair",
+      affiliate_url: "https://www.wayfair.com/",
+      badge: null,
+      status: "live",
+      tags: ["lobby", "luggage", "front of house"],
+      position: 30,
+    },
+    {
+      slug: "auto-dashcam-front-rear",
+      tab_id: "auto",
+      name: "Front + Rear Dashcam (4K)",
+      body: "The single piece of gear every Turo car should have. Resolves disputes in 30 seconds with date-stamped video.",
+      bullets: [
+        "4K front, 1080p rear",
+        "Parking mode catches lot dings",
+        "G-sensor auto-locks footage on impact",
+      ],
+      image_url: "/images/Website Images/crr-collage-03-dashboard.png",
+      image_alt: "Dashcam mounted to a vehicle windshield",
+      price_range: "$140–$220",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Della Uses This",
+      status: "live",
+      tags: ["dashcam", "turo", "evidence", "camera"],
+      position: 10,
+    },
+    {
+      slug: "auto-obd2-reader",
+      tab_id: "auto",
+      name: "OBD-II Bluetooth Scanner",
+      body: "When the check-engine light comes on at 11pm, this tells you whether it's a $0 fix or a Monday-morning shop visit.",
+      bullets: [
+        "Pairs with iOS and Android",
+        "Reads and clears every common code",
+        "Saves a shop trip on most P0420 false positives",
+      ],
+      image_url: "/images/Website Images/crr-collage-02-steering-wheel.png",
+      image_alt: "OBD-II Bluetooth scanner plugged into a vehicle's diagnostic port",
+      price_range: "$35–$60",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Best Value",
+      status: "live",
+      tags: ["obd2", "diagnostics", "turo", "maintenance"],
+      position: 20,
+    },
+    {
+      slug: "auto-detail-kit",
+      tab_id: "auto",
+      name: "Turnover Detail Kit",
+      body: "What we put in every car's trunk: microfibers, interior cleaner, glass cleaner, tire shine. Fits in a small caddy.",
+      bullets: [
+        "Microfibers for paint and interior",
+        "One-bottle interior cleaner that's safe on leather",
+        "Lives in the trunk, not the garage",
+      ],
+      image_url: "/images/Website Images/crr-collage-04-exterior.png",
+      image_alt: "Auto detailing kit laid out on a driveway",
+      price_range: "$45–$75",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: null,
+      status: "live",
+      tags: ["detail", "cleaning", "turo", "turnover"],
+      position: 30,
+    },
+    {
+      slug: "back-office-unreasonable-hospitality",
+      tab_id: "back-office",
+      name: "Unreasonable Hospitality — Will Guidara",
+      body: "The single most-recommended book on the BNHG bookshelf. The framework behind Module 6 of Room Rental Riches.",
+      bullets: [
+        "Required reading for every BNHG hire",
+        "Frames the hospitality-grade design module",
+        "Audio version is excellent for the car",
+      ],
+      image_url: "/images/Website Images/module-06-design.png",
+      image_alt: "Copy of Unreasonable Hospitality by Will Guidara on a desk",
+      price_range: "$18–$28",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: "Editor's Pick",
+      status: "live",
+      tags: ["book", "hospitality", "guidara", "training"],
+      position: 10,
+    },
+    {
+      slug: "back-office-quickbooks",
+      tab_id: "back-office",
+      name: "QuickBooks Self-Employed",
+      body: "The bookkeeping setup we use across every Be Nice entity. Mileage tracking alone covers the subscription cost.",
+      bullets: [
+        "Quarterly tax estimate built-in",
+        "Auto-mileage tracking via phone GPS",
+        "Affiliate code below saves first month",
+      ],
+      image_url: "/images/Website Images/alex at his computer.png",
+      image_alt: "Laptop showing accounting software dashboard",
+      price_range: "$20/mo",
+      network: "direct",
+      affiliate_url: "https://quickbooks.intuit.com/",
+      badge: null,
+      status: "live",
+      tags: ["accounting", "bookkeeping", "tax", "software"],
+      position: 20,
+    },
+    {
+      slug: "back-office-planner",
+      tab_id: "back-office",
+      name: "Weekly Operator Planner",
+      body: "Paper, not Notion. The same weekly cadence Della runs every Sunday night across all six properties.",
+      bullets: [
+        "Single weekly spread, no monthly fluff",
+        "13-week quarter layout",
+        "Lays flat without breaking the spine",
+      ],
+      image_url: "/images/Website Images/Della Behind Desk.png",
+      image_alt: "Operator planner open on a desk next to a coffee cup",
+      price_range: "$32–$48",
+      network: "amazon",
+      affiliate_url: "https://www.amazon.com/",
+      badge: null,
+      status: "live",
+      tags: ["planner", "weekly", "productivity"],
+      position: 30,
+    },
+  ];
+
+  for (const p of MARKETPLACE_SEED) {
+    await sql`
+      INSERT INTO marketplace_products (
+        slug, tab_id, name, body, bullets, image_url, image_alt,
+        price_range, network, affiliate_url, badge, status, tags, position
+      )
+      VALUES (
+        ${p.slug}, ${p.tab_id}, ${p.name}, ${p.body}, ${p.bullets},
+        ${p.image_url}, ${p.image_alt}, ${p.price_range}, ${p.network},
+        ${p.affiliate_url}, ${p.badge}, ${p.status}, ${p.tags}, ${p.position}
+      )
+      ON CONFLICT (slug) DO NOTHING
+    `;
+  }
+  console.log(`  ✓ marketplace_products seeded (${MARKETPLACE_SEED.length} rows)`);
+
+  // Marketplace affiliate click tracking. One row per outbound click on
+  // /marketplace, fired via /api/marketplace/click with keepalive so the
+  // request survives the navigation. product_id matches the slug in
+  // marketplace_products. user_id is nullable so anonymous visitors are
+  // captured too.
+  await sql`
+    CREATE TABLE IF NOT EXISTS marketplace_clicks (
+      id SERIAL PRIMARY KEY,
+      product_id TEXT NOT NULL,
+      network TEXT NOT NULL,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      referrer TEXT,
+      ip TEXT,
+      user_agent TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_clicks_product ON marketplace_clicks(product_id, created_at DESC)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_clicks_network ON marketplace_clicks(network)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_clicks_created_at ON marketplace_clicks(created_at DESC)`;
+  console.log("  ✓ marketplace_clicks table created");
 
   console.log("Migrations complete!");
 }

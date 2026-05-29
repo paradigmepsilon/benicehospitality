@@ -55,6 +55,16 @@ const AFFILIATES_COLUMN: FooterColumn = {
   ],
 };
 
+const MARKETPLACE_COLUMN: FooterColumn = {
+  heading: "Marketplace",
+  links: [
+    { label: "Operator's Toolkit", href: "/marketplace" },
+    { label: "Property gear", href: "/marketplace?tab=property" },
+    { label: "Hotel gear", href: "/marketplace?tab=hotel" },
+    { label: "Auto gear", href: "/marketplace?tab=auto" },
+  ],
+};
+
 const COMPANY_LINKS = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -70,12 +80,12 @@ const COMPANY_LINKS_SECONDARY = [
 export default function Footer() {
   return (
     <footer
-      className="bg-near-black text-white pb-[60px] lg:pb-0"
+      className="bg-near-black text-white"
       role="contentinfo"
     >
       <HomeNewsletter />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-10 mb-12">
           {/* Brand block */}
           <div>
             <Link href="/" className="block mb-5" aria-label="Be Nice Hospitality Group home">
@@ -115,6 +125,9 @@ export default function Footer() {
 
           {/* Education */}
           <FooterLinkColumn column={EDUCATION_COLUMN} />
+
+          {/* Marketplace */}
+          <FooterLinkColumn column={MARKETPLACE_COLUMN} />
 
           {/* Get in Touch */}
           <div>
