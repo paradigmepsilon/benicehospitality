@@ -1,6 +1,5 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 const SITE_URL = "https://benicehospitality.com";
 const ORG_ID = `${SITE_URL}/#organization`;
@@ -127,7 +126,6 @@ export default function MarketingLayout({
       <Header />
       <main id="main-content">{children}</main>
       <Footer />
-      <MobileBottomNav />
     </>
   );
 }
