@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import AnimatedSection, {
-  AnimatedDiv,
-  AnimatedItem,
-} from "@/components/ui/AnimatedSection";
-import SectionLabel from "@/components/ui/SectionLabel";
-import Button from "@/components/ui/Button";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { STOCK_LIBRARY } from "@/lib/stock-images";
-import ResourceCard, {
-  type Resource,
-} from "./_components/ResourceCard";
+import { type Resource } from "./_components/ResourceCard";
+import ResourceCatalog, {
+  type ResourceTab,
+} from "./_components/ResourceCatalog";
 
 export const metadata: Metadata = {
   title: "Resource Library",
@@ -33,7 +28,7 @@ export const metadata: Metadata = {
 
 const PROPERTY_RESOURCES: Resource[] = [
   {
-    name: "MTR Viability Scorecard",
+    name: "MTR Viability Calculator",
     body: "40 weighted questions across 7 sections. Score any single property in under 10 minutes and get a Della-voice fix list for every gap.",
     bullets: [
       "40 weighted questions across 7 operator sections",
@@ -138,8 +133,6 @@ const PROPERTY_RESOURCES: Resource[] = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Audience: Boutique Hotels (10 to 50 room independents)
-// Combines Tier 0 free audits (each has its own /resources/[slug] page) with
-// the four Signal diagnostics surfaced from the Signal sub-brand.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const HOTEL_RESOURCES: Resource[] = [
@@ -246,8 +239,6 @@ const HOTEL_RESOURCES: Resource[] = [
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Audience: Auto Operators (Turo / peer-to-peer fleet)
-// This is the newest segment. Library is intentionally short and will grow
-// with Car Rental Riches.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const AUTO_RESOURCES: Resource[] = [
@@ -274,6 +265,45 @@ const AUTO_RESOURCES: Resource[] = [
     access: "course",
     status: "soon",
     waitlist: { courseSlug: "car-rental-riches", tier: "interest" },
+  },
+];
+
+const TABS: ResourceTab[] = [
+  {
+    id: "property",
+    label: "Property",
+    sectionLabel: "For property operators",
+    headline: "STR, MTR, and co-living.",
+    body: "Tools that diagnose specific operator problems, plus the full Room Rental Riches curriculum for the people who want the whole method. Run any diagnostic on your portfolio in minutes.",
+    image: {
+      src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
+      alt: "Boutique short-term and mid-term rental property interior",
+    },
+    resources: PROPERTY_RESOURCES,
+  },
+  {
+    id: "hotel",
+    label: "Independent Hotel",
+    sectionLabel: "For boutique hotels",
+    headline: "Independent 10 to 50 room properties.",
+    body: "Free audits and diagnostics focused on the AI-search visibility, OTA-recovery, and revenue-integrity problems specific to independent boutique hotels. Each one is delivered as a written report; share your URL, we do the research.",
+    image: {
+      src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
+      alt: "Independent boutique hotel exterior in warm light",
+    },
+    resources: HOTEL_RESOURCES,
+  },
+  {
+    id: "auto",
+    label: "Auto",
+    sectionLabel: "For auto operators",
+    headline: "Turo and peer-to-peer fleet.",
+    body: "Our newest segment, so the library is intentionally short. What's here today is what we use ourselves; Car Rental Riches ships next and will bring a full set of fleet-grade tools with it.",
+    image: {
+      src: "/images/Website Images/hf_20260502_232029_ed24d441-412f-4958-94ae-c47d67d782f0.png",
+      alt: "Auto operator vehicle in a peer-to-peer rental fleet setting",
+    },
+    resources: AUTO_RESOURCES,
   },
 ];
 
@@ -316,163 +346,7 @@ export default function ResourcesPage() {
 
       <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
 
-      {/* Audience 1: Property Operators */}
-      <AnimatedSection theme="off-white" className="py-14 md:py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <AnimatedItem>
-                <SectionLabel>For property operators</SectionLabel>
-              </AnimatedItem>
-              <AnimatedItem>
-                <h2 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4 mb-4">
-                  STR, MTR, and co-living.
-                </h2>
-              </AnimatedItem>
-              <AnimatedItem>
-                <p className="font-sans text-base text-charcoal/85 leading-relaxed">
-                  Tools that diagnose specific operator problems, plus the full
-                  Room Rental Riches curriculum for the people who want the whole
-                  method. Run any diagnostic on your portfolio in minutes.
-                </p>
-              </AnimatedItem>
-            </div>
-            <AnimatedItem>
-              <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                <Image
-                  src="/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg"
-                  alt="Boutique short-term and mid-term rental property interior"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-              </div>
-            </AnimatedItem>
-          </div>
-          <AnimatedDiv
-            stagger
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {PROPERTY_RESOURCES.map((r) => (
-              <AnimatedItem key={r.name}>
-                <ResourceCard r={r} variant="light" />
-              </AnimatedItem>
-            ))}
-          </AnimatedDiv>
-          <div className="mt-10">
-            <p className="font-sans text-sm text-charcoal/60 italic">
-              More property-operator tools ship through Labs first. Members of
-              The Nice Host Network see them before the public.
-            </p>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      <SectionDivider fromColor={C.cream} toColor={C.primaryGreen} flip />
-
-      {/* Audience 2: Boutique Hotels */}
-      <AnimatedSection
-        theme="none"
-        className="bg-primary-green text-white py-14 md:py-16 px-6"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <AnimatedItem>
-                <SectionLabel light>For boutique hotels</SectionLabel>
-              </AnimatedItem>
-              <AnimatedItem>
-                <h2 className="font-display text-3xl md:text-4xl font-semibold text-white leading-[1.15] tracking-tight mt-4 mb-4">
-                  Independent 10 to 50 room properties.
-                </h2>
-              </AnimatedItem>
-              <AnimatedItem>
-                <p className="font-sans text-base text-white/85 leading-relaxed">
-                  Free audits and diagnostics focused on the AI-search visibility,
-                  OTA-recovery, and revenue-integrity problems specific to
-                  independent boutique hotels. Each one is delivered as a written
-                  report; share your URL, we do the research.
-                </p>
-              </AnimatedItem>
-            </div>
-            <AnimatedItem>
-              <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                <Image
-                  src="/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg"
-                  alt="Independent boutique hotel exterior in warm light"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-              </div>
-            </AnimatedItem>
-          </div>
-          <AnimatedDiv
-            stagger
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-          >
-            {HOTEL_RESOURCES.map((r) => (
-              <AnimatedItem key={r.name}>
-                <ResourceCard r={r} variant="dark" />
-              </AnimatedItem>
-            ))}
-          </AnimatedDiv>
-          <div className="mt-12">
-            <Button href="/signal" variant="secondary" size="lg">
-              Explore Signal
-            </Button>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      <SectionDivider fromColor={C.primaryGreen} toColor={C.cream} />
-
-      {/* Audience 3: Auto Operators */}
-      <AnimatedSection theme="off-white" className="py-14 md:py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <AnimatedItem>
-                <SectionLabel>For auto operators</SectionLabel>
-              </AnimatedItem>
-              <AnimatedItem>
-                <h2 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-[1.15] tracking-tight mt-4 mb-4">
-                  Turo and peer-to-peer fleet.
-                </h2>
-              </AnimatedItem>
-              <AnimatedItem>
-                <p className="font-sans text-base text-charcoal/85 leading-relaxed">
-                  Our newest segment, so the library is intentionally short.
-                  What&rsquo;s here today is what we use ourselves; Car Rental
-                  Riches ships next and will bring a full set of fleet-grade
-                  tools with it.
-                </p>
-              </AnimatedItem>
-            </div>
-            <AnimatedItem>
-              <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                <Image
-                  src="/images/Website Images/hf_20260502_232029_ed24d441-412f-4958-94ae-c47d67d782f0.png"
-                  alt="Auto operator vehicle in a peer-to-peer rental fleet setting"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                />
-              </div>
-            </AnimatedItem>
-          </div>
-          <AnimatedDiv
-            stagger
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            {AUTO_RESOURCES.map((r) => (
-              <AnimatedItem key={r.name}>
-                <ResourceCard r={r} variant="light" />
-              </AnimatedItem>
-            ))}
-          </AnimatedDiv>
-        </div>
-      </AnimatedSection>
+      <ResourceCatalog tabs={TABS} />
 
       <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />
     </>
