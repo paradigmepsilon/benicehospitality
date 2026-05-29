@@ -94,7 +94,7 @@ export default function ScorecardReport({
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
             <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
-              MTR Viability Scorecard
+              MTR Viability Calculator
             </p>
             <p className="font-sans text-xs text-white/50 tabular-nums">
               Scored {createdLabel}

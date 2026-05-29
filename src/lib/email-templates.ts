@@ -449,7 +449,7 @@ export function bookingConfirmationEmail({
 }
 
 // ============================================================================
-// MTR Viability Scorecard emails
+// MTR Viability Calculator emails
 // ============================================================================
 
 const SCORECARD_BAND_COPY: Record<
@@ -490,7 +490,7 @@ function scorecardCallout({
   const meta = SCORECARD_BAND_COPY[band];
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px;background-color:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
     <tr><td style="padding:24px 28px;">
-      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">MTR Viability Scorecard</p>
+      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">MTR Viability Calculator</p>
       <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
         ${propertyNickname}
       </p>
@@ -517,10 +517,10 @@ export function scorecardReadyEmail(p: ScorecardReadyPayload) {
   return auditLayout({
     preheader: `${p.propertyNickname}: ${p.overallScore.toFixed(1)} / ${p.maxScore.toFixed(0)}, ${meta.label}.`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your MTR Viability Scorecard is ready</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your MTR Viability Calculator is ready</h1>
       ${goldDivider()}
       <p style="margin:0 0 16px;">Hi ${p.name},</p>
-      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the MTR Viability Scorecard.</p>
+      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the MTR Viability Calculator.</p>
       ${scorecardCallout({ propertyNickname: p.propertyNickname, overallScore: p.overallScore, maxScore: p.maxScore, band: p.band })}
       <p style="margin:0 0 16px;">${meta.line}</p>
       <p style="margin:0 0 16px;">Your full report includes section-by-section scores and a specific recommendation for every gap. The link stays active so you can come back any time.</p>
@@ -561,7 +561,7 @@ export function internalScorecardRequestEmail(
   return auditLayout({
     preheader: `New scorecard: ${p.propertyNickname} (${meta.label})`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New MTR Viability Scorecard submission</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New MTR Viability Calculator submission</h1>
       ${goldDivider()}
       <p style="margin:0 0 18px;">A visitor just unlocked their scorecard.</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">

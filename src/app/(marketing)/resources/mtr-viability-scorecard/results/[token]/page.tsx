@@ -8,7 +8,7 @@ import type { ScorecardSectionId } from "@/lib/scorecard/questions";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: { absolute: "Your MTR Viability Scorecard | BNHG" },
+  title: { absolute: "Your MTR Viability Calculator | BNHG" },
   robots: { index: false, follow: false },
 };
 

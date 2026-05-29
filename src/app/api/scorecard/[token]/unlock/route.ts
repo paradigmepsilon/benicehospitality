@@ -152,7 +152,7 @@ export async function POST(
       await getResend().emails.send({
         from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
         to: email,
-        subject: `Your MTR Viability Scorecard is ready (${propertyNickname})`,
+        subject: `Your MTR Viability Calculator is ready (${propertyNickname})`,
         html: scorecardReadyEmail({
           name,
           propertyNickname,
@@ -175,7 +175,7 @@ export async function POST(
           process.env.CONTACT_EMAIL ||
           "admin@benicehospitality.com",
         replyTo: email,
-        subject: `New MTR Viability Scorecard: ${propertyNickname} (${scorecard.band})`,
+        subject: `New MTR Viability Calculator: ${propertyNickname} (${scorecard.band})`,
         html: internalScorecardRequestEmail({
           email,
           name,

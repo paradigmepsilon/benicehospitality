@@ -47,7 +47,7 @@ export const auditTrackLimiter = createLimiter(30, 60 * 1000);
 export const auditRequestLimiter = createLimiter(3, 60 * 1000);
 export const unsubscribeLimiter = createLimiter(10, 60 * 1000);
 
-// MTR Viability Scorecard limiters
+// MTR Viability Calculator limiters
 export const scorecardSubmitLimiter = createLimiter(5, 60 * 1000);
 export const scorecardUnlockLimiter = createLimiter(3, 60 * 1000);
 

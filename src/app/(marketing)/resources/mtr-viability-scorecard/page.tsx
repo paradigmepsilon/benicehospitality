@@ -12,13 +12,13 @@ const PAGE_PATH = "/resources/mtr-viability-scorecard";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "MTR Viability Scorecard: Free Property Assessment | BNHG",
+    absolute: "MTR Viability Calculator: Free Property Assessment | BNHG",
   },
   description:
     "A free, weighted scorecard that grades any property's fit for mid-term rentals. 40 questions across 7 sections. Built for owners, investors, and operators in the Southeast.",
   alternates: { canonical: `${SITE_URL}${PAGE_PATH}` },
   openGraph: {
-    title: "MTR Viability Scorecard: Free Property Assessment | BNHG",
+    title: "MTR Viability Calculator: Free Property Assessment | BNHG",
     description:
       "Score any property on its fit for mid-term rentals. 40 weighted questions, instant report, recommendations from a working MTR operator.",
     url: `${SITE_URL}${PAGE_PATH}`,
@@ -45,7 +45,7 @@ export default function MtrViabilityScorecardPage() {
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "MTR Viability Scorecard",
+    name: "MTR Viability Calculator",
     description:
       "Free 40-question weighted scorecard that grades any property's fit for mid-term rentals.",
     provider: { "@id": `${SITE_URL}/#organization` },
@@ -80,7 +80,7 @@ export default function MtrViabilityScorecardPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-near-black/75 via-near-black/85 to-near-black/95" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
-            Free Resource · MTR Viability Scorecard
+            Free Resource · MTR Viability Calculator
           </p>
           <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight">
             Is your property MTR-ready?
