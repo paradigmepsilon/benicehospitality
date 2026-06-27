@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { label: "Schedule", href: "/admin/schedule", icon: "calendar" },
   { label: "Blog Posts", href: "/admin/posts", icon: "edit" },
   { label: "Subscribers", href: "/admin/subscribers", icon: "mail" },
+  { label: "Notifications", href: "/admin/notifications", icon: "send" },
 ];
 
 function NavIcon({ icon }: { icon: string }) {

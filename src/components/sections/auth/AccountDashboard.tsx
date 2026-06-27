@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, Users, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Sparkles, Bell } from "lucide-react";
+import PushOptInButton from "@/components/PushOptInButton";
 
 interface Session {
   email: string;
@@ -206,6 +207,25 @@ function UserPanels({ enrollments }: { enrollments: EnrollmentSummary[] }) {
             View the schedule
             <ArrowRight className="w-4 h-4" aria-hidden />
           </Link>
+        </div>
+      </section>
+
+      <section className="mb-10">
+        <div className="bg-white border border-light-gray rounded-lg p-6 md:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <Bell className="w-5 h-5 text-primary-green mt-0.5 shrink-0" aria-hidden />
+            <div>
+              <h3 className="font-display text-lg font-semibold text-deep-teal">
+                Push notifications
+              </h3>
+              <p className="font-sans text-sm text-charcoal/75 leading-relaxed mt-1 max-w-md">
+                Get notified the moment a new lesson drops or a live session
+                starts. Install the app to your home screen for the best
+                experience.
+              </p>
+            </div>
+          </div>
+          <PushOptInButton className="inline-flex items-center justify-center gap-2 bg-primary-green text-white hover:bg-primary-green-dark font-sans font-semibold tracking-wide rounded-lg px-6 py-3 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed" />
         </div>
       </section>
     </>
