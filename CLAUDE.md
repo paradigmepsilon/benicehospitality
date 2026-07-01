@@ -434,3 +434,11 @@ The closest in-module lesson is the best calibration source. Before building Mod
 Lesson 1.2 is the canonical Editorial reference — the player template was extracted from it. When the layout library here isn't clear enough, open `Module 1.2/Lesson_1_2_Editorial_v4.html` and search for the layout class.
 
 The master plan is in `Courses/Room Rental Riches/Room_Rental_Riches_Master_Course_Plan_FINAL.md`. Modules 2.6 through 2.10, plus Module 3+, are scoped there.
+
+
+---
+
+## Build Tracker
+- Project: BNHG
+- Repo / Location: benicehospitality (branch: main)
+This repo follows the global Build Tracker Protocol. Tag all tickets with the Project above; do not re-ask.
