@@ -18,6 +18,16 @@ build/
 # prospect data — lives in the DB, do not commit raw CSVs
 bnhg-deep-research-*.csv
 
+# buyer PII log (The Host's Edge / digital-product purchases) — never commit.
+# NOTE: Vercel's filesystem is ephemeral, so this local mirror does NOT persist
+# in prod. The durable buyer record is Stripe (every purchase carries the email).
+/data/
+*.jsonl
+
+# The Host's Edge prototype workspace — standalone Next.js scratch app + research
+# docs. The LIVE product code is under src/; this folder is not served or deployed.
+/the-hosts-edge/
+
 # course lesson bundles — large generated assets served from Neon via import-lesson.ts
 # filesystem is build-time source of truth, but too large for git
 /Courses/
@@ -37,3 +47,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env.local

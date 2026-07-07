@@ -10,6 +10,14 @@ import {
 } from "@/lib/course-catalog";
 import { grantEnrollment } from "@/lib/lms";
 import { sql } from "@/lib/db";
+import {
+  HOSTS_EDGE_PRODUCT_TAG,
+  getHostsEdgeDownloadUrl,
+  getHostsEdgeFromAddress,
+  hostsEdgeDeliveryEmail,
+  recordHostsEdgeBuyer,
+} from "@/lib/hosts-edge";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -54,7 +62,14 @@ export async function POST(request: Request) {
       case "checkout.session.async_payment_succeeded": {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.payment_status === "paid") {
-          await fulfillCheckout(session);
+          // Route by product. Digital products (e.g. The Host's Edge) are
+          // anonymous, no-enrollment buys — fulfill them their own way and stop
+          // BEFORE the course-enrollment path. Everything untagged is a course.
+          if (session.metadata?.product === HOSTS_EDGE_PRODUCT_TAG) {
+            await fulfillHostsEdge(session);
+          } else {
+            await fulfillCheckout(session);
+          }
         }
         break;
       }
@@ -74,6 +89,90 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+/**
+ * Fulfill a Host's Edge (digital product) purchase: email the buyer their
+ * download link via Resend and log the buyer. NO course enrollment, NO account.
+ * Both side-effects are best-effort and isolated — a failure logs but does not
+ * throw, so one broken side-effect can't 500 the webhook and trigger endless
+ * Stripe retries. (Stripe's own receipt is the payment record of truth.)
+ */
+async function fulfillHostsEdge(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] Host's Edge session ${session.id} has no email — cannot deliver`,
+    );
+    return;
+  }
+
+  // Deliver the download by email (best-effort).
+  try {
+    const { subject, html } = hostsEdgeDeliveryEmail({
+      name,
+      downloadUrl: getHostsEdgeDownloadUrl(),
+    });
+    const result = await getResend().emails.send({
+      from: getHostsEdgeFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(
+        `[webhooks/stripe] Host's Edge delivery email to ${email} failed:`,
+        `${result.error.name}: ${result.error.message}`,
+      );
+    } else {
+      console.log(
+        `[webhooks/stripe] Host's Edge delivered to ${email} (session ${session.id})`,
+      );
+    }
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Host's Edge delivery email threw for ${email}:`,
+      err,
+    );
+  }
+
+  // Log the buyer ("own the list", best-effort local mirror).
+  try {
+    await recordHostsEdgeBuyer({
+      email,
+      name,
+      sessionId: session.id,
+      purchasedAt: new Date(
+        (session.created ?? Math.floor(Date.now() / 1000)) * 1000,
+      ).toISOString(),
+    });
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Host's Edge buyer log threw for ${email}:`,
+      err,
+    );
+  }
+
+  try {
+    const posthog = getPostHogClient();
+    const amountTotal = session.amount_total ?? 0;
+    posthog.capture({
+      distinctId: email,
+      event: "hosts_edge_purchased",
+      properties: {
+        stripe_session_id: session.id,
+        amount_cents: amountTotal,
+        currency: session.currency ?? "usd",
+      },
+    });
+  } catch (err) {
+    console.error(`[webhooks/stripe] PostHog capture for Host's Edge threw:`, err);
+  }
 }
 
 async function fulfillCheckout(session: Stripe.Checkout.Session): Promise<void> {
@@ -111,6 +210,25 @@ async function fulfillCheckout(session: Stripe.Checkout.Session): Promise<void> 
       ? session.payment_intent
       : session.payment_intent?.id ?? null,
   );
+
+  try {
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: String(purchase.userId),
+      event: "course_enrollment_granted",
+      properties: {
+        course_id: purchase.courseId,
+        tier_id: purchase.courseTierId,
+        tier_name: tier.name,
+        tier_slug: tier.tier,
+        amount_cents: purchase.amountCents,
+        currency: purchase.currency,
+        stripe_session_id: session.id,
+      },
+    });
+  } catch (err) {
+    console.error("[webhooks/stripe] PostHog capture for enrollment threw:", err);
+  }
 
   // Send a receipt-style confirmation. We keep this best-effort: a failed
   // email must not roll back the enrollment that already succeeded.
