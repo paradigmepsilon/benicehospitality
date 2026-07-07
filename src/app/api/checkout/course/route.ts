@@ -10,6 +10,7 @@ import {
 } from "@/lib/course-catalog";
 import { getActiveEnrollment, getCourseBySlug } from "@/lib/lms";
 import { sql } from "@/lib/db";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 const bodySchema = z.object({
   tierId: z.number().int().positive(),
@@ -107,6 +108,20 @@ export async function POST(request: Request) {
     stripeSessionId: checkoutSession.id,
     amountCents: tier.priceCents,
     currency: tier.currency,
+  });
+
+  const posthog = getPostHogClient();
+  posthog.capture({
+    distinctId: String(session.user.id),
+    event: "course_checkout_started",
+    properties: {
+      course_id: tier.courseId,
+      course_slug: courseSlug,
+      tier_id: tier.id,
+      tier_name: tier.name,
+      amount_cents: tier.priceCents,
+      currency: tier.currency,
+    },
   });
 
   // Sanity guard — Stripe always returns a URL for non-embedded sessions, but

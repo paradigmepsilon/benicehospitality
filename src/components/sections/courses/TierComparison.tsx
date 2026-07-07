@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { AnimatedItem } from "@/components/ui/AnimatedSection";
 import WaitlistModal from "@/components/sections/courses/WaitlistModal";
 import type { WaitlistTier } from "@/lib/validation/waitlist";
+import posthog from "posthog-js";
 
 type CompareValue = boolean | string;
 
@@ -81,6 +82,16 @@ const COMPARISON: Array<{
 export default function TierComparison() {
   const [openTier, setOpenTier] = useState<number | null>(null);
   const activeTier = openTier !== null ? TIERS[openTier] : null;
+
+  function handleWaitlistClick(index: number) {
+    const tier = TIERS[index];
+    posthog.capture("tier_waitlist_clicked", {
+      tier_name: tier.name,
+      tier_slug: tier.slug,
+      tier_price: tier.price,
+    });
+    setOpenTier(index);
+  }
 
   return (
     <>
@@ -168,7 +179,7 @@ export default function TierComparison() {
               >
                 <button
                   type="button"
-                  onClick={() => setOpenTier(i)}
+                  onClick={() => handleWaitlistClick(i)}
                   className={[
                     "w-full inline-flex items-center justify-center rounded-lg",
                     "font-sans text-sm font-semibold tracking-wide",
@@ -307,7 +318,7 @@ export default function TierComparison() {
                 >
                   <button
                     type="button"
-                    onClick={() => setOpenTier(i)}
+                    onClick={() => handleWaitlistClick(i)}
                     className={[
                       "w-full inline-flex items-center justify-center rounded-lg",
                       "font-sans text-sm font-semibold tracking-wide",

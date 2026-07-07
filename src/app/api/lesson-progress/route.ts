@@ -9,6 +9,7 @@ import {
 } from "@/lib/lms";
 import { recordEvent } from "@/lib/analytics";
 import { PREVIEW_COOKIE_NAME } from "@/lib/preview-cookie";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 interface LessonRefRow {
   course_id: number;
@@ -73,6 +74,12 @@ export async function POST(request: Request) {
       userId: auth.userId,
       eventType: "lesson.complete",
       metadata: { lessonId },
+    });
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: String(auth.userId),
+      event: "lesson_completed",
+      properties: { lesson_id: lessonId },
     });
     return NextResponse.json({ success: true, complete: true });
   } catch (error) {

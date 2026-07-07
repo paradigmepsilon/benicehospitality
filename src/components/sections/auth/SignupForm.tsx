@@ -5,6 +5,7 @@ import Link from "next/link";
 import OAuthButtons, {
   type EnabledProviders,
 } from "@/components/sections/auth/OAuthButtons";
+import posthog from "posthog-js";
 
 // Mirrors the LOCKED vocabulary in src/lib/community-auth.ts. Kept inline as
 // a labelled tuple so the form copy can diverge from the DB enum names
@@ -101,6 +102,10 @@ export default function SignupForm({
         setLoading(false);
         return;
       }
+      posthog.capture("user_signed_up", {
+        method: "password",
+        service_interests: interestArray,
+      });
       setSubmitted(true);
       setLoading(false);
     } catch {

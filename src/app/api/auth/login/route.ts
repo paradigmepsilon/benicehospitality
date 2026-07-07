@@ -8,6 +8,7 @@ import {
 } from "@/lib/community-auth";
 import { loginLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 export async function POST(request: Request) {
   try {
@@ -86,10 +87,21 @@ export async function POST(request: Request) {
       eventType: "auth.login",
       metadata: { role: user.role },
     });
+    const posthog = getPostHogClient();
+    posthog.identify({
+      distinctId: String(user.id),
+      properties: { name: user.name, role: user.role },
+    });
+    posthog.capture({
+      distinctId: String(user.id),
+      event: "user_logged_in",
+      properties: { role: user.role },
+    });
 
     const response = NextResponse.json({
       success: true,
       user: {
+        id: user.id,
         email: user.email,
         name: user.name,
         role: user.role,

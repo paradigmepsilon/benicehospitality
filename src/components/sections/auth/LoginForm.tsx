@@ -7,6 +7,7 @@ import OAuthButtons, {
   type EnabledProviders,
 } from "@/components/sections/auth/OAuthButtons";
 import { safeNext } from "@/lib/auth-redirect";
+import posthog from "posthog-js";
 
 interface Props {
   enabledProviders?: EnabledProviders;
@@ -92,6 +93,15 @@ export default function LoginForm({
         setLoading(false);
         return;
       }
+
+      const data = await res.json().catch(() => ({})) as { user?: { id?: number; name?: string; role?: string } };
+      if (data.user?.id) {
+        posthog.identify(String(data.user.id), {
+          name: data.user.name,
+          role: data.user.role,
+        });
+      }
+      posthog.capture("user_logged_in", { role: data.user?.role });
 
       // Hard navigation so the freshly-set bnhg_session cookie is sent on the
       // very next request (avoids router.push race with cookie write under

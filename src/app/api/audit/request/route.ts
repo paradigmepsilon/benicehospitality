@@ -5,6 +5,7 @@ import { auditRequestBodySchema } from "@/lib/validation/audit";
 import { auditRequestLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { internalAuditRequestEmail } from "@/lib/email-templates";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -85,6 +86,13 @@ export async function POST(request: Request) {
     } catch (emailErr) {
       console.error("[audit/request] internal notification failed:", emailErr);
     }
+
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: email,
+      event: "audit_requested",
+      properties: { hotel_url: parsed.data.hotel_url, role: parsed.data.role },
+    });
 
     return NextResponse.json({ success: true, request_id: requestId }, { status: 201 });
   } catch (err) {

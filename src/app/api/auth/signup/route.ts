@@ -10,6 +10,7 @@ import {
 import { sendVerificationEmail } from "@/lib/auth-email";
 import { signupLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 const SignupBody = z.object({
   name: z.string().trim().min(2, "Please enter your full name.").max(120),
@@ -71,6 +72,16 @@ export async function POST(request: Request) {
         userId,
         eventType: "auth.signup",
         metadata: { method: "password", interests: body.serviceInterests },
+      });
+      const posthog = getPostHogClient();
+      posthog.identify({
+        distinctId: String(userId),
+        properties: { name: body.name, role: "member" },
+      });
+      posthog.capture({
+        distinctId: String(userId),
+        event: "user_signed_up",
+        properties: { method: "password", service_interests: body.serviceInterests },
       });
     } catch (err) {
       if (err instanceof SignupEmailInUseError) {

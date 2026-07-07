@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { newsletterLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 export async function POST(request: Request) {
   try {
@@ -44,6 +45,13 @@ export async function POST(request: Request) {
       VALUES (${email.toLowerCase().trim()}, ${source || "insights"})
       ON CONFLICT (email) DO NOTHING
     `;
+
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: email.toLowerCase().trim(),
+      event: "newsletter_subscribed",
+      properties: { source: source || "insights" },
+    });
 
     return NextResponse.json({ success: true });
   } catch {

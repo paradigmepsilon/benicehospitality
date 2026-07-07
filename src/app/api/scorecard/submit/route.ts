@@ -6,6 +6,7 @@ import { computeScorecard } from "@/lib/scorecard/score";
 import { scorecardSubmitBodySchema } from "@/lib/validation/scorecard";
 import { scorecardSubmitLimiter, getClientIp } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
@@ -78,6 +79,19 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+
+  const distinctId = userId ? String(userId) : email ?? token;
+  const posthog = getPostHogClient();
+  posthog.capture({
+    distinctId,
+    event: "scorecard_submitted",
+    properties: {
+      overall_score: computed.overallScore,
+      band: computed.band,
+      property_nickname: propertyNickname,
+      is_logged_in: Boolean(session),
+    },
+  });
 
   return NextResponse.json(
     {
