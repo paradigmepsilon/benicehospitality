@@ -10,7 +10,7 @@ import { CLAIM_PROOF } from "@/lib/claim-proof";
  */
 
 export const metadata: Metadata = {
-  title: "You're covered — Claim Proof",
+  title: "You're covered · Claim Proof",
   robots: { index: false, follow: false },
 };
 
@@ -40,9 +40,9 @@ export default function ClaimProofSuccessPage() {
           </h2>
           <p className="font-sans text-base text-charcoal leading-relaxed">
             Print the per-trip checklist and put it wherever you stage your
-            cars. That single page is the system — four minutes per trip. The
-            rest of the manual is there for the day a guest sends you a photo
-            of something bent.
+            cars. That one page is the whole system, and it takes about four
+            minutes a trip. The rest of the manual is there for the day a guest
+            sends you a photo of something bent and swears it was not them.
           </p>
         </div>
 

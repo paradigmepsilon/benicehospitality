@@ -45,7 +45,7 @@ export default function GuideForm() {
   if (status === "success") {
     return (
       <p className="font-sans text-base font-semibold text-gold-light">
-        On its way — check your inbox for The 24-Hour Rule.
+        On its way. Check your inbox for The 24-Hour Rule.
       </p>
     );
   }
