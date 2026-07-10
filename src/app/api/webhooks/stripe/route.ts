@@ -17,6 +17,15 @@ import {
   hostsEdgeDeliveryEmail,
   recordHostsEdgeBuyer,
 } from "@/lib/hosts-edge";
+import {
+  CLAIM_PROOF_PRODUCT_TAG,
+  claimProofDeliveryEmail,
+  claimProofDownloadLink,
+  getClaimProofFromAddress,
+  isClaimProofTier,
+  recordClaimProofContact,
+} from "@/lib/claim-proof";
+import { makeClaimProofToken } from "@/lib/claim-proof-download";
 import { getPostHogClient } from "@/lib/posthog-server";
 
 let cachedResend: Resend | null = null;
@@ -67,6 +76,8 @@ export async function POST(request: Request) {
           // BEFORE the course-enrollment path. Everything untagged is a course.
           if (session.metadata?.product === HOSTS_EDGE_PRODUCT_TAG) {
             await fulfillHostsEdge(session);
+          } else if (session.metadata?.product === CLAIM_PROOF_PRODUCT_TAG) {
+            await fulfillClaimProof(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -172,6 +183,100 @@ async function fulfillHostsEdge(
     });
   } catch (err) {
     console.error(`[webhooks/stripe] PostHog capture for Host's Edge threw:`, err);
+  }
+}
+
+/**
+ * Fulfill a Claim Proof purchase (any tier): email the tier's download link
+ * via Resend and record the buyer on the owned list (newsletter_subscribers,
+ * durable in Neon — unlike Host's Edge's local jsonl mirror). Side-effects are
+ * best-effort and isolated, same contract as fulfillHostsEdge.
+ */
+async function fulfillClaimProof(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+  const tierRaw = session.metadata?.tier;
+  const tier = isClaimProofTier(tierRaw) ? tierRaw : "core";
+
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] Claim Proof session ${session.id} has no email — cannot deliver`,
+    );
+    return;
+  }
+  if (!isClaimProofTier(tierRaw)) {
+    // Deliver Core rather than nothing, but make the misconfig loud.
+    console.error(
+      `[webhooks/stripe] Claim Proof session ${session.id} has invalid tier "${tierRaw}" — defaulting to core`,
+    );
+  }
+
+  try {
+    // Token-gated link to our download endpoint (mints short-lived signed URLs
+    // from the private blob store). The email link itself never expires.
+    const downloadUrl = claimProofDownloadLink(
+      getBaseUrl(),
+      tier,
+      makeClaimProofToken(tier),
+    );
+    const { subject, html } = claimProofDeliveryEmail({
+      name,
+      tier,
+      downloadUrl,
+      videoUrl:
+        tier === "fleet"
+          ? process.env.CLAIM_PROOF_FLEET_VIDEO_URL || undefined
+          : undefined,
+    });
+    const result = await getResend().emails.send({
+      from: getClaimProofFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(
+        `[webhooks/stripe] Claim Proof delivery email to ${email} failed:`,
+        `${result.error.name}: ${result.error.message}`,
+      );
+    } else {
+      console.log(
+        `[webhooks/stripe] Claim Proof (${tier}) delivered to ${email} (session ${session.id})`,
+      );
+    }
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Claim Proof delivery email threw for ${email}:`,
+      err,
+    );
+  }
+
+  try {
+    await recordClaimProofContact(email, `claimproof-${tier}`);
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Claim Proof contact log threw for ${email}:`,
+      err,
+    );
+  }
+
+  try {
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: email,
+      event: "claimproof_purchased",
+      properties: {
+        tier,
+        stripe_session_id: session.id,
+        amount_cents: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+      },
+    });
+  } catch (err) {
+    console.error(`[webhooks/stripe] PostHog capture for Claim Proof threw:`, err);
   }
 }
 

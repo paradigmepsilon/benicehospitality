@@ -15,6 +15,7 @@
     "lesson:import": "node --env-file=.env.local --import tsx scripts/import-lesson.ts",
     "resource:attach": "node --env-file=.env.local --import tsx scripts/attach-lesson-resource.ts",
     "resource:publish": "node --env-file=.env.local --import tsx scripts/publish-member-resource.ts",
+    "claimproof:upload": "node --env-file=.env.local --import tsx scripts/upload-claimproof.ts",
     "smoke:bookings": "node --env-file=.env.local --import tsx scripts/smoke/booking-conflict.ts"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "@tiptap/react": "^3.20.1",
     "@tiptap/starter-kit": "^3.20.1",
     "@types/papaparse": "^5.5.2",
+    "@vercel/blob": "^2.6.1",
     "arctic": "^3.7.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.35.2",
