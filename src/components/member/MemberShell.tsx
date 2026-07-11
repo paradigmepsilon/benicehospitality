@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import posthog from "posthog-js";
 import type { PreviewMode } from "@/lib/preview-cookie";
 
 const MODE_LABEL: Record<NonNullable<PreviewMode>, string> = {
@@ -51,10 +52,12 @@ function NavIcon({ icon }: { icon: string }) {
 
 export default function MemberShell({
   children,
+  userId,
   previewMode = null,
   previewPicker,
 }: {
   children: React.ReactNode;
+  userId: number;
   previewMode?: PreviewMode;
   // Server-rendered preview-mode picker. Slotted in as a prop so this client
   // component doesn't have to import server actions directly.
@@ -65,7 +68,13 @@ export default function MemberShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isPreview = previewMode !== null;
 
+  // Re-identify on every page load so returning sessions are linked to the user.
+  useEffect(() => {
+    posthog.identify(String(userId));
+  }, [userId]);
+
   async function handleLogout() {
+    posthog.reset();
     try {
       await fetch("/api/auth/logout", { method: "POST" });
     } catch {

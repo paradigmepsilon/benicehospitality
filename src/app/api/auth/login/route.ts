@@ -97,6 +97,7 @@ export async function POST(request: Request) {
       event: "user_logged_in",
       properties: { role: user.role },
     });
+    await posthog.flush();
 
     const response = NextResponse.json({
       success: true,

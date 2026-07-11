@@ -39,7 +39,7 @@ export default async function AccountLayout({
   ) : undefined;
 
   return (
-    <MemberShell previewMode={ctx.previewMode} previewPicker={picker}>
+    <MemberShell userId={ctx.userId} previewMode={ctx.previewMode} previewPicker={picker}>
       {children}
     </MemberShell>
   );

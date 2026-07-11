@@ -93,6 +93,7 @@ export async function POST(request: Request) {
       event: "audit_requested",
       properties: { hotel_url: parsed.data.hotel_url, role: parsed.data.role },
     });
+    await posthog.flush();
 
     return NextResponse.json({ success: true, request_id: requestId }, { status: 201 });
   } catch (err) {

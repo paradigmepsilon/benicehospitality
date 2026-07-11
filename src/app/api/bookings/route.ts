@@ -13,6 +13,7 @@ import {
   callDurationLabel,
 } from "@/lib/constants/call-types";
 import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -237,6 +238,24 @@ export async function POST(req: Request) {
       });
     } catch (emailError) {
       console.error("Failed to send admin notification email:", emailError);
+    }
+
+    try {
+      const posthog = getPostHogClient();
+      posthog.capture({
+        distinctId: email,
+        event: "discovery_call_booked",
+        properties: {
+          call_type: callType,
+          focus_dimension: focusDimension || null,
+          requested_founder: requestedFounder,
+          click_source: clickSource,
+          has_audit: !!auditId,
+        },
+      });
+      await posthog.flush();
+    } catch (phErr) {
+      console.error("[bookings] PostHog capture failed:", phErr);
     }
 
     return NextResponse.json({ success: true, booking });

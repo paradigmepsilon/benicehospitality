@@ -6,6 +6,7 @@ import {
   getClaimProofPriceId,
   isClaimProofTier,
 } from "@/lib/claim-proof";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // Stripe SDK needs Node APIs, not the Edge runtime.
 export const runtime = "nodejs";
@@ -82,6 +83,18 @@ export async function POST(request: Request) {
         { error: "Stripe did not return a checkout URL." },
         { status: 502 },
       );
+    }
+
+    try {
+      const posthog = getPostHogClient();
+      posthog.capture({
+        distinctId: session.id,
+        event: "claimproof_checkout_started",
+        properties: { tier },
+      });
+      await posthog.flush();
+    } catch (phErr) {
+      console.error("[claimproof/checkout] PostHog capture failed:", phErr);
     }
 
     return NextResponse.json({ url: session.url });

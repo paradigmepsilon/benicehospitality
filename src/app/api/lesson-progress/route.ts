@@ -81,6 +81,7 @@ export async function POST(request: Request) {
       event: "lesson_completed",
       properties: { lesson_id: lessonId },
     });
+    await posthog.flush();
     return NextResponse.json({ success: true, complete: true });
   } catch (error) {
     console.error("[lesson-progress POST]", error);

@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // Lazy-construct so this module can load at build time without RESEND_API_KEY.
 let cachedResend: Resend | null = null;
@@ -94,6 +95,18 @@ export async function POST(req: Request) {
       `;
     } catch (crmError) {
       console.error("Failed to create pipeline contact:", crmError);
+    }
+
+    try {
+      const posthog = getPostHogClient();
+      posthog.capture({
+        distinctId: email,
+        event: "contact_form_submitted",
+        properties: { interests: interests || null, has_hotel: !!hotelName },
+      });
+      await posthog.flush();
+    } catch (phErr) {
+      console.error("Contact form PostHog capture failed:", phErr);
     }
 
     return NextResponse.json({ success: true });
