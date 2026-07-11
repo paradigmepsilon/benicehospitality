@@ -83,6 +83,7 @@ export async function POST(request: Request) {
         event: "user_signed_up",
         properties: { method: "password", service_interests: body.serviceInterests },
       });
+      await posthog.flush();
     } catch (err) {
       if (err instanceof SignupEmailInUseError) {
         // Generic success response, same as request-reset, to avoid leaking

@@ -123,6 +123,7 @@ export async function POST(request: Request) {
       currency: tier.currency,
     },
   });
+  await posthog.flush();
 
   // Sanity guard — Stripe always returns a URL for non-embedded sessions, but
   // narrow the type for TS.

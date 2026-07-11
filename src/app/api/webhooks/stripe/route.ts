@@ -181,6 +181,7 @@ async function fulfillHostsEdge(
         currency: session.currency ?? "usd",
       },
     });
+    await posthog.flush();
   } catch (err) {
     console.error(`[webhooks/stripe] PostHog capture for Host's Edge threw:`, err);
   }
@@ -275,6 +276,7 @@ async function fulfillClaimProof(
         currency: session.currency ?? "usd",
       },
     });
+    await posthog.flush();
   } catch (err) {
     console.error(`[webhooks/stripe] PostHog capture for Claim Proof threw:`, err);
   }
@@ -331,6 +333,7 @@ async function fulfillCheckout(session: Stripe.Checkout.Session): Promise<void> 
         stripe_session_id: session.id,
       },
     });
+    await posthog.flush();
   } catch (err) {
     console.error("[webhooks/stripe] PostHog capture for enrollment threw:", err);
   }
