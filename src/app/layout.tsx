@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegistrar from "@/components/ServiceWorkerRegistrar";
+import { Analytics } from '@vercel/analytics/next';
 
 
 const playfair = Playfair_Display({
@@ -110,6 +111,7 @@ export default function RootLayout({
       <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
         <ServiceWorkerRegistrar />
+        <Analytics />
       </body>
     </html>
   );
