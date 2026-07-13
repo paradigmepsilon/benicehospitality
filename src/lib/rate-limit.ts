@@ -54,6 +54,9 @@ export const scorecardUnlockLimiter = createLimiter(3, 60 * 1000);
 // Course waitlist — 3 signups per minute per IP
 export const waitlistLimiter = createLimiter(3, 60 * 1000);
 
+// Claim Proof "resend my access email" — keep low; each hit sends an email.
+export const claimProofResendLimiter = createLimiter(3, 60 * 1000);
+
 // Push subscribe/unsubscribe — lenient; a single device may re-subscribe on
 // permission changes or SW updates.
 export const pushSubscribeLimiter = createLimiter(20, 60 * 1000);
