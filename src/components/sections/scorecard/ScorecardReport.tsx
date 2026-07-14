@@ -27,7 +27,7 @@ const BAND_META: Record<
     tagBg: "bg-primary-green/10",
     tagText: "text-primary-green",
     summary:
-      "This is a strong MTR candidate. Your work now is sharpening what already works and locking in the few gaps below before launch.",
+      "This is a strong co-living candidate. Your work now is sharpening what already works and locking in the few gaps below before launch.",
     ctaHeadline: "Worth a strategy call.",
     ctaBody:
       "If you want a second set of eyes on positioning, pricing, or launch sequencing, Della and team run free 30-minute calls.",
@@ -40,7 +40,7 @@ const BAND_META: Record<
     tagBg: "bg-warm-gold/15",
     tagText: "text-warm-gold",
     summary:
-      "This property can work as an MTR with some targeted upgrades. Below, the fix list is ordered by section weight so you can attack the highest-ROI items first.",
+      "This property can work for co-living with some targeted upgrades. Below, the fix list is ordered by section weight so you can attack the highest-ROI items first.",
     ctaHeadline: "Want a deeper read?",
     ctaBody:
       "Our free Tier 0 Comprehensive Audit goes deeper on revenue, reputation, and tech stack across your whole operation.",
@@ -53,10 +53,10 @@ const BAND_META: Record<
     tagBg: "bg-terracotta/10",
     tagText: "text-terracotta",
     summary:
-      "This property needs significant work before it pencils as an MTR. Read the gaps below carefully. Some are fixable for a few thousand dollars. Others (zoning, HOA) may be deal-breakers.",
+      "This property needs significant work before it pencils for co-living. Read the gaps below carefully. Some are fixable for a few thousand dollars. Others (zoning, HOA) may be deal-breakers.",
     ctaHeadline: "Start with the playbook.",
     ctaBody:
-      "Della's Room Rental Riches course walks through MTR setup end to end. The Module 2 lessons on legal and zoning are the most directly relevant to a low score.",
+      "Della's Room Rental Riches course walks through co-living setup end to end. The Module 2 lessons on legal and zoning are the most directly relevant to a low score.",
     ctaHref: "/education",
     ctaLabel: "See the Course",
   },
@@ -94,7 +94,7 @@ export default function ScorecardReport({
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
             <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
-              MTR Viability Calculator
+              Co-living Property Calculator
             </p>
             <p className="font-sans text-xs text-white/50 tabular-nums">
               Scored {createdLabel}
@@ -125,7 +125,7 @@ export default function ScorecardReport({
             <div className="flex items-center gap-3">
               <PrintButton />
               <Link
-                href="/resources/mtr-viability-scorecard"
+                href="/resources/co-living-property-calculator"
                 className="font-sans text-sm font-semibold text-white/70 hover:text-white transition-colors underline-offset-4 hover:underline"
               >
                 Score another property

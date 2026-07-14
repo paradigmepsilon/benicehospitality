@@ -67,6 +67,27 @@ const nextConfig: NextConfig = {
         destination: "/education",
         permanent: true,
       },
+      {
+        // Future free/paid tool suite lives under /tools. The Co-living Property
+        // Calculator keeps its canonical /resources URL; /tools/property-viability
+        // is the memorable alias.
+        source: "/tools/property-viability",
+        destination: "/resources/co-living-property-calculator",
+        permanent: true,
+      },
+      {
+        // Legacy slug: the tool was renamed from "MTR Viability Calculator" to
+        // "Co-living Property Calculator". Preserve old links + SEO.
+        source: "/resources/mtr-viability-scorecard",
+        destination: "/resources/co-living-property-calculator",
+        permanent: true,
+      },
+      {
+        // ...including deep links to saved results (/results/:token).
+        source: "/resources/mtr-viability-scorecard/:path*",
+        destination: "/resources/co-living-property-calculator/:path*",
+        permanent: true,
+      },
     ];
   },
 };

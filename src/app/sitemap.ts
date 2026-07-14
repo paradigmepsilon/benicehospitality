@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/book`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/audit/request`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${baseUrl}/resources/mtr-viability-scorecard`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/resources/co-living-property-calculator`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const coursePages: MetadataRoute.Sitemap = COURSES.map((c) => ({

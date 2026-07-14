@@ -25,6 +25,7 @@ export default function EmailCaptureModal({
   const [role, setRole] = useState<string>("");
   const [phone, setPhone] = useState("");
   const [optedIn, setOptedIn] = useState(true);
+  const [confirmedAccurate, setConfirmedAccurate] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +43,13 @@ export default function EmailCaptureModal({
 
     if (!name.trim() || !email.trim() || !role) {
       setError("Please fill in name, email, and role.");
+      return;
+    }
+
+    if (!confirmedAccurate) {
+      setError(
+        "Please confirm your answers accurately reflect this property before we score it.",
+      );
       return;
     }
 
@@ -104,9 +112,9 @@ export default function EmailCaptureModal({
             Where should we send your scorecard?
           </h2>
           <p className="font-sans text-sm text-charcoal/70 leading-relaxed mb-6">
-            Your score and full report are ready. Drop your contact info and we
-            will reveal the result here, plus email a copy you can revisit any
-            time.
+            Your score is ready. Confirm your answers are accurate and tell us
+            where to send it. We will reveal the result here and email you a copy
+            you can revisit any time.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -188,6 +196,23 @@ export default function EmailCaptureModal({
               />
             </div>
 
+            <label className="flex items-start gap-2.5 cursor-pointer rounded-md border-2 border-warm-gold/50 bg-warm-gold/10 p-3.5">
+              <input
+                type="checkbox"
+                required
+                checked={confirmedAccurate}
+                onChange={(e) => setConfirmedAccurate(e.target.checked)}
+                className="mt-0.5 h-4 w-4 accent-primary-green shrink-0"
+              />
+              <span className="font-sans text-xs text-near-black leading-relaxed">
+                <strong>
+                  I confirm my answers accurately reflect this property.
+                </strong>{" "}
+                I understand anything left unchecked counts as a &ldquo;no,&rdquo;
+                and a property can legitimately score low.
+              </span>
+            </label>
+
             <label className="flex items-start gap-2.5 cursor-pointer pt-1">
               <input
                 type="checkbox"
@@ -196,9 +221,7 @@ export default function EmailCaptureModal({
                 className="mt-1 h-4 w-4 accent-primary-green shrink-0"
               />
               <span className="font-sans text-xs text-charcoal/80 leading-relaxed">
-                Send me the BNHG operator newsletter. Della writes a couple
-                times a month about MTR setup, pricing, and the field-tested
-                stuff that actually moves the number. Unsubscribe any time.
+                Send me the BNHG operator newsletter.
               </span>
             </label>
 
@@ -210,7 +233,7 @@ export default function EmailCaptureModal({
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !confirmedAccurate}
               className="w-full inline-flex items-center justify-center bg-primary-green hover:bg-primary-green-dark text-white font-semibold px-6 py-3 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
             >
               {submitting ? "Unlocking..." : "Show My Score"}
@@ -228,7 +251,7 @@ export default function EmailCaptureModal({
 
             <p className="font-sans text-[11px] text-charcoal/60 text-center leading-relaxed pt-1">
               We will not share your information. By submitting you agree to be
-              contacted by Be Nice Hospitality Group about MTR operations.
+              contacted by Be Nice Hospitality Group about co-living operations.
             </p>
 
             <button

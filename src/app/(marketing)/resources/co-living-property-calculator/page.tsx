@@ -8,19 +8,19 @@ import {
 } from "@/lib/scorecard/questions";
 
 const SITE_URL = "https://benicehospitality.com";
-const PAGE_PATH = "/resources/mtr-viability-scorecard";
+const PAGE_PATH = "/resources/co-living-property-calculator";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "MTR Viability Calculator: Free Property Assessment | BNHG",
+    absolute: "Co-living Property Calculator: Free Property Assessment | BNHG",
   },
   description:
-    "A free, weighted scorecard that grades any property's fit for mid-term rentals. 40 questions across 7 sections. Built for owners, investors, and operators in the Southeast.",
+    "A free, weighted scorecard that grades any property's fit for co-living. 40 questions across 7 sections. Built for owners, investors, and operators in the Southeast.",
   alternates: { canonical: `${SITE_URL}${PAGE_PATH}` },
   openGraph: {
-    title: "MTR Viability Calculator: Free Property Assessment | BNHG",
+    title: "Co-living Property Calculator: Free Property Assessment | BNHG",
     description:
-      "Score any property on its fit for mid-term rentals. 40 weighted questions, instant report, recommendations from a working MTR operator.",
+      "Score any property on its fit for co-living. 40 weighted questions, instant report, recommendations from a working co-living operator.",
     url: `${SITE_URL}${PAGE_PATH}`,
     type: "website",
   },
@@ -28,28 +28,28 @@ export const metadata: Metadata = {
 
 const WHAT_YOU_GET = [
   "Section-by-section score across 7 weighted categories",
-  "Specific Della-voice recommendation for every gap",
+  "Specific recommendation for every gap",
   "An overall band (High / Moderate / Low) with what it means",
   "A printable report you can revisit or share with a partner",
   "A recommended next move tied to your band",
 ];
 
 const WHO_ITS_FOR = [
-  "Owners weighing whether their property fits MTR",
+  "Owners weighing whether their property fits co-living",
   "Investors evaluating a deal before they buy",
   "Property managers building a portfolio of furnished units",
-  "Anyone considering buying with MTR cash flow in mind",
+  "Anyone considering buying with co-living cash flow in mind",
 ];
 
 export default function MtrViabilityScorecardPage() {
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "MTR Viability Calculator",
+    name: "Co-living Property Calculator",
     description:
-      "Free 40-question weighted scorecard that grades any property's fit for mid-term rentals.",
+      "Free 40-question weighted scorecard that grades any property's fit for co-living.",
     provider: { "@id": `${SITE_URL}/#organization` },
-    serviceType: "Mid-Term Rental Property Assessment",
+    serviceType: "Co-living Property Assessment",
     areaServed: { "@type": "Country", name: "United States" },
     offers: {
       "@type": "Offer",
@@ -80,10 +80,10 @@ export default function MtrViabilityScorecardPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-near-black/75 via-near-black/85 to-near-black/95" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
-            Free Resource · MTR Viability Calculator
+            Free Resource · Co-living Property Calculator
           </p>
           <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight">
-            Is your property MTR-ready?
+            Is your property Co-living-Ready?
           </h1>
           <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl mx-auto leading-relaxed">
             {SCORECARD_QUESTION_COUNT} weighted questions across{" "}
@@ -92,9 +92,55 @@ export default function MtrViabilityScorecardPage() {
             every gap.
           </p>
           <p className="font-sans text-sm text-white/55 mt-4">
-            Built by operators running MTRs in the Southeast. Free to use,
+            Built by operators running co-living properties in the Southeast. Free to use,
             yours to keep.
           </p>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16 sm:py-20 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <p className="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-warm-gold mb-3 text-center">
+            How it works
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black leading-tight text-center mb-12">
+            Tick what is true. We score the rest.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {[
+              {
+                step: "1",
+                title: "Walk the property",
+                body: "Open the scorecard, give the property a nickname, and work through the 7 sections. About 10 minutes if you know the place well.",
+              },
+              {
+                step: "2",
+                title: "We weight the answers",
+                body: "Location and operations carry more than community vibes. Our weighting reflects what actually drives co-living demand.",
+              },
+              {
+                step: "3",
+                title: "Drop your email, see the score",
+                body: "Your overall band, section breakdown, and a specific fix for every gap. Emailed to you so you can revisit any time.",
+              },
+            ].map((s) => (
+              <div
+                key={s.step}
+                className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-6"
+              >
+                <p className="font-display text-4xl font-semibold text-warm-gold mb-3">
+                  {s.step}
+                </p>
+                <h3 className="font-display text-lg font-semibold text-near-black mb-2">
+                  {s.title}
+                </h3>
+                <p className="font-sans text-sm text-charcoal/85 leading-relaxed">
+                  {s.body}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -160,51 +206,6 @@ export default function MtrViabilityScorecardPage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-16 sm:py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <p className="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-warm-gold mb-3 text-center">
-            How it works
-          </p>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black leading-tight text-center mb-12">
-            Tick what is true. We score the rest.
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                step: "1",
-                title: "Walk the property",
-                body: "Open the scorecard, give the property a nickname, and work through the 7 sections. About 10 minutes if you know the place well.",
-              },
-              {
-                step: "2",
-                title: "We weight the answers",
-                body: "Location and operations carry more than community vibes. Our weighting reflects what actually drives MTR booking rates.",
-              },
-              {
-                step: "3",
-                title: "Drop your email, see the score",
-                body: "Your overall band, section breakdown, and a specific fix for every gap. Emailed to you so you can revisit any time.",
-              },
-            ].map((s) => (
-              <div
-                key={s.step}
-                className="bg-off-white border border-light-gray rounded-lg p-6"
-              >
-                <p className="font-display text-4xl font-semibold text-warm-gold mb-3">
-                  {s.step}
-                </p>
-                <h3 className="font-display text-lg font-semibold text-near-black mb-2">
-                  {s.title}
-                </h3>
-                <p className="font-sans text-sm text-charcoal/85 leading-relaxed">
-                  {s.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   );
 }

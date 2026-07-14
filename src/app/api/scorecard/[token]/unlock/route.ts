@@ -5,12 +5,25 @@ import { SCORECARD_MAX_SCORE } from "@/lib/scorecard/questions";
 import { scorecardUnlockBodySchema } from "@/lib/validation/scorecard";
 import { scorecardUnlockLimiter, getClientIp } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
+import { upsertAudienceContact } from "@/lib/resend-audience";
 import {
   scorecardReadyEmail,
   internalScorecardRequestEmail,
 } from "@/lib/email-templates";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.benicehospitality.com";
+
+// Verified Della/BNHG sender for lead-facing + internal scorecard emails.
+// Prefer an explicit override, then the shared verified BNHG identity, then the
+// legacy audit address, and only fall back to the Resend sandbox as a last resort.
+const SCORECARD_FROM_EMAIL =
+  process.env.SCORECARD_FROM_EMAIL ||
+  process.env.BNHG_AUTH_FROM ||
+  process.env.AUDIT_FROM_EMAIL ||
+  "BNHG <onboarding@resend.dev>";
+
+// Internal new-lead notifications land in the shared ops inbox.
+const SCORECARD_NOTIFY_TO = process.env.ADMIN_EMAIL || "admin@benicehospitality.com";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -140,19 +153,32 @@ export async function POST(
     } catch (subErr) {
       console.error("[scorecard/unlock] newsletter subscribe failed:", subErr);
     }
+
+    // Also sync into the Resend "Room Rental Riches leads" audience for nurture.
+    // Best-effort: a failure here never blocks the unlock or the results.
+    const added = await upsertAudienceContact({
+      email,
+      firstName: name.split(" ")[0],
+    });
+    if (!added) {
+      console.error(
+        "[scorecard/unlock] resend audience upsert skipped/failed for",
+        email,
+      );
+    }
   }
 
   const propertyNickname = scorecard.property_nickname || "Your property";
   const overallScore = Number(scorecard.overall_score);
-  const resultsUrl = `${SITE_URL}/resources/mtr-viability-scorecard/results/${token}`;
+  const resultsUrl = `${SITE_URL}/resources/co-living-property-calculator/results/${token}`;
   const bookingUrl = `${SITE_URL}/book`;
 
   if (process.env.RESEND_API_KEY) {
     try {
       await getResend().emails.send({
-        from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
+        from: SCORECARD_FROM_EMAIL,
         to: email,
-        subject: `Your MTR Viability Calculator is ready (${propertyNickname})`,
+        subject: `Your Co-living Property Calculator is ready (${propertyNickname})`,
         html: scorecardReadyEmail({
           name,
           propertyNickname,
@@ -169,13 +195,10 @@ export async function POST(
 
     try {
       await getResend().emails.send({
-        from: process.env.AUDIT_FROM_EMAIL || "BNHG <onboarding@resend.dev>",
-        to:
-          process.env.ADMIN_EMAIL ||
-          process.env.CONTACT_EMAIL ||
-          "admin@benicehospitality.com",
+        from: SCORECARD_FROM_EMAIL,
+        to: SCORECARD_NOTIFY_TO,
         replyTo: email,
-        subject: `New MTR Viability Calculator: ${propertyNickname} (${scorecard.band})`,
+        subject: `New Co-living Property Calculator: ${propertyNickname} (${scorecard.band})`,
         html: internalScorecardRequestEmail({
           email,
           name,
@@ -192,5 +215,5 @@ export async function POST(
     }
   }
 
-  return NextResponse.json({ ok: true, results_url: `/resources/mtr-viability-scorecard/results/${token}` });
+  return NextResponse.json({ ok: true, results_url: `/resources/co-living-property-calculator/results/${token}` });
 }

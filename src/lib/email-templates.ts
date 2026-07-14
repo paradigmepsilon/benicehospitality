@@ -449,7 +449,7 @@ export function bookingConfirmationEmail({
 }
 
 // ============================================================================
-// MTR Viability Calculator emails
+// Co-living Property Calculator emails
 // ============================================================================
 
 const SCORECARD_BAND_COPY: Record<
@@ -460,19 +460,19 @@ const SCORECARD_BAND_COPY: Record<
     label: "High Viability",
     color: "#5b9a2f",
     bg: "#5b9a2f1a",
-    line: "This property is a strong MTR candidate. The biggest opportunity is sharpening what is already working.",
+    line: "This property is a strong co-living candidate. The biggest opportunity is sharpening what is already working.",
   },
   moderate: {
     label: "Moderate Viability",
     color: "#f5a623",
     bg: "#f5a6231a",
-    line: "This property can work as an MTR with some targeted upgrades. Your report ranks the highest-ROI fixes first.",
+    line: "This property can work for co-living with some targeted upgrades. Your report ranks the highest-ROI fixes first.",
   },
   low: {
     label: "Low Viability",
     color: "#c0674a",
     bg: "#c0674a1a",
-    line: "This property needs significant work before it pencils as an MTR. The report lays out what would have to change.",
+    line: "This property needs significant work before it pencils for co-living. The report lays out what would have to change.",
   },
 };
 
@@ -490,7 +490,7 @@ function scorecardCallout({
   const meta = SCORECARD_BAND_COPY[band];
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px;background-color:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
     <tr><td style="padding:24px 28px;">
-      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">MTR Viability Calculator</p>
+      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">Co-living Property Calculator</p>
       <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
         ${propertyNickname}
       </p>
@@ -517,16 +517,16 @@ export function scorecardReadyEmail(p: ScorecardReadyPayload) {
   return auditLayout({
     preheader: `${p.propertyNickname}: ${p.overallScore.toFixed(1)} / ${p.maxScore.toFixed(0)}, ${meta.label}.`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your MTR Viability Calculator is ready</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your Co-living Property Calculator is ready</h1>
       ${goldDivider()}
       <p style="margin:0 0 16px;">Hi ${p.name},</p>
-      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the MTR Viability Calculator.</p>
+      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the Co-living Property Calculator.</p>
       ${scorecardCallout({ propertyNickname: p.propertyNickname, overallScore: p.overallScore, maxScore: p.maxScore, band: p.band })}
       <p style="margin:0 0 16px;">${meta.line}</p>
       <p style="margin:0 0 16px;">Your full report includes section-by-section scores and a specific recommendation for every gap. The link stays active so you can come back any time.</p>
       ${primaryButton(p.resultsUrl, "View My Full Report")}
       <p style="margin:32px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:18px;color:#1a1a1a;font-weight:600;">Want a second set of eyes?</p>
-      <p style="margin:8px 0 0;">Della and the BNHG team run free 30-minute strategy calls for operators working through MTR setup. Bring your scorecard, we will work through your highest-leverage next move.</p>
+      <p style="margin:8px 0 0;">Della and the BNHG team run free 30-minute strategy calls for operators working through co-living setup. Bring your scorecard, we will work through your highest-leverage next move.</p>
       ${primaryButton(p.bookingUrl, "Book a Strategy Call")}
       <p style="margin:32px 0 0;color:#1a1a1a;font-weight:500;">The BNHG team</p>
     `,
@@ -561,7 +561,7 @@ export function internalScorecardRequestEmail(
   return auditLayout({
     preheader: `New scorecard: ${p.propertyNickname} (${meta.label})`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New MTR Viability Calculator submission</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New Co-living Property Calculator submission</h1>
       ${goldDivider()}
       <p style="margin:0 0 18px;">A visitor just unlocked their scorecard.</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">

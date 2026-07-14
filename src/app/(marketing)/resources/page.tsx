@@ -28,16 +28,16 @@ export const metadata: Metadata = {
 
 const PROPERTY_RESOURCES: Resource[] = [
   {
-    name: "MTR Viability Calculator",
+    name: "Co-living Property Calculator",
     body: "40 weighted questions across 7 sections. Score any single property in under 10 minutes and get a Della-voice fix list for every gap.",
     bullets: [
       "40 weighted questions across 7 operator sections",
       "Score a property in under 10 minutes",
       "Della-voice fix list for every gap you flag",
-      "Built specifically for MTR, not generic STR scoring",
+      "Built specifically for co-living, not generic STR scoring",
     ],
     access: "free-email",
-    href: "/resources/mtr-viability-scorecard",
+    href: "/resources/co-living-property-calculator",
     status: "live",
   },
   {

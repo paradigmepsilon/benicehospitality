@@ -3,10 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import {
-  SCORECARD_SECTIONS,
-  type ScorecardSectionId,
-} from "@/lib/scorecard/questions";
+import { SCORECARD_SECTIONS } from "@/lib/scorecard/questions";
 import EmailCaptureModal from "./EmailCaptureModal";
 
 type Answers = Record<string, boolean>;
@@ -21,9 +18,10 @@ export default function ScorecardForm({
   const [propertyNickname, setPropertyNickname] = useState(initialNickname);
   const [answers, setAnswers] = useState<Answers>({});
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
-  const [visitedSections, setVisitedSections] = useState<Set<ScorecardSectionId>>(
-    new Set([SCORECARD_SECTIONS[0].id]),
-  );
+  // Furthest section the user has reached. Sections past this are locked: you
+  // advance one at a time via "Next", but can always jump back to any section
+  // you've already reached.
+  const [maxReachedIdx, setMaxReachedIdx] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [captureToken, setCaptureToken] = useState<string | null>(null);
@@ -41,12 +39,12 @@ export default function ScorecardForm({
 
   function goToSection(idx: number) {
     if (idx < 0 || idx >= SCORECARD_SECTIONS.length) return;
+    // You can return to any reached section, or advance exactly one forward.
+    // Jumping ahead to a locked section is blocked.
+    const advancingByOne = idx === currentSectionIdx + 1;
+    if (idx > maxReachedIdx && !advancingByOne) return;
     setCurrentSectionIdx(idx);
-    setVisitedSections((prev) => {
-      const next = new Set(prev);
-      next.add(SCORECARD_SECTIONS[idx].id);
-      return next;
-    });
+    setMaxReachedIdx((prev) => Math.max(prev, idx));
     // Scroll the wizard back to the top of the form on section change.
     if (typeof window !== "undefined") {
       requestAnimationFrame(() => {
@@ -99,7 +97,7 @@ export default function ScorecardForm({
       if (data.requires_capture) {
         setCaptureToken(data.token);
       } else {
-        router.push(`/resources/mtr-viability-scorecard/results/${data.token}`);
+        router.push(`/resources/co-living-property-calculator/results/${data.token}`);
       }
     } catch {
       setError("Something went wrong. Please try again.");
@@ -119,6 +117,16 @@ export default function ScorecardForm({
         id="scorecard-wizard"
         className="space-y-6 scroll-mt-28"
       >
+        {/* How to use */}
+        <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-4 sm:p-5">
+          <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold mb-2">
+            How this works
+          </p>
+          <p className="font-sans text-sm text-near-black leading-relaxed">
+            Work through the sections in order, 1 at a time. <strong>Tick only what is true</strong> for this property. Anything you leave unchecked counts as a &ldquo;no.&rdquo; Use <strong>Next</strong> to move forward; you can jump back to any section you&apos;ve already completed. You score at the end.
+          </p>
+        </div>
+
         {/* Property nickname (always visible) */}
         <div className="bg-white border border-light-gray rounded-lg p-5 sm:p-6">
           <label
@@ -141,16 +149,6 @@ export default function ScorecardForm({
           />
         </div>
 
-        {/* How to use */}
-        <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-4 sm:p-5">
-          <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold mb-2">
-            How this works
-          </p>
-          <p className="font-sans text-sm text-near-black leading-relaxed">
-            Walk through 1 section at a time. <strong>Tick only what is true</strong> for this property. Anything you leave unchecked counts as a &ldquo;no.&rdquo; You can move between sections freely and submit whenever you&apos;re ready.
-          </p>
-        </div>
-
         {/* Top section nav */}
         <nav
           aria-label="Section navigation"
@@ -159,7 +157,7 @@ export default function ScorecardForm({
           <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
             {SCORECARD_SECTIONS.map((section, idx) => {
               const isCurrent = idx === currentSectionIdx;
-              const isVisited = visitedSections.has(section.id);
+              const isLocked = idx > maxReachedIdx;
               const sectionChecks = section.questions.filter(
                 (q) => answers[q.id],
               ).length;
@@ -168,21 +166,31 @@ export default function ScorecardForm({
                   key={section.id}
                   type="button"
                   onClick={() => goToSection(idx)}
+                  disabled={isLocked}
                   aria-current={isCurrent ? "step" : undefined}
+                  aria-disabled={isLocked}
                   className={[
                     "flex flex-col items-center justify-start gap-1 rounded-md py-2 px-1 sm:px-2 text-center transition-colors",
                     isCurrent
                       ? "bg-near-black text-white"
-                      : isVisited
-                        ? "bg-primary-green/5 text-near-black hover:bg-primary-green/10"
-                        : "bg-off-white text-charcoal/70 hover:bg-light-gray",
+                      : isLocked
+                        ? "bg-off-white text-charcoal/35 cursor-not-allowed"
+                        : "bg-primary-green/5 text-near-black hover:bg-primary-green/10",
                   ].join(" ")}
-                  title={section.label}
+                  title={
+                    isLocked
+                      ? "Complete the earlier sections to unlock this one"
+                      : section.label
+                  }
                 >
                   <span
                     className={[
                       "font-display font-semibold leading-none text-base sm:text-lg",
-                      isCurrent ? "text-white" : "text-near-black",
+                      isCurrent
+                        ? "text-white"
+                        : isLocked
+                          ? "text-charcoal/35"
+                          : "text-near-black",
                     ].join(" ")}
                   >
                     {idx + 1}
@@ -190,7 +198,11 @@ export default function ScorecardForm({
                   <span
                     className={[
                       "hidden sm:block font-sans text-[10px] font-medium tracking-wide leading-tight truncate w-full",
-                      isCurrent ? "text-white/80" : "text-charcoal/70",
+                      isCurrent
+                        ? "text-white/80"
+                        : isLocked
+                          ? "text-charcoal/30"
+                          : "text-charcoal/70",
                     ].join(" ")}
                   >
                     {section.label.split(" & ")[0].split(" ")[0]}
@@ -315,23 +327,6 @@ export default function ScorecardForm({
             )}
           </div>
         </div>
-
-        {/* Skip-to-score escape hatch (hidden on last section since the main button submits there) */}
-        {!isLastSection && (
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={submitScorecard}
-              disabled={submitting}
-              className="font-sans text-sm text-charcoal/70 hover:text-near-black underline underline-offset-4 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? "Scoring..." : "Skip to score with current answers →"}
-            </button>
-            <p className="font-sans text-xs text-charcoal/55 mt-1.5">
-              Unfinished sections count as &ldquo;no&rdquo; for any unchecked item.
-            </p>
-          </div>
-        )}
 
         {/* Sticky bottom progress */}
         <div className="sticky bottom-4 z-10">
