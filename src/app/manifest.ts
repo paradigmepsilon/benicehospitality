@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Be Nice Hospitality Group",
     short_name: "Be Nice",
     description:
-      "Boutique hotel consulting and technology for independent luxury hotels.",
+      "Training, services, and software for operators running co-living properties, boutique stays, and rental fleets.",
     start_url: "/",
     scope: "/",
     display: "standalone",

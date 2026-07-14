@@ -13,13 +13,13 @@ const SURFACES: Surface[] = [
   {
     name: "Education & Community",
     audience: "Sharing-economy operators",
-    body: "Foundation and Flagship courses, plus the Nice Host Network. For property and auto operators running their own books.",
+    body: "Foundation and Flagship courses, plus the Nice Host Network. For co-living, rental, and fleet operators running their own books.",
     href: "/education",
   },
   {
     name: "Signal",
-    audience: "Boutique luxury hotels",
-    body: "Productized AI services for 10 to 50 room independent properties. Quick Wins, Sprints, Retainers, Custom Builds.",
+    audience: "Boutique stays",
+    body: "Productized AI services for independent boutique stays. Quick Wins, Sprints, Retainers, Custom Builds.",
     href: "/signal",
   },
   {

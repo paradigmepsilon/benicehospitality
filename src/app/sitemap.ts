@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { sql } from "@/lib/db";
 import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 import { COURSES } from "@/lib/courses";
+import { liveResourceTools } from "@/lib/resources/registry";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://benicehospitality.com";
@@ -23,6 +24,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/audit/request`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/resources/co-living-property-calculator`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
   ];
+
+  const resourceToolPages: MetadataRoute.Sitemap = liveResourceTools().map(
+    (t) => ({
+      url: `${baseUrl}/resources/${t.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }),
+  );
 
   const coursePages: MetadataRoute.Sitemap = COURSES.map((c) => ({
     url: `${baseUrl}/courses/${c.slug}`,
@@ -50,5 +60,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...coursePages, ...resourcePages, ...blogPages];
+  return [
+    ...staticPages,
+    ...resourceToolPages,
+    ...coursePages,
+    ...resourcePages,
+    ...blogPages,
+  ];
 }

@@ -15,7 +15,7 @@ const OFFERINGS: Offering[] = [
   {
     name: "AI Visibility Audit",
     price: "$2,500",
-    body: "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your hotel today. 5 business days.",
+    body: "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your property today. 5 business days.",
   },
   {
     name: "MCP Readiness Package",
@@ -56,7 +56,7 @@ export default function SignalSpotlight() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base text-charcoal/75 mt-4 leading-relaxed">
-                For 10 to 50 room independent properties. Productized AI engagements with outcome guarantees. Quick Wins, 30-day sprints, monthly retainers, and custom builds. Led by Alex.
+                For independent boutique stays: hotels, inns, and the design-forward short-term and vacation rentals guests book on purpose. Productized AI engagements with outcome guarantees. Quick Wins, 30-day sprints, monthly retainers, and custom builds. Led by Alex.
               </p>
             </AnimatedItem>
           </div>

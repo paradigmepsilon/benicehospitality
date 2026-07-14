@@ -348,7 +348,7 @@ export function bookingConfirmationEmail({
                 Hi ${name},
               </p>
               <p style="margin:0 0 28px;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:16px;color:#3d3d3d;line-height:1.6;">
-                Thank you for scheduling a discovery call with Be Nice Hospitality Group. We're looking forward to learning about your property and how we can help.
+                Thank you for scheduling a discovery call with Be Nice Hospitality Group. We're looking forward to learning about your operation and how we can help.
               </p>
 
               <!-- Booking details card -->
@@ -427,7 +427,7 @@ export function bookingConfirmationEmail({
                 Be Nice Hospitality Group
               </p>
               <p style="margin:0 0 16px;font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;">
-                Boutique Hotel Consulting &amp; Management
+                Co-living, Boutique Stays &amp; Fleet Operations
               </p>
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
                 <tr>
@@ -574,6 +574,68 @@ export function internalScorecardRequestEmail(
         </td></tr>
       </table>
       <p style="margin:18px 0 0;font-size:13px;color:#3d3d3d;">Contact has been added to <code>pipeline_contacts</code> with source <code>viability_scorecard</code>.</p>
+    `,
+  });
+}
+
+// ============================================================================
+// Resource tools: generic gated-tool unlock emails. Parameterized by tool name
+// + URL so every /resources tool (Price Calculator, Start-Up Cost, P&L, Setup
+// Checklist, and Phase 2 tools) reuses one lead-facing + one internal template.
+// ============================================================================
+
+export interface ResourceUnlockedPayload {
+  name: string;
+  toolName: string;
+  toolUrl: string;
+}
+
+export function resourceUnlockedEmail(p: ResourceUnlockedPayload) {
+  return auditLayout({
+    preheader: `Your ${p.toolName} is unlocked. Pick up where you left off any time.`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your ${p.toolName} is ready</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 16px;">Hi ${p.name},</p>
+      <p style="margin:0 0 16px;">Here is your link to the <strong>${p.toolName}</strong>. It stays open on this device, and this email is your way back in from anywhere else.</p>
+      ${primaryButton(p.toolUrl, `Open the ${p.toolName}`)}
+      <p style="margin:32px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:18px;color:#1a1a1a;font-weight:600;">Want a second set of eyes?</p>
+      <p style="margin:8px 0 0;">Della and the BNHG team run free 30-minute strategy calls for operators working through co-living. Bring what you build here and we will pressure-test it with you.</p>
+      <p style="margin:24px 0 0;color:#1a1a1a;font-weight:500;">The BNHG team</p>
+    `,
+  });
+}
+
+export interface InternalResourceLeadPayload {
+  name: string;
+  email: string;
+  role?: "owner" | "investor" | "manager" | "considering";
+  toolName: string;
+  slug: string;
+}
+
+export function internalResourceLeadEmail(p: InternalResourceLeadPayload) {
+  const roleLabels: Record<string, string> = {
+    owner: "Owner",
+    investor: "Investor",
+    manager: "Property Manager",
+    considering: "Considering buying",
+  };
+  return auditLayout({
+    preheader: `New resource lead: ${p.toolName}`,
+    bodyHtml: `
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New resource tool unlock</h1>
+      ${goldDivider()}
+      <p style="margin:0 0 18px;">A visitor just unlocked a gated resource tool.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
+        <tr><td style="padding:18px 22px;font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#3d3d3d;line-height:1.7;">
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Tool:</strong> ${p.toolName}</p>
+          <p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">From:</strong> ${p.name} &lt;${p.email}&gt;</p>
+          ${p.role ? `<p style="margin:0 0 6px;"><strong style="color:#1a1a1a;">Role:</strong> ${roleLabels[p.role] ?? p.role}</p>` : ""}
+          <p style="margin:0;"><strong style="color:#1a1a1a;">Slug:</strong> ${p.slug}</p>
+        </td></tr>
+      </table>
+      <p style="margin:18px 0 0;font-size:13px;color:#3d3d3d;">Contact has been added to <code>pipeline_contacts</code> with source <code>resource:${p.slug}</code>.</p>
     `,
   });
 }

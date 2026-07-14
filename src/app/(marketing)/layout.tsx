@@ -30,7 +30,7 @@ const graph = {
       url: SITE_URL,
       logo: `${SITE_URL}/images/logo.png`,
       description:
-        "Boutique hotel consulting and technology for independent luxury hotels with 10–50 rooms. Direct booking strategy, operations, guest experience, AI services (Signal), and Guestally software.",
+        "Training, services, and software for operators running co-living properties, boutique stays, and rental fleets. Direct booking strategy, operations, guest experience, AI services (Signal), and Guestally software.",
       telephone: "+1-404-541-9934",
       email: "admin@benicehospitality.com",
       address: {
@@ -56,7 +56,7 @@ const graph = {
       name: "Guestally",
       url: "https://guestally.ai",
       description:
-        "Guest messaging and upsell automation software for independent boutique hotels.",
+        "Guest messaging and upsell automation software for independent boutique stays and hotels.",
       parentOrganization: { "@id": ORG_ID },
     },
     {
@@ -64,9 +64,9 @@ const graph = {
       "@id": PROFESSIONAL_SERVICE_ID,
       name: "Be Nice Hospitality Group",
       url: SITE_URL,
-      serviceType: "Boutique Hotel Consulting",
+      serviceType: "Hospitality Operations Consulting",
       description:
-        "Consulting and fractional advisory services for independent luxury boutique properties. Revenue strategy, operations, guest experience, and hotel technology.",
+        "Consulting and fractional advisory services for independent boutique stays and co-living operators. Revenue strategy, operations, guest experience, and hospitality technology.",
       areaServed: {
         "@type": "Country",
         name: "United States",
@@ -91,7 +91,7 @@ const graph = {
       worksFor: { "@id": ORG_ID },
       url: "https://alexhenry.bio",
       description:
-        "Co-founder and CEO of Be Nice Hospitality Group. Military veteran with enterprise operations background focused on boutique hotel technology, revenue strategy, and direct booking for independent luxury properties.",
+        "Co-founder and CEO of Be Nice Hospitality Group. Military veteran with enterprise operations background focused on hospitality technology, revenue strategy, and direct booking for co-living properties, boutique stays, and rental fleets.",
       sameAs: [
         "https://alexhenry.bio",
         "https://www.linkedin.com/company/be-nice-hospitality/",
@@ -104,7 +104,7 @@ const graph = {
       jobTitle: "Co-Founder",
       worksFor: { "@id": ORG_ID },
       description:
-        "Co-founder of Be Nice Hospitality Group. Military veteran with deep hospitality operations experience helping independent boutique hotels grow through guest experience and operations strategy.",
+        "Co-founder of Be Nice Hospitality Group. Military veteran with deep hospitality operations experience helping independent boutique stays and co-living operators grow through guest experience and operations strategy.",
       sameAs: [
         "https://www.linkedin.com/company/be-nice-hospitality/",
       ],

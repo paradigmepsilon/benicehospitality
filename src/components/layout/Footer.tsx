@@ -59,9 +59,9 @@ const MARKETPLACE_COLUMN: FooterColumn = {
   heading: "Marketplace",
   links: [
     { label: "Operator's Toolkit", href: "/marketplace" },
-    { label: "Property gear", href: "/marketplace?tab=property" },
-    { label: "Hotel gear", href: "/marketplace?tab=hotel" },
-    { label: "Auto gear", href: "/marketplace?tab=auto" },
+    { label: "Co-living gear", href: "/marketplace?tab=property" },
+    { label: "Boutique gear", href: "/marketplace?tab=hotel" },
+    { label: "Fleet gear", href: "/marketplace?tab=auto" },
   ],
 };
 

@@ -59,3 +59,146 @@ body {
   background-color: var(--color-deep-teal);
   color: white;
 }
+
+/* Claim Proof testimonial marquee: scroll the doubled track by -50% so it
+   loops seamlessly. Used via `animate-cp-marquee` (see TestimonialMarquee). */
+@keyframes cp-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-cp-marquee {
+  animation: cp-marquee 75s linear infinite;
+}
+
+/* Pause the marquee while its wrapper is hovered so a card can be read.
+   A plain CSS rule because Tailwind v4 does not emit the arbitrary-property
+   `group-hover:[animation-play-state:paused]` variant. */
+.cp-marquee-pause-group:hover .animate-cp-marquee {
+  animation-play-state: paused;
+}
+
+/* ── Resource tools: print / Save-as-PDF ─────────────────────────────────────
+   Goal: a printout is a clean, branded, ink-light document of just the tool —
+   no site nav, hero, footer, or dark UI chrome bleeding in. */
+
+/* The branded header is on screen hidden, print visible. */
+.print-only {
+  display: none;
+}
+.resource-print-header {
+  margin: 0 0 16px;
+  padding: 0 0 12px;
+  border-bottom: 2px solid #1a1a1a;
+}
+.resource-print-header .rp-org {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #807868;
+  margin: 0;
+}
+.resource-print-header .rp-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 2px 0 0;
+}
+.resource-print-header .rp-date {
+  font-size: 11px;
+  color: #807868;
+  margin: 4px 0 0;
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  /* Isolate the tool: hide the whole page, reveal only the tool subtree, and
+     pull it to the top of the sheet. Reliable across the site chrome without
+     knowing nav/footer selectors. */
+  body * {
+    visibility: hidden !important;
+  }
+  .resource-tool,
+  .resource-tool * {
+    visibility: visible !important;
+  }
+  .resource-tool {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #fff !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+
+  /* Neutralize dark result cards so they print on white, ink-light. */
+  .resource-tool .bg-near-black {
+    background: #fff !important;
+    border: 1px solid #d9d5cc !important;
+  }
+  .resource-tool [class*="text-white"] {
+    color: #1a1a1a !important;
+  }
+  .resource-tool .text-warm-gold,
+  .resource-tool [class*="text-warm-gold"] {
+    color: #8a6a1e !important;
+  }
+  .resource-tool .bg-primary-green {
+    background: #5b9a2f !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Undo sticky/scroll so nothing is cut off or floating. */
+  .resource-tool .sticky {
+    position: static !important;
+  }
+  .resource-tool .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  /* Inputs print as their plain values, no boxes. */
+  .resource-tool input,
+  .resource-tool select {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+  }
+
+  /* Tables: fit the page, keep light gridlines, avoid row splits. */
+  .resource-tool table {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 9px !important;
+    border-collapse: collapse !important;
+  }
+  .resource-tool table th,
+  .resource-tool table td {
+    border: 0.5px solid #e2ddd3 !important;
+    padding: 2px 4px !important;
+  }
+
+  /* Keep cards and rows from breaking across pages awkwardly. */
+  .resource-tool .rounded-lg,
+  .resource-tool tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

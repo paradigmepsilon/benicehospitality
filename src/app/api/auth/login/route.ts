@@ -9,6 +9,7 @@ import {
 import { loginLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { claimWorkspacesForUser } from "@/lib/claim-proof-workspace";
 
 export async function POST(request: Request) {
   try {
@@ -82,6 +83,15 @@ export async function POST(request: Request) {
 
     const userAgent = request.headers.get("user-agent");
     const { sessionId } = await createUserSession(user.id, ip, userAgent);
+
+    // Claim any Claim Proof purchase made before this account existed, so the
+    // buyer's Command Center workspace is ready the moment they land. Best
+    // effort — a failure here must not block login.
+    try {
+      await claimWorkspacesForUser(user.id, user.email);
+    } catch (err) {
+      console.error("[auth/login] claimWorkspacesForUser threw:", err);
+    }
     void recordEvent({
       userId: user.id,
       eventType: "auth.login",

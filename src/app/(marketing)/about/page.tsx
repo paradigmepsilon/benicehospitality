@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Alex and Della Henry | Be Nice Hospitality Group",
     description:
-      "Husband-and-wife veteran operators behind Be Nice Hospitality Group. We help boutique hotels, vacation rentals, and small hospitality groups deliver experiences worth returning for.",
+      "Husband-and-wife veteran operators behind Be Nice Hospitality Group. We help co-living operators, boutique stays, and small hospitality groups deliver experiences worth returning for.",
     url: "https://benicehospitality.com/about",
     type: "profile",
   },
@@ -27,17 +27,17 @@ const HOW_WE_HELP = [
   {
     eyebrow: "01 · What we do",
     title: "Build the systems independent operators actually use",
-    body: "We design, install, and operate the technology, commercial strategy, and guest experience playbooks that small operators need to compete with the brands. Every recommendation is one we've already run on our own properties and fleet first. No theory; just the work, the math, and the systems that hold it together.",
+    body: "We design, install, and operate the technology, commercial strategy, and guest experience playbooks that small operators need to compete with the brands. Every recommendation is one we've already run on our own co-living properties, boutique stays, and fleet first. No theory; just the work, the math, and the systems that hold it together.",
   },
   {
     eyebrow: "02 · Who we work with",
     title: "Independent operators across hospitality and the sharing economy",
-    body: "Independent property owners running boutique hotels and vacation rentals. Short-term rental and co-living operators. Turo and small vehicle-fleet owners. Aspiring operators preparing to launch their first unit. If you run independently, or are getting ready to, you're who we built this for.",
+    body: "Co-living operators renting rooms by the door, plus the short-term, mid-term, and long-term portfolios that mix in. Independent boutique stays: boutique hotels, inns, and the design-forward vacation rentals guests book on purpose. Turo hosts and small fleet operators running 3 to 30 vehicles. Aspiring operators preparing to launch their first unit. If you run independently, or are getting ready to, you're who we built this for.",
   },
   {
     eyebrow: "03 · Services we offer",
     title: "Courses, advisory, and operator systems and software",
-    body: "We offer courses for growing and aspiring operators of independent properties and vehicle fleets, and our advisory engagements bring us in one-on-one with established teams. We have services that make hotels and rentals discoverable inside ChatGPT, Perplexity, and Google's AI answers, and free resources that help operators start the initial engagements.",
+    body: "We offer courses for growing and aspiring operators of independent co-living properties, boutique stays, and vehicle fleets, and our advisory engagements bring us in one-on-one with established teams. We have services that make stays and rentals discoverable inside ChatGPT, Perplexity, and Google's AI answers, and free resources that help operators start the initial engagements.",
   },
 ];
 
@@ -53,7 +53,7 @@ const ALEX_SKILLS = [
   "Technology strategy and full hospitality tech stack design",
   "Systems integration, automation, and AI implementation",
   "Operational problem-solving and workflow design",
-  "Vehicle and mobility operations leadership via Be Nice Autos",
+  "Fleet and mobility operations leadership via Be Nice Autos",
   "Years of cross-industry experience in technology and operations",
 ];
 
@@ -449,7 +449,7 @@ export default function AboutPage() {
               </AnimatedItem>
               <AnimatedItem>
                 <p className="font-sans text-sm md:text-base font-semibold tracking-wide text-warm-gold-dark mb-6">
-                  Co-founder &middot; Technology, Operations &amp; Vehicle
+                  Co-founder &middot; Technology, Operations &amp; Fleet
                   Operations
                 </p>
               </AnimatedItem>

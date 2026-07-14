@@ -14,16 +14,16 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
   title:
-    "Alex Henry | Vehicle Management & Technology at Be Nice Hospitality (Atlanta, GA)",
+    "Alex Henry | Fleet Management & Technology at Be Nice Hospitality (Atlanta, GA)",
   description:
-    "Alex Henry, co-founder of Be Nice Hospitality. Leads the vehicle management side of the company and the technology work behind everything else, including Signal services for boutique hotels.",
+    "Alex Henry, co-founder of Be Nice Hospitality. Leads the fleet management side of the company and the technology work behind everything else, including Signal services for boutique stays.",
   keywords: [
     "Car Rental Riches",
     "Turo fleet operations",
     "small fleet management",
-    "vehicle rental coaching",
-    "boutique hotel technology",
-    "AI services for hotels",
+    "fleet management coaching",
+    "boutique stay technology",
+    "AI services for boutique stays",
     "hospitality automation",
     "Alex Henry",
     "Be Nice Hospitality",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Alex Henry. Vehicles, technology, and the build side of BNHG.",
     description:
-      "Della runs property. Alex runs vehicles and tech. Book a working call, get on the Car Rental Riches waitlist, or see what Signal does for boutique hotels.",
+      "Della runs co-living properties. Alex runs vehicles and tech. Book a working call, get on the Car Rental Riches waitlist, or see what Signal does for boutique stays.",
     url: "https://benicehospitality.com/alex",
     type: "profile",
     images: [
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
 const EXPERTISE = [
   {
     title: "Vehicle Fleet Operations",
-    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running 3 to 30 economy vehicles. The same operating discipline Della brings to property, applied to the cars sitting in your driveway.",
+    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running 3 to 30 economy vehicles. The same operating discipline Della brings to co-living properties, applied to the cars sitting in your driveway.",
   },
   {
     title: "Turo and Direct Channel Strategy",
@@ -62,11 +62,11 @@ const EXPERTISE = [
   },
   {
     title: "AI Search and Visibility",
-    body: "Getting your hotel or your fleet cited inside ChatGPT, Perplexity, and the AI overviews that are quietly replacing search. Structured content, schema, and a monitoring stack that proves the work is paying out.",
+    body: "Getting your boutique stay or your fleet cited inside ChatGPT, Perplexity, and the AI overviews that are quietly replacing search. Structured content, schema, and a monitoring stack that proves the work is paying out.",
   },
   {
     title: "OTA Reconciliation and Revenue Recovery",
-    body: "Most independent hotels are leaking commissions on cancellations, duplicate charges, and post-stay adjustments. Signal's revenue integrity monitor finds the leaks, files the reclaims, and turns recovered dollars into a recurring line item on your P&L.",
+    body: "Most independent boutique stays are leaking commissions on cancellations, duplicate charges, and post-stay adjustments. Signal's revenue integrity monitor finds the leaks, files the reclaims, and turns recovered dollars into a recurring line item on your P&L.",
   },
   {
     title: "Automations and Internal Tools",
@@ -84,19 +84,19 @@ const STATS = [
 const FAQS = [
   {
     q: "What does Alex actually focus on at BNHG?",
-    a: "2 things, mostly. He runs the vehicle management side of the company, which is where Car Rental Riches lives. And he leads the technology work that touches everything else, including Signal services for boutique hotels. Della handles the property coaching. Alex handles the cars, the tools, and the systems underneath all of it.",
+    a: "2 things, mostly. He runs the fleet management side of the company, which is where Car Rental Riches lives. And he leads the technology work that touches everything else, including Signal services for boutique stays. Della handles the co-living property coaching. Alex handles the cars, the tools, and the systems underneath all of it.",
   },
   {
     q: "How is Car Rental Riches different from Room Rental Riches?",
-    a: "Same operating method, applied to a different asset. Della's course is for people running property. Alex's is for people running cars. Pricing logic, channel strategy, ops cadence, customer flow. If you have 3 vehicles on Turo and you are tired of running the whole thing from your phone, this is the one.",
+    a: "Same operating method, applied to a different asset. Della's course is for people running co-living properties. Alex's is for people running cars. Pricing logic, channel strategy, ops cadence, customer flow. If you have 3 vehicles on Turo and you are tired of running the whole thing from your phone, this is the one.",
   },
   {
     q: "Do I need to operate vehicles to work with Alex?",
-    a: "No. Plenty of his work is on the property side too. Signal services for boutique hotels, custom automations, integrations that connect tools you already pay for. If your operation is mostly property but the tech is the thing holding you back, you are in the right room.",
+    a: "No. Plenty of his work is on the co-living property side too. Signal services for boutique stays, custom automations, integrations that connect tools you already pay for. If your operation is mostly co-living but the tech is the thing holding you back, you are in the right room.",
   },
   {
     q: "What is Signal and who is it for?",
-    a: "Signal is the services arm Alex leads. It is built for independent boutique hotels with 10 to 50 rooms that want real engineering work instead of another agency proposal. Quick Wins, 30-Day Sprints, monthly retainers, and custom builds. Every engagement has a written success criterion before kickoff, and a money-back guarantee on productized work.",
+    a: "Signal is the services arm Alex leads. It is built for independent boutique stays, from 10 to 50 room hotels and inns to the design-forward short-term and vacation-stay operators that want real engineering work instead of another agency proposal. Quick Wins, 30-Day Sprints, monthly retainers, and custom builds. Every engagement has a written success criterion before kickoff, and a money-back guarantee on productized work.",
   },
   {
     q: "Why work with Alex instead of an agency?",
@@ -122,14 +122,14 @@ export default function AlexPage() {
               Vehicles, technology, and the build side of BNHG.
             </h1>
             <p className="font-sans text-lg md:text-xl text-charcoal leading-snug mb-8 max-w-xl">
-              Della runs the property side of the house. Alex runs vehicles
-              and tech. If you operate cars, run a boutique hotel that needs
+              Della runs the co-living side of the house. Alex runs vehicles
+              and tech. If you operate cars, run a boutique stay that needs
               real systems, or you are tired of paying for software that does
               not quite fit, you are in the right place.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
               You have 3 doors. Book a working call. Get on the Car Rental
-              Riches waitlist. Or see what Signal can do for your property.
+              Riches waitlist. Or see what Signal can do for your boutique stay.
               Pick the one that fits where you actually are right now.
             </p>
 
@@ -206,7 +206,7 @@ export default function AlexPage() {
             <div className="space-y-5 font-sans text-lg text-charcoal leading-snug">
               <p>
                 A 5-vehicle Turo fleet runs on the same patchwork as a
-                20-room boutique hotel. A notes app. 2 spreadsheets.
+                20-room boutique stay. A notes app. 2 spreadsheets.
                 3 messaging threads. Prayer.
               </p>
               <p>
@@ -223,7 +223,7 @@ export default function AlexPage() {
               </p>
               <p className="font-medium text-deep-teal">
                 Alex builds those systems. For fleet operators. For boutique
-                hotels. For the people running real businesses at a scale
+                stays. For the people running real businesses at a scale
                 where they still know everybody by name.
               </p>
             </div>
@@ -264,7 +264,7 @@ export default function AlexPage() {
             <AnimatedItem>
               <p className="font-sans text-lg text-charcoal/85 leading-snug">
                 Most people start with a call or the waitlist. Signal comes
-                in when a boutique hotel is ready for real engineering work
+                in when a boutique stay is ready for real engineering work
                 instead of another deck. Start where you actually are.
               </p>
             </AnimatedItem>
@@ -287,7 +287,7 @@ export default function AlexPage() {
                   Book a 1:1 Call
                 </h3>
                 <p className="font-sans text-base text-white/85 leading-snug mb-8 flex-grow">
-                  30 focused minutes on your fleet, your property, or the
+                  30 focused minutes on your fleet, your co-living property, or the
                   one piece of the stack that is driving you crazy. If Alex is
                   not the right fit, he tells you on the call.
                 </p>
@@ -362,16 +362,17 @@ export default function AlexPage() {
             <AnimatedItem>
               <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
                 <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
-                  For boutique hotels
+                  For boutique stays
                 </p>
                 <h3 className="font-display text-3xl font-semibold text-deep-teal leading-tight mb-4">
                   Signal Engagements
                 </h3>
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
                   Productized engagements and custom builds for independent
-                  hotels with 10 to 50 rooms. Quick Wins, Sprints,
-                  retainers, and bespoke work. Every scope written down
-                  before kickoff and backed by a money-back guarantee on
+                  boutique stays: hotels, inns, and the design-forward
+                  short-term rentals guests book on purpose. Quick Wins,
+                  Sprints, retainers, and bespoke work. Every scope written
+                  down before kickoff and backed by a money-back guarantee on
                   productized work.
                 </p>
                 <div className="space-y-3 mb-8">
@@ -466,7 +467,7 @@ export default function AlexPage() {
                     Car Rental Riches and the small-fleet playbook.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    While Della was teaching property operators, Alex started
+                    While Della was teaching co-living operators, Alex started
                     quietly building the equivalent for cars. Pricing
                     methods, channel strategy, ops cadence, and the customer
                     flow that turns a Turo side hustle into a fleet you can
@@ -482,12 +483,12 @@ export default function AlexPage() {
                     Building Signal
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
-                    Tech services for boutique hotels that were tired of
+                    Tech services for boutique stays that were tired of
                     decks.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
                     Signal came out of a pattern Alex kept seeing. Boutique
-                    hotels paying agencies for slides and PDFs while their
+                    stays paying agencies for slides and PDFs while their
                     booking engine was slow on mobile and their PMS was not
                     talking to their channel manager. So he built a services
                     arm that ships working software instead, with the scope
@@ -505,8 +506,9 @@ export default function AlexPage() {
                     Because the operators in the middle deserve real tools.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    The properties and fleets Alex works with are too big for
-                    a notes app and too small for enterprise software. The
+                    The co-living properties, boutique stays, and fleets Alex
+                    works with are too big for a notes app and too small for
+                    enterprise software. The
                     space in between is where most operators actually live,
                     and most software companies ignore them. BNHG exists to
                     fix that.
@@ -629,7 +631,7 @@ export default function AlexPage() {
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
               src="/images/Website%20Images/alex%20in%20hotel%20lobby.png"
-              alt="Alex in a boutique hotel lobby, the type of property Signal builds services for"
+              alt="Alex in a boutique hotel lobby, the kind of independent stay Signal builds services for"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -652,7 +654,7 @@ export default function AlexPage() {
           </h2>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
             30 minutes with Alex will save you weeks of guessing. Bring
-            the fleet, the property, or the integration that has been driving
+            the fleet, the co-living property, or the integration that has been driving
             you crazy. Walk away with a plan you can actually run.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

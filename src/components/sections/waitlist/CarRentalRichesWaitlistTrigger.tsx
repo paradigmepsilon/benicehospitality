@@ -13,7 +13,7 @@ const CRR_BULLETS = [
 ];
 
 const CRR_BODY =
-  "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same 3 commitment tiers, same operator-grade depth.";
+  "The Host-to-Operator method retuned for Turo hosts and small fleet operators. Same 3 commitment tiers, same operator-grade depth.";
 
 interface CarRentalRichesWaitlistTriggerProps {
   children: ReactNode;

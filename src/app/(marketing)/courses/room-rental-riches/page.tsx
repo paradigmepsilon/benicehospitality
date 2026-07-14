@@ -14,14 +14,14 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Room Rental Riches",
   description:
-    "Run your portfolio like a real business. 3 commitment tiers from $497 self-paced to $7,497 90-day Operator. Founding pricing for the first 100 students.",
+    "Run your co-living portfolio like a real business. 3 commitment tiers from $497 self-paced to $7,497 90-day Operator. Founding pricing for the first 100 students.",
   alternates: {
     canonical: "https://benicehospitality.com/courses/room-rental-riches",
   },
   openGraph: {
     title: "Room Rental Riches | BNHG",
     description:
-      "The Host-to-Operator method for property operators. 3 commitment tiers. Same curriculum.",
+      "The Host-to-Operator method for co-living operators. 3 commitment tiers. Same curriculum.",
     url: "https://benicehospitality.com/courses/room-rental-riches",
     type: "website",
   },
@@ -146,7 +146,7 @@ export default function RRRPage() {
             Riches.
           </>
         }
-        body="Run your portfolio like a real business. The Host-to-Operator method, taught at 3 commitment tiers. Same curriculum in all 3. What changes is how much support, accountability, and time with Della you get."
+        body="Run your co-living portfolio like a real business. The Host-to-Operator method for operators renting rooms by the door, plus the short, mid, and long-term rentals that mix in. Taught at 3 commitment tiers. Same curriculum in all 3. What changes is how much support, accountability, and time with Della you get."
         primaryCta={{ label: "Compare the Tiers", href: "#tiers" }}
         secondaryCta={{
           label: "Login",
@@ -229,10 +229,10 @@ export default function RRRPage() {
           <AnimatedItem>
             <div className="font-sans text-base md:text-lg text-charcoal leading-relaxed space-y-4">
               <p className="font-semibold text-deep-teal">
-                The aspiring operator without a property yet.
+                The aspiring co-living operator without a door yet.
               </p>
               <p>
-                You&rsquo;re looking at MTR and co-living because the math
+                You&rsquo;re looking at co-living and MTR because the math
                 works and the W-2 doesn&rsquo;t. At least not for the next
                 20 years. You want to operate in the Southeast (Atlanta,
                 Tampa, Charlotte, Raleigh, Nashville, Houston, somewhere on
@@ -249,7 +249,7 @@ export default function RRRPage() {
               </p>
               <p>
                 You have between 3 and 30 units. Some mix of
-                short-term, mid-term, long-term, or co-living. Your revenue is
+                co-living, short-term, mid-term, or long-term. Your revenue is
                 real. Your time is the bottleneck. You&rsquo;ve outgrown the
                 spreadsheet phase, you&rsquo;re tired of Sunday-night
                 cleaner-scrambles, and you&rsquo;re paying enough in OTA

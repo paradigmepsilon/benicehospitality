@@ -186,12 +186,19 @@ async function migrate() {
   // NOTE: Originally used ON CONFLICT(email) — that constraint was dropped later in
   // this script (multi-property hotels share info@ addresses). Use NOT EXISTS instead
   // so this block is safe to re-run after the constraint is gone.
+  //
+  // Idempotency: on an already-migrated DB the pipeline_contacts_property_uniq index
+  // (created later in this file) is already live. Inbound rows carry no website_url and
+  // frequently no hotel_name, so several would collide on the ('','') property key.
+  // Guard with ON CONFLICT DO NOTHING, restating that index's expression (it's a bare
+  // expression index, not a named constraint, so the target has to be the expression).
   await sql`
     INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source, created_at)
     SELECT DISTINCT ON (cs.email) cs.name, cs.email, cs.phone, cs.hotel_name, cs.hotel_location, cs.room_count, 'contact_form', cs.submitted_at
     FROM contact_submissions cs
     WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = cs.email)
     ORDER BY cs.email, cs.submitted_at DESC
+    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,''))) DO NOTHING
   `;
 
   // Migrate existing bookings into pipeline contacts
@@ -201,6 +208,7 @@ async function migrate() {
     FROM bookings b
     WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = b.email)
     ORDER BY b.email, b.created_at DESC
+    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,''))) DO NOTHING
   `;
 
   // Link existing records
@@ -1483,6 +1491,220 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_clicks_network ON marketplace_clicks(network)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_clicks_created_at ON marketplace_clicks(created_at DESC)`;
   console.log("  ✓ marketplace_clicks table created");
+
+  // ===========================================================================
+  // Claim Proof — Command Center Phase 2: cross-device claim tracking.
+  //
+  // Buyers now get a real account (reuses the users/user_sessions system). A
+  // WORKSPACE is the unit that owns claims and holds the purchased tier; a
+  // solo buyer's workspace has one member (them), a Fleet buyer's workspace
+  // can hold up to 5 additional invited members who share the workspace's
+  // claims. Claim CONTENT (worksheet rows, comms log, checklist state) syncs
+  // to the server as JSON so it follows the buyer across devices.
+  // ===========================================================================
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_workspaces (
+      id SERIAL PRIMARY KEY,
+      owner_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      tier TEXT NOT NULL DEFAULT 'core' CHECK (tier IN ('core', 'pro', 'fleet')),
+      name TEXT NOT NULL DEFAULT 'My Claims',
+      -- Max additional members beyond the owner. Solo tiers = 0; fleet = 5.
+      seat_limit INTEGER NOT NULL DEFAULT 0,
+      -- The purchase email, so the webhook can attach a workspace before the
+      -- buyer has finished creating their account (claimed later on signup).
+      purchase_email TEXT,
+      stripe_session_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_workspaces_owner ON cp_workspaces(owner_user_id)`;
+  // (defined just below cp_workspaces so provisioning-before-signup has a home)
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_pending_purchases (
+      id SERIAL PRIMARY KEY,
+      email TEXT NOT NULL,
+      tier TEXT NOT NULL CHECK (tier IN ('core', 'pro', 'fleet')),
+      stripe_session_id TEXT UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      claimed_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_pending_email ON cp_pending_purchases(LOWER(email)) WHERE claimed_at IS NULL`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_workspaces_purchase_email ON cp_workspaces(LOWER(purchase_email))`;
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS idx_cp_workspaces_stripe_session ON cp_workspaces(stripe_session_id) WHERE stripe_session_id IS NOT NULL`;
+  console.log("  ✓ cp_workspaces table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_workspace_members (
+      id SERIAL PRIMARY KEY,
+      workspace_id INTEGER NOT NULL REFERENCES cp_workspaces(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('owner', 'member')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (workspace_id, user_id)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_members_workspace ON cp_workspace_members(workspace_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_members_user ON cp_workspace_members(user_id)`;
+  console.log("  ✓ cp_workspace_members table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_claims (
+      id SERIAL PRIMARY KEY,
+      workspace_id INTEGER NOT NULL REFERENCES cp_workspaces(id) ON DELETE CASCADE,
+      created_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      -- The tracking skeleton: what the dashboard shows at a glance.
+      label TEXT NOT NULL DEFAULT 'Untitled claim',
+      vehicle TEXT,
+      trip TEXT,
+      stage TEXT NOT NULL DEFAULT 'documenting',
+      status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'closed')),
+      next_action TEXT,
+      next_action_date DATE,
+      appraisal_amount NUMERIC(12,2),
+      shop_estimate NUMERIC(12,2),
+      discovered_on DATE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_claims_workspace ON cp_claims(workspace_id, status, updated_at DESC)`;
+  console.log("  ✓ cp_claims table created");
+
+  // Full per-claim, per-tool content. One row per (claim, tool_key); `data`
+  // holds the tool's JSON payload (worksheet rows, log entries, checklist map).
+  // Last-write-wins keyed by tool, so two tools editing concurrently never
+  // clobber each other. Not FK'd to a claim for GLOBAL tools (checklists on
+  // reference pages that aren't tied to one claim) — those use a NULL claim_id
+  // and are workspace-scoped.
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_claim_data (
+      id SERIAL PRIMARY KEY,
+      workspace_id INTEGER NOT NULL REFERENCES cp_workspaces(id) ON DELETE CASCADE,
+      claim_id INTEGER REFERENCES cp_claims(id) ON DELETE CASCADE,
+      tool_key TEXT NOT NULL,
+      data JSONB NOT NULL DEFAULT '{}'::jsonb,
+      updated_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      -- One payload per tool per claim (or per workspace when claim_id IS NULL).
+      UNIQUE (workspace_id, claim_id, tool_key)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_claim_data_claim ON cp_claim_data(claim_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_claim_data_workspace_tool ON cp_claim_data(workspace_id, tool_key)`;
+  // Partial unique index for workspace-scoped rows (claim_id IS NULL): the
+  // table UNIQUE constraint treats NULLs as distinct, so enforce it explicitly.
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_cp_claim_data_ws_tool_nullclaim
+    ON cp_claim_data(workspace_id, tool_key)
+    WHERE claim_id IS NULL
+  `;
+  console.log("  ✓ cp_claim_data table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS cp_invites (
+      id SERIAL PRIMARY KEY,
+      workspace_id INTEGER NOT NULL REFERENCES cp_workspaces(id) ON DELETE CASCADE,
+      email TEXT NOT NULL,
+      token_hash TEXT UNIQUE NOT NULL,
+      invited_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      expires_at TIMESTAMPTZ NOT NULL,
+      accepted_at TIMESTAMPTZ,
+      revoked_at TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_invites_workspace ON cp_invites(workspace_id)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_cp_invites_email ON cp_invites(LOWER(email))`;
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_cp_invites_pending_email
+    ON cp_invites(workspace_id, LOWER(email))
+    WHERE accepted_at IS NULL AND revoked_at IS NULL
+  `;
+  console.log("  ✓ cp_invites table created");
+
+  // ===========================================================================
+  // Claim Proof — purchase mirror for Unified Ops reporting.
+  //
+  // Stripe stays the ledger of record; this table exists so Unified Ops can
+  // query revenue/customers over BNHG_DATABASE_URL without hitting Stripe.
+  // Written by the shared webhook at fulfillment, backfilled by
+  // scripts/backfill-claimproof-purchases.ts.
+  // ===========================================================================
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS claimproof_purchases (
+      id SERIAL PRIMARY KEY,
+      stripe_session_id TEXT UNIQUE NOT NULL,
+      stripe_payment_intent TEXT,
+      email TEXT NOT NULL,
+      tier TEXT NOT NULL,
+      amount_cents INTEGER NOT NULL,
+      currency TEXT NOT NULL DEFAULT 'usd',
+      amount_discount_cents INTEGER NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'paid',
+      purchased_at TIMESTAMPTZ NOT NULL,
+      refunded_at TIMESTAMPTZ,
+      portal_first_login TIMESTAMPTZ,
+      portal_last_login TIMESTAMPTZ
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_claimproof_purchases_email ON claimproof_purchases(email)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_claimproof_purchases_purchased_at ON claimproof_purchases(purchased_at)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_claimproof_purchases_payment_intent ON claimproof_purchases(stripe_payment_intent)`;
+  console.log("  ✓ claimproof_purchases table created");
+
+  await sql`ALTER TABLE newsletter_subscribers ADD COLUMN IF NOT EXISTS unsubscribed_at TIMESTAMPTZ`;
+  console.log("  ✓ newsletter_subscribers.unsubscribed_at added");
+
+  // ===========================================================================
+  // Resource tools — generic lead capture for the gated /resources tools
+  // (Room Rental Price Calculator, Start-Up Cost Worksheet, P&L, Setup
+  // Checklist, and the Phase 2 trackers/worksheets/reference libraries).
+  //
+  // One row per (tool_slug, unlock) so the same person opening two tools is
+  // logged twice — that per-tool interest is the point. Access itself is
+  // granted by a signed cookie, not a row here, so there is no token/status
+  // column like the scorecard's viability_scorecards table.
+  // ===========================================================================
+  await sql`
+    CREATE TABLE IF NOT EXISTS resource_leads (
+      id SERIAL PRIMARY KEY,
+      tool_slug TEXT NOT NULL,
+      email TEXT NOT NULL,
+      name TEXT,
+      role TEXT,
+      phone TEXT,
+      opted_in_newsletter BOOLEAN NOT NULL DEFAULT FALSE,
+      user_id INT REFERENCES users(id) ON DELETE SET NULL,
+      pipeline_contact_id INT REFERENCES pipeline_contacts(id) ON DELETE SET NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_resource_leads_slug ON resource_leads(tool_slug)`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_resource_leads_email ON resource_leads(LOWER(email))`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_resource_leads_created ON resource_leads(created_at DESC)`;
+  console.log("  ✓ resource_leads table created");
+
+  // Resource tool state — server-side account-save for logged-in users. The
+  // Phase 2 trackers (Maintenance, Contractor Rolodex, Inventory) and the
+  // worksheet persist a JSONB blob per (user, tool) so a logged-in operator's
+  // data follows them across devices. Anonymous (email-only) users fall back to
+  // localStorage. One row per (user_id, tool_slug).
+  await sql`
+    CREATE TABLE IF NOT EXISTS resource_tool_state (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      tool_slug TEXT NOT NULL,
+      state JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (user_id, tool_slug)
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_resource_tool_state_user ON resource_tool_state(user_id)`;
+  console.log("  ✓ resource_tool_state table created");
 
   console.log("Migrations complete!");
 }

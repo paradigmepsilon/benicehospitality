@@ -59,7 +59,7 @@ const TIERS: Tier[] = [
       {
         name: "AI Operations Automation Sprint",
         price: "$6,500",
-        desc: "Build 3 to 5 custom workflow automations for recurring hotel operations. Delivered with Loom walkthroughs and support.",
+        desc: "Build 3 to 5 custom workflow automations for recurring operations at your property. Delivered with Loom walkthroughs and support.",
       },
       {
         name: "Voice AI Deployment Sprint",

@@ -47,7 +47,7 @@ export default function SignalHero() {
             variants={itemVariants}
             className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-semibold text-near-black leading-[0.98] tracking-tight mb-8"
           >
-            Be the hotel
+            Be the stay
             <br />
             AI recommends.
           </motion.h1>
@@ -56,10 +56,10 @@ export default function SignalHero() {
             variants={itemVariants}
             className="font-display italic text-xl md:text-2xl text-charcoal/80 leading-snug max-w-xl mb-8"
           >
-            The AI-first services layer for independent boutique luxury hotels. We help
-            10 to 50 room properties get cited in ChatGPT, recover revenue from OTA
-            leakage, and automate the manual work eating your week. Delivered in
-            sprints. Backed by guarantees.
+            The AI-first services layer for independent boutique stays. We help
+            boutique hotels, inns, and design-forward short-term and vacation rentals
+            get cited in ChatGPT, recover revenue from OTA leakage, and automate the
+            manual work eating your week. Delivered in sprints. Backed by guarantees.
           </motion.p>
 
           <motion.div
@@ -88,7 +88,7 @@ export default function SignalHero() {
             variants={itemVariants}
             className="font-sans text-sm text-charcoal/60 max-w-lg leading-relaxed mt-6"
           >
-            For US boutique luxury properties. No long-term contracts. Every engagement
+            For US boutique stays. No long-term contracts. Every engagement
             backed by a specific outcome guarantee.
           </motion.p>
         </motion.div>
@@ -102,7 +102,7 @@ export default function SignalHero() {
           {/* Aesthetic: editorial boutique hotel interior, morning light, no people, material texture (Aman / Rosewood register). */}
           <Image
             src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80"
-            alt="Soft morning light falling across a quiet boutique hotel sitting room with warm wood and linen textures."
+            alt="Soft morning light falling across a quiet boutique stay sitting room with warm wood and linen textures."
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 40vw"

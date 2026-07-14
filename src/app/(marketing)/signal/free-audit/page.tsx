@@ -9,7 +9,7 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 export const metadata: Metadata = {
   title: "Free AI Visibility Audit",
   description:
-    "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your boutique hotel today. 5-business-day turnaround. No commitment.",
+    "See exactly how ChatGPT, Perplexity, and Google AI Overviews describe your boutique stay today. 5-business-day turnaround. No commitment.",
   alternates: {
     canonical: "https://benicehospitality.com/signal/free-audit",
   },
@@ -54,18 +54,18 @@ interface AuditFAQ {
 const AUDIT_FAQ: AuditFAQ[] = [
   {
     q: "Is it really free?",
-    a: "Yes. The AI Visibility Audit is the top of the Signal funnel. We deliver it because boutique hotel owners have been burned by agencies before, and we want to show you the work before we ask for a dollar. No upsell sequence. No drip emails. 1 audit, 1 report, 1 optional discovery call if you want one.",
+    a: "Yes. The AI Visibility Audit is the top of the Signal funnel. We deliver it because boutique stay owners have been burned by agencies before, and we want to show you the work before we ask for a dollar. No upsell sequence. No drip emails. 1 audit, 1 report, 1 optional discovery call if you want one.",
   },
   {
     q: "What do you need from me?",
-    a: "Your hotel website URL and an email address. That is it. We do the rest of the data gathering on our side.",
+    a: "Your website URL and an email address. That is it. We do the rest of the data gathering on our side.",
   },
   {
     q: "How long does it take?",
     a: "5 business days from request to delivery. We send the report as a written PDF to the email you provide.",
   },
   {
-    q: "What if my hotel is not a fit for Signal?",
+    q: "What if my property is not a fit for Signal?",
     a: "You still get the audit. If we genuinely cannot help, we will tell you who can. We have an active referral relationship with a small number of agencies in adjacent specialties.",
   },
   {
@@ -84,7 +84,7 @@ export default function SignalFreeAuditPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mt-4 mb-6 leading-[1.1]">
-              See exactly what AI is saying about your hotel.
+              See exactly what AI is saying about your property.
             </h1>
           </AnimatedItem>
           <AnimatedItem>
@@ -145,7 +145,7 @@ export default function SignalFreeAuditPage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/70 mb-8 leading-relaxed">
-              Drop your email and we follow up to confirm your hotel URL and any specifics you want us to focus on. The audit lands in your inbox 5 business days later.
+              Drop your email and we follow up to confirm your website URL and any specifics you want us to focus on. The audit lands in your inbox 5 business days later.
             </p>
           </AnimatedItem>
           <AnimatedItem>
@@ -154,7 +154,7 @@ export default function SignalFreeAuditPage() {
                 source="signal_free_audit_request"
                 variant="card"
                 buttonLabel="Request Audit"
-                placeholder="you@yourhotel.com"
+                placeholder="you@yourproperty.com"
                 helperText="We will email you within 1 business day to confirm your URL and queue the audit."
                 successMessage="Got it. We will follow up within 1 business day to confirm your URL and start the audit."
               />

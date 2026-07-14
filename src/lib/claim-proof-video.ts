@@ -16,6 +16,7 @@
  */
 import { issueSignedToken, presignUrl } from "@vercel/blob";
 import type { ClaimProofTier } from "@/lib/claim-proof";
+import { tierUnlocks } from "@/lib/claim-proof-workspace";
 
 /** Keep in lockstep with scripts/upload-claimproof.ts VIDEO_PREFIX. */
 export const CLAIM_PROOF_VIDEO_PREFIX = "claim-proof-9f2a7c/videos";
@@ -62,6 +63,16 @@ export function videoKeyForPack(packSlug: string): string | null {
 
 export function getWalkthrough(key: string): WalkthroughVideo | null {
   return WALKTHROUGH_VIDEOS[key] ?? null;
+}
+
+/** Display order for the walkthrough library: orientation, then pack order. */
+const WALKTHROUGH_ORDER = ["orientation", "emergency", "proof", "valuation", "followup", "fleet"];
+
+/** The walkthroughs a tier can watch, in display order. */
+export function walkthroughsForTier(tier: ClaimProofTier): WalkthroughVideo[] {
+  return WALKTHROUGH_ORDER.map((k) => WALKTHROUGH_VIDEOS[k]).filter((v) =>
+    tierUnlocks(tier, v.access),
+  );
 }
 
 // A generous window so a viewer can watch and seek without the URL expiring

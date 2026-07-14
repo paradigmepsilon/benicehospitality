@@ -13,26 +13,26 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
   title:
-    "Signal | AI Services for Boutique Luxury Hotels | Be Nice Hospitality",
+    "Signal | AI Services for Boutique Stays | Be Nice Hospitality",
   description:
-    "Signal is the AI services arm of Be Nice Hospitality, built for boutique luxury hotels with 10 to 50 rooms. Direct booking lift, AI search visibility, OTA commission recovery, and ops automation. Scope written down before kickoff. Money-back if we miss.",
+    "Signal is the AI services arm of Be Nice Hospitality, built for boutique stays: independent hotels, inns, and design-forward short-term and vacation rentals. Direct booking lift, AI search visibility, OTA commission recovery, and ops automation. Scope written down before kickoff. Money-back if we miss.",
   keywords: [
-    "AI services for boutique hotels",
-    "boutique luxury hotel marketing",
-    "AI search visibility for hotels",
+    "AI services for boutique stays",
+    "boutique luxury stay marketing",
+    "AI search visibility for boutique stays",
     "AEO for hospitality",
     "OTA commission recovery",
     "direct booking optimization",
     "boutique hotel technology partner",
-    "independent hotel AI services",
+    "short-term rental and inn AI services",
     "Signal by BNHG",
     "Be Nice Hospitality",
   ],
   alternates: { canonical: "https://benicehospitality.com/signal" },
   openGraph: {
-    title: "Signal | AI Services for Boutique Luxury Hotels",
+    title: "Signal | AI Services for Boutique Stays",
     description:
-      "Direct booking lift, AI search visibility, OTA recovery, and ops automation for boutique luxury hotels with 10 to 50 rooms. Built by operators.",
+      "Direct booking lift, AI search visibility, OTA recovery, and ops automation for boutique stays: independent hotels, inns, and design-forward short-term and vacation rentals. Built by operators.",
     url: "https://benicehospitality.com/signal",
     type: "website",
     images: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
         url: "https://benicehospitality.com/images/Website%20Images/signal%20header.png",
         width: 1600,
         height: 900,
-        alt: "Signal by Be Nice Hospitality. AI services for boutique luxury hotels.",
+        alt: "Signal by Be Nice Hospitality. AI services for boutique stays.",
       },
     ],
   },
@@ -103,7 +103,7 @@ const ENGAGEMENTS = [
 ];
 
 const STATS = [
-  { figure: "10-50", label: "Rooms in the sweet spot" },
+  { figure: "10-50", label: "Rooms or units in the sweet spot" },
   { figure: "100%", label: "Scopes written down before kickoff" },
   { figure: "30", label: "Day money-back guarantee" },
   { figure: "0", label: "Annual contracts. Cancel any month." },
@@ -148,16 +148,16 @@ const GUARANTEES = [
 
 const FAQS = [
   {
-    q: "What makes Signal different from a regular hotel marketing agency?",
+    q: "What makes Signal different from a regular hospitality marketing agency?",
     a: "Agencies sell decks and dashboards. Signal ships software. Every engagement ends with a working system, a measurable result, and a hand-off document. And every productized engagement carries a 30-day money-back guarantee in writing.",
   },
   {
-    q: "Why are you focused on 10-to-50 room boutique hotels?",
-    a: "That is the sweet spot where the work is technical enough to need real engineering and small enough that you still talk to the operator. Larger portfolios usually need a custom build. Smaller properties are better served by the free resource library or the Room Rental Riches Masterclass.",
+    q: "Why are you focused on independent boutique stays?",
+    a: "That is the sweet spot where the work is technical enough to need real engineering and small enough that you still talk to the operator. Larger portfolios usually need a custom build. Smaller operators are better served by the free resource library or the Room Rental Riches Masterclass.",
   },
   {
-    q: "What does AI search visibility actually mean for my hotel?",
-    a: "When a traveler asks ChatGPT, Perplexity, or Google AI Overviews for a boutique hotel in your market, the answer is built from sources the model can find, parse, and trust. Signal makes sure your property is in that answer. Schema, citation paths, content structure, and a monitoring stack that proves the work is showing up.",
+    q: "What does AI search visibility actually mean for my property?",
+    a: "When a traveler asks ChatGPT, Perplexity, or Google AI Overviews for a boutique stay in your market, the answer is built from sources the model can find, parse, and trust. Signal makes sure your property is in that answer. Schema, citation paths, content structure, and a monitoring stack that proves the work is showing up.",
   },
   {
     q: "Can Signal work with my existing PMS and channel manager?",
@@ -178,7 +178,7 @@ export default function SignalPage() {
       <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-24 md:pb-28 px-6 md:px-12 lg:px-20 overflow-hidden">
         <Image
           src={HERO_IMAGE}
-          alt="Boutique luxury hotel interior. The kind of property Signal builds AI services for."
+          alt="Boutique stay interior. The kind of property Signal builds AI services for."
           fill
           priority
           sizes="100vw"
@@ -197,12 +197,13 @@ export default function SignalPage() {
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold text-white leading-[1.02] tracking-tight mb-8 max-w-4xl">
             AI services built for{" "}
             <span className="italic text-warm-gold">boutique luxury</span>{" "}
-            hotels.
+            stays.
           </h1>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-2xl">
             Direct booking lift. AI search visibility. OTA commission recovery.
-            Ops automation. Built for independent boutique luxury hotels with
-            10 to 50 rooms.
+            Ops automation. Built for independent boutique stays. Hotels, inns,
+            and the design-forward short-term and vacation rentals guests book
+            on purpose.
           </p>
           <p className="font-sans text-base md:text-lg text-white/70 leading-snug mb-10 max-w-2xl">
             We write the success criterion into the contract before kickoff.
@@ -255,7 +256,7 @@ export default function SignalPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-8">
-              For boutique luxury hotel owners who are done paying for slides.
+              For boutique stay owners who are done paying for slides.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
@@ -273,8 +274,8 @@ export default function SignalPage() {
                 6 months ago.
               </p>
               <p>
-                And now travelers are asking ChatGPT and Perplexity for hotel
-                recommendations in your market, and your property is not in
+                And now travelers are asking ChatGPT and Perplexity where to
+                stay in your market, and your property is not in
                 the answer.
               </p>
               <p className="font-semibold text-deep-teal text-xl">
@@ -447,7 +448,7 @@ export default function SignalPage() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-lg text-white/85 leading-relaxed">
-                Boutique innkeepers have been burned by enough agencies. Signal
+                Boutique operators have been burned by enough agencies. Signal
                 puts the risk on us, not on you.
               </p>
             </AnimatedItem>

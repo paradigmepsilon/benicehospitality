@@ -42,7 +42,7 @@ const NETWORK_FEATURES = [
   },
   {
     title: "Asset-class channels",
-    body: "Property operators talk to property operators. Auto operators talk to auto operators. Multi-asset operators get both rooms. The signal stays high because the rooms stay specific.",
+    body: "Co-living and property operators get their own room. Autos operators get theirs. Multi-asset operators get both. The signal stays high because the rooms stay specific.",
   },
   {
     title: "Labs released here first",
@@ -63,8 +63,8 @@ export default function CommunityPage() {
           </h1>
           <p className="font-sans text-lg md:text-xl text-charcoal leading-relaxed max-w-2xl mb-10">
             2 live, founder-led sessions a week. 47 weeks a year.
-            Built for operators running short-term rentals, mid-term,
-            long-term, co-living, Turo fleets, and boutique luxury hotels.
+            Built for operators running co-living, short-term, mid-term, and
+            long-term rentals, Turo fleets, and boutique stays.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button href="/education" variant="primary" size="lg">
@@ -139,7 +139,7 @@ export default function CommunityPage() {
           <AnimatedItem>
             <p className="font-sans text-lg text-white/85 leading-relaxed">
               The members in this network are running real operations: 3
-              units to 30, STR to LTR to co-living. They show up because
+              units to 30, co-living to STR to LTR. They show up because
               the work is good, the founders are in it, and the conversation
               stays operator-class. Marketers don&rsquo;t last in here.
             </p>

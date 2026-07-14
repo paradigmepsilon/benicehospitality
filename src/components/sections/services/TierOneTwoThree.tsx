@@ -223,7 +223,7 @@ export default function TierOneTwoThree() {
 
           <AnimatedItem>
             <p className="text-center font-sans text-white/50 italic text-sm max-w-lg mx-auto">
-              Retainer pricing is customized based on property size and scope.
+              Retainer pricing is customized based on the size and scope of your operation.
               All Tier 3 engagements begin with a Discovery Call.
             </p>
           </AnimatedItem>

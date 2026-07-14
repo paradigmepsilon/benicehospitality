@@ -11,7 +11,7 @@ export default function BookingHero() {
         </h1>
         <p className="font-sans text-xl text-white/70 max-w-2xl leading-relaxed">
           Pick a time that works for you. It&apos;s a relaxed 45-minute
-          conversation about your property. No sales pressure. Just honest
+          conversation about your operation. No sales pressure. Just honest
           insight from people who&apos;ve been in your shoes.
         </p>
       </div>

@@ -4,6 +4,8 @@ import { getPortalAccess, tierUnlocks, TIER_LABEL } from "./_lib/access";
 import ClaimsPanel from "./_components/ClaimsPanel";
 import PackagePrintButton from "./_components/PackagePrintButton";
 import { WalkthroughVideo } from "./_components/WalkthroughVideo";
+import WalkthroughLibrary from "./_components/WalkthroughLibrary";
+import { walkthroughsForTier } from "@/lib/claim-proof-video";
 import { PACKS, STAGES } from "./_content";
 import { AccessGate } from "./_components/Gates";
 import {
@@ -46,6 +48,11 @@ export default async function PortalDashboard({
   if (!access) return <AccessGate denied={denied === "1"} />;
   const tier = access.tier;
   const hasWorkspace = access.workspace != null;
+  const walkthroughVideos = walkthroughsForTier(tier).map((v) => ({
+    key: v.key,
+    title: v.title,
+    runtime: v.runtime,
+  }));
   const isFleetOwner =
     access.workspace?.workspace.tier === "fleet" &&
     access.workspace.role === "owner";
@@ -184,6 +191,28 @@ export default async function PortalDashboard({
                   (unlocked ? "bg-[#2A2932]" : "bg-[#292831]")
                 }
               >
+                {unlocked ? (
+                  <Link
+                    href={`/claimproof/portal/${pack.slug}`}
+                    className="group mb-4 block"
+                  >
+                    <div className="mb-3 flex items-center gap-3">
+                      <span className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-[#E19C63]/12 text-[#E19C63]">
+                        <PackIcon slug={pack.slug} className="h-5 w-5" />
+                      </span>
+                      <h3 className="truncate font-sans text-lg font-bold text-white transition-colors duration-300 group-hover:text-[#E19C63]">
+                        {pack.name}
+                      </h3>
+                      <span className="ml-auto flex h-7 w-7 flex-none items-center justify-center rounded-full border border-white/12 text-white/35 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0.5 group-hover:border-[#E19C63] group-hover:bg-[#E19C63] group-hover:text-[#27262E]">
+                        <IconArrowUpRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                    <p className="font-sans text-sm leading-relaxed text-white/60 transition-colors duration-300 group-hover:text-white/75">
+                      {pack.blurb}
+                    </p>
+                  </Link>
+                ) : (
+                  <>
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
                     <span
@@ -220,6 +249,8 @@ export default async function PortalDashboard({
                 >
                   {pack.blurb}
                 </p>
+                  </>
+                )}
 
                 {unlocked ? (
                   <>
@@ -273,6 +304,21 @@ export default async function PortalDashboard({
           );
         })}
       </div>
+
+      {/* the full walkthrough library: every video the tier unlocks, inline */}
+      {walkthroughVideos.length > 0 && (
+        <div className="mt-14">
+          <div className="mb-5 flex items-baseline justify-between gap-4">
+            <h2 className="font-display text-2xl font-semibold text-white md:text-3xl">
+              Walkthrough videos
+            </h2>
+            <span className="font-sans text-xs text-white/40">
+              {walkthroughVideos.length} in your {TIER_LABEL[tier]}
+            </span>
+          </div>
+          <WalkthroughLibrary videos={walkthroughVideos} />
+        </div>
+      )}
 
       {/* first 15 minutes: the method as a timeline */}
       <div

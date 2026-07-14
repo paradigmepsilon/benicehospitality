@@ -13,18 +13,18 @@ import posthog from "posthog-js";
 const SERVICE_OPTIONS = [
   {
     value: "rental_properties",
-    label: "Rental Properties",
-    helper: "Short-term, mid-term, and long-term residential rentals.",
+    label: "Co-living Properties",
+    helper: "Co-living, short-term, mid-term, and long-term rentals.",
   },
   {
     value: "independent_hotels",
-    label: "Independent Hotels",
-    helper: "Boutique and independent hospitality operators.",
+    label: "Boutique Stays",
+    helper: "Boutique hotels, inns, and short-term or vacation stays.",
   },
   {
     value: "autos",
     label: "Autos",
-    helper: "Vehicle rental and fleet operations.",
+    helper: "Turo, car rental, and fleet management.",
   },
 ] as const;
 

@@ -52,8 +52,9 @@ export default function HomeNewsletter() {
         </AnimatedItem>
         <AnimatedItem>
           <p className="font-sans text-white/70 mb-8 leading-relaxed">
-            Operator-level thinking on running properties and vehicle rentals
-            like a business. Delivered when we have something worth saying.
+            Operator-level thinking on running co-living properties, boutique
+            stays, and rental fleets like a business. Delivered when we have
+            something worth saying.
           </p>
         </AnimatedItem>
         <AnimatedItem>

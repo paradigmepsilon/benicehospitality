@@ -5,20 +5,30 @@ import Link from "next/link";
 import SignupForm from "@/components/sections/auth/SignupForm";
 import { getCurrentSession } from "@/lib/community-auth";
 import { getEnabledProviders } from "@/lib/oauth/providers";
+import { safeNext } from "@/lib/auth-redirect";
 
 export const metadata: Metadata = {
   title: "Create your account",
   description:
-    "Join the Nice Host Network — a free community for rental property, independent hotel, and auto rental operators.",
+    "Join the Nice Host Network, a free community for co-living property, boutique stay, and Autos fleet operators.",
   alternates: { canonical: "https://benicehospitality.com/signup" },
   robots: { index: false, follow: false },
 };
 
-// If a logged-in user lands on /signup, send them where they belong. Admins
-// go to /admin, members to /account.
-export default async function SignupPage() {
+// If a logged-in user lands on /signup, send them where they belong. Honor a
+// safe `next` first (a Claim Proof buyer who already has an account clicks the
+// delivery link with next=/claimproof/portal and must land there, not on the
+// generic member dashboard). Otherwise admins go to /admin, members to /account.
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
   const session = await getCurrentSession();
+  const { next } = await searchParams;
   if (session) {
+    const dest = safeNext(next);
+    if (dest !== "/account") redirect(dest);
     redirect(session.user.role === "admin" ? "/admin" : "/account");
   }
   const enabledProviders = getEnabledProviders();

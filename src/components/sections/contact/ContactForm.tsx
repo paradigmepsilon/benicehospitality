@@ -9,7 +9,7 @@ import AnimatedSection, {
 import Button from "@/components/ui/Button";
 import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 
-const INTERESTS = ["Properties", "Vehicles", "Boutique Hotels"];
+const INTERESTS = ["Co-living Properties", "Boutique Stays", "Autos"];
 
 function slugToResourceName(slug: string | null): string | null {
   if (!slug) return null;

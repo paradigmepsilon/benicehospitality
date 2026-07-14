@@ -3,17 +3,17 @@ import SectionLabel from "@/components/ui/SectionLabel";
 
 const STATS = [
   {
-    stat: "2–5%",
+    stat: "2-5%",
     label: "OTA Commissions Recovered",
     desc: "The monthly Revenue Integrity Monitor reconciles every OTA statement against your actual bookings. Properties typically find this much commission has been underpaid or miscalculated.",
   },
   {
-    stat: "6–12 hrs",
+    stat: "6-12 hrs",
     label: "Owner Hours Returned Per Week",
     desc: "Custom AI agents take over recurring work: review responses, pre-arrival communication, report generation, guest inquiry triage. Hours back, at a direct staffing cost of zero.",
   },
   {
-    stat: "10–20%",
+    stat: "10-20%",
     label: "Direct Bookings Lift",
     desc: "The AI Direct Booking Accelerator combines AEO, MCP readiness, and a tuned AI concierge widget. Target outcome measured against a 90-day baseline.",
   },

@@ -10,7 +10,7 @@ export default function WhoItsForBanner() {
     >
       <AnimatedItem className="max-w-3xl mx-auto text-center">
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-white leading-[1.2] tracking-tight">
-          Whether you have 3 units, 22 rooms, or a Turo fleet; if
+          Whether you run 3 co-living doors, 22 rooms, or a Turo fleet; if
           you&rsquo;re trying to run an operation instead of creating a job,
           you&rsquo;re in the right place.
         </h2>

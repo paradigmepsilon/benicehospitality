@@ -1,6 +1,6 @@
 // Be Nice Hospitality Group — service worker
 // Bump CACHE version to invalidate old caches on deploy.
-const CACHE = "bnhg-v1";
+const CACHE = "bnhg-v2";
 const OFFLINE_URL = "/offline";
 
 const PRECACHE = [OFFLINE_URL, "/icon-192.png", "/icon-512.png"];
@@ -45,7 +45,30 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets: stale-while-revalidate.
+  // Images (including Next's /_next/image optimizer): network-first, so a
+  // swapped image always shows on first load. Fall back to cache only offline.
+  // Without this, stale-while-revalidate would serve the previous image and
+  // silently pin it for returning visitors until a second page load.
+  if (
+    request.destination === "image" ||
+    url.pathname.startsWith("/_next/image") ||
+    url.pathname.startsWith("/images/")
+  ) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === "basic") {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Other static assets: stale-while-revalidate.
   event.respondWith(
     caches.match(request).then((cached) => {
       const network = fetch(request)

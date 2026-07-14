@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
 };
 
-const EFFECTIVE_DATE = "May 26, 2026";
+const EFFECTIVE_DATE = "July 11, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -68,7 +68,9 @@ export default function PrivacyPage() {
               company based in Hapeville, Georgia. We are the owners of
               benicehospitality.com and the services available on it,
               including the Room Rental Riches course, our community, our
-              Signal AI services, and our resource library.
+              Signal AI services, our resource library, and the{" "}
+              <strong>Claim Proof Command Center</strong> (a Be Nice
+              Hospitality Group product for Turo and rental-vehicle hosts).
             </p>
             <p>
               You can reach us anytime at{" "}
@@ -125,7 +127,57 @@ export default function PrivacyPage() {
             </ul>
           </LegalSection>
 
-          <LegalSection title="4. Information we collect automatically">
+          <LegalSection title="4. Claim Proof Command Center data">
+            <p>
+              The Claim Proof Command Center is an interactive product for
+              rental-vehicle hosts working a damage claim. When you buy it and
+              set up your account, the Command Center saves your work to your
+              account so it syncs across your devices and is there when you
+              come back. This is a change from the earliest version of the
+              product, which kept everything on your device only. We store it
+              on our infrastructure now so the tools can remember your claims.
+            </p>
+            <ul>
+              <li>
+                <strong>Claim records.</strong> The vehicle, trip reference,
+                dates, claim stage, next action, and the dollar figures you
+                enter (appraisal, shop estimate, and the resulting valuation
+                gap) for each claim you track.
+              </li>
+              <li>
+                <strong>Tool worksheets and logs.</strong> The line items in
+                your valuation comparison, your communication log entries,
+                downtime and economics figures, and your checklist progress.
+              </li>
+              <li>
+                <strong>What may be inside that content.</strong> Because you
+                type it in yourself, this content can include details about a
+                specific trip, a renter, a claim number, and correspondence.
+                Treat it the way you would your own claim file. We handle it as
+                confidential and never use it to identify or contact the other
+                people mentioned in it.
+              </li>
+              <li>
+                <strong>Fleet team members.</strong> On the Fleet plan, the
+                account owner can invite up to five teammates by email. We
+                store that email to send the invitation and, once accepted, to
+                link the teammate&apos;s account to the shared workspace so the
+                team sees the same claims. The owner can remove a teammate at
+                any time.
+              </li>
+            </ul>
+            <p>
+              We use this content only to run the Command Center for you: to
+              save and sync your work, compute the figures the tools show, and
+              share claims across your own Fleet team. We do not sell it, we do
+              not share it with anyone outside your workspace, and we do not
+              use it to train models or for advertising. You can export any
+              worksheet to CSV yourself, and you can ask us to delete your
+              Command Center data at any time (see Section 8).
+            </p>
+          </LegalSection>
+
+          <LegalSection title="5. Information we collect automatically">
             <ul>
               <li>
                 <strong>Log data.</strong> Standard web request information:
@@ -145,7 +197,7 @@ export default function PrivacyPage() {
             </ul>
           </LegalSection>
 
-          <LegalSection title="5. Third-party services we rely on">
+          <LegalSection title="6. Third-party services we rely on">
             <p>
               We use a small set of vendors to run the business. Each of them
               sees only the information they need to do their job.
@@ -177,7 +229,7 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="6. How we use your information">
+          <LegalSection title="7. How we use your information">
             <ul>
               <li>To deliver the course, community, and services you bought.</li>
               <li>
@@ -198,7 +250,7 @@ export default function PrivacyPage() {
             </ul>
           </LegalSection>
 
-          <LegalSection title="7. Your rights">
+          <LegalSection title="8. Your rights">
             <p>
               You can ask us to access, correct, export, or delete the
               personal information we hold about you. Email{" "}
@@ -220,17 +272,20 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="8. Data retention">
+          <LegalSection title="9. Data retention">
             <p>
               We keep your account and course-access records for as long as
               your account is active. If you close your account, we retain
               payment and transaction records for the period required by tax
               and accounting law (typically seven years). Newsletter
-              subscribers are kept until they unsubscribe.
+              subscribers are kept until they unsubscribe. Claim Proof Command
+              Center data is kept while your account is active and is deleted
+              when you delete a claim, delete your account, or ask us to remove
+              it.
             </p>
           </LegalSection>
 
-          <LegalSection title="9. Security">
+          <LegalSection title="10. Security">
             <p>
               We protect your information with TLS encryption in transit,
               hashed passwords, role-based access to our database, and
@@ -240,7 +295,7 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="10. Children">
+          <LegalSection title="11. Children">
             <p>
               The site is intended for adults. We do not knowingly collect
               information from anyone under sixteen. If you believe a child
@@ -248,7 +303,7 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="11. International users">
+          <LegalSection title="12. International users">
             <p>
               We operate from the United States. If you use the site from
               outside the US, your information will be transferred to and
@@ -256,7 +311,7 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="12. Changes to this policy">
+          <LegalSection title="13. Changes to this policy">
             <p>
               If we make material changes, we will post the updated policy
               here, change the effective date at the top, and email account
@@ -265,7 +320,7 @@ export default function PrivacyPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="13. Contact">
+          <LegalSection title="14. Contact">
             <p>
               Questions, requests, or complaints can be sent to{" "}
               <a

@@ -82,7 +82,7 @@ export const COURSES: Course[] = [
     description:
       "A focused, no-filler playbook on building direct bookings into your operation. Aimed at operators with one to seven units who want a system, not a hack.",
     forWhom:
-      "Property and auto operators on OTA-heavy distribution who want to start owning a meaningful share of their bookings.",
+      "Co-living, short-term rental, and fleet operators on OTA-heavy distribution who want to start owning a meaningful share of their bookings.",
     duration: "About two hours of video, plus the templates",
     outcomes: [
       "A direct booking site that converts on the basics",
@@ -146,17 +146,17 @@ export const COURSES: Course[] = [
   },
   {
     slug: "foundation-property",
-    name: "Foundation: Property Edition",
+    name: "Foundation: Co-living Edition",
     edition: "Foundation",
-    shortName: "Foundation Property",
+    shortName: "Foundation Co-living",
     price: 497,
     status: "waitlist",
     assetClass: "property",
-    tagline: "The operating system every property operator should already have.",
+    tagline: "The operating system every co-living operator should already have.",
     description:
-      "The foundation course for short-term rental, long-term rental, and co-living operators. Same shared core as the Auto edition, with property-specific case studies, vendors, and SOPs.",
+      "The foundation course for co-living operators renting rooms by the door, plus the short-term and long-term rental portfolios that mix in. Same shared core as the Auto edition, with co-living and rental case studies, vendors, and SOPs.",
     forWhom:
-      "Property operators with one to seven units who feel the operation outgrowing their attention.",
+      "Co-living and rental operators with one to seven units who feel the operation outgrowing their attention.",
     duration: "Roughly eight hours of video plus the asset library",
     outcomes: [
       "A documented SOP library you can hand to a part-time ops assistant",
@@ -179,7 +179,7 @@ export const COURSES: Course[] = [
         title: "The SOP Library and How to Maintain It",
         body: "Real SOPs, not Google Doc graveyards. A library that gets used because it is built around the work, not around documentation theater.",
         lessons: [
-          "The fifteen SOPs every property operator needs",
+          "The fifteen SOPs every co-living operator needs",
           "Cleaner, handyman, and vendor onboarding scripts",
           "The quarterly review that keeps the library alive",
         ],
@@ -239,9 +239,9 @@ export const COURSES: Course[] = [
     assetClass: "auto",
     tagline: "Run your fleet like a business, not a side project.",
     description:
-      "The foundation course for Turo and rental car operators. Same shared core as the Property edition, with auto-specific vendors, turnover protocols, and fleet hiring.",
+      "The foundation course for Turo hosts and small fleet operators. Same shared core as the Co-living edition, with fleet-specific vendors, turnover protocols, and fleet hiring.",
     forWhom:
-      "Auto operators with two to ten vehicles who can see the next bottleneck coming and want a real playbook.",
+      "Fleet operators with two to ten vehicles who can see the next bottleneck coming and want a real playbook.",
     duration: "Roughly eight hours of video plus the asset library",
     outcomes: [
       "A turnover protocol that survives a part-time fleet handler",
@@ -317,17 +317,17 @@ export const COURSES: Course[] = [
   },
   {
     slug: "flagship-property",
-    name: "Flagship: Host to Operator, Property Edition",
+    name: "Flagship: Host to Operator, Co-living Edition",
     edition: "Flagship",
-    shortName: "Flagship Property",
+    shortName: "Flagship Co-living",
     price: 799,
     status: "waitlist",
     assetClass: "property",
     tagline: "Stop being the bottleneck. Build the team and the system.",
     description:
-      "The flagship course for property operators ready to scale. Foundation is about getting the operation out of your head. Flagship is about building a team that runs it without you.",
+      "The flagship course for co-living operators ready to scale. Foundation is about getting the operation out of your head. Flagship is about building a team that runs it without you.",
     forWhom:
-      "Property operators at five to twenty units who feel the ceiling and need to professionalize fast.",
+      "Co-living operators at five to twenty units who feel the ceiling and need to professionalize fast.",
     duration: "Twelve to fifteen hours of video plus the team-building track",
     outcomes: [
       "A clear operator-to-CEO transition plan",
@@ -387,7 +387,7 @@ export const COURSES: Course[] = [
       },
     ],
     includes: [
-      "Everything in Foundation: Property",
+      "Everything in Foundation: Co-living",
       "The team-building track and hiring scorecards",
       "Operator dashboard template (Google Sheets and Notion)",
       "Lifetime Nice Host Network access",
@@ -410,9 +410,9 @@ export const COURSES: Course[] = [
     assetClass: "auto",
     tagline: "Five vehicles is a hobby. Build the business that scales past it.",
     description:
-      "The flagship course for auto operators ready to grow past the small-fleet ceiling. Same Host-to-Operator backbone as the Property edition, taught for fleet realities.",
+      "The flagship course for fleet operators ready to grow past the small-fleet ceiling. Same Host-to-Operator backbone as the Co-living edition, taught for fleet realities.",
     forWhom:
-      "Auto operators at five to twenty vehicles who want to grow toward fifty without breaking themselves.",
+      "Fleet operators at five to twenty vehicles who want to grow toward fifty without breaking themselves.",
     duration: "Twelve to fifteen hours of video plus the fleet-ops track",
     outcomes: [
       "A documented fleet-ops playbook another operator could run",

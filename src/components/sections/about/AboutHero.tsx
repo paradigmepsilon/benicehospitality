@@ -5,7 +5,7 @@ export default function AboutHero() {
     <section className="relative h-[60svh] min-h-[480px] overflow-hidden bg-near-black">
       <Image
         src="https://images.unsplash.com/photo-1527853787696-f7be74f2e39a?auto=format&fit=crop&w=1920&q=80"
-        alt="Hotel team working together"
+        alt="Hospitality team working together"
         fill
         className="object-cover opacity-40"
         priority
@@ -22,7 +22,7 @@ export default function AboutHero() {
         </h1>
         <p className="font-sans text-lg sm:text-xl text-white/70 mt-6 max-w-2xl leading-relaxed">
           BNHG was built by people who understand both the art of hospitality
-          and the science of running a profitable property.
+          and the science of running a profitable operation.
         </p>
       </div>
     </section>

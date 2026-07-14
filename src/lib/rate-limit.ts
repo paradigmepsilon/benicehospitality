@@ -47,9 +47,15 @@ export const auditTrackLimiter = createLimiter(30, 60 * 1000);
 export const auditRequestLimiter = createLimiter(3, 60 * 1000);
 export const unsubscribeLimiter = createLimiter(10, 60 * 1000);
 
-// MTR Viability Calculator limiters
+// Co-living Property Calculator limiters
 export const scorecardSubmitLimiter = createLimiter(5, 60 * 1000);
 export const scorecardUnlockLimiter = createLimiter(3, 60 * 1000);
+
+// Resource tools front-door gate — each unlock captures a lead + may send email.
+export const resourceUnlockLimiter = createLimiter(5, 60 * 1000);
+
+// Resource tool account-save — debounced writes from logged-in users; lenient.
+export const resourceStateLimiter = createLimiter(60, 60 * 1000);
 
 // Course waitlist — 3 signups per minute per IP
 export const waitlistLimiter = createLimiter(3, 60 * 1000);

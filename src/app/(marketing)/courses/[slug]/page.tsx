@@ -108,9 +108,9 @@ export default async function CoursePage({ params }: PageProps) {
 }
 
 const ASSET_LABEL: Record<Course["assetClass"], string> = {
-  property: "Property edition",
+  property: "Co-living edition",
   auto: "Auto edition",
-  both: "Property and Auto",
+  both: "Co-living and Auto",
 };
 
 /* ------------------------------------------------------------------ */

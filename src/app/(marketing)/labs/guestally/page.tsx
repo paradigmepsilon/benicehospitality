@@ -11,12 +11,12 @@ const SITE_URL = "https://benicehospitality.com";
 export const metadata: Metadata = {
   title: "Guestally",
   description:
-    "Property-side AI concierge for short-term rental and co-living operators. Bernice handles guest messaging, upsells, and the operations the front desk used to babysit.",
+    "Property-side AI concierge for co-living and short-term rental operators. Bernice handles guest messaging, upsells, and the operations the front desk used to babysit.",
   alternates: { canonical: `${SITE_URL}/labs/guestally` },
   openGraph: {
     title: "Guestally | BNHG Labs",
     description:
-      "AI concierge built for STR and co-living operators. Starter $179, Growth $299, Premium $349 a month. Property-side only.",
+      "AI concierge built for co-living and short-term rental operators. Starter $179, Growth $299, Premium $349 a month. Property-side only.",
     url: `${SITE_URL}/labs/guestally`,
     type: "website",
   },
@@ -32,7 +32,7 @@ const guestallyProductSchema = {
   operatingSystem: "Web",
   url: "https://guestally.ai",
   description:
-    "Property-side AI concierge for short-term rental and co-living operators. Guest messaging, upsells, and operations dispatch handled by Bernice, the AI agent at the core of Guestally.",
+    "Property-side AI concierge for co-living and short-term rental operators. Guest messaging, upsells, and operations dispatch handled by Bernice, the AI agent at the core of Guestally.",
   publisher: { "@id": `${SITE_URL}/#organization` },
   brand: {
     "@type": "Brand",
@@ -168,7 +168,7 @@ export default function GuestallyPage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-white/75 leading-relaxed mb-8">
-              The AI concierge for property-side operators. Bernice handles guest messaging, upsells, and the operational back-and-forth that used to live in your phone. Built for short-term rental and co-living operators. Property only.
+              The AI concierge for property-side operators. Bernice handles guest messaging, upsells, and the operational back-and-forth that used to live in your phone. Built for co-living and short-term rental operators. Property only.
             </p>
           </AnimatedItem>
           <AnimatedItem>

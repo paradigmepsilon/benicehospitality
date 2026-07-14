@@ -5,25 +5,25 @@ import { useMemo, useState, type FormEvent } from "react";
 const SERVICE_OPTIONS = [
   {
     value: "rental_properties",
-    label: "Rental Properties",
-    helper: "Short-term, mid-term, and long-term residential rentals.",
+    label: "Co-living Properties",
+    helper: "Co-living, short-term, mid-term, and long-term rentals.",
   },
   {
     value: "independent_hotels",
-    label: "Independent Hotels",
-    helper: "Boutique and independent hospitality operators.",
+    label: "Boutique Stays",
+    helper: "Boutique hotels, inns, and short-term or vacation stays.",
   },
   {
     value: "autos",
     label: "Autos",
-    helper: "Vehicle rental and fleet operations.",
+    helper: "Turo, car rental, and fleet management.",
   },
 ] as const;
 
 type ServiceValue = (typeof SERVICE_OPTIONS)[number]["value"];
 
 const BUSINESS_STAGE_OPTIONS = [
-  { value: "none", label: "No properties or vehicles yet — exploring" },
+  { value: "none", label: "No properties or vehicles yet, exploring" },
   { value: "one", label: "Running one property/vehicle" },
   { value: "multiple", label: "Running multiple (or scaling)" },
 ] as const;

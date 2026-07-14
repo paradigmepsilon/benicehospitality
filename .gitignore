@@ -13,6 +13,7 @@ build/
 # misc
 .DS_Store
 .claude/
+.playwright-mcp/
 *.pem
 
 # prospect data — lives in the DB, do not commit raw CSVs

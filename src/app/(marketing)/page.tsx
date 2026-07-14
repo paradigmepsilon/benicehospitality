@@ -14,14 +14,14 @@ export const metadata: Metadata = {
       "Be Nice Hospitality Group | The Operator's Company for the Sharing Economy",
   },
   description:
-    "Training, services, and software for operators running short-term rentals, mid-term, long-term, co-living, Turo fleets, and boutique luxury hotels. Atlanta-headquartered. Founded by Della and Alex Henry.",
+    "Training, services, and software for operators running co-living properties, boutique stays, and rental fleets. Atlanta-headquartered. Founded by Della and Alex Henry.",
   alternates: {
     canonical: "https://benicehospitality.com",
   },
   openGraph: {
     title: "Be Nice Hospitality Group",
     description:
-      "Built by operators, for operators. Training and community for property operators, AI services for boutique hotels, and the BNHG Labs portfolio of operator tools.",
+      "Built by operators, for operators. Training and community for co-living operators, AI services for boutique stays, and the BNHG Labs portfolio of operator tools.",
     url: "https://benicehospitality.com",
     type: "website",
     images: [

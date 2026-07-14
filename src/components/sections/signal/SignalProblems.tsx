@@ -17,7 +17,7 @@ const PROBLEMS = [
     title: "Compliance and revenue-critical work.",
     body: [
       "The work where a mistake is expensive, but the work itself is tedious. Rate parity monitoring across OTAs. Commission reconciliation. TCPA and A2P 10DLC compliance on SMS. ADA website compliance.",
-      "Signal runs this continuously on AI. Typical boutique properties recover 2 to 5% of OTA commissions paid through the commission audit alone, which usually covers the full retainer cost.",
+      "Signal runs this continuously on AI. Typical boutique stays recover 2 to 5% of OTA commissions paid through the commission audit alone, which usually covers the full retainer cost.",
     ],
     related:
       "Compliance Readiness Audit · Revenue Integrity Monitor · Voice AI Deployment Sprint",
@@ -26,7 +26,7 @@ const PROBLEMS = [
     num: "03",
     title: "Fix outdated software without replacing it.",
     body: [
-      "Most boutique hotels run some mix of a 2015-era PMS, a booking engine from a different vendor, and an email tool from a third. Ripping it out costs more than most owners can absorb.",
+      "Most boutique stays run some mix of a 2015-era PMS, a booking engine from a different vendor, and an email tool from a third. Ripping it out costs more than most owners can absorb.",
       "Signal wraps existing software rather than replacing it. A Claude-powered agent reads the PMS daily and produces the unified report you've been promised for years, without touching the underlying stack.",
     ],
     related: "AI Guest Intelligence Sprint · Custom AI Assistant · MCP Readiness Package",

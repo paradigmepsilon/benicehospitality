@@ -21,7 +21,7 @@ export const PAIN_POINTS: PainPoint[] = [
   {
     stat: "61% of independent hotel bookings go through OTAs",
     description:
-      "At 15–25% commission per booking, that's a staggering portion of your revenue walking out the door before you've even opened your doors.",
+      "At 15 to25% commission per booking, that's a staggering portion of your revenue walking out the door before you've even opened your doors.",
     image: "/images/ota.jpeg",
   },
   {
@@ -64,7 +64,7 @@ export const PILLARS: PillarCard[] = [
     title: "Own Your Guests",
     tagline:
       "OTAs are a discovery channel. They are not your customer list.",
-    body: "Every booking that comes through Airbnb, VRBO, Booking.com or Turo belongs to them. You have to make it yours. Direct booking pages that convert, post-stay capture flows, owned email lists, and a reason to come back. Without these, you're paying 15–20% commission for a customer relationship you don't actually own.",
+    body: "Every booking that comes through Airbnb, VRBO, Booking.com or Turo belongs to them. You have to make it yours. Direct booking pages that convert, post-stay capture flows, owned email lists, and a reason to come back. Without these, you're paying 15 to20% commission for a customer relationship you don't actually own.",
   },
 ];
 
@@ -78,13 +78,13 @@ export const PROPERTY_TYPES: PropertyType[] = [
   {
     name: "Destination Properties",
     description:
-      "Resort-style boutiques where the experience extends far beyond the room: gardens, pools, and curated local access.",
+      "Resort-style boutiques and vacation stays where the experience extends far beyond the room: gardens, pools, and curated local access.",
     image: "/images/resort.jpeg",
   },
   {
-    name: "Lifestyle Hotels",
+    name: "Lifestyle Stays",
     description:
-      "Design-driven properties that attract a specific guest. The vibe is the brand and the brand is the marketing.",
+      "Design-driven stays, from independent hotels to short-term rentals, that attract a specific guest. The vibe is the brand and the brand is the marketing.",
     image: "/images/lifestyle2.jpeg",
   },
   {
@@ -199,9 +199,9 @@ export const CASE_STUDIES: CaseStudy[] = [
 export const INSIGHTS: InsightPost[] = [
   {
     title:
-      "What 10 to 50 Room Hotels Get Wrong About Direct Bookings",
+      "What Independent Boutique Stays Get Wrong About Direct Bookings",
     excerpt:
-      "Most boutique hotels have a direct booking problem they don't know how to solve, or worse, one they don't know they have. Here's where the money is hiding and how to reclaim it.",
+      "Most boutique stays have a direct booking problem they don't know how to solve, or worse, one they don't know they have. Here's where the money is hiding and how to reclaim it.",
     category: "Revenue Strategy",
     date: "February 2026",
     image:
@@ -210,9 +210,9 @@ export const INSIGHTS: InsightPost[] = [
   },
   {
     title:
-      "Why Your Boutique Hotel's Tech Stack Is Costing You More Than You Think",
+      "Why Your Boutique Stay's Tech Stack Is Costing You More Than You Think",
     excerpt:
-      "The average independent hotel pays for 6–8 technology tools. Fewer than half are configured correctly. The overlap is costing you time, money, and data you'll never get back.",
+      "The average independent operator pays for 6 to 8 technology tools. Fewer than half are configured correctly. The overlap is costing you time, money, and data you'll never get back.",
     category: "Hotel Technology",
     date: "January 2026",
     image:
@@ -317,7 +317,7 @@ export const FREE_RESOURCES: FreeResource[] = [
   {
     name: "Guest Persona Highlights",
     description:
-      "A sketch of who's actually booking boutique hotels in your market and what they're looking for.",
+      "A sketch of who's actually booking boutique stays in your market and what they're looking for.",
   },
   {
     name: "Tech Stack Quick Scan",
@@ -367,8 +367,8 @@ export const TIER_ONE_SERVICES = [
     ],
   },
   {
-    name: "Boutique Hotel Profit Audit",
-    timeline: "2–3 weeks",
+    name: "Boutique Stay Profit Audit",
+    timeline: "2 to3 weeks",
     description:
       "A comprehensive financial and operational diagnostic that identifies your highest-impact profit opportunities across revenue, cost, and operations.",
     deliverables: [
@@ -380,7 +380,7 @@ export const TIER_ONE_SERVICES = [
   },
   {
     name: "Revenue & Distribution Audit",
-    timeline: "1–2 weeks",
+    timeline: "1 to2 weeks",
     description:
       "A focused examination of your revenue strategy, OTA dependency, direct booking conversion, and pricing approach.",
     deliverables: [
@@ -392,7 +392,7 @@ export const TIER_ONE_SERVICES = [
   },
   {
     name: "Tech Stack Assessment",
-    timeline: "1–2 weeks",
+    timeline: "1 to2 weeks",
     description:
       "A complete inventory and analysis of your current technology tools, identifying redundancy, gaps, and optimization opportunities.",
     deliverables: [
@@ -404,7 +404,7 @@ export const TIER_ONE_SERVICES = [
   },
   {
     name: "Guest Experience Snapshot",
-    timeline: "2–3 weeks",
+    timeline: "2 to3 weeks",
     description:
       "An end-to-end evaluation of your guest journey, from the first digital touchpoint to post-stay follow-up, with a clear picture of where experience and revenue are being lost.",
     deliverables: [
@@ -419,7 +419,7 @@ export const TIER_ONE_SERVICES = [
 export const TIER_TWO_SERVICES = [
   {
     name: "AEO Implementation",
-    timeline: "6–8 weeks",
+    timeline: "6 to8 weeks",
     description:
       "The full build: we make your property discoverable and citation-worthy in ChatGPT, Perplexity, Google AI Overviews, and Gemini. This is the flagship frontier opportunity for independent hotels and luxury STR operators right now.",
     deliverables: [
@@ -433,7 +433,7 @@ export const TIER_TWO_SERVICES = [
   },
   {
     name: "Direct Booking Growth Sprint",
-    timeline: "4–8 weeks",
+    timeline: "4 to8 weeks",
     description:
       "A focused engagement to systematically reduce OTA dependency and build a sustainable direct booking engine.",
     deliverables: [
@@ -446,7 +446,7 @@ export const TIER_TWO_SERVICES = [
   },
   {
     name: "Revenue Engine Setup",
-    timeline: "3–6 weeks",
+    timeline: "3 to6 weeks",
     description:
       "Build a complete revenue management infrastructure, from pricing strategy to yield management to reporting.",
     deliverables: [
@@ -459,7 +459,7 @@ export const TIER_TWO_SERVICES = [
   },
   {
     name: "Guest Experience & SOP Buildout",
-    timeline: "4–8 weeks",
+    timeline: "4 to8 weeks",
     description:
       "Design and document the complete guest experience so every team member delivers a consistent, premium experience regardless of who's working.",
     deliverables: [
@@ -472,7 +472,7 @@ export const TIER_TWO_SERVICES = [
   },
   {
     name: "Tech Stack Optimization",
-    timeline: "6–12 weeks",
+    timeline: "6 to12 weeks",
     description:
       "A comprehensive technology engagement, from audit to vendor selection to implementation and staff training.",
     deliverables: [
@@ -485,7 +485,7 @@ export const TIER_TWO_SERVICES = [
   },
   {
     name: "Operations Efficiency Sprint",
-    timeline: "3–4 weeks",
+    timeline: "3 to4 weeks",
     description:
       "Identify and eliminate the operational inefficiencies that are quietly costing you time, money, and staff morale.",
     deliverables: [
@@ -501,7 +501,7 @@ export const TIER_TWO_SERVICES = [
 export const TIER_THREE_SERVICES = [
   {
     name: "Fractional Commercial Director",
-    hours: "8–10 hours/month",
+    hours: "8 to10 hours/month",
     description:
       "Strategic commercial leadership on a retainer basis: revenue management, distribution strategy, and performance oversight without the full-time overhead.",
     includes: [
@@ -514,7 +514,7 @@ export const TIER_THREE_SERVICES = [
   },
   {
     name: "Tech & Systems Support",
-    hours: "4–6 hours/month",
+    hours: "4 to6 hours/month",
     description:
       "Ongoing technology guidance and troubleshooting so your systems stay configured correctly and your team uses them effectively.",
     includes: [
@@ -527,7 +527,7 @@ export const TIER_THREE_SERVICES = [
   },
   {
     name: "Performance Advisory",
-    hours: "4–5 hours/month",
+    hours: "4 to5 hours/month",
     description:
       "A focused monthly advisory relationship for operators who want a trusted strategic partner without a full commercial engagement.",
     includes: [
@@ -551,65 +551,65 @@ export const FAQ_ITEMS: FAQItem[] = [
   // About BNHG & Consulting Basics
   {
     category: "About BNHG & Consulting Basics",
-    question: "What does a boutique hotel consultant do?",
+    question: "What does a boutique stay consultant do?",
     answer:
-      "A boutique hotel consultant helps independent hotels improve revenue, operations, guest experience, and technology. For properties with 10–50 rooms, that usually means direct booking strategy, OTA channel rebalancing, tech stack optimization, guest messaging, and operational systems. At BNHG, we focus specifically on independent luxury boutique properties and work across commercial, guest experience, and technology pillars rather than revenue management alone.",
+      "A boutique stay consultant helps independent operators improve revenue, operations, guest experience, and technology. For independent boutique stays, typically 10 to 50 rooms, that usually means direct booking strategy, OTA channel rebalancing, tech stack optimization, guest messaging, and operational systems. At BNHG, we focus specifically on independent luxury boutique stays, from hotels and inns to design-forward short-term rentals, and work across commercial, guest experience, and technology pillars rather than revenue management alone.",
   },
   {
     category: "About BNHG & Consulting Basics",
-    question: "How much does boutique hotel consulting cost?",
+    question: "How much does boutique stay consulting cost?",
     answer:
-      "Boutique hotel consulting typically ranges from a few thousand dollars for a targeted diagnostic to $5,000–$15,000+ per month for ongoing fractional advisory. BNHG uses a 4-tier model: Tier 0 resources are free, Tier 1 diagnostics are scoped engagements, Tier 2 is implementation work, and Tier 3 is ongoing fractional advisory. Pricing depends on scope, property size, and timeline. The cheapest way to start is with a free Tier 0 resource so you can evaluate the quality of our thinking before committing.",
+      "Boutique stay consulting typically ranges from a few thousand dollars for a targeted diagnostic to $5,000 to $15,000+ per month for ongoing fractional advisory. BNHG uses a 4-tier model: Tier 0 resources are free, Tier 1 diagnostics are scoped engagements, Tier 2 is implementation work, and Tier 3 is ongoing fractional advisory. Pricing depends on scope, property size, and timeline. The cheapest way to start is with a free Tier 0 resource so you can evaluate the quality of our thinking before committing.",
   },
   {
     category: "About BNHG & Consulting Basics",
     question: "Who is Be Nice Hospitality Group?",
     answer:
-      "Be Nice Hospitality Group (BNHG) is a boutique hotel consulting and technology firm for independent luxury hotels with 10–50 rooms. Based in Hapeville, Georgia, BNHG was co-founded by Alex and Della Henry, 2 military veterans who combine enterprise operations experience with deep hospitality expertise. The firm also builds Guestally, a guest messaging and upsell automation platform for independent hotels.",
+      "Be Nice Hospitality Group (BNHG) is a boutique stay consulting and technology firm for independent luxury operators, typically 10 to 50 rooms, from boutique hotels and inns to design-forward short-term rentals. Based in Hapeville, Georgia, BNHG was co-founded by Alex and Della Henry, 2 military veterans who combine enterprise operations experience with deep hospitality expertise. The firm also builds Guestally, a guest messaging and upsell automation platform for independent operators.",
   },
   {
     category: "About BNHG & Consulting Basics",
-    question: "What size hotels does BNHG work with?",
+    question: "What size boutique stays does BNHG work with?",
     answer:
-      "BNHG specializes in independent luxury boutique properties with 10–50 rooms. That includes urban boutiques, destination properties, historic inns, and lifestyle hotels that are owner-operated or managed by a small leadership team. We do not work with large branded hotels or properties below 10 rooms.",
+      "BNHG specializes in independent luxury boutique stays. That includes urban boutique hotels, destination properties, historic inns, lifestyle hotels, and design-forward short-term and vacation rentals that are owner-operated or managed by a small leadership team. Our hotel engagements typically run 10 to 50 rooms. We don't work with large branded hotels or high-volume chains.",
   },
   {
     category: "About BNHG & Consulting Basics",
     question: "How is BNHG different from larger hospitality consulting firms?",
     answer:
-      "Large hospitality consulting firms like Xotels or HVS primarily serve branded chains or 100+ room properties and often focus narrowly on revenue management. BNHG is built for independent operators at the 10–50 room range, works across commercial, guest experience, and tech pillars, and offers a free Tier 0 layer so owners can try the thinking before paying. We also build our own software (Guestally), which means we understand the tech side from the inside.",
+      "Large hospitality consulting firms like Xotels or HVS primarily serve branded chains or 100+ room properties and often focus narrowly on revenue management. BNHG is built for independent operators at the 10 to 50 room range, works across commercial, guest experience, and tech pillars, and offers a free Tier 0 layer so owners can try the thinking before paying. We also build our own software (Guestally), which means we understand the tech side from the inside.",
   },
 
   // Revenue & Direct Booking
   {
     category: "Revenue & Direct Booking",
-    question: "How do I reduce OTA dependency at my independent hotel?",
+    question: "How do I reduce OTA dependency at my boutique stay?",
     answer:
-      "Reducing OTA dependency at an independent hotel requires 3 things working together: a high-converting direct booking website, a parity and rate strategy that rewards direct guests, and retargeting of OTA-acquired guests into direct channels on repeat stays. In practice that means auditing your booking engine, tightening rate parity, launching a best-rate guarantee, improving on-site SEO, and capturing email on every booking. Most boutique hotels we work with move from 60%+ OTA dependency to under 40% within 6–9 months.",
+      "Reducing OTA dependency at an independent boutique stay requires 3 things working together: a high-converting direct booking website, a parity and rate strategy that rewards direct guests, and retargeting of OTA-acquired guests into direct channels on repeat stays. In practice that means auditing your booking engine, tightening rate parity, launching a best-rate guarantee, improving on-site SEO, and capturing email on every booking. Most boutique stays we work with move from 60%+ OTA dependency to under 40% within 6 to 9 months.",
   },
   {
     category: "Revenue & Direct Booking",
-    question: "What's a realistic direct booking percentage for a boutique hotel?",
+    question: "What's a realistic direct booking percentage for a boutique stay?",
     answer:
-      "A healthy direct booking percentage for an independent boutique hotel is 45–60%. Properties that lean heavily on OTAs for discovery often sit at 25–35% direct. Properties with strong brands, repeat guests, and a well-optimized website can push 60–70%. Direct booking as a percentage of total bookings is more important than total volume. Every direct booking saves 15–25% in OTA commission.",
+      "A healthy direct booking percentage for an independent boutique stay is 45 to 60%. Properties that lean heavily on OTAs for discovery often sit at 25 to 35% direct. Properties with strong brands, repeat guests, and a well-optimized website can push 60 to 70%. Direct booking as a percentage of total bookings is more important than total volume. Every direct booking saves 15 to 25% in OTA commission.",
   },
   {
     category: "Revenue & Direct Booking",
-    question: "How do boutique hotels increase ancillary revenue?",
+    question: "How do boutique stays increase ancillary revenue?",
     answer:
-      "Boutique hotels increase ancillary revenue by pre-selling upgrades and experiences before arrival, offering smart in-stay upsells through guest messaging, and packaging local partnerships (restaurants, spas, activities) as add-ons. The highest-ROI moves are pre-arrival upsells (room upgrades, early check-in, late check-out, amenity kits) because guests are already committed. Guestally automates this entire flow so you capture revenue without manual effort from your front desk.",
+      "Boutique stays increase ancillary revenue by pre-selling upgrades and experiences before arrival, offering smart in-stay upsells through guest messaging, and packaging local partnerships (restaurants, spas, activities) as add-ons. The highest-ROI moves are pre-arrival upsells (room upgrades, early check-in, late check-out, amenity kits) because guests are already committed. Guestally automates this entire flow so you capture revenue without manual effort from your front desk.",
   },
   {
     category: "Revenue & Direct Booking",
     question: "What's the ROI on a hotel tech audit?",
     answer:
-      "Hotel tech audits typically pay for themselves within 30–60 days. Most boutique hotels we audit are overpaying for 2–4 overlapping tools and missing 1–2 critical ones. A well-run audit usually surfaces $500–$3,000 per month in redundant software spend and unlocks new revenue opportunities (upsells, direct booking tooling, guest messaging) that were previously unavailable. The implementation timeline is usually 2–4 weeks.",
+      "Hotel tech audits typically pay for themselves within 30 to 60 days. Most boutique stays we audit are overpaying for 2 to 4 overlapping tools and missing 1 to 2 critical ones. A well-run audit usually surfaces $500 to $3,000 per month in redundant software spend and unlocks new revenue opportunities (upsells, direct booking tooling, guest messaging) that were previously unavailable. The implementation timeline is usually 2 to 4 weeks.",
   },
   {
     category: "Revenue & Direct Booking",
     question: "How long does it take to see revenue improvements from consulting?",
     answer:
-      "Revenue improvements at a boutique hotel show up in 3 waves. Quick wins (tech consolidation, OTA parity fixes, ancillary upsells) appear within 30–60 days. Direct booking shifts and conversion improvements take 90–120 days. Compounding revenue (brand strength, repeat guests, rate positioning) takes 6–12 months. Most BNHG clients see measurable revenue impact within the first 90 days.",
+      "Revenue improvements at a boutique stay show up in 3 waves. Quick wins (tech consolidation, OTA parity fixes, ancillary upsells) appear within 30 to 60 days. Direct booking shifts and conversion improvements take 90 to 120 days. Compounding revenue (brand strength, repeat guests, rate positioning) takes 6 to 12 months. Most BNHG clients see measurable revenue impact within the first 90 days.",
   },
   {
     category: "Revenue & Direct Booking",
@@ -623,7 +623,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Hotel Technology",
     question: "What is the best guest messaging software for small hotels?",
     answer:
-      "The best guest messaging software for small independent hotels is one that integrates with your PMS, automates pre-arrival and in-stay messaging, captures upsell revenue, and doesn't require a dedicated ops person to run. Guestally was built specifically for independent boutique hotels (10–50 rooms) that want messaging and upsell automation without enterprise complexity. Other options in the market include Canary Technologies, Akia, and Duve, but most are priced and scoped for larger or branded properties.",
+      "The best guest messaging software for small independent operators is one that integrates with your PMS, automates pre-arrival and in-stay messaging, captures upsell revenue, and doesn't require a dedicated ops person to run. Guestally was built specifically for independent boutique stays (10 to 50 rooms) that want messaging and upsell automation without enterprise complexity. Other options in the market include Canary Technologies, Akia, and Duve, but most are priced and scoped for larger or branded properties.",
   },
   {
     category: "Hotel Technology",
@@ -641,13 +641,13 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Hotel Technology",
     question: "How do I know if my hotel tech stack is overbuilt?",
     answer:
-      "Your hotel tech stack is probably overbuilt if you pay for more than 1 tool that does the same job (2 booking engines, multiple upsell tools, overlapping CRMs), if you have software nobody on staff uses, or if the total monthly cost exceeds 3–4% of your revenue. Most boutique hotels we audit are overpaying for 2–4 redundant tools. A Tech Stack Quick Scan will surface this in about a week.",
+      "Your hotel tech stack is probably overbuilt if you pay for more than 1 tool that does the same job (2 booking engines, multiple upsell tools, overlapping CRMs), if you have software nobody on staff uses, or if the total monthly cost exceeds 3 to 4% of your revenue. Most boutique stays we audit are overpaying for 2 to 4 redundant tools. A Tech Stack Quick Scan will surface this in about a week.",
   },
   {
     category: "Hotel Technology",
     question: "What is Guestally and how does it work?",
     answer:
-      "Guestally is a guest messaging and upsell automation platform for independent boutique hotels. It connects to your PMS, automates pre-arrival messaging, surfaces personalized upsell offers (upgrades, early check-in, experiences), handles in-stay guest requests, and captures reviews post-stay. It's built specifically for 10–50 room independent properties, not enterprise chains. Guestally is a subsidiary of Be Nice Hospitality Group.",
+      "Guestally is a guest messaging and upsell automation platform for independent boutique stays. It connects to your PMS, automates pre-arrival messaging, surfaces personalized upsell offers (upgrades, early check-in, experiences), handles in-stay guest requests, and captures reviews post-stay. It's built specifically for 10 to 50 room independent properties, not enterprise chains. Guestally is a subsidiary of Be Nice Hospitality Group.",
   },
   {
     category: "Hotel Technology",
@@ -671,20 +671,20 @@ export const FAQ_ITEMS: FAQItem[] = [
   },
   {
     category: "Working with BNHG",
-    question: "Do you work with hotels outside the Southeast U.S.?",
+    question: "Do you work with boutique stays outside the Southeast U.S.?",
     answer:
-      "Yes. BNHG is based in Hapeville, Georgia, but we work with independent boutique hotels across the United States. Most of our engagements are remote-first with occasional on-site visits depending on scope. If you are outside the U.S. and running an independent boutique hotel in the 10–50 room range, reach out. We evaluate engagements case by case.",
+      "Yes. BNHG is based in Hapeville, Georgia, but we work with independent boutique stays across the United States. Most of our engagements are remote-first with occasional on-site visits depending on scope. If you are outside the U.S. and running an independent boutique stay in the 10 to 50 room range, reach out. We evaluate engagements case by case.",
   },
   {
     category: "Working with BNHG",
     question: "What happens on a discovery call?",
     answer:
-      "A BNHG discovery call is 40 minutes, booked into a 1-hour slot so we never have to rush. We ask about your property, your current operations and tech, the 1–2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation: either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
+      "A BNHG discovery call is 40 minutes, booked into a 1-hour slot so we never have to rush. We ask about your property, your current operations and tech, the 1 to 2 problems that are top of mind, and where you'd like to be in 12 months. We end the call with a specific recommendation: either a free Tier 0 resource, a paid engagement, or a referral if we're not the right fit. No slide decks, no pressure, no generic playbook.",
   },
   {
     category: "Working with BNHG",
     question: "What free resources does BNHG offer?",
     answer:
-      "BNHG offers 8 free Tier 0 resources for boutique hotel operators: the Revenue Opportunity Snapshot, Online Reputation Briefing, Competitive Position Map, Guest Persona Highlights, Tech Stack Quick Scan, Guestally ROI Estimate, Visibility & Discoverability Audit, and Quick Win Action List. Each is custom to your property, research-backed, and completely free. Start with whichever one maps to your biggest question right now.",
+      "BNHG offers 8 free Tier 0 resources for boutique stay operators: the Revenue Opportunity Snapshot, Online Reputation Briefing, Competitive Position Map, Guest Persona Highlights, Tech Stack Quick Scan, Guestally ROI Estimate, Visibility & Discoverability Audit, and Quick Win Action List. Each is custom to your property, research-backed, and completely free. Start with whichever one maps to your biggest question right now.",
   },
 ];

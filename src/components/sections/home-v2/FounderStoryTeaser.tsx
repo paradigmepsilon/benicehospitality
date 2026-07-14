@@ -25,7 +25,7 @@ export default function FounderStoryTeaser() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-charcoal/80 mb-4 leading-relaxed">
-              Della and Alex Henry have spent the last decade running the operations they teach. Property portfolios, fleet vehicles, AI tools shipping in production. The company exists because the gap between what operators are told to do and what actually works in the field has never been wider.
+              Della and Alex Henry have spent the last decade running the operations they teach. Co-living and rental portfolios, fleet vehicles, AI tools shipping in production. The company exists because the gap between what operators are told to do and what actually works in the field has never been wider.
             </p>
           </AnimatedItem>
           <AnimatedItem>

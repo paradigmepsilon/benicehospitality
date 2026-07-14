@@ -19,15 +19,15 @@ import BuyButton from "./_components/BuyButton";
  */
 
 const PRICE = `$${HOSTS_EDGE.priceUsd}`;
-const CTA_LABEL = `Get the system — ${PRICE}`;
+const CTA_LABEL = `Get the system for ${PRICE}`;
 
 export const metadata: Metadata = {
-  title: "The Host's Edge — Guest Message System",
+  title: "The Host's Edge: Guest Message System",
   description:
     "A lean, tool-agnostic guest-message system for self-managing Airbnb & STR hosts. Six messages that kill repeat questions, protect your review, and sound like you. Not a spammy auto-drip.",
   alternates: { canonical: "https://benicehospitality.com/thehostsedge" },
   openGraph: {
-    title: "The Host's Edge — Guest Message System",
+    title: "The Host's Edge: Guest Message System",
     description:
       "Six sharp guest messages that actually get read. Kill the repeat questions, protect your rating, keep your evenings. Drops into Hospitable, Guesty, Hostaway, or native Airbnb.",
     url: "https://benicehospitality.com/thehostsedge",
@@ -151,7 +151,7 @@ export default function HostsEdgePage() {
           </div>
           <div>
             <p className="font-display text-5xl md:text-6xl font-semibold text-warm-gold mb-3">
-              2&ndash;4 hrs
+              2 to 4 hrs
             </p>
             <p className="font-sans text-base text-white/85 leading-relaxed">
               a day lost to messaging, even for just a few properties.
@@ -328,7 +328,7 @@ export default function HostsEdgePage() {
             the first time, and you get your evenings back.
           </p>
           <BuyButton
-            label={`Get the Guest Message System — ${PRICE}`}
+            label={`Get the Guest Message System for ${PRICE}`}
             className="flex justify-center"
           />
           <p className="mt-6 font-sans text-sm text-white/55">

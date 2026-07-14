@@ -325,12 +325,20 @@ export default function ClaimProofV2() {
               </a>
             ))}
           </nav>
-          <a
-            href="#pricing"
-            className="flex-none rounded-full bg-warm-gold px-5 py-2 font-sans text-sm font-semibold text-near-black transition-colors hover:bg-gold-light"
-          >
-            Get the System
-          </a>
+          <div className="flex flex-none items-center gap-3 md:gap-4">
+            <a
+              href="/claimproof/login"
+              className="font-sans text-sm font-medium text-white/70 transition-colors hover:text-warm-gold"
+            >
+              Log in
+            </a>
+            <a
+              href="#pricing"
+              className="rounded-full bg-warm-gold px-5 py-2 font-sans text-sm font-semibold text-near-black transition-colors hover:bg-gold-light"
+            >
+              Get the System
+            </a>
+          </div>
         </div>
       </div>
 

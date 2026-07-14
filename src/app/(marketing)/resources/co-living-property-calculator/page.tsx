@@ -82,8 +82,10 @@ export default function MtrViabilityScorecardPage() {
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
             Free Resource · Co-living Property Calculator
           </p>
-          <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight">
-            Is your property Co-living-Ready?
+          <h1 className="font-display text-4xl md:text-6xl font-semibold text-white leading-tight text-balance">
+            Is your property
+            <br />
+            Co-living-Ready?
           </h1>
           <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl mx-auto leading-relaxed">
             {SCORECARD_QUESTION_COUNT} weighted questions across{" "}
@@ -99,12 +101,12 @@ export default function MtrViabilityScorecardPage() {
       </section>
 
       {/* How it works */}
-      <section className="py-16 sm:py-20 px-6 bg-white">
+      <section className="py-10 sm:py-12 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <p className="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-warm-gold mb-3 text-center">
             How it works
           </p>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black leading-tight text-center mb-12">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black leading-tight text-center mb-8">
             Tick what is true. We score the rest.
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

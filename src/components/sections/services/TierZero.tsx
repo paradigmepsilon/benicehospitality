@@ -10,7 +10,7 @@ const REPORT_PARTS = [
     label: "Overall Score",
     title: "Overall Score & Letter Grade",
     description:
-      "A single 0-100 score with a letter grade (A-F) that captures how your property performs across every dimension we evaluate. The headline number you can benchmark against yourself over time.",
+      "A single 0-100 score with a letter grade (A-F) that captures how your operation performs across every dimension we evaluate. The headline number you can benchmark against yourself over time.",
   },
   {
     label: "Dimension 01",
@@ -59,7 +59,7 @@ const REPORT_PARTS = [
 const USE_CASES = [
   {
     title: "A diagnostic snapshot",
-    body: "See exactly where your property is strong, where it is weak, and where the highest-leverage opportunities live, scored and benchmarked.",
+    body: "See exactly where your operation is strong, where it is weak, and where the highest-leverage opportunities live, scored and benchmarked.",
   },
   {
     title: "An internal alignment tool",
@@ -86,15 +86,15 @@ export default function TierZero() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-6 leading-tight">
-              Your Hotel, Scored in 8 Sections
+              Your Operation, Scored in 8 Sections
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 leading-relaxed">
               Our flagship Tier 0 deliverable is a Comprehensive Audit: a
               2-page diagnostic that opens with an overall score, breaks your
-              property down across 6 dimensions of boutique hotel
-              performance, and closes with 3 prioritized quick wins. We
+              operation down across 6 dimensions of performance, and closes
+              with 3 prioritized quick wins. We
               pull real market data, real competitor intelligence, and real
               industry benchmarks, then translate it into a scored report you
               can act on immediately.

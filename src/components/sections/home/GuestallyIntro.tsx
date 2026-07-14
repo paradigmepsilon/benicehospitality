@@ -35,15 +35,15 @@ export default function GuestallyIntro() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-xl text-white/80 mb-6 leading-relaxed">
-                SMS-first guest engagement and upsell automation, built
-                exclusively for boutique hotels.
+                SMS-first guest engagement and upsell automation, built for
+                independent boutique stays and co-living operators.
               </p>
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-base text-white/60 mb-10 leading-relaxed">
                 Most guest messaging platforms were built for large hotels with
                 dedicated tech teams. Guestally was built for operators like
-                you. Properties where every hour matters and every dollar of
+                you. Operations where every hour matters and every dollar of
                 incremental revenue counts.
               </p>
             </AnimatedItem>

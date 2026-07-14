@@ -15,4 +15,7 @@ export const SECTION_COLORS = {
   primaryGreen: "#1A4D4F",
   deepTeal: "#1A4D4F",
   nearBlack: "#1a1a1a",
+  // Soft terracotta wash for "danger/problem" sections (matches the .alert
+  // callout background in the Claim Proof PDFs). Signals a warning zone.
+  alertWash: "#F6EAE5",
 } as const;

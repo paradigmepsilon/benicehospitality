@@ -7,17 +7,17 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Contact Boutique Hotel Consultants | Be Nice Hospitality Group",
+    absolute: "Contact Our Hospitality Consultants | Be Nice Hospitality Group",
   },
   description:
-    "Start a conversation with Be Nice Hospitality Group. Request a free revenue snapshot, book a discovery call, or ask about our boutique hotel consulting services.",
+    "Start a conversation with Be Nice Hospitality Group. Request a free revenue snapshot, book a discovery call, or ask about our consulting for co-living operators, boutique stays, and fleets.",
   alternates: {
     canonical: "https://benicehospitality.com/contact",
   },
   openGraph: {
-    title: "Contact Boutique Hotel Consultants | Be Nice Hospitality Group",
+    title: "Contact Our Hospitality Consultants | Be Nice Hospitality Group",
     description:
-      "Get in touch with BNHG. Request a free resource, book a discovery call, or learn about our boutique hotel consulting and Guestally software.",
+      "Get in touch with BNHG. Request a free resource, book a discovery call, or learn about our hospitality consulting and Guestally software.",
     url: "https://benicehospitality.com/contact",
     type: "website",
     images: [

@@ -8,17 +8,17 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Boutique Hotel Strategy Insights & Articles | BNHG",
+    absolute: "Hospitality Strategy Insights & Articles | BNHG",
   },
   description:
-    "Strategy, operations, and technology thinking for independent boutique hotel owners and general managers. Direct booking strategies, tech stack optimization, guest experience frameworks, and more.",
+    "Strategy, operations, and technology thinking for co-living operators, boutique stays, and fleet operators. Direct booking strategies, tech stack optimization, guest experience frameworks, and more.",
   alternates: {
     canonical: "https://benicehospitality.com/insights",
   },
   openGraph: {
-    title: "Boutique Hotel Strategy Insights & Articles | BNHG",
+    title: "Hospitality Strategy Insights & Articles | BNHG",
     description:
-      "Boutique hotel insights: revenue strategy, guest experience, and technology thinking for independent hoteliers.",
+      "Operator insights: revenue strategy, guest experience, and technology thinking for co-living, boutique stays, and fleets.",
     url: "https://benicehospitality.com/insights",
     type: "website",
     images: [

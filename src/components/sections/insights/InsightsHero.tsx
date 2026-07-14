@@ -5,7 +5,7 @@ export default function InsightsHero() {
     <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
       <Image
         src="https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=1920&q=80"
-        alt="Hotel lobby with reading area"
+        alt="Boutique stay lobby with a reading area"
         fill
         className="object-cover opacity-30"
         priority

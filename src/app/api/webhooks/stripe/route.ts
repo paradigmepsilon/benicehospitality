@@ -21,11 +21,13 @@ import {
   CLAIM_PROOF_PRODUCT_TAG,
   claimProofDeliveryEmail,
   claimProofDownloadLink,
+  claimProofPortalLink,
   getClaimProofFromAddress,
   isClaimProofTier,
   recordClaimProofContact,
 } from "@/lib/claim-proof";
 import { makeClaimProofToken } from "@/lib/claim-proof-download";
+import { provisionWorkspaceForPurchase } from "@/lib/claim-proof-workspace";
 import { getPostHogClient } from "@/lib/posthog-server";
 
 let cachedResend: Resend | null = null;
@@ -88,6 +90,32 @@ export async function POST(request: Request) {
       case "checkout.session.expired": {
         const session = event.data.object as Stripe.Checkout.Session;
         await markPurchaseFailed(session.id);
+        break;
+      }
+      case "charge.refunded": {
+        // Marks mirrored Claim Proof purchases refunded for Unified Ops
+        // reporting. Charges from other products simply won't match a row.
+        // NOTE: charge.refunded must be enabled on the Stripe webhook
+        // endpoint config for this to fire.
+        const charge = event.data.object as Stripe.Charge;
+        const pi =
+          typeof charge.payment_intent === "string"
+            ? charge.payment_intent
+            : charge.payment_intent?.id ?? null;
+        if (pi) {
+          try {
+            await sql`
+              UPDATE claimproof_purchases
+              SET status = 'refunded', refunded_at = NOW()
+              WHERE stripe_payment_intent = ${pi} AND status <> 'refunded'
+            `;
+          } catch (err) {
+            console.error(
+              `[webhooks/stripe] refund mark failed for ${pi}:`,
+              err,
+            );
+          }
+        }
         break;
       }
       // Other event types are intentionally ignored — Stripe is chatty.
@@ -218,15 +246,16 @@ async function fulfillClaimProof(
   try {
     // Token-gated link to our download endpoint (mints short-lived signed URLs
     // from the private blob store). The email link itself never expires.
-    const downloadUrl = claimProofDownloadLink(
-      getBaseUrl(),
-      tier,
-      makeClaimProofToken(tier),
-    );
+    // Third arg embeds the session id so portal logins can be attributed to
+    // this purchase (claimproof_purchases stamping). Older links still work.
+    const token = makeClaimProofToken(tier, undefined, session.id);
+    const downloadUrl = claimProofDownloadLink(getBaseUrl(), tier, token);
     const { subject, html } = claimProofDeliveryEmail({
       name,
       tier,
       downloadUrl,
+      // Same token doubles as the Claim Command Center magic link.
+      portalUrl: claimProofPortalLink(getBaseUrl(), token),
       videoUrl:
         tier === "fleet"
           ? process.env.CLAIM_PROOF_FLEET_VIDEO_URL || undefined
@@ -260,6 +289,49 @@ async function fulfillClaimProof(
   } catch (err) {
     console.error(
       `[webhooks/stripe] Claim Proof contact log threw for ${email}:`,
+      err,
+    );
+  }
+
+  // Mirror the purchase into the BNHG DB for Unified Ops reporting (revenue,
+  // customers, ROAS). Stripe stays the ledger of record. Own try/catch — a
+  // mirror failure must never block fulfillment; the backfill script
+  // (scripts/backfill-claimproof-purchases.ts) heals any gaps.
+  try {
+    const paymentIntent =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id ?? null;
+    await sql`
+      INSERT INTO claimproof_purchases
+        (stripe_session_id, stripe_payment_intent, email, tier, amount_cents,
+         currency, amount_discount_cents, purchased_at)
+      VALUES
+        (${session.id}, ${paymentIntent}, ${email.toLowerCase().trim()}, ${tier},
+         ${session.amount_total ?? 0}, ${session.currency ?? "usd"},
+         ${session.total_details?.amount_discount ?? 0},
+         ${new Date(session.created * 1000).toISOString()})
+      ON CONFLICT (stripe_session_id) DO NOTHING
+    `;
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Claim Proof purchase mirror failed for ${session.id}:`,
+      err,
+    );
+  }
+
+  // Phase 2: provision a Command Center workspace for this purchase so the
+  // buyer's tracked claims sync across devices under their account. Own
+  // try/catch — a DB hiccup here must never block the delivery email above.
+  try {
+    await provisionWorkspaceForPurchase({
+      email,
+      tier,
+      stripeSessionId: session.id,
+    });
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Claim Proof workspace provisioning threw for ${email}:`,
       err,
     );
   }

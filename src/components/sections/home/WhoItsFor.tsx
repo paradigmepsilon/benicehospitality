@@ -18,39 +18,39 @@ interface Operator {
 // Unsplash placeholders until real photography ships.
 const OPERATORS: Operator[] = [
   {
-    eyebrow: "Property",
-    heading: "If you operate property",
+    eyebrow: "Co-living Properties",
+    heading: "If you run co-living properties",
     body:
-      "New Operators, 3 STRs, a co-living building, or a portfolio that mixes them. The math is the same. Direct bookings, automation, owned guest lists. The operators we work with are the ones who got tired of running their portfolios on Sunday nights and finally want their evenings back.",
+      "Co-living operators renting rooms by the door, plus the short-term and mid-term portfolios that mix in. The math is the same. Direct bookings, automation, owned guest lists. The operators we work with are the ones who got tired of running their portfolios on Sunday nights and finally want their evenings back.",
     ctaLabel: "Join the Room Rental Riches Masterclass",
     ctaHref: "/courses/room-rental-riches",
     image: {
       src: "/images/Website Images/image4.png",
-      alt: "Residential home exterior at golden hour",
+      alt: "Co-living property exterior at golden hour",
     },
   },
   {
-    eyebrow: "Boutique Hotels",
-    heading: "If you run an independent property with 10 to 50 rooms",
+    eyebrow: "Boutique Stays",
+    heading: "If you run independent boutique stays",
     body:
-      "The OTAs are eating into your revenue, your tech stack is held together by a vendor who half-quit, and the last agency you hired left you with slides and an invoice. Signal works the way you'd actually want a partner to work. Outcome-tied, transparent, willing to be measured.",
+      "Independent boutique hotels, inns, and the design-forward short-term and vacation stays guests book on purpose. The OTAs are eating into your revenue, your tech stack is held together by a vendor who half-quit, and the last agency you hired left you with slides and an invoice. Signal works the way you'd actually want a partner to work. Outcome-tied, transparent, willing to be measured.",
     ctaLabel: "Explore Signal Offerings",
     ctaHref: "/signal",
     image: {
       src: "/images/Website Images/image3.png",
-      alt: "Boutique hotel exterior at dusk",
+      alt: "Boutique stay exterior at dusk",
     },
   },
   {
     eyebrow: "Autos",
-    heading: "If you operate auto",
+    heading: "If you run a rental fleet",
     body:
-      "Aspiring Turo hosts and small fleet operators running 3 to 30 economy vehicles can use our same methods, applied to vehicles: pricing, channel mix, ops cadence, customer flow. Car Rental Riches is in production now.",
+      "Aspiring Turo hosts and small fleet operators running 3 to 30 economy vehicles can use our same methods, applied to fleet management: pricing, channel mix, ops cadence, customer flow. Car Rental Riches is in production now.",
     ctaLabel: "Join the Car Rental Riches Waitlist",
     ctaHref: "/alex",
     image: {
       src: "/images/Website Images/image5.png",
-      alt: "A small fleet of 3 economy vehicles parked in a line",
+      alt: "A small rental fleet of 3 economy vehicles parked in a line",
     },
   },
 ];

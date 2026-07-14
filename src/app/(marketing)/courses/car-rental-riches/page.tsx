@@ -15,14 +15,14 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Car Rental Riches",
   description:
-    "The Host-to-Operator method retuned for Turo and rental-fleet operators. 3 commitment tiers, same operator-grade depth. Founding pricing announced 2026. Join the waitlist.",
+    "The Host-to-Operator method retuned for Turo hosts and small fleet operators. 3 commitment tiers, same operator-grade depth. Founding pricing announced 2026. Join the waitlist.",
   alternates: {
     canonical: "https://benicehospitality.com/courses/car-rental-riches",
   },
   openGraph: {
     title: "Car Rental Riches | BNHG",
     description:
-      "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026.",
+      "The Host-to-Operator method retuned for Turo hosts and small fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026.",
     url: "https://benicehospitality.com/courses/car-rental-riches",
     type: "website",
   },
@@ -146,7 +146,7 @@ export default function CRRPage() {
             Riches.
           </>
         }
-        body="The Host-to-Operator method retuned for Turo and rental-fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026."
+        body="The Host-to-Operator method retuned for Turo hosts and small fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026."
         primaryCta={{ label: "See the curriculum", href: "#curriculum" }}
         secondaryCta={{
           label: "Login",
@@ -271,7 +271,7 @@ export default function CRRPage() {
 
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
-      {/* Curriculum perk-card grid (typographic — no module imagery yet) */}
+      {/* Curriculum perk-card grid (typographic, no module imagery yet) */}
       <AnimatedSection
         theme="light"
         id="curriculum"

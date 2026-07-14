@@ -23,22 +23,22 @@ const u = (id: string, w = 1200) =>
 // Hospitality / property operator imagery
 export const STOCK_PROPERTY: StockImage = {
   src: "/images/lifestyle.jpeg",
-  alt: "Short-term rental living room ready for a guest arrival",
+  alt: "Co-living rental living room ready for a guest arrival",
 };
 
 export const STOCK_PROPERTY_ALT: StockImage = {
   src: "/images/lifestyle2.jpeg",
-  alt: "Modern apartment interior styled for a short-term stay",
+  alt: "Modern apartment interior styled for a co-living rental",
 };
 
 export const STOCK_BOUTIQUE_HOTEL: StockImage = {
   src: "/images/historic.jpeg",
-  alt: "Historic boutique hotel facade",
+  alt: "Historic boutique stay facade",
 };
 
 export const STOCK_RESORT: StockImage = {
   src: "/images/resort.jpeg",
-  alt: "Independent resort property at golden hour",
+  alt: "Independent resort at golden hour",
 };
 
 export const STOCK_URBAN: StockImage = {
@@ -69,7 +69,7 @@ export const STOCK_ALL_HATS: StockImage = {
 // Auto / fleet operator
 export const STOCK_AUTO: StockImage = {
   src: u("photo-1492144534655-ae79c964c9d7"),
-  alt: "Modern car interior detail of an auto-operator vehicle",
+  alt: "Modern car interior detail of a fleet vehicle",
 };
 
 export const STOCK_AUTO_FLEET: StockImage = {
@@ -86,12 +86,12 @@ export const STOCK_COLIVING: StockImage = {
 // Modern interior / luxury hotel
 export const STOCK_HOTEL_ROOM: StockImage = {
   src: u("photo-1564501049412-61c2a3083791"),
-  alt: "Boutique hotel guest room styled for an independent property",
+  alt: "Boutique stay guest room styled for an independent operator",
 };
 
 export const STOCK_HOTEL_EXTERIOR: StockImage = {
   src: u("photo-1551882547-ff40c63fe5fa"),
-  alt: "Independent boutique hotel exterior at twilight",
+  alt: "Independent boutique stay exterior at twilight",
 };
 
 // Workspace / operations / technology
@@ -141,10 +141,10 @@ export const STOCK_PORTRAIT_M1: StockImage = {
 
 export const STOCK_PORTRAIT_F2: StockImage = {
   src: u("photo-1494790108377-be9c29b29330", 256),
-  alt: "Portrait of a property operator",
+  alt: "Portrait of a co-living operator",
 };
 
 export const STOCK_PORTRAIT_M2: StockImage = {
   src: u("photo-1599566150163-29194dcaad36", 256),
-  alt: "Portrait of an auto-fleet operator",
+  alt: "Portrait of a fleet operator",
 };

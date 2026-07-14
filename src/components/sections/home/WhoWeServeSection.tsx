@@ -18,15 +18,15 @@ export default function WhoWeServeSection() {
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-near-black mb-4 leading-tight">
               Built for Independent{" "}
               <span className="text-primary-green italic">
-                Luxury Boutique Properties
+                Luxury Boutique Stays
               </span>
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg text-charcoal/70 max-w-2xl mx-auto">
-              Independent boutique hotels and luxury short-term rental
-              operators. 10 to 50 rooms (or keys). U.S. market. No brand
-              affiliations required.
+              Independent boutique hotels, inns, and the design-forward
+              short-term and vacation stays guests seek out. U.S. market. No
+              brand affiliations required.
             </p>
           </AnimatedItem>
         </div>

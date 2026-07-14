@@ -21,14 +21,14 @@ const SURFACES: Surface[] = [
   {
     number: "02",
     title: "Courses",
-    body: "Foundation and Flagship in Property and Auto editions. From the $97 Direct Booking Playbook up to the $799 flagship.",
+    body: "Foundation and Flagship in Co-living and Auto editions. From the $97 Direct Booking Playbook up to the $799 flagship.",
     cta: "See the Catalog",
     href: "/education",
   },
   {
     number: "03",
     title: "Signal",
-    body: "AI services for boutique luxury hotels. Productized engagements with outcome guarantees, 10 to 50 rooms.",
+    body: "AI services for boutique stays: independent hotels, inns, and design-forward short-term and vacation rentals. Productized engagements with outcome guarantees.",
     cta: "Explore Signal",
     href: "/signal",
   },

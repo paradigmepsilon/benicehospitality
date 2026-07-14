@@ -6,8 +6,8 @@ import { unsubscribeLimiter } from "@/lib/rate-limit";
 function htmlPage({ ok, email }: { ok: boolean; email: string }) {
   const heading = ok ? "You've been unsubscribed" : "Unsubscribe link invalid";
   const body = ok
-    ? `<p>${email} has been removed from our outreach list. You will no longer receive cold emails from Be Nice Hospitality Group.</p>
-       <p>If you change your mind, just reply to one of our emails and we'll re-add you.</p>`
+    ? `<p>${email} has been removed from our email lists. You will no longer receive emails from Be Nice Hospitality Group or its products.</p>
+       <p>If you change your mind, just reply to one of our previous emails and we'll re-add you.</p>`
     : `<p>This unsubscribe link is invalid or has expired. If you'd like to be removed from our list, please reply to one of our emails or email <a href="mailto:admin@benicehospitality.com">admin@benicehospitality.com</a>.</p>`;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -64,6 +64,15 @@ export async function GET(request: Request) {
     UPDATE outreach_targets
     SET status = 'unsubscribed', unsubscribed_at = NOW(), updated_at = NOW()
     WHERE contact_email = ${email} AND sent_at IS NULL AND status IN ('scheduled', 'approved')
+  `;
+
+  // Newsletter/product lists (Claim Proof updates, BNHG insights) share this
+  // endpoint. Tombstone rather than delete so re-subscribes stay auditable;
+  // Unified Ops excludes unsubscribed_at rows from every send.
+  await sql`
+    UPDATE newsletter_subscribers
+    SET unsubscribed_at = COALESCE(unsubscribed_at, NOW())
+    WHERE email = ${email}
   `;
 
   return new NextResponse(htmlPage({ ok: true, email }), {

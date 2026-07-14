@@ -6,14 +6,14 @@ import { STOCK_TECH } from "@/lib/stock-images";
 export const metadata: Metadata = {
   title: { absolute: "Get Your Free Audit | Be Nice Hospitality Group" },
   description:
-    "Free Tier 0 Comprehensive Audit. URL in, branded report out. Built for boutique hotel owners and sharing-economy operators who want a serious second opinion.",
+    "Free Tier 0 Comprehensive Audit. URL in, branded report out. Built for co-living operators, boutique stays, and small fleets who want a serious second opinion.",
   alternates: {
     canonical: "https://benicehospitality.com/audit/request",
   },
   openGraph: {
     title: "Get Your Free Audit | Be Nice Hospitality Group",
     description:
-      "2-page diagnostic across 7 dimensions. Custom to your property, yours to keep, no commitment.",
+      "2-page diagnostic across 7 dimensions. Custom to your operation, yours to keep, no commitment.",
     url: "https://benicehospitality.com/audit/request",
     type: "website",
   },
@@ -51,10 +51,10 @@ export default function AuditRequestPage() {
             Your operation, scored across 7 dimensions.
           </h1>
           <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl leading-relaxed">
-            We analyze your property or fleet, score it across 7 dimensions, and send back a 2-page diagnostic with the 3 highest-impact next moves. Free, custom, and yours to keep.
+            We analyze your property, stay, or fleet, score it across 7 dimensions, and send back a 2-page diagnostic with the 3 highest-impact next moves. Free, custom, and yours to keep.
           </p>
           <p className="font-sans text-sm text-white/55 mt-4">
-            Built for boutique hotel owners and sharing-economy operators. Tell us your role and we route the report to the right next step.
+            Built for co-living operators, boutique stays, and small fleets. Tell us your role and we route the report to the right next step.
           </p>
         </div>
       </section>

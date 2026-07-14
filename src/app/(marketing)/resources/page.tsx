@@ -7,16 +7,31 @@ import { type Resource } from "./_components/ResourceCard";
 import ResourceCatalog, {
   type ResourceTab,
 } from "./_components/ResourceCatalog";
+import { liveResourceTools } from "@/lib/resources/registry";
+
+// Interactive, gated property tools (Price Calculator, Start-Up Cost, P&L,
+// Setup Checklist) are sourced straight from the registry so the index never
+// drifts from the tools themselves.
+const RESOURCE_TOOL_CARDS: Resource[] = liveResourceTools("property").map(
+  (t) => ({
+    name: t.name,
+    body: t.blurb,
+    bullets: t.bullets,
+    access: "free-email",
+    href: `/resources/${t.slug}`,
+    status: "live",
+  }),
+);
 
 export const metadata: Metadata = {
   title: "Resource Library",
   description:
-    "An ever-growing library of operator resources. Diagnostic tools, scorecards, and free audits for property operators, boutique hotels, and auto operators. Some are free, some require a quick signup, some are bundled with the course.",
+    "An ever-growing library of operator resources. Diagnostic tools, scorecards, and free audits for co-living operators, boutique stays, and fleet operators. Some are free, some require a quick signup, some are bundled with the course.",
   alternates: { canonical: "https://benicehospitality.com/resources" },
   openGraph: {
     title: "Resource Library | Be Nice Hospitality Group",
     description:
-      "Operator-grade resources for property operators, boutique hotels, and auto operators. Free, signup-gated, and course-bundled.",
+      "Operator-grade resources for co-living operators, boutique stays, and fleet operators. Free, signup-gated, and course-bundled.",
     url: "https://benicehospitality.com/resources",
     type: "website",
   },
@@ -40,12 +55,13 @@ const PROPERTY_RESOURCES: Resource[] = [
     href: "/resources/co-living-property-calculator",
     status: "live",
   },
+  ...RESOURCE_TOOL_CARDS,
   {
     name: "Direct Booking Snapshot",
     body: "What percent of your bookings are direct? Where you are vs. where you should be, by asset class.",
     bullets: [
       "Your direct-vs.-OTA share over the trailing 12 months",
-      "Benchmarks by asset class (STR, MTR, co-living)",
+      "Benchmarks by asset class (co-living, MTR, STR)",
       "Dollar value of every percentage point you recover",
       "3 specific levers to move the number this quarter",
     ],
@@ -159,7 +175,7 @@ const HOTEL_RESOURCES: Resource[] = [
     access: "free-email",
   },
   {
-    name: "AEO Optimization for Hotels",
+    name: "AEO Optimization for Boutique Stays",
     body: "Travelers ask ChatGPT, Perplexity, and Google AI Overviews for recommendations. Find out if you're in the answer, and what to fix if not.",
     bullets: [
       "Real prompts tested in ChatGPT, Perplexity, and Google AI Overviews",
@@ -193,9 +209,9 @@ const HOTEL_RESOURCES: Resource[] = [
   },
   {
     name: "Guest Persona Highlights",
-    body: "A sketch of who's actually booking boutique hotels in your market and what they're looking for.",
+    body: "A sketch of who's actually booking boutique stays in your market and what they're looking for.",
     bullets: [
-      "Who's actually booking boutique hotels in your market",
+      "Who's actually booking boutique stays in your market",
       "What they want, what they pay, where they research",
       "Where your current marketing matches them vs. misses",
       "3 persona-specific positioning angles",
@@ -244,7 +260,7 @@ const HOTEL_RESOURCES: Resource[] = [
 const AUTO_RESOURCES: Resource[] = [
   {
     name: "Fleet Utilization Report",
-    body: "Per-vehicle utilization, day-of-week patterns, fleet-mix optimization. Built for Turo operators running 3 or more cars.",
+    body: "Per-vehicle utilization, day-of-week patterns, fleet-mix optimization. Built for Turo hosts and small fleet operators running 3 or more vehicles.",
     bullets: [
       "Per-vehicle utilization across the trailing 12 months",
       "Day-of-week and seasonal demand patterns",
@@ -271,31 +287,31 @@ const AUTO_RESOURCES: Resource[] = [
 const TABS: ResourceTab[] = [
   {
     id: "property",
-    label: "Property",
-    sectionLabel: "For property operators",
-    headline: "STR, MTR, and co-living.",
+    label: "Co-living Properties",
+    sectionLabel: "For co-living operators",
+    headline: "Co-living, MTR, and STR.",
     body: "Tools that diagnose specific operator problems, plus the full Room Rental Riches curriculum for the people who want the whole method. Run any diagnostic on your portfolio in minutes.",
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
-      alt: "Boutique short-term and mid-term rental property interior",
+      alt: "Co-living and short-term rental property interior",
     },
     resources: PROPERTY_RESOURCES,
   },
   {
     id: "hotel",
-    label: "Independent Hotel",
-    sectionLabel: "For boutique hotels",
-    headline: "Independent 10 to 50 room properties.",
-    body: "Free audits and diagnostics focused on the AI-search visibility, OTA-recovery, and revenue-integrity problems specific to independent boutique hotels. Each one is delivered as a written report; share your URL, we do the research.",
+    label: "Boutique Stays",
+    sectionLabel: "For boutique stays",
+    headline: "Boutique hotels, inns, and design-forward stays.",
+    body: "Free audits and diagnostics focused on the AI-search visibility, OTA-recovery, and revenue-integrity problems specific to boutique stays: independent hotels, inns, and the design-forward short-term rentals guests book on purpose. Each one is delivered as a written report; share your URL, we do the research.",
     image: {
       src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
-      alt: "Independent boutique hotel exterior in warm light",
+      alt: "Boutique stay exterior in warm light",
     },
     resources: HOTEL_RESOURCES,
   },
   {
     id: "auto",
-    label: "Auto",
+    label: "Autos",
     sectionLabel: "For auto operators",
     headline: "Turo and peer-to-peer fleet.",
     body: "Our newest segment, so the library is intentionally short. What's here today is what we use ourselves; Car Rental Riches ships next and will bring a full set of fleet-grade tools with it.",

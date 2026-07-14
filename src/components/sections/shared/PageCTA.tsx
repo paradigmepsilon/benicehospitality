@@ -39,10 +39,10 @@ const AUDIENCE_PRESETS: Record<PageCTAAudience, AudiencePreset> = {
     secondary: { href: "/community", label: "Join the Network" },
   },
   owner: {
-    sectionLabel: "For boutique luxury hotels",
-    headline: "Be the hotel AI recommends.",
+    sectionLabel: "For boutique stays",
+    headline: "Be the stay AI recommends.",
     subtext:
-      "AI services with outcome guarantees, built for 10 to 50 room independent properties.",
+      "AI services with outcome guarantees, built for independent boutique stays: hotels, inns, and design-forward short-term and vacation rentals.",
     primary: { href: "/signal", label: "Explore Signal" },
     secondary: {
       href: bookingUrl({

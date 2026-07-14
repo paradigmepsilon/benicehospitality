@@ -11,26 +11,28 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
   title:
-    "Della Henry | Southeast Mid-Term Rental & Co-Living Coach (Atlanta, GA)",
+    "Della Henry | Southeast Co-Living & Mid-Term Rental Coach (Atlanta, GA)",
   description:
-    "Atlanta MTR operator running 12 mid-term rentals across Atlanta, Charlotte, Nashville, Savannah, and Birmingham. Travel nurse, corporate housing, and insurance displacement playbooks from an operator who runs the units she teaches about.",
+    "Atlanta co-living and MTR operator running 12 co-living and mid-term rental units across Atlanta, Charlotte, Nashville, Savannah, and Birmingham. Travel nurse, corporate housing, and insurance displacement playbooks from an operator who runs the units she teaches about.",
   keywords: [
+    "co-living coach",
+    "co-living Southeast",
+    "rent rooms by the door",
     "mid-term rental coach",
     "MTR Atlanta",
-    "co-living Southeast",
     "travel nurse housing",
     "corporate housing operator",
     "insurance displacement housing",
     "Southeast Airbnb alternative",
     "Della Henry",
     "Be Nice Hospitality",
-    "mid-term rental course",
+    "co-living and mid-term rental course",
   ],
   alternates: { canonical: "https://benicehospitality.com/della" },
   openGraph: {
-    title: "Della Henry. Southeast Mid-Term Rental Coach.",
+    title: "Della Henry. Southeast Co-Living and Mid-Term Rental Coach.",
     description:
-      "12 MTR units. 5 Southeast markets. 1 operating system. Book a working call, take the Room to Rental Riches Masterclass, or pull from the free resource library.",
+      "12 co-living and MTR units. 5 Southeast markets. 1 operating system. Book a working call, take the Room to Rental Riches Masterclass, or pull from the free resource library.",
     url: "https://benicehospitality.com/della",
     type: "profile",
     images: [
@@ -46,12 +48,12 @@ export const metadata: Metadata = {
 
 const EXPERTISE = [
   {
-    title: "Mid-Term Rental Operations",
-    body: "Cleaning, turns, vendor SLAs, maintenance routes. Built for 30 day plus stays, not weekend Airbnbs. The same playbook keeps a 12-unit Southeast portfolio running with 1 full-time hire.",
+    title: "Co-Living and Mid-Term Operations",
+    body: "Cleaning, turns, vendor SLAs, maintenance routes. Built for rooms rented by the door and 30 day plus stays, not weekend Airbnbs. The same playbook keeps a 12-unit Southeast portfolio running with 1 full-time hire.",
   },
   {
     title: "Demand Sourcing Beyond the OTAs",
-    body: "Travel nurse agencies, corporate housing brokers, insurance displacement contracts, and direct relocation channels. Where the real MTR money lives in Atlanta, Charlotte, Nashville, Savannah, and Birmingham. How to turn an inbound inquiry into a 6-month contract.",
+    body: "Travel nurse agencies, corporate housing brokers, insurance displacement contracts, and direct relocation channels. Where the real co-living and MTR money lives in Atlanta, Charlotte, Nashville, Savannah, and Birmingham. How to turn an inbound inquiry into a 6-month contract.",
   },
   {
     title: "Southeast Regulatory Navigation",
@@ -67,12 +69,12 @@ const EXPERTISE = [
   },
   {
     title: "Underwriting Southeast Properties",
-    body: "What to actually look for when you are buying or leasing for MTR. The 3 numbers that matter, the 5 neighborhoods worth a hard look right now, and the deal-breakers that never show up on a pro forma.",
+    body: "What to actually look for when you are buying or leasing for co-living or MTR. The 3 numbers that matter, the 5 neighborhoods worth a hard look right now, and the deal-breakers that never show up on a pro forma.",
   },
 ];
 
 const STATS = [
-  { figure: "8", label: "Years running mid-term rentals" },
+  { figure: "8", label: "Years running co-living and MTR" },
   { figure: "12", label: "Units in active operation" },
   { figure: "5", label: "Southeast cities" },
   { figure: "92%", label: "Trailing 12-month occupancy" },
@@ -92,12 +94,12 @@ const FAQS = [
     a: "No. The first 3 modules of the Room to Rental Riches Masterclass walk you through property selection and underwriting for people who do not own a single door yet. The free resource library has a starter checklist if you want to see how Della thinks before you spend a dollar.",
   },
   {
-    q: "Why Della instead of any other MTR coach?",
-    a: "Because she runs the units she teaches you about. 12 units. 5 Southeast cities. All mid-term. All hers or under her management. When she tells you how a corporate housing inquiry converts in Atlanta in October, it is because she just closed one.",
+    q: "Why Della instead of any other co-living or MTR coach?",
+    a: "Because she runs the units she teaches you about. 12 units. 5 Southeast cities. All co-living and mid-term. All hers or under her management. When she tells you how a corporate housing inquiry converts in Atlanta in October, it is because she just closed one.",
   },
   {
     q: "How fast can I expect to see results?",
-    a: "Depends where you start. Operators with units already running see pricing and length-of-stay wins inside 30 days of applying the course. Acquisition-stage operators are working a longer clock. 3 to 6 months to a first MTR-ready unit is realistic. Faster if your capital is ready.",
+    a: "Depends where you start. Operators with units already running see pricing and length-of-stay wins inside 30 days of applying the course. Acquisition-stage operators are working a longer clock. 3 to 6 months to a first co-living or MTR-ready unit is realistic. Faster if your capital is ready.",
   },
   {
     q: "Will Della work with me long term?",
@@ -116,12 +118,12 @@ export default function DellaPage() {
               Della Henry · Co-Founder, Be Nice Hospitality
             </p>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-deep-teal leading-[1.05] tracking-tight mb-7">
-              Run profitable mid-term rentals in the Southeast.
+              Run profitable co-living and mid-term rentals in the Southeast.
             </h1>
             <p className="font-sans text-lg md:text-xl text-charcoal leading-snug mb-8 max-w-xl">
-              12 MTR units. 5 cities. 8 years of doing this every
-              single day. If you are trying to build a mid-term rental
-              portfolio in Atlanta, Charlotte, Nashville, Savannah, or
+              12 co-living and mid-term units. 5 cities. 8 years of doing this every
+              single day. If you are building a rental portfolio by the door
+              in Atlanta, Charlotte, Nashville, Savannah, or
               Birmingham, you are in the right place.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
@@ -161,7 +163,7 @@ export default function DellaPage() {
             <div className="relative w-full h-full overflow-hidden rounded-sm">
               <Image
                 src="/images/Website%20Images/Della%20Casual.png"
-                alt="Della Henry, Southeast mid-term rental operator and co-founder of Be Nice Hospitality Group"
+                alt="Della Henry, Southeast co-living and mid-term rental operator and co-founder of Be Nice Hospitality Group"
                 fill
                 priority
                 className="object-cover"
@@ -197,23 +199,23 @@ export default function DellaPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-8">
-              Most MTR coaches do not run units in the Southeast.
+              Most co-living coaches do not run units in the Southeast.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <div className="space-y-5 font-sans text-lg text-charcoal leading-snug">
               <p>
-                Here is the truth. The loudest mid-term rental teachers online
-                operate in Phoenix, Dallas, or Boise. Their playbooks work
-                there. Imported to Atlanta or Charlotte without adjustment,
-                they leak money every month.
+                Here is the truth. The loudest co-living and mid-term rental
+                teachers online operate in Phoenix, Dallas, or Boise. Their
+                playbooks work there. Imported to Atlanta or Charlotte without
+                adjustment, they leak money every month.
               </p>
               <p>
                 The Southeast plays different. Permitting is fractured city by
                 city. HOA boards move fast on STR restrictions. And the
-                dominant MTR demand here is travel nurses, corporate
-                relocations, and insurance displacement contracts. Not digital
-                nomads chasing wifi and a hot tub.
+                dominant co-living and MTR demand here is travel nurses,
+                corporate relocations, and insurance displacement contracts.
+                Not digital nomads chasing wifi and a hot tub.
               </p>
               <p>
                 If you are buying a generic course or taking advice from
@@ -236,7 +238,7 @@ export default function DellaPage() {
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
               src="/images/Website%20Images/hf_20260528_162140_0ee925d0-fbc6-4a93-af15-0c4174b02574.png"
-              alt="Southeast neighborhood scene where Della operates mid-term rentals"
+              alt="Southeast neighborhood scene where Della operates co-living and mid-term rentals"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -419,7 +421,7 @@ export default function DellaPage() {
                 <div className="relative aspect-[4/5] w-full overflow-hidden mt-10">
                   <Image
                     src="/images/Website%20Images/Della%20Behind%20Desk.png"
-                    alt="Della Henry working at her desk on Southeast mid-term rental operations"
+                    alt="Della Henry working at her desk on Southeast co-living and mid-term rental operations"
                     fill
                     className="object-cover"
                     style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -476,10 +478,10 @@ export default function DellaPage() {
                     12 units. 5 Southeast cities. 1 playbook.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    The portfolio is mixed. A handful of owned units. A
+                    The portfolio is mixed. Co-living arrangements that serve
+                    corporate housing contracts. A handful of owned units. A
                     couple of rental arbitrage agreements with seasoned
-                    landlords. Co-living arrangements that serve corporate
-                    housing contracts. What ties it together is the
+                    landlords. What ties it together is the
                     operating system. The same SOPs run every door,
                     regardless of city.
                   </p>
@@ -492,7 +494,7 @@ export default function DellaPage() {
                     Why she teaches now
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
-                    Because bad MTR advice is costing operators real money.
+                    Because bad co-living and MTR advice is costing operators real money.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
                     Della built the Room to Rental Riches Masterclass and the resource library
@@ -555,7 +557,7 @@ export default function DellaPage() {
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedItem>
             <p className="font-display text-3xl md:text-4xl lg:text-5xl text-white leading-[1.25] italic mb-5">
-              &ldquo;Della is the only MTR coach I have worked with whose
+              &ldquo;Della is the only co-living coach I have worked with whose
               answer to a hard question was not a slide deck. It was a
               spreadsheet from last Tuesday with her own numbers on it.&rdquo;
             </p>
@@ -634,8 +636,8 @@ export default function DellaPage() {
           </h2>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
             The next 30 minutes with Della will save you months of
-            guessing on Southeast MTR. Bring the question, the deal, or the
-            unit that is keeping you up. Walk away with a plan.
+            guessing on Southeast co-living and MTR. Bring the question, the
+            deal, or the unit that is keeping you up. Walk away with a plan.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button

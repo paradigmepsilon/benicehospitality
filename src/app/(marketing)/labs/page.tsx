@@ -39,7 +39,7 @@ const TOOLS: LabsTool[] = [
     name: "Guestally",
     status: "live",
     href: "/labs/guestally",
-    body: "Property-side AI concierge for STR and co-living operators. The flagship Labs product. Founded by Alex Henry as a separate company within the BNHG portfolio. $179 / $299 / $349 per month.",
+    body: "Property-side AI concierge for co-living and short-term rental operators. The flagship Labs product. Founded by Alex Henry as a separate company within the BNHG portfolio. $179 / $299 / $349 per month.",
   },
   {
     name: "Audit Generator",
@@ -54,10 +54,10 @@ const TOOLS: LabsTool[] = [
     body: "Live text thread with our AI guest concierge. Try it before you trust it.",
   },
   {
-    name: "Operator Audit (Property)",
+    name: "Operator Audit (Co-living)",
     status: "planned",
     href: "/labs#operator-audit",
-    body: "The boutique-hotel audit, retuned for STR / LTR / co-living. Same engine, operator-flavored output.",
+    body: "The boutique-stay audit, retuned for co-living, mid-term, and short-term rentals. Same engine, operator-flavored output.",
   },
   {
     name: "Fleet Screener",
@@ -130,8 +130,9 @@ export default function LabsPage() {
               </AnimatedItem>
               <AnimatedItem>
                 <p className="font-sans text-lg text-white/85 leading-relaxed mb-4">
-                  The AI concierge platform for property operators. Automated
-                  guest messaging, revenue-focused upsells, unified messaging
+                  The AI concierge platform for co-living and short-term rental
+                  operators. Automated guest messaging, revenue-focused upsells,
+                  unified messaging
                   hub, and analytics that quantify the time your team is
                   getting back.
                 </p>

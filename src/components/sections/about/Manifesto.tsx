@@ -26,7 +26,7 @@ export default function Manifesto() {
         <div className="font-serif font-display text-lg text-charcoal/85 leading-[1.75] space-y-6">
           <AnimatedItem>
             <p>
-              For the last decade, the people who actually run short-term rentals, long-term rentals, co-living buildings, experiential stays, and Turo fleets have been called &ldquo;hosts.&rdquo; That word is generous on a good day and condescending on a bad one. It implies that what these people do is hospitality at the scale of a dinner party. It is not.
+              For the last decade, the people who actually run co-living buildings, short-term rentals, long-term rentals, experiential stays, and Turo fleets have been called &ldquo;hosts.&rdquo; That word is generous on a good day and condescending on a bad one. It implies that what these people do is hospitality at the scale of a dinner party. It is not.
             </p>
           </AnimatedItem>
 
@@ -68,7 +68,7 @@ export default function Manifesto() {
 
           <AnimatedItem>
             <p>
-              That is what the Foundation and Flagship courses teach. That is what the Operator&apos;s Boardroom helps you implement at scale. That is what Signal sells productized to boutique luxury hotels. That is what BNHG Labs ships in software, starting with Guestally. And that is what the Nice Host Network reinforces every Tuesday and Thursday with people who are doing the same work in different rooms.
+              That is what the Foundation and Flagship courses teach. That is what the Operator&apos;s Boardroom helps you implement at scale. That is what Signal sells productized to boutique and luxury stays. That is what BNHG Labs ships in software, starting with Guestally. And that is what the Nice Host Network reinforces every Tuesday and Thursday with people who are doing the same work in different rooms.
             </p>
           </AnimatedItem>
 

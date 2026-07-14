@@ -23,7 +23,7 @@ const COHORT_WEEKS = [
     week: "01",
     modules: "Modules 1 & 2",
     title: "Foundation: opportunity + legal",
-    body: "Mindset alignment on the 2026 MTR opportunity. Legal and regulatory deep dive: state-by-state matrix workshopped live. Attorney recommendations shared.",
+    body: "Mindset alignment on the 2026 co-living and MTR opportunity. Legal and regulatory deep dive: state-by-state matrix workshopped live. Attorney recommendations shared.",
   },
   {
     week: "02",
@@ -81,7 +81,7 @@ export default function CohortPage() {
       <CourseHero
         eyebrow="Room Rental Riches · Cohort · Most popular"
         headline={<>$2,497.</>}
-        body="8 weeks of live, guided work. The full Host-to-Operator curriculum, applied to your portfolio in real time, alongside other operators doing the same work."
+        body="8 weeks of live, guided work. The full Host-to-Operator curriculum, applied to your co-living portfolio in real time, alongside other operators doing the same work."
         primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",

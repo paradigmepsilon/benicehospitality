@@ -18,26 +18,26 @@ interface Audience {
 
 const AUDIENCES: Audience[] = [
   {
-    title: "Property Operators",
-    body: "Short-term rentals, long-term rentals, co-living, experiential stays.",
-    detail: "Foundation and Flagship, Property edition. Plus Guestally and the Nice Host Network.",
+    title: "Co-living Properties",
+    body: "Co-living operators renting rooms by the door, plus the short-term and mid-term portfolios that mix in.",
+    detail: "Foundation and Flagship, Co-living edition. Plus Guestally and the Nice Host Network.",
     image: STOCK_PROPERTY,
   },
   {
-    title: "Auto Operators",
-    body: "Turo, rental car businesses, fleet operators going from 3 to 15 vehicles.",
-    detail: "Foundation and Flagship, Auto edition. Built for fleet realities, not rebranded property content.",
+    title: "Autos",
+    body: "Aspiring Turo hosts and small fleet operators running 3 to 30 economy vehicles.",
+    detail: "Foundation and Flagship, Auto edition. Built for fleet realities, not rebranded co-living content.",
     image: STOCK_AUTO_FLEET,
   },
   {
-    title: "Boutique Hotel & Inn Owners",
-    body: "Independent properties with 10 to 50 rooms.",
+    title: "Boutique Stays",
+    body: "Independent boutique hotels, inns, and the design-forward short-term and vacation stays guests book on purpose.",
     detail: "Signal: productized AI services with outcome guarantees. Led by Alex.",
     image: STOCK_BOUTIQUE_HOTEL,
   },
   {
     title: "Multi-Asset Innovators",
-    body: "Operators running across categories: property plus auto, plus co-living, plus experiences.",
+    body: "Operators running across categories: co-living plus boutique stays plus fleet, plus experiences.",
     detail: "The Operator's Boardroom advisory engagement, 12-month commitment.",
     image: STOCK_COLIVING,
   },

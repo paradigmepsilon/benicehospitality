@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
 };
 
-const EFFECTIVE_DATE = "May 26, 2026";
+const EFFECTIVE_DATE = "July 11, 2026";
 
 export default function TermsPage() {
   return (
@@ -126,7 +126,53 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="5. Community">
+          <LegalSection title="5. Claim Proof Command Center">
+            <p>
+              The Claim Proof Command Center is a Be Nice Hospitality Group
+              product for rental-vehicle hosts. When you buy it, you get a
+              personal license to use the Command Center and its tools through
+              your account. The same account rules in Section 3 apply: keep
+              your login private and you are responsible for activity under
+              your account.
+            </p>
+            <ul>
+              <li>
+                <strong>Your claim content is yours.</strong> The claims,
+                worksheets, logs, and figures you enter belong to you. We store
+                them on our infrastructure so they sync across your devices and
+                so the tools can remember your claims, and we handle them as
+                described in our{" "}
+                <Link
+                  href="/privacy"
+                  className="text-primary-green hover:text-primary-green-dark underline underline-offset-2"
+                >
+                  Privacy Policy
+                </Link>
+                . You can export your worksheets to CSV and delete your claims
+                or your account at any time.
+              </li>
+              <li>
+                <strong>Fleet workspaces.</strong> The Fleet plan lets one
+                account owner invite up to five additional team members to a
+                shared workspace where the team sees the same claims. The owner
+                is responsible for who they invite and for removing members who
+                should no longer have access. Seats are limited to five
+                teammates beyond the owner.
+              </li>
+              <li>
+                <strong>Not legal, tax, or insurance advice.</strong> The
+                Command Center is an organizing tool. Its checklists,
+                templates, and worksheets are educational. It does not
+                guarantee any claim outcome, payout, or reimbursement, and it
+                is not a substitute for advice from a qualified professional or
+                from the platform&apos;s own published rules. Nothing in the
+                product should be read as a promise that a claim will be
+                approved or paid.
+              </li>
+            </ul>
+          </LegalSection>
+
+          <LegalSection title="6. Community">
             <p>
               The community is a place for operators to learn from each
               other. Keep it useful. No spam, no selling, no abuse, no
@@ -142,7 +188,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="6. Payments, billing, and refunds">
+          <LegalSection title="7. Payments, billing, and refunds">
             <p>
               Payments are processed by Stripe. Prices are listed in US
               dollars and are charged at the time of purchase. Subscription
@@ -178,7 +224,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="7. Acceptable use">
+          <LegalSection title="8. Acceptable use">
             <p>
               You agree not to use the site or our services to do any of the
               following.
@@ -202,7 +248,7 @@ export default function TermsPage() {
             </ul>
           </LegalSection>
 
-          <LegalSection title="8. Intellectual property">
+          <LegalSection title="9. Intellectual property">
             <p>
               The site, the courses, the lesson videos and slides, the
               resource library, the Signal frameworks, and the BNHG brand
@@ -218,7 +264,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="9. Disclaimers">
+          <LegalSection title="10. Disclaimers">
             <p>
               Our courses, resources, and consulting are educational and
               professional services. They are not legal, tax, accounting,
@@ -241,7 +287,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="10. Limitation of liability">
+          <LegalSection title="11. Limitation of liability">
             <p>
               To the maximum extent allowed by law, Be Nice Hospitality
               Group, its founders, employees, and contractors will not be
@@ -258,7 +304,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="11. Indemnification">
+          <LegalSection title="12. Indemnification">
             <p>
               You agree to defend and hold harmless Be Nice Hospitality
               Group from any claim, loss, or expense (including reasonable
@@ -268,7 +314,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="12. Third-party services and links">
+          <LegalSection title="13. Third-party services and links">
             <p>
               The site links to third-party services we use or recommend
               (Stripe, Guestally, calendar tools, and others). Those
@@ -277,7 +323,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="13. Termination">
+          <LegalSection title="14. Termination">
             <p>
               You can close your account at any time by emailing us. We can
               suspend or close accounts that break these terms, that pose a
@@ -287,7 +333,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="14. Governing law and disputes">
+          <LegalSection title="15. Governing law and disputes">
             <p>
               These terms are governed by the laws of the State of Georgia,
               United States, without regard to its conflict-of-law rules.
@@ -298,7 +344,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="15. Changes to these terms">
+          <LegalSection title="16. Changes to these terms">
             <p>
               We may update these terms from time to time. If we make
               material changes, we will post the updated terms here, change
@@ -308,7 +354,7 @@ export default function TermsPage() {
             </p>
           </LegalSection>
 
-          <LegalSection title="16. Contact">
+          <LegalSection title="17. Contact">
             <p>
               Questions about these terms can be sent to{" "}
               <a

@@ -21,7 +21,7 @@ interface Tool {
 const TOOLS: Tool[] = [
   {
     name: "Guestally",
-    body: "Property-side AI concierge. Bernice handles guest messaging, upsells, and the operational back-and-forth. Flagship Labs product.",
+    body: "AI concierge for co-living properties and boutique stays. Bernice handles guest messaging, upsells, and the operational back-and-forth. Flagship Labs product.",
     href: "/labs/guestally",
     status: "live",
     image: STOCK_DASHBOARD,
@@ -35,7 +35,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "What's Coming Next",
-    body: "Operator audits for property and auto, an AI-assisted fleet screener, and the Bernice sandbox. Members and advisory clients see it first.",
+    body: "Operator audits for co-living properties and autos, an AI-assisted fleet screener, and the Bernice sandbox. Members and advisory clients see it first.",
     href: "/labs",
     status: "next",
     image: STOCK_CODE_SCREEN,

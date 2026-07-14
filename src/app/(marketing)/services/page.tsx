@@ -8,17 +8,17 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Boutique Hotel Consulting Services & Pricing | BNHG",
+    absolute: "Co-Living & Boutique Stay Consulting Services & Pricing | BNHG",
   },
   description:
-    "Boutique hotel consulting services from free resources to full fractional advisory. Tier 0 free resources, Tier 1 diagnostics, Tier 2 implementation, and Tier 3 ongoing advisory for independent hotels.",
+    "Consulting for co-living operators and boutique stays, from free resources to full fractional advisory. Tier 0 free resources, Tier 1 diagnostics, Tier 2 implementation, and Tier 3 ongoing advisory for independent operators.",
   alternates: {
     canonical: "https://benicehospitality.com/services",
   },
   openGraph: {
-    title: "Boutique Hotel Consulting Services & Pricing | BNHG",
+    title: "Co-Living & Boutique Stay Consulting Services & Pricing | BNHG",
     description:
-      "4 tiers of hotel consulting, from no-cost resources to full strategic partnership for independent boutique hotels.",
+      "4 tiers of hospitality consulting, from no-cost resources to full strategic partnership for independent co-living operators and boutique stays.",
     url: "https://benicehospitality.com/services",
     type: "website",
     images: [

@@ -11,8 +11,8 @@ export default function FAQHero() {
           <span className="text-warm-gold italic">Independent Operators</span>
         </h1>
         <p className="font-sans text-lg text-white/70 mt-6 max-w-2xl leading-relaxed">
-          What boutique hotel consulting actually costs, how to reduce OTA
-          dependency, which guest messaging tools are right for small hotels,
+          What boutique stay consulting actually costs, how to reduce OTA
+          dependency, which guest messaging tools are right for small operators,
           and everything else we get asked.
         </p>
       </div>

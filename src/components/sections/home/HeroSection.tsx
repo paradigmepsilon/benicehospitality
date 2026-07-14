@@ -26,8 +26,8 @@ export default function HeroSection() {
             <p className="font-sans text-base md:text-lg text-cream/90 leading-relaxed">
               We&rsquo;re operators who got tired of running our portfolios on
               duct tape. So we built the systems, training, services, and
-              software we wished existed for our properties and vehicle rental
-              businesses.
+              software we wished existed for our co-living properties, boutique
+              stays, and rental fleets.
             </p>
           </div>
         </div>

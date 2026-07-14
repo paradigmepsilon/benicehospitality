@@ -17,12 +17,12 @@ import type {
 export const metadata: Metadata = {
   title: "The Marketplace",
   description:
-    "The gear, books, and software we actually use to run our properties, hotels, and fleets. Curated by audience, vetted by us.",
+    "The gear, books, and software we actually use to run our co-living properties, boutique stays, and fleets. Curated by audience, vetted by us.",
   alternates: { canonical: "https://benicehospitality.com/marketplace" },
   openGraph: {
     title: "The Marketplace | Be Nice Hospitality Group",
     description:
-      "Curated gear, books, and software for property operators, boutique hotels, and auto operators. The stuff we actually use.",
+      "Curated gear, books, and software for co-living operators, boutique stays, and fleet operators. The stuff we actually use.",
     url: "https://benicehospitality.com/marketplace",
     type: "website",
   },
@@ -44,32 +44,32 @@ interface TabMeta {
 const TAB_META: TabMeta[] = [
   {
     id: "property",
-    label: "Property",
-    sectionLabel: "Gear for property operators",
+    label: "Co-living Properties",
+    sectionLabel: "Gear for co-living operators",
     headline: "What we put in every unit.",
     body: "Lockboxes, linen, mattress upgrades, smart-home gear, and the consumables we replace on every turnover. If it lives at the property and we'd buy it again, it's here.",
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
-      alt: "Boutique short-term rental property interior",
+      alt: "Co-living and short-term rental property interior",
     },
   },
   {
     id: "hotel",
-    label: "Independent Hotel",
-    sectionLabel: "Gear for boutique hotels",
+    label: "Boutique Stays",
+    sectionLabel: "Gear for boutique stays",
     headline: "Front-of-house and back-of-house.",
-    body: "Amenity programs, front-desk tech, lobby touches, and operational tools sized for 10 to 50 room independent properties. The stuff Signal members ask about most.",
+    body: "Amenity programs, front-desk tech, lobby touches, and operational tools sized for independent boutique stays, from 10 to 50 room hotels to design-forward inns. The stuff Signal members ask about most.",
     image: {
       src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
-      alt: "Independent boutique hotel exterior in warm light",
+      alt: "Boutique stay exterior in warm light",
     },
   },
   {
     id: "auto",
-    label: "Auto",
+    label: "Autos",
     sectionLabel: "Gear for auto operators",
     headline: "What lives in every Be Nice Auto car.",
-    body: "Dashcams, OBD-II readers, turnover detail kits, and the small upgrades that keep guest reviews high and dispute resolution easy. Built around what works on Turo today.",
+    body: "Dashcams, OBD-II readers, turnover detail kits, and the small upgrades that keep guest reviews high and dispute resolution easy. Built around what works for Turo hosts and small fleets today.",
     image: {
       src: "/images/Website Images/Alex Turo Shot.png",
       alt: "Auto operator vehicle in a peer-to-peer rental fleet setting",

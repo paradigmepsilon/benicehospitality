@@ -32,7 +32,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Hotel Revenue Audit: Revenue Opportunity Snapshot | BNHG",
     metaDescription:
-      "Free boutique hotel revenue audit. We identify OTA leakage, rate parity gaps, and ancillary revenue opportunities specific to your property. No strings attached.",
+      "Free boutique stay revenue audit. We identify OTA leakage, rate parity gaps, and ancillary revenue opportunities specific to your property. No strings attached.",
     targetKeywords: [
       "free hotel revenue audit",
       "boutique hotel revenue analysis",
@@ -41,7 +41,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "See Exactly Where Your Revenue Is Hiding",
     heroSubhead:
-      "A free, research-backed snapshot of the top revenue opportunities at your independent boutique hotel. Built specifically for 10–50 room properties.",
+      "A free, research-backed snapshot of the top revenue opportunities at your independent boutique stay. Built specifically for 10 to 50 room properties.",
     pillar: "Commercial",
     whatYouGet: [
       "OTA commission leakage estimate based on your channel mix",
@@ -53,7 +53,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     whoItsFor: [
       "Owner-operators who feel like OTAs take too much of every booking",
       "GMs who suspect rate parity is off but can't prove it",
-      "Properties in the 10–50 room range that want a second opinion",
+      "Properties in the 10 to 50 room range that want a second opinion",
     ],
     howItWorks: [
       {
@@ -64,7 +64,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         step: "We research",
         description:
-          "We pull OTA data, rate data, review data, and competitor signals. Takes us 3–5 business days.",
+          "We pull OTA data, rate data, review data, and competitor signals. Takes us 3 to 5 business days.",
       },
       {
         step: "You get the snapshot",
@@ -76,7 +76,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "Is the Revenue Opportunity Snapshot really free?",
         answer:
-          "Yes. It's a Tier 0 resource, so we deliver it to you with no charge and no obligation. We built this layer because most boutique hotels have never seen a real revenue audit and we want to earn your attention before asking for anything.",
+          "Yes. It's a Tier 0 resource, so we deliver it to you with no charge and no obligation. We built this layer because most boutique stays have never seen a real revenue audit and we want to earn your attention before asking for anything.",
       },
       {
         question: "What information do I need to provide?",
@@ -86,7 +86,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days from the time you request it to delivery.",
+          "Typically 3 to 5 business days from the time you request it to delivery.",
       },
       {
         question: "Do I have to get on a sales call after?",
@@ -103,7 +103,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Hotel Review & Reputation Audit | Online Reputation Briefing | BNHG",
     metaDescription:
-      "Free boutique hotel reputation audit. We analyze 40–60 reviews across Google, TripAdvisor, and Booking.com to surface perception gaps costing you direct bookings.",
+      "Free boutique stay reputation audit. We analyze 40 to 60 reviews across Google, TripAdvisor, and Booking.com to surface perception gaps costing you direct bookings.",
     targetKeywords: [
       "hotel reputation audit free",
       "hotel review analysis",
@@ -112,10 +112,10 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "What Your Reviews Are Actually Saying",
     heroSubhead:
-      "A free reputation briefing for independent boutique hotels. We read your reviews across every platform and tell you what's costing you bookings.",
+      "A free reputation briefing for independent boutique stays. We read your reviews across every platform and tell you what's costing you bookings.",
     pillar: "Guest Experience",
     whatYouGet: [
-      "Sentiment analysis across Google, TripAdvisor, and Booking.com (40–60 reviews)",
+      "Sentiment analysis across Google, TripAdvisor, and Booking.com (40 to 60 reviews)",
       "Recurring praise and complaint themes ranked by frequency",
       "Sentiment gap between your star rating and your service reality",
       "Anonymized review quotes as evidence for each finding",
@@ -135,7 +135,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         step: "We read everything",
         description:
-          "We analyze 40–60 recent reviews across Google, TripAdvisor, and Booking.com.",
+          "We analyze 40 to 60 recent reviews across Google, TripAdvisor, and Booking.com.",
       },
       {
         step: "You get the briefing",
@@ -147,7 +147,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How many reviews do you actually read?",
         answer:
-          "Typically 40–60, weighted toward the most recent 12 months. We'd rather go deep on recent reviews than summarize 500 old ones.",
+          "Typically 40 to 60, weighted toward the most recent 12 months. We'd rather go deep on recent reviews than summarize 500 old ones.",
       },
       {
         question: "Will you share the raw review data?",
@@ -162,7 +162,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
     ],
   },
@@ -174,7 +174,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Hotel Competitive Analysis | Competitive Position Map | BNHG",
     metaDescription:
-      "Free boutique hotel competitive analysis. We map 5 nearby competitors on a price-vs-review quadrant and show you where you're getting undercut or missing opportunity.",
+      "Free boutique stay competitive analysis. We map 5 nearby competitors on a price-vs-review quadrant and show you where you're getting undercut or missing opportunity.",
     targetKeywords: [
       "hotel competitive analysis",
       "boutique hotel comp set",
@@ -183,7 +183,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "Know Exactly Where You Sit in Your Local Market",
     heroSubhead:
-      "A free competitive position map for independent boutique hotels. We research 5 nearby competitors and plot you on a price-vs-review quadrant.",
+      "A free competitive position map for independent boutique stays. We research 5 nearby competitors and plot you on a price-vs-review quadrant.",
     pillar: "Commercial",
     whatYouGet: [
       "5 nearby competitor profiles with pricing and positioning",
@@ -233,7 +233,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 5–7 business days.",
+          "Typically 5 to 7 business days.",
       },
     ],
   },
@@ -241,11 +241,11 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "guest-persona-highlights",
     name: "Guest Persona Highlights",
     shortDescription:
-      "A sketch of who's actually booking boutique hotels in your market and what they're looking for.",
+      "A sketch of who's actually booking boutique stays in your market and what they're looking for.",
     metaTitle:
       "Free Hotel Guest Persona Analysis | Guest Persona Highlights | BNHG",
     metaDescription:
-      "Free boutique hotel guest persona analysis. We identify 4–5 distinct personas actually booking your property and compare them to who your website markets to.",
+      "Free boutique stay guest persona analysis. We identify 4 to 5 distinct personas actually booking your property and compare them to who your website markets to.",
     targetKeywords: [
       "hotel guest personas",
       "boutique hotel target market",
@@ -254,10 +254,10 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "Who's Actually Staying at Your Hotel",
     heroSubhead:
-      "A free persona analysis for independent boutique hotels. We identify who's really booking and whether your marketing matches the guest you actually attract.",
+      "A free persona analysis for independent boutique stays. We identify who's really booking and whether your marketing matches the guest you actually attract.",
     pillar: "Guest Experience",
     whatYouGet: [
-      "4–5 distinct guest personas derived from reviews, bookings, and market data",
+      "4 to 5 distinct guest personas derived from reviews, bookings, and market data",
       "Profile for each: trip purpose, travel party, budget, motivations",
       "Identity mismatch analysis (website tone vs real guest mix)",
       "Messaging recommendations for each persona",
@@ -298,7 +298,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
       {
         question: "What if I don't have reviews yet?",
@@ -315,7 +315,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free Hotel Tech Audit | Tech Stack Quick Scan | BNHG",
     metaDescription:
-      "Free boutique hotel tech audit. We evaluate your website, booking engine, mobile, OTA listings, guest messaging, and social, assign letter grades, and flag guest-facing friction.",
+      "Free boutique stay tech audit. We evaluate your website, booking engine, mobile, OTA listings, guest messaging, and social, assign letter grades, and flag guest-facing friction.",
     targetKeywords: [
       "free hotel tech audit",
       "hotel tech stack review",
@@ -324,10 +324,10 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "Where Your Hotel Tech Is Failing Guests",
     heroSubhead:
-      "A free tech stack scan for independent boutique hotels. We grade 6 guest-facing categories and flag the friction points costing you bookings.",
+      "A free tech stack scan for independent boutique stays. We grade 6 guest-facing categories and flag the friction points costing you bookings.",
     pillar: "Tech",
     whatYouGet: [
-      "Letter grades (A–F) across website, booking engine, mobile, OTAs, guest messaging, social",
+      "Letter grades (A to F) across website, booking engine, mobile, OTAs, guest messaging, social",
       "Count of guest-facing friction points with specific examples",
       "List of redundant tools you're likely overpaying for",
       "Critical gaps ranked by revenue impact",
@@ -369,12 +369,12 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
       {
         question: "What if my grades are bad?",
         answer:
-          "They're a starting point, not a judgment. Most boutique hotels score in the C range on their first scan. The value is in the 90-day roadmap.",
+          "They're a starting point, not a judgment. Most boutique stays score in the C range on their first scan. The value is in the 90-day roadmap.",
       },
     ],
   },
@@ -430,7 +430,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How accurate is the estimate?",
         answer:
-          "It's a directional projection based on benchmark conversion rates across similar boutique hotels. Real results vary with your guest mix and how well Guestally is configured, but the estimate is within a reasonable range.",
+          "It's a directional projection based on benchmark conversion rates across similar boutique stays. Real results vary with your guest mix and how well Guestally is configured, but the estimate is within a reasonable range.",
       },
       {
         question: "What if Guestally isn't a fit?",
@@ -445,7 +445,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
     ],
   },
@@ -453,11 +453,11 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     slug: "visibility-discoverability-audit",
     name: "Visibility & Discoverability Audit",
     shortDescription:
-      "How easily can travelers find your property, including in ChatGPT, Perplexity, and Google AI Overviews? Full channel + AEO audit with a 0–120 score.",
+      "How easily can travelers find your property, including in ChatGPT, Perplexity, and Google AI Overviews? Full channel + AEO audit with a 0 to 120 score.",
     metaTitle:
       "Free Hotel Visibility & AEO Audit | BNHG",
     metaDescription:
-      "Free visibility + AEO audit for boutique hotels and luxury short-term rentals. 0–120 score across 7 categories including AI search & answer engines (ChatGPT, Perplexity, Google AI Overviews). Channel presence grid and quick wins included.",
+      "Free visibility + AEO audit for boutique stays and luxury short-term rentals. 0 to 120 score across 7 categories including AI search & answer engines (ChatGPT, Perplexity, Google AI Overviews). Channel presence grid and quick wins included.",
     targetKeywords: [
       "hotel visibility audit",
       "hotel discoverability",
@@ -470,17 +470,17 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "Can Travelers (and AI) Actually Find You?",
     heroSubhead:
-      "A free visibility audit for independent boutique hotels and luxury short-term rental operators. We check every channel a traveler might look, including ChatGPT, Perplexity, and Google AI Overviews, and score your discoverability out of 120.",
+      "A free visibility audit for independent boutique stays and luxury short-term rental operators. We check every channel a traveler might look, including ChatGPT, Perplexity, and Google AI Overviews, and score your discoverability out of 120.",
     pillar: "Commercial",
     featuredCallout: {
       label: "NEW: AEO Module",
       title: "Now with Answer Engine Optimization",
-      body: "Travelers increasingly ask ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Most boutique properties are completely invisible in those answers. We now audit AI search visibility as a featured 7th category worth 20 points, the biggest single opportunity on the page.",
+      body: "Travelers increasingly ask ChatGPT, Perplexity, and Google AI Overviews for hotel recommendations. Most boutique stays are completely invisible in those answers. We now audit AI search visibility as a featured 7th category worth 20 points, the biggest single opportunity on the page.",
       ctaText: "See the dedicated AEO page",
       ctaHref: "/resources/aeo-optimization",
     },
     whatYouGet: [
-      "0–120 visibility score across 7 channel categories, including AI Search & Answer Engines (AEO)",
+      "0 to 120 visibility score across 7 channel categories, including AI Search & Answer Engines (AEO)",
       "Channel presence grid: OTAs, metasearch, Google, social, maps, email, blog, PR, and AI engines (ChatGPT, Perplexity, AI Overviews)",
       "AEO subscore with specific gaps in schema, llms.txt, and AI-answerable content",
       "List of channels you're missing from completely, AI engines included",
@@ -513,7 +513,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "What's a good visibility score?",
         answer:
-          "Most independent boutique hotels and luxury STR operators score 55–75 out of 120 on their first audit. A score above 95 usually correlates with strong organic demand. AEO scores are typically very low (0–6 out of 20) on first audit, which is exactly the opportunity.",
+          "Most independent boutique stays and luxury STR operators score 55 to 75 out of 120 on their first audit. A score above 95 usually correlates with strong organic demand. AEO scores are typically very low (0 to 6 out of 20) on first audit, which is exactly the opportunity.",
       },
       {
         question: "Is this the same as an SEO audit?",
@@ -528,7 +528,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
       {
         question: "Can you help me fix the gaps?",
@@ -543,9 +543,9 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     shortDescription:
       "5 to 10 specific, implementable actions you could take this month to improve performance.",
     metaTitle:
-      "Free Hotel Quick Win Action List | Boutique Hotel Improvements | BNHG",
+      "Free Hotel Quick Win Action List | Boutique Stay Improvements | BNHG",
     metaDescription:
-      "Free quick win action list for boutique hotels. 5 high-impact actions with estimated revenue impact across OTA, reviews, tech, guest communication, and visibility.",
+      "Free quick win action list for boutique stays. 5 high-impact actions with estimated revenue impact across OTA, reviews, tech, guest communication, and visibility.",
     targetKeywords: [
       "hotel quick wins",
       "hotel improvement checklist",
@@ -554,7 +554,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "5 Things You Could Do This Month",
     heroSubhead:
-      "A free, cross-pillar action list for independent boutique hotels. 5 high-impact wins with estimated revenue impact and a total annual gap estimate.",
+      "A free, cross-pillar action list for independent boutique stays. 5 high-impact wins with estimated revenue impact and a total annual gap estimate.",
     pillar: "Commercial",
     whatYouGet: [
       "5 specific, implementable actions ranked by revenue impact",
@@ -599,7 +599,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does it take?",
         answer:
-          "Typically 5–7 business days because we touch multiple research areas.",
+          "Typically 5 to 7 business days because we touch multiple research areas.",
       },
       {
         question: "Can I request more than 5?",
@@ -616,7 +616,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     metaTitle:
       "Free AEO Audit for Hotels | Answer Engine Optimization | BNHG",
     metaDescription:
-      "Free AEO (Answer Engine Optimization) snapshot for independent boutique hotels and luxury short-term rentals. See whether ChatGPT, Perplexity, Google AI Overviews, and Gemini recommend your property, and exactly what's missing.",
+      "Free AEO (Answer Engine Optimization) snapshot for independent boutique stays and luxury short-term rentals. See whether ChatGPT, Perplexity, Google AI Overviews, and Gemini recommend your property, and exactly what's missing.",
     targetKeywords: [
       "hotel AEO",
       "answer engine optimization hotels",
@@ -629,12 +629,12 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
     ],
     heroHeadline: "Are You in the AI Answer?",
     heroSubhead:
-      "A free Answer Engine Optimization (AEO) snapshot for independent boutique hotels and luxury short-term rental operators. We test your property across ChatGPT, Perplexity, Google AI Overviews, and Gemini, then show you exactly what's missing.",
+      "A free Answer Engine Optimization (AEO) snapshot for independent boutique stays and luxury short-term rental operators. We test your property across ChatGPT, Perplexity, Google AI Overviews, and Gemini, then show you exactly what's missing.",
     pillar: "Commercial",
     featuredCallout: {
       label: "Why this matters now",
       title: "AI search is the newest booking channel",
-      body: "A growing share of travelers now asks an AI assistant before a search engine. Most boutique properties score 0–6 out of 20 on AEO today. That gap is the single biggest low-effort visibility opportunity available right now, and the window to get ahead of competitors is short.",
+      body: "A growing share of travelers now asks an AI assistant before a search engine. Most boutique stays score 0 to 6 out of 20 on AEO today. That gap is the single biggest low-effort visibility opportunity available right now, and the window to get ahead of competitors is short.",
     },
     whatYouGet: [
       "An AEO snapshot testing your property across ChatGPT, Perplexity, Google AI Overviews, and Gemini",
@@ -689,7 +689,7 @@ export const TIER_ZERO_RESOURCES: TierZeroResource[] = [
       {
         question: "How long does the free snapshot take?",
         answer:
-          "Typically 3–5 business days.",
+          "Typically 3 to 5 business days.",
       },
     ],
   },

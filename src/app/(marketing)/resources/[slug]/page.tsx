@@ -77,7 +77,7 @@ export default async function ResourcePage({
     name: resource.name,
     description: resource.metaDescription,
     provider: { "@id": `${SITE_URL}/#organization` },
-    serviceType: "Boutique Hotel Consulting",
+    serviceType: "Hospitality Operations Consulting",
     areaServed: { "@type": "Country", name: "United States" },
     offers: {
       "@type": "Offer",

@@ -6,6 +6,7 @@ import LoginForm from "@/components/sections/auth/LoginForm";
 import { getCurrentSession } from "@/lib/community-auth";
 import { getEnabledProviders } from "@/lib/oauth/providers";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
+import { safeNext } from "@/lib/auth-redirect";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -16,10 +17,18 @@ export const metadata: Metadata = {
 };
 
 // If a logged-in user lands on /login, send them to wherever they belong.
-// Admins go to /admin (their primary surface), users to /account.
-export default async function LoginPage() {
+// Honor a safe `next` first (e.g. a Claim Proof buyer following the delivery
+// link with next=/claimproof/portal), then admins to /admin, users to /account.
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
   const session = await getCurrentSession();
+  const { next } = await searchParams;
   if (session) {
+    const dest = safeNext(next);
+    if (dest !== "/account") redirect(dest);
     redirect(session.user.role === "admin" ? "/admin" : "/account");
   }
   const enabledProviders = getEnabledProviders();

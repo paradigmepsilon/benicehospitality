@@ -31,7 +31,7 @@ export default function SignalWhyNow() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base md:text-lg text-charcoal/80 leading-relaxed mb-5">
-              Most 10 to 50 room independent boutique luxury properties are not moving
+              Most independent boutique stays are not moving
               at all, and almost no specialized service provider exists to help them.
             </p>
           </AnimatedItem>
@@ -50,7 +50,7 @@ export default function SignalWhyNow() {
             {/* Aesthetic: tall portrait architectural detail. Staircase, textile close-up, brass and stone material study. Natural light. No people. */}
             <Image
               src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=80"
-              alt="Architectural detail of a quiet luxury hotel interior with warm natural light on a textured material surface."
+              alt="Architectural detail of a quiet boutique stay interior with warm natural light on a textured material surface."
               fill
               loading="lazy"
               sizes="(max-width: 1024px) 100vw, 40vw"

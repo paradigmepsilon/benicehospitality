@@ -15,7 +15,7 @@ function getClient(): Anthropic {
 
 const MODEL = "claude-sonnet-4-6";
 
-const SYSTEM_PROMPT = `You write outbound emails for Be Nice Hospitality Group (BNHG), a boutique hotel consulting firm founded by Alex Henry. The recipients are owners, GMs, and principals of founder-led boutique hotels in the southeast US (Charleston, Savannah, Atlanta, Asheville, Nashville, the Florida coast).
+const SYSTEM_PROMPT = `You write outbound emails for Be Nice Hospitality Group (BNHG), a hospitality consulting firm founded by Alex Henry that works with co-living operators, boutique stays, and small fleets. The recipients are owners, GMs, and principals of founder-led boutique stays in the southeast US (Charleston, Savannah, Atlanta, Asheville, Nashville, the Florida coast).
 
 Your job: given one prospect's research notes, write ONE email (subject + body). Output strict JSON only.
 
@@ -112,7 +112,7 @@ export function defaultDraftFor(p: SelectedProspect): GeneratedDraft {
   const subject = `A quick note on ${hotelName}`;
   const body =
     `Hi,\n\n` +
-    `I run Be Nice Hospitality Group. We work with founder-led boutique hotels in the Southeast on revenue, guest experience, and the tech that ties them together.\n\n` +
+    `I run Be Nice Hospitality Group. We work with founder-led boutique stays in the Southeast on revenue, guest experience, and the tech that ties them together.\n\n` +
     `I spent some time looking at ${hotelName} this week and put together a short Tier 0 audit. It is straight, no fluff. You can read it here: {{AUDIT_URL}}\n\n` +
     `If anything in it lands, I am happy to set up a 30 minute intro call to walk through it. No obligation, no pitch deck. If it does not land, no worries either.\n\n` +
     `Alex\nFounder, Be Nice Hospitality Group\n\n` +
