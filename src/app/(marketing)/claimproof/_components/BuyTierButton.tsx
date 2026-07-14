@@ -18,7 +18,7 @@ export default function BuyTierButton({
 }: {
   tier: ClaimProofTier;
   label: string;
-  variant?: "solid" | "outline";
+  variant?: "solid" | "outline" | "outline-dark";
   className?: string;
 }) {
   const [loading, setLoading] = useState(false);
@@ -56,13 +56,21 @@ export default function BuyTierButton({
     "inline-flex w-full items-center justify-center rounded-full bg-warm-gold px-8 py-4 font-sans text-base font-semibold text-near-black transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-gold-light hover:shadow-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70";
   const outline =
     "inline-flex w-full items-center justify-center rounded-full border-2 border-near-black/20 px-8 py-4 font-sans text-base font-semibold text-near-black transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-warm-gold hover:text-warm-gold active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70";
+  // Outline treatment for dark card backgrounds (v2): gold outline + gold
+  // label visible at rest, fills solid gold on hover. The plain `outline`
+  // above is dark-on-light and would vanish on a near-black card.
+  const outlineDark =
+    "inline-flex w-full items-center justify-center rounded-full border-2 border-warm-gold/40 px-8 py-4 font-sans text-base font-semibold text-warm-gold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-warm-gold hover:bg-warm-gold hover:text-near-black active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70";
+
+  const buttonClass =
+    variant === "solid" ? solid : variant === "outline-dark" ? outlineDark : outline;
 
   return (
     <div className={className}>
       <button
         onClick={handleClick}
         disabled={loading}
-        className={variant === "solid" ? solid : outline}
+        className={buttonClass}
       >
         {loading ? "Starting checkout…" : label}
       </button>

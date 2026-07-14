@@ -39,6 +39,44 @@ const DIST =
   process.env.CLAIM_PROOF_DIST ||
   path.join(homedir(), "Sites", "bna-claim-proof", "dist");
 
+// Walkthrough MP4s live in the product workspace's videos/final folder. Their
+// blob pathnames are derived here and read back (hardcoded) by
+// src/lib/claim-proof-video.ts — no env vars, since the tier check on the
+// /api/claimproof/video endpoint is the real access boundary.
+const VIDEO_SRC =
+  process.env.CLAIM_PROOF_VIDEO_SRC ||
+  path.join(homedir(), "Sites", "bna-claim-proof", "videos", "final");
+
+// Editable assets (deck + KPI spreadsheet). Sourced from the assets/ folder.
+// [local file, blob pathname, contentType]. Keep pathnames in lockstep with
+// CLAIM_PROOF_ASSETS in src/lib/claim-proof-asset.ts.
+const ASSET_SRC =
+  process.env.CLAIM_PROOF_ASSET_SRC ||
+  path.join(homedir(), "Sites", "bna-claim-proof", "assets");
+const ASSETS: Array<[string, string, string]> = [
+  [
+    "claimproof_kpi_template.xlsx",
+    `${PREFIX}/assets/claimproof-fleet-kpi-tracker.xlsx`,
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ],
+  [
+    "claimproof_staff_training.pptx",
+    `${PREFIX}/assets/claimproof-fleet-staff-training.pptx`,
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  ],
+];
+
+// [local file, blob pathname]. Keep the pathname keys in lockstep with
+// WALKTHROUGH_VIDEOS in src/lib/claim-proof-video.ts.
+const VIDEOS: Array<[string, string]> = [
+  ["claimproof_video_1.mp4", `${PREFIX}/videos/orientation.mp4`],
+  ["claimproof_video_2.mp4", `${PREFIX}/videos/emergency.mp4`],
+  ["claimproof_video_3.mp4", `${PREFIX}/videos/proof.mp4`],
+  ["claimproof_video_4.mp4", `${PREFIX}/videos/valuation.mp4`],
+  ["claimproof_video_5.mp4", `${PREFIX}/videos/followup.mp4`],
+  ["claimproof_video_6.mp4", `${PREFIX}/videos/fleet.mp4`],
+];
+
 // [local file, blob pathname, the env var it populates with the PATHNAME]
 // NOTE: env vars hold the blob PATHNAME (e.g. "claim-proof-9f2a7c/...pdf"),
 // not a URL — the download endpoint signs a fresh URL from the pathname on
@@ -103,6 +141,55 @@ async function main() {
     envLines.push(`${envVar}=${blob.pathname}`);
   }
 
+  // Walkthrough videos (private blobs, tier-gated via /api/claimproof/video).
+  if (existsSync(VIDEO_SRC)) {
+    console.log(`\nUploading walkthrough videos from:\n  ${VIDEO_SRC}\n`);
+    for (const [file, pathname] of VIDEOS) {
+      const abs = path.join(VIDEO_SRC, file);
+      if (!existsSync(abs)) {
+        console.error(`  ✗ missing: ${file} — skipped`);
+        continue;
+      }
+      const data = await readFile(abs);
+      const blob = await put(pathname, data, {
+        access: "private",
+        contentType: "video/mp4",
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        token,
+      });
+      const sizeMb = (data.byteLength / 1024 / 1024).toFixed(1);
+      console.log(`  ✓ ${file}  (${sizeMb} MB) → ${blob.pathname}`);
+    }
+  } else {
+    console.log(`\n(no walkthrough videos at ${VIDEO_SRC} — skipping video upload)`);
+  }
+
+  // Editable assets (staff deck + KPI spreadsheet), tier-gated via
+  // /api/claimproof/asset.
+  if (existsSync(ASSET_SRC)) {
+    console.log(`\nUploading editable assets from:\n  ${ASSET_SRC}\n`);
+    for (const [file, pathname, contentType] of ASSETS) {
+      const abs = path.join(ASSET_SRC, file);
+      if (!existsSync(abs)) {
+        console.error(`  ✗ missing: ${file} — skipped`);
+        continue;
+      }
+      const data = await readFile(abs);
+      const blob = await put(pathname, data, {
+        access: "private",
+        contentType,
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        token,
+      });
+      const sizeKb = Math.round(data.byteLength / 1024);
+      console.log(`  ✓ ${file}  (${sizeKb} KB) → ${blob.pathname}`);
+    }
+  } else {
+    console.log(`\n(no editable assets at ${ASSET_SRC} — skipping asset upload)`);
+  }
+
   console.log(
     "\n─────────────────────────────────────────────────────────────\n" +
       "Paste these into .env.local AND the Vercel project env vars.\n" +
@@ -124,9 +211,10 @@ async function main() {
   );
   console.log(
     "\nFLEET NOTE: the Fleet download serves Pro + the supplement automatically\n" +
-      "(both pathnames above). The walkthrough VIDEO is delivered as a separate\n" +
-      "link in the Fleet email — host it wherever (unlisted YouTube is fine) and\n" +
-      "set CLAIM_PROOF_FLEET_VIDEO_URL to it.\n",
+      "(both pathnames above).\n\n" +
+      "VIDEOS: the 6 walkthroughs upload as private blobs above. They need NO env\n" +
+      "vars — src/lib/claim-proof-video.ts derives their pathnames from the same\n" +
+      "prefix, and the portal streams them tier-gated via /api/claimproof/video.\n",
   );
 }
 

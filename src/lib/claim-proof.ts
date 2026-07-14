@@ -38,17 +38,17 @@ export const CLAIM_PROOF_TIERS: Record<
   { label: string; priceUsd: number; envPrice: string }
 > = {
   core: {
-    label: "Core Kit",
+    label: "Claim Proof Core",
     priceUsd: 47,
     envPrice: "CLAIM_PROOF_STRIPE_PRICE_ID_CORE",
   },
   pro: {
-    label: "Pro Kit",
+    label: "Claim Proof Complete",
     priceUsd: 97,
     envPrice: "CLAIM_PROOF_STRIPE_PRICE_ID_PRO",
   },
   fleet: {
-    label: "Fleet Kit",
+    label: "Claim Proof Fleet",
     priceUsd: 197,
     envPrice: "CLAIM_PROOF_STRIPE_PRICE_ID_FLEET",
   },
@@ -135,19 +135,38 @@ const EMAIL_SHELL_BOTTOM = `
   </div>
 `;
 
+/**
+ * Portal link for a buyer: the Claim Command Center, keyed by the same
+ * delivery token. The dashboard bounces ?t= through /api/claimproof/portal-auth
+ * to set the access cookie.
+ */
+export function claimProofPortalLink(baseUrl: string, token: string): string {
+  // Phase 2: buyers set up an account rather than using a magic-link token.
+  // Route to Claim Proof's OWN signup door (dark, Command-Center-branded) with a
+  // return path to the portal. The token still rides along as a legacy bridge so
+  // a pre-Phase-2 buyer's link keeps working (portal-auth reads ?t= if present).
+  // Using /claimproof/signup instead of the shared /signup keeps the buyer in
+  // the Claim Proof world and, for buyers who already have a BNHG account, lands
+  // them on the portal instead of the BNHG member dashboard.
+  const next = encodeURIComponent(`/claimproof/portal?t=${token}`);
+  return `${baseUrl}/claimproof/signup?next=${next}`;
+}
+
 /** Paid-tier delivery email. Operator voice — direct, warm, zero hype. */
 export function claimProofDeliveryEmail(args: {
   name?: string;
   tier: ClaimProofTier;
   /** Token-gated link to /api/claimproof/download (from claimProofDownloadLink). */
   downloadUrl: string;
+  /** Magic link to the Claim Command Center (from claimProofPortalLink). */
+  portalUrl?: string;
   /** Fleet only: the walkthrough video URL (CLAIM_PROOF_FLEET_VIDEO_URL). */
   videoUrl?: string;
 }): { subject: string; html: string } {
   const first = args.name?.trim().split(/\s+/)[0];
   const hi = first ? `Hi ${first},` : "Hi,";
   const tierLabel = CLAIM_PROOF_TIERS[args.tier].label;
-  const subject = `Your Claim Proof ${tierLabel} is here`;
+  const subject = `Your ${tierLabel} is here`;
 
   const videoLine = args.videoUrl
     ? `Your fleet walkthrough video is here: <a href="${args.videoUrl}" style="color:#1A4D4F;font-weight:600;">watch it</a>. `
@@ -156,9 +175,10 @@ export function claimProofDeliveryEmail(args: {
     args.tier === "fleet"
       ? `<p style="font-size:15px;line-height:1.55;margin:0 0 20px;">
           Your download bundles the Pro manual and the Fleet Operations
-          supplement. ${videoLine}You&rsquo;re also on the lifetime-updates
-          list — when Turo materially changes its claim or dispute rules, the
-          revised edition lands in this inbox at no charge.
+          supplement. ${videoLine}You&rsquo;re also on the updates list:
+          while your updates are active, any revised edition after Turo
+          materially changes its claim or dispute rules lands in this inbox
+          at no charge.
         </p>`
       : "";
 
@@ -170,11 +190,31 @@ export function claimProofDeliveryEmail(args: {
       Thanks for picking up Claim Proof. Here&rsquo;s your download —
       everything is inside, print-ready.
     </p>
-    <p style="margin:24px 0;">
+    ${
+      args.portalUrl
+        ? `<p style="margin:24px 0 8px;">
+      <a href="${args.portalUrl}" style="background:#B08D57;color:#1a1a1a;padding:14px 24px;text-decoration:none;font-weight:600;border-radius:8px;display:inline-block;">
+        Set up your Claim Command Center
+      </a>
+    </p>
+    <p style="font-size:13px;line-height:1.5;color:#4B5563;margin:0 0 16px;">
+      Create your free account with <strong>this email address</strong> and your
+      Command Center is ready. Your claims, worksheets, and logs save to your
+      account and sync across every device you sign in on. If you have an active
+      claim right now, start there: pick your situation and it hands you the
+      next step.
+    </p>
+    <p style="margin:0 0 24px;">
+      <a href="${args.downloadUrl}" style="color:#1A4D4F;font-weight:600;">
+        Or download the print-ready kit files
+      </a>
+    </p>`
+        : `<p style="margin:24px 0;">
       <a href="${args.downloadUrl}" style="background:#B08D57;color:#1a1a1a;padding:14px 24px;text-decoration:none;font-weight:600;border-radius:8px;display:inline-block;">
         Download your kit
       </a>
-    </p>
+    </p>`
+    }
     <p style="font-size:15px;line-height:1.55;margin:0 0 20px;">
       Do one thing today: print the per-trip checklist and put it wherever you
       stage your cars. That single page is the system — the rest of the manual
@@ -216,6 +256,43 @@ export function claimProofGuideEmail(args: { downloadUrl: string }): {
       dispute scripts, the appeal workflow, and the desk-arbitration playbook —
       it&rsquo;s all in <a href="https://benicehospitality.com/claimproof" style="color:#1A4D4F;font-weight:600;">Claim Proof</a>,
       built and used daily by a working fleet.
+    </p>
+    ${EMAIL_SHELL_BOTTOM}
+  `;
+  return { subject, html };
+}
+
+/**
+ * Fleet seat-invite email. Sent when a Fleet owner invites a teammate to
+ * share the workspace's claims. The link routes to accept-invite, which asks
+ * them to sign in or create an account, then joins them to the workspace.
+ */
+export function claimProofInviteEmail(args: {
+  inviterName?: string;
+  workspaceName: string;
+  acceptUrl: string;
+}): { subject: string; html: string } {
+  const inviter = args.inviterName?.trim();
+  const subject = inviter
+    ? `${inviter} added you to their Claim Command Center`
+    : "You've been added to a Claim Command Center";
+  const html = `
+    ${EMAIL_SHELL_TOP}
+    <h1 style="font-size:22px;color:#1a1a1a;margin:0 0 16px;line-height:1.3;">You have a seat on the team.</h1>
+    <p style="font-size:15px;line-height:1.55;margin:0 0 20px;">
+      ${inviter ? `${inviter} has` : "A fleet owner has"} added you to
+      <strong>${args.workspaceName}</strong> in the Claim Proof Command Center.
+      You&rsquo;ll be able to document damage, run the claim tools, and see the
+      team&rsquo;s open claims, all in one place.
+    </p>
+    <p style="margin:24px 0;">
+      <a href="${args.acceptUrl}" style="background:#B08D57;color:#1a1a1a;padding:14px 24px;text-decoration:none;font-weight:600;border-radius:8px;display:inline-block;">
+        Accept your seat
+      </a>
+    </p>
+    <p style="font-size:13px;line-height:1.5;color:#4B5563;margin:0 0 16px;">
+      You&rsquo;ll sign in or create a free account with this email address, then
+      you&rsquo;re in. This invite expires in 14 days.
     </p>
     ${EMAIL_SHELL_BOTTOM}
   `;

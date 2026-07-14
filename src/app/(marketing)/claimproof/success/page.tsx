@@ -90,7 +90,7 @@ export default async function ClaimProofSuccessPage({
         {access ? (
           <>
             <p className="font-sans text-lg text-charcoal leading-relaxed mb-2">
-              Your Claim Proof {access.tierLabel} is ready.
+              Your {access.tierLabel} is ready.
             </p>
             <p className="font-sans text-base text-warm-gray leading-relaxed mb-10">
               We also emailed everything

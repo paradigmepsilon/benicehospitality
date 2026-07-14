@@ -69,15 +69,20 @@ function getSecret(): string {
 
 const DEFAULT_TTL_MS = 365 * 24 * 60 * 60 * 1000; // 1 year — email link longevity
 
-/** Mint a token for an item. Include in the email link via claimProofDownloadLink. */
+/** Mint a token for an item. Include in the email link via claimProofDownloadLink.
+ *  Optional sessionId (Stripe checkout session) rides in the signed payload so
+ *  the portal can attribute logins to a specific purchase. Older two-part
+ *  tokens verify unchanged — verifyClaimProofToken only reads the first two
+ *  payload segments, and session ids never contain a dot. */
 export function makeClaimProofToken(
   item: ClaimProofItem,
   ttlMs: number = DEFAULT_TTL_MS,
+  sessionId?: string,
 ): string {
   const exp = nowMs() + ttlMs;
-  const payload = `${item}.${exp}`;
+  const payload = sessionId ? `${item}.${exp}.${sessionId}` : `${item}.${exp}`;
   const sig = createHmac("sha256", getSecret()).update(payload).digest("hex");
-  // token = base64url(item.exp).sig  — self-describing, no DB lookup
+  // token = base64url(item.exp[.sid]).sig  — self-describing, no DB lookup
   const b64 = Buffer.from(payload).toString("base64url");
   return `${b64}.${sig}`;
 }
@@ -109,6 +114,47 @@ export function verifyClaimProofToken(
   const exp = Number(expStr);
   if (!Number.isFinite(exp) || exp < nowMs()) return false;
   return true;
+}
+
+/**
+ * Parse + verify a token WITHOUT knowing the item up front. Returns the item
+ * the token was minted for, or null if the signature or expiry fails. Powers
+ * the Claim Command Center portal login: the delivery-email token doubles as
+ * the magic link, and this tells us which tier the visitor owns.
+ */
+export function readClaimProofToken(token: string): ClaimProofItem | null {
+  const dot = token.lastIndexOf(".");
+  if (dot <= 0) return null;
+  const b64 = token.slice(0, dot);
+
+  let payload: string;
+  try {
+    payload = Buffer.from(b64, "base64url").toString("utf8");
+  } catch {
+    return null;
+  }
+  const [tokItem] = payload.split(".");
+  if (!isClaimProofItem(tokItem)) return null;
+  return verifyClaimProofToken(token, tokItem) ? tokItem : null;
+}
+
+/** Like readClaimProofToken, but also returns the Stripe session id when the
+ *  token carries one (tokens minted since the purchase mirror shipped). Older
+ *  emailed links yield sessionId: null. */
+export function readClaimProofTokenDetails(
+  token: string,
+): { item: ClaimProofItem; sessionId: string | null } | null {
+  const item = readClaimProofToken(token);
+  if (!item) return null;
+  const dot = token.lastIndexOf(".");
+  let payload: string;
+  try {
+    payload = Buffer.from(token.slice(0, dot), "base64url").toString("utf8");
+  } catch {
+    return null;
+  }
+  const parts = payload.split(".");
+  return { item, sessionId: parts.length >= 3 && parts[2] ? parts[2] : null };
 }
 
 function safeEqualHex(a: string, b: string): boolean {

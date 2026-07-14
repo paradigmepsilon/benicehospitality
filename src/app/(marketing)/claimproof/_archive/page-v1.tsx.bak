@@ -1,0 +1,532 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import SectionDivider from "@/components/ui/SectionDivider";
+import { SECTION_COLORS as C } from "@/lib/section-colors";
+import BuyTierButton from "./_components/BuyTierButton";
+import GuideForm from "./_components/GuideForm";
+import ProofBand from "./_components/ProofBand";
+import PriceAnchor from "./_components/PriceAnchor";
+import StickyBuyBar from "./_components/StickyBuyBar";
+import HairlineDivider from "./_components/HairlineDivider";
+import FaqAccordion from "./_components/FaqAccordion";
+
+/**
+ * Claim Proof sales page. Anonymous-checkout digital product (Be Nice Autos
+ * product on BNHG rails), pattern cloned from /thehostsedge. Three tiers;
+ * the $97 Pro is the hero. Copy voice: one working host talking to another.
+ * No em dashes anywhere on this page by design.
+ */
+
+export const metadata: Metadata = {
+  title: "Claim Proof: The Turo Host's Damage-Claim Defense System",
+  description:
+    "Stop losing Turo damage claims. The exact documentation routine, dispute scripts, and arbitration playbook a working fleet uses every day. Verified against Turo's July 2026 policy.",
+};
+
+const TIER_FEATURES: Record<
+  "core" | "pro" | "fleet",
+  {
+    name: string;
+    price: string;
+    tagline: string;
+    who: string;
+    features: string[];
+    note?: string;
+  }
+> = {
+  core: {
+    name: "Core Kit",
+    price: "$47",
+    tagline: "The routine that protects you before a claim ever starts",
+    who: "For the host who just wants the documentation habit, dialed in.",
+    features: [
+      "Our 32-page field manual: how Turo claims actually get decided",
+      "Our Clock Map: every deadline that can quietly kill your claim, on one page",
+      "Our pre-trip and post-trip photo routine (the 12-shot ritual we run on every car)",
+      "The printable per-trip checklist we keep where we stage our cars",
+      "The photo standards that win us claims, and the mistakes that lose them",
+      "3 of our ready-to-send dispute messages",
+    ],
+  },
+  pro: {
+    name: "Pro Kit",
+    price: "$97",
+    tagline: "The tier you want open the day a claim goes sideways",
+    who: "For anyone who plans to actually fight a claim, one car or ten.",
+    features: [
+      "Everything in Core, plus:",
+      "Our full library of 10 dispute messages: the “it was already like that” guest, lowball estimates, mechanical claims, theft, escalation",
+      "Our appeal workflow, matched to every reason Turo gives for a denial",
+      "Arbitration in plain English, including the documents-only “desk” process and your written statement, structured the way we structure ours",
+      "The 30-day arbitration opt-out almost no host knows exists",
+      "Our per-trip evidence tracker",
+      "Our fight-or-fold money math, so you know when to push and when to walk",
+    ],
+    note: "Most hosts pick this one. It is the part nobody warns you about.",
+  },
+  fleet: {
+    name: "Fleet Kit",
+    price: "$197",
+    tagline: "For when you are running more than one car",
+    who: "For multi-car operators with cleaners, co-hosts, or VAs to train.",
+    features: [
+      "Everything in Pro, plus:",
+      "Our Fleet Operations supplement: the batch documentation and monthly baseline libraries we run across our own fleet",
+      "The one-page training card we hand our cleaners, co-hosts, and VAs",
+      "Our fleet risk ledger: how we spot when a car has become a lemon, and which guests we screen out",
+      "The recorded walkthrough video, showing the whole system running on our real cars",
+      "Lifetime policy updates: when Turo changes the rules, the new edition lands in your inbox free",
+    ],
+  },
+};
+
+function CheckIcon() {
+  return (
+    <svg
+      className="mt-1 h-4 w-4 flex-none text-warm-gold"
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" />
+    </svg>
+  );
+}
+
+export default function ClaimProofPage() {
+  return (
+    <>
+      <StickyBuyBar />
+
+      {/* ---------- HERO ---------- */}
+      <section
+        id="cp-hero"
+        className="relative bg-near-black px-6 md:px-12 lg:px-20 pt-36 md:pt-44 pb-20 md:pb-24 overflow-hidden"
+      >
+        <Image
+          src="/images/claimproof/hero.png"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-near-black/40 via-near-black/60 to-near-black" />
+        <div className="relative max-w-4xl mx-auto">
+          <p className="font-sans text-xs font-semibold tracking-[0.25em] md:tracking-[0.3em] uppercase text-warm-gold mb-4 md:mb-6">
+            For Turo hosts, from a working fleet
+          </p>
+          <h1 className="font-display text-3xl md:text-6xl font-semibold text-white leading-[1.08] md:leading-[1.05] mb-6 md:mb-8">
+            The scratch shows up two days later. That is where you lose.
+          </h1>
+          <div className="font-sans text-base md:text-xl text-white/85 leading-relaxed max-w-2xl mb-6 space-y-3 md:space-y-4">
+            <p>Your car comes back fine. You move on.</p>
+            <p>Then a few days later, you spot a dent nobody mentioned&hellip;</p>
+            <p className="text-[#E8917A]">
+              <strong className="font-bold">Here is the sting:</strong> Turo
+              never sees the car. They decide from your photos and your timing.
+              If either one is weak,{" "}
+              <strong className="font-bold text-white">YOU PAY.</strong>
+            </p>
+            <p>
+              <strong className="font-bold text-warm-gold">
+                Claim Proof is the routine a real fleet runs on every trip
+              </strong>
+              , so your paperwork wins before a claim ever starts.
+            </p>
+          </div>
+          <p className="font-sans text-sm text-white/60 mb-8 md:mb-10">
+            Every rule inside is verified against Turo&rsquo;s published US
+            policy and{" "}
+            <span className="font-semibold text-gold-light">
+              date-stamped July 2026
+            </span>
+            , so you always know what was checked, and when.
+          </p>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-5">
+            <a
+              href="#pricing"
+              className="inline-flex w-full sm:w-auto items-center justify-center rounded-full bg-warm-gold px-8 py-4 font-sans text-base font-semibold text-near-black transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-gold-light hover:shadow-lg active:scale-[0.98]"
+            >
+              Get Claim Proof, from $47
+            </a>
+            <a
+              href="#free-guide"
+              className="text-center sm:text-left font-sans text-sm font-semibold text-white/80 underline underline-offset-4 hover:text-warm-gold transition-colors"
+            >
+              Or start with the free 24-Hour Rule guide
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider fromColor={C.nearBlack} toColor={C.alertWash} />
+
+      {/* ---------- THE TRAP (danger zone: warm-red wash) ---------- */}
+      <section className="bg-[#F6EAE5] px-6 md:px-12 lg:px-20 py-14 md:py-20">
+        <div className="max-w-5xl mx-auto">
+          <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-terracotta mb-4">
+            Why good hosts still lose
+          </p>
+          <h2 className="font-display text-3xl md:text-5xl font-semibold text-deep-teal leading-tight mb-6 max-w-3xl">
+            Most claims are lost before you ever file them.
+          </h2>
+          <p className="font-sans text-lg text-charcoal leading-relaxed mb-10 max-w-2xl">
+            Not because your case is weak. Because three rules quietly decide the
+            outcome, and almost no host knows them until it is too late.
+          </p>
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9] w-full rounded-2xl overflow-hidden shadow-lg mb-10 md:mb-12">
+            <Image
+              src="/images/claimproof/frustrated-host-v2.png"
+              alt="A Turo host looking at damage on his car he did not catch at return"
+              fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-near-black/85 via-near-black/25 to-transparent" />
+            <p className="absolute bottom-5 left-5 right-5 md:left-6 md:right-6 font-sans text-sm font-medium text-white max-w-lg">
+              The damage you catch two days late is the claim you were always
+              going to lose.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 md:p-8 shadow-sm rounded-2xl border-t-4 border-terracotta/70">
+              <p className="font-display text-5xl font-semibold text-terracotta mb-4">
+                24 hrs
+              </p>
+              <h3 className="font-sans font-bold text-near-black mb-3">
+                And the clock starts at trip end.
+              </h3>
+              <p className="font-sans text-sm text-charcoal leading-relaxed">
+                Not when you find the scratch. Report even one hour late and Turo
+                can{" "}
+                <strong className="font-semibold text-terracotta">
+                  refuse the claim outright.
+                </strong>{" "}
+                Most hosts learn this rule by losing to it.
+              </p>
+            </div>
+            <div className="bg-white p-6 md:p-8 shadow-sm rounded-2xl border-t-4 border-terracotta/70">
+              <p className="font-display text-5xl font-semibold text-terracotta mb-4">
+                100%
+              </p>
+              <h3 className="font-sans font-bold text-near-black mb-3">
+                Decided on your photos. Nothing else.
+              </h3>
+              <p className="font-sans text-sm text-charcoal leading-relaxed">
+                Turo never sees the car. Clean shots settle in a day. Blurry ones
+                trigger delays, inspections, and{" "}
+                <strong className="font-semibold text-terracotta">
+                  fees for photos you never took.
+                </strong>
+              </p>
+            </div>
+            <div className="bg-white p-6 md:p-8 shadow-sm rounded-2xl border-t-4 border-terracotta/70">
+              <p className="font-display text-5xl font-semibold text-terracotta mb-4">
+                10 pgs
+              </p>
+              <h3 className="font-sans font-bold text-near-black mb-3">
+                A dispute is a paper fight.
+              </h3>
+              <p className="font-sans text-sm text-charcoal leading-relaxed">
+                Most disputes end in documents-only arbitration. One arbitrator,
+                ten pages each, no hearing.{" "}
+                <strong className="font-semibold text-near-black">
+                  Whoever brought the better paper wins.
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider fromColor={C.alertWash} toColor={C.white} />
+
+      {/* ---------- WHAT IT IS ---------- */}
+      <section className="bg-white px-6 md:px-12 lg:px-20 py-14 md:py-20">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+          <div>
+            <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
+              What you actually get
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-tight mb-6">
+              A field manual you use, not a course you forget.
+            </h2>
+            <p className="font-sans text-base text-charcoal leading-relaxed mb-7">
+              No theory. No webinar. This is the exact system we have run across
+              our own fleet for over{" "}
+              <strong className="font-semibold text-deep-teal">
+                8 years
+              </strong>
+              , handed to you print-ready:
+            </p>
+            <ul className="space-y-3 mb-8">
+              {[
+                ["Our 12-shot routine", "four minutes at pickup and return"],
+                ["Our one-page checklist", "the one we keep where we stage our cars"],
+                ["Our 10 fill-in dispute scripts", "for the messages you dread"],
+                ["Our appeal + arbitration playbook", "the same one we use"],
+              ].map(([head, sub]) => (
+                <li key={head} className="flex gap-3">
+                  <CheckIcon />
+                  <span className="font-sans text-base leading-snug text-charcoal">
+                    <strong className="font-semibold text-deep-teal">
+                      {head}
+                    </strong>
+                    <span className="text-warm-gray">: {sub}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <blockquote className="border-l-2 border-warm-gold pl-6 font-display text-xl text-deep-teal italic leading-relaxed mb-6">
+              It is a documentation contest. Most hosts show up
+              empty-handed.{" "}
+              <span className="not-italic font-semibold text-warm-gold">
+                Four minutes a trip puts you on the winning side.
+              </span>
+            </blockquote>
+            <p className="font-sans text-sm text-warm-gray leading-relaxed">
+              Written by someone who runs a rental fleet in metro Atlanta. Every
+              routine in here is used on real cars, on real claims. Not
+              affiliated with Turo Inc.
+            </p>
+          </div>
+          <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src="/images/claimproof/wheel.png"
+              alt="Editorial detail photograph of a black car wheel"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-near-black/70 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="font-display text-2xl font-semibold text-white">
+                Shoot first.
+              </p>
+              <p className="font-sans text-sm text-white/70">
+                The two-word version of the entire system.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* white → white seam: hairline so the two sections stay distinct */}
+      <HairlineDivider bg="bg-white" />
+
+      {/* ---------- PROOF (fleet, stats, wins, testimonials) ---------- */}
+      <ProofBand />
+
+      <SectionDivider fromColor={C.white} toColor={C.deepTeal} />
+
+      {/* ---------- VERIFIED BAND ---------- */}
+      <section className="bg-deep-teal px-6 md:px-12 lg:px-20 py-12 md:py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-gold-light mb-6">
+            Built on Turo&rsquo;s actual rules, not host-forum folklore
+          </p>
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 text-left">
+            {[
+              ["24-hr report window", "from trip end, verified"],
+              ["Photo metadata rules", "date, time, geolocation"],
+              ["20-day escalation window", "your direct-resolution safety net"],
+              ["Desk arbitration under $200k", "documents only, 10-page cap"],
+            ].map(([head, sub]) => (
+              <div key={head} className="border-l-2 border-warm-gold pl-4">
+                <p className="font-sans text-sm font-bold text-white mb-1">
+                  {head}
+                </p>
+                <p className="font-sans text-xs text-white/65">{sub}</p>
+              </div>
+            ))}
+          </div>
+          <p className="font-sans text-sm text-white/70 mt-10 leading-relaxed">
+            Platforms move the goalposts, so nothing in here pretends to be
+            timeless. Every policy fact carries a{" "}
+            <span className="text-gold-light font-semibold">Verified 07&middot;2026</span>{" "}
+            mark so you always know what was checked, and when. Fleet owners get
+            the revised edition free whenever the rules materially change.
+          </p>
+        </div>
+      </section>
+
+      {/* teal → teal seam: hairline so the two sections stay distinct */}
+      <HairlineDivider bg="bg-deep-teal" />
+
+      {/* ---------- PRICE ANCHOR (loss vs. kit) ---------- */}
+      <PriceAnchor />
+
+      <SectionDivider fromColor={C.deepTeal} toColor={C.cream} />
+
+      {/* ---------- PRICING ---------- */}
+      <section id="pricing" className="bg-cream px-6 md:px-12 lg:px-20 py-14 md:py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10 md:mb-14">
+            <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
+              Pick your kit
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-semibold text-deep-teal leading-tight mb-4">
+              You have seen the math. Now arm yourself.
+            </h2>
+            <p className="font-sans text-base text-charcoal max-w-2xl mx-auto">
+              One-time purchase, in your inbox in seconds. Run it on your very
+              next trip.{" "}
+              <strong className="font-semibold text-deep-teal">
+                If your evidence is not the cleanest it has ever been, email me
+                for a full refund and keep the kit anyway.
+              </strong>
+            </p>
+            <p className="mt-5 font-sans text-base font-semibold text-terracotta max-w-2xl mx-auto">
+              The next claim will not wait for you to be ready.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 items-start">
+            {(Object.keys(TIER_FEATURES) as Array<"core" | "pro" | "fleet">).map(
+              (tier) => {
+                const t = TIER_FEATURES[tier];
+                const isHero = tier === "pro";
+                return (
+                  <div
+                    key={tier}
+                    className={
+                      "transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-2 " +
+                      (isHero
+                        ? "relative bg-near-black text-white p-6 md:p-8 rounded-2xl shadow-xl md:-mt-4 md:mb-[-1rem] ring-2 ring-warm-gold hover:shadow-2xl hover:ring-gold-light"
+                        : "bg-white p-6 md:p-8 rounded-2xl shadow-sm ring-1 ring-transparent hover:shadow-xl hover:ring-warm-gold/60")
+                    }
+                  >
+                    {isHero && (
+                      <p className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-warm-gold px-4 py-1 font-sans text-xs font-bold uppercase tracking-[0.15em] text-near-black">
+                        Most popular
+                      </p>
+                    )}
+                    <h3
+                      className={`font-display text-2xl font-semibold mb-1 ${isHero ? "text-white" : "text-deep-teal"}`}
+                    >
+                      {t.name}
+                    </h3>
+                    <p
+                      className={`font-sans text-sm mb-3 ${isHero ? "text-white/70" : "text-warm-gray"}`}
+                    >
+                      {t.tagline}
+                    </p>
+                    <p
+                      className={`font-sans text-xs font-semibold mb-5 ${isHero ? "text-gold-light" : "text-warm-gold"}`}
+                    >
+                      {t.who}
+                    </p>
+                    <p
+                      className={`font-display text-5xl font-semibold mb-6 ${isHero ? "text-warm-gold" : "text-near-black"}`}
+                    >
+                      {t.price}
+                      <span
+                        className={`font-sans text-sm font-normal ${isHero ? "text-white/60" : "text-warm-gray"}`}
+                      >
+                        {" "}
+                        one-time
+                      </span>
+                    </p>
+                    <ul className="space-y-3 mb-8">
+                      {t.features.map((f) => (
+                        <li key={f} className="flex gap-3">
+                          <CheckIcon />
+                          <span
+                            className={`font-sans text-sm leading-relaxed ${isHero ? "text-white/85" : "text-charcoal"}`}
+                          >
+                            {f}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <BuyTierButton
+                      tier={tier}
+                      label={`Get the ${t.name}`}
+                      variant={isHero ? "solid" : "outline"}
+                    />
+                    {t.note && (
+                      <p className="mt-4 font-sans text-xs text-white/60 text-center">
+                        {t.note}
+                      </p>
+                    )}
+                  </div>
+                );
+              },
+            )}
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider fromColor={C.cream} toColor={C.white} />
+
+      {/* ---------- GUARANTEE + FAQ ---------- */}
+      <section className="bg-white px-6 md:px-12 lg:px-20 py-14 md:py-20">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-cream rounded-2xl p-6 md:p-10 mb-12 md:mb-16 text-center">
+            <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
+              My guarantee, plainly
+            </p>
+            <p className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-snug mb-4">
+              Run it on your next trip. If your evidence is not the cleanest it
+              has ever been, email me for a full refund,{" "}
+              <span className="text-warm-gold">and keep the kit anyway.</span>
+            </p>
+            <p className="font-sans text-sm text-warm-gray">
+              No forms. Nothing to send back. No hard feelings.
+            </p>
+          </div>
+
+          <h2 className="font-display text-3xl font-semibold text-deep-teal mb-8">
+            The questions every host asks first
+          </h2>
+          <FaqAccordion />
+        </div>
+      </section>
+
+      <SectionDivider fromColor={C.white} toColor={C.nearBlack} />
+
+      {/* ---------- FREE GUIDE ---------- */}
+      <section
+        id="free-guide"
+        className="relative bg-near-black px-6 md:px-12 lg:px-20 py-14 md:py-20 overflow-hidden"
+      >
+        <Image
+          src="/images/claimproof/fleet.png"
+          alt=""
+          fill
+          className="object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/80 to-near-black/40" />
+        <div className="relative max-w-4xl mx-auto">
+          <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
+            Not ready yet? Start free.
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-white leading-tight mb-4 max-w-xl">
+            The 24-Hour Rule, the one deadline that decides most claims.
+          </h2>
+          <p className="font-sans text-base text-white/75 leading-relaxed max-w-xl mb-8">
+            A free two-page guide: how the clock really works, exactly what to do
+            in the first 24 hours, and the 10-shot mini baseline. If you host on
+            Turo, this one page will save you a claim someday. No catch.
+          </p>
+          <GuideForm />
+          <p className="font-sans text-xs text-white/40 mt-4">
+            One email with the guide, then the occasional operator note. Unsubscribe anytime.
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- FINE PRINT ---------- */}
+      <section className="bg-near-black px-6 md:px-12 lg:px-20 pb-12">
+        <div className="max-w-4xl mx-auto border-t border-white/10 pt-8">
+          <p className="font-sans text-xs text-white/40 leading-relaxed">
+            Claim Proof is operational guidance, not legal advice, and is not
+            affiliated with, endorsed by, or sponsored by Turo Inc.
+            &ldquo;Turo&rdquo; is a trademark of Turo Inc., used only to describe
+            the platform this product addresses. Policy facts verified against
+            Turo&rsquo;s published US policies, July 2026. A Be Nice Autos
+            product.
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}

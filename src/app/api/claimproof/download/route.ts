@@ -60,7 +60,7 @@ export async function GET(request: Request) {
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Your Claim Proof Fleet Kit</title>
+<title>Your Claim Proof Fleet kit</title>
 <style>
   body{font-family:-apple-system,Helvetica,Arial,sans-serif;background:#FAF8F3;color:#1a1a1a;margin:0;padding:48px 20px;}
   .card{max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:36px;box-shadow:0 2px 24px rgba(0,0,0,.06);}
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
   a.btn.alt{background:#1A4D4F;color:#fff;}
   small{display:block;color:#9a9484;font-size:12px;margin-top:20px;line-height:1.5;}
 </style></head><body><div class="card">
-  <h1>Your Fleet Kit is ready.</h1>
+  <h1>Your Claim Proof Fleet is ready.</h1>
   <p>Two documents — start with the manual, keep the supplement for when you scale.</p>
   <a class="btn" href="${proUrl}">Download the Claim Proof manual (PDF)</a>
   <a class="btn alt" href="${supplementUrl}">Download the Fleet Operations supplement (PDF)</a>
