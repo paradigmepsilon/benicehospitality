@@ -221,6 +221,182 @@ export const EMERGENCY: Pack = {
     },
     // ------------------------------------------------------------------
     {
+      slug: "accident-tow",
+      name: "Accident & Tow Response",
+      tagline: "The car was in a crash or got towed. This is a different play than a scratch at drop-off.",
+      minutes: "25 min",
+      policySensitive: true,
+      sections: [
+        {
+          kind: "callout",
+          tone: "warn",
+          title: "This is not the scratch-at-drop-off flow.",
+          body: "When the car was wrecked or hauled off on a truck, the order changes. People and safety come first. The accident gets reported right away, not at the next drop-off. And the car has already moved, so the whole 'do not move the vehicle' rule does not apply. Work this tool instead, then come back to the photo and submission tools once the car is somewhere you can shoot it.",
+        },
+        {
+          kind: "callout",
+          tone: "gold",
+          title: "Who does what",
+          body: "Your guest was the driver, so the accident report, the police report, and the on-scene details are theirs to make and yours to collect. Your job as the host is to make sure the guest reported it, to report the damage yourself inside the window, and to get your car recovered before it disappears into storage fees. This tool covers your side.",
+        },
+        {
+          kind: "steps",
+          id: "accident-steps",
+          items: [
+            {
+              action: "People first. Confirm everyone is safe.",
+              minutes: "0 min",
+              detail:
+                "Before anything about the car, confirm your guest and anyone else involved are safe and out of traffic. If anyone is hurt, the call is 911, not you. A car is replaceable and insured. Nothing in this tool comes before a person's safety.",
+              subtasks: [
+                "Confirm the guest is safe and out of danger",
+                "If anyone is injured, 911 has already been called",
+                "Do not ask the guest to do anything unsafe to protect the car",
+              ],
+            },
+            {
+              action: "Make sure the accident is reported to Turo now.",
+              minutes: "5 min",
+              detail:
+                "An accident is reported immediately, not at trip end. Your guest should report it through the app and can call Turo support at 1-888-391-0460. Confirm they have done it. If they have not, tell them to, and report the damage from your side too. Reporting an accident is separate from the 24-hour damage window, and it is expected right away.",
+              subtasks: [
+                "Confirm the guest reported the accident in the Turo app",
+                "Turo host and guest support line: 1-888-391-0460",
+                "Note the date and time the accident was reported",
+              ],
+              mistakes: [
+                "Assuming the guest reported it. Confirm, do not assume.",
+                "Waiting for the trip to end before anything is reported to Turo",
+              ],
+            },
+            {
+              action: "Collect the scene facts from the guest.",
+              minutes: "10 min",
+              detail:
+                "In the US, a collision requires a police report, so get the report or the report number. Have the guest send you the other driver's name, insurance, and plate, any witness contact, and photos of the scene, all vehicles, plates, and surroundings while they are still there. You cannot go back to the scene later. They can.",
+              subtasks: [
+                "Police report filed; get the report number",
+                "Other driver name, insurance carrier, and plate",
+                "Any witness names and phone numbers",
+                "Scene photos: all vehicles, plates, wide surroundings, road",
+                "Where the accident happened (address or cross streets)",
+              ],
+              mistakes: [
+                "Letting the guest leave the scene with no photos and no police report",
+                "Trying to assign blame in writing before facts are gathered",
+              ],
+            },
+            {
+              action: "Pin down the tow. Get the yard details before the car is lost.",
+              minutes: "5 min",
+              detail:
+                "Find out who arranged the tow: Turo roadside, the police, or a third party. Write down the tow company, the yard address and phone, and what it takes to release the car. Storage fees start the day the car arrives and do not stop. A car you cannot locate is a car you are paying for daily. After an accident, Turo does not charge the guest for the tow unless the accident came from a prohibited use.",
+              subtasks: [
+                "Who ordered the tow (Turo roadside / police / third party)",
+                "Tow company name and phone",
+                "Yard address and phone",
+                "What is required to release the car (ID, fees, authorization)",
+                "Date the car arrived at the yard (the storage clock)",
+              ],
+              mistakes: [
+                "Not writing down the yard before the guest moves on",
+                "Letting the car sit in storage for days while fees pile up",
+              ],
+            },
+            {
+              action: "Recover the car and photograph it at the yard.",
+              minutes: "reference",
+              detail:
+                "Get the car released as soon as you can. At the yard, shoot it with the standard Damage Photo Protocol: four corners wide, every side, the damage at three distances and three angles, plus the odometer and VIN. The car being at a tow lot instead of your driveway does not change what a strong photo set looks like.",
+              subtasks: [
+                "Car released from the yard, or a pickup date set",
+                "Full Photo Protocol shot at the yard",
+                "Storage fees and tow invoice saved to the claim folder",
+              ],
+            },
+            {
+              action: "File the damage claim with the accident file attached.",
+              minutes: "reference",
+              detail:
+                "Report the damage through Turo the same as any claim, and attach the accident file: police report, scene photos, tow and yard records, and your yard photo set. Run the Submission Checklist before you file. Then start the Communication Log, because an accident claim has more moving parts and more people to chase than a scratch.",
+              subtasks: [
+                "Damage reported through Turo within the window",
+                "Police report and scene photos attached",
+                "Tow and storage records attached",
+                "Submission Checklist completed line by line",
+                "Communication Log started with the report as entry one",
+              ],
+            },
+          ],
+        },
+        {
+          kind: "checklist",
+          id: "tow-logistics",
+          title: "Tow-yard quick capture",
+          intro:
+            "The five things to have written down before the car has been at the yard 24 hours.",
+          items: [
+            "Tow company name and phone",
+            "Yard address and phone",
+            "What it takes to release the car (ID, fees, authorization)",
+            "Date the car arrived (storage fees run from here)",
+            "Retrieval date set, and photos taken at the yard",
+          ],
+        },
+        {
+          kind: "template",
+          id: "accident-report-note",
+          title: "Accident summary (copy and fill in)",
+          context:
+            "Your factual record of the accident, to sit at the front of the claim file. Facts only, no blame.",
+          body: `ACCIDENT SUMMARY
+
+Vehicle: [YEAR MAKE MODEL, plate or last 6 of VIN]
+Trip: [TRIP NUMBER], [START DATE/TIME] to [END DATE/TIME]
+Guest: [GUEST FIRST NAME + LAST INITIAL]
+
+Accident:
+[Date, time, and location as reported by the guest. Example:
+"Guest reported a collision on [DATE] at approx [TIME] at [LOCATION]."]
+
+Reported to Turo: [DATE, TIME], [by guest in app / support call]
+Police report: [NUMBER, or "filed with [DEPARTMENT]"]
+
+Other party:
+[Name, insurance carrier, plate, if any. "Single vehicle" if none.]
+
+Tow and storage:
+[Tow company, yard address and phone, date car arrived,
+release requirements.]
+
+Evidence attached:
+- Scene photos ([COUNT])
+- Yard photos ([COUNT]), taken [DATE]
+- Police report
+- Tow invoice / storage records
+- Guest message thread ([COUNT] screenshots)
+
+Actions taken:
+[Confirmed guest reported the accident, located and recovered the
+vehicle on [DATE], photographed at the yard, reported the damage
+within the window on [DATE, TIME].]`,
+        },
+        {
+          kind: "callout",
+          tone: "info",
+          title: "The downtime is the real cost.",
+          body: "In the US, Turo hosts do not get loss-of-use or lost-income reimbursement while a car is down. A towed car earns nothing until it is repaired and re-listed, so every day it sits at a yard or waits on a shop is money. That is the argument for moving fast on release and getting the repair booked early, not for cutting corners on documentation.",
+        },
+        {
+          kind: "callout",
+          tone: "gold",
+          title: "What comes next",
+          body: "Once the car is somewhere you can shoot it, the Damage Photo Protocol and Submission Checklist in this pack handle the file. If the payout comes in under the shop's estimate, the Valuation pack builds the supplement. If the claim stalls, the Follow-Up pack carries it.",
+        },
+      ],
+    },
+    // ------------------------------------------------------------------
+    {
       slug: "photo-protocol",
       name: "Damage Photo Protocol",
       tagline: "Photos a reviewer can trust, shot in a repeatable sequence.",

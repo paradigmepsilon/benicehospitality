@@ -14,6 +14,7 @@ import {
   IconCamera,
   IconScale,
   IconChat,
+  IconAlert,
   IconArrowUpRight,
   IconLock,
 } from "./_components/Icons";
@@ -32,6 +33,7 @@ export const dynamic = "force-dynamic";
 const STAGE_ICON: Record<string, React.ReactNode> = {
   prepare: <IconCamera className="h-5 w-5" />,
   today: <IconBolt className="h-6 w-6" />,
+  accident: <IconAlert className="h-5 w-5" />,
   underpaid: <IconScale className="h-5 w-5" />,
   stuck: <IconChat className="h-5 w-5" />,
 };
@@ -57,8 +59,11 @@ export default async function PortalDashboard({
     access.workspace?.workspace.tier === "fleet" &&
     access.workspace.role === "owner";
 
+  // The first urgent stage is featured in the bento hero; every other stage
+  // (including any additional urgent one, e.g. the accident path) renders in
+  // the secondary grid so nothing is silently dropped.
   const urgent = STAGES.find((s) => s.urgent)!;
-  const calm = STAGES.filter((s) => !s.urgent);
+  const calm = STAGES.filter((s) => s !== urgent);
 
   return (
     <div>

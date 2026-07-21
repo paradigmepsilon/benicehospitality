@@ -53,10 +53,24 @@ export default function RescueChecklistPage() {
           Found damage? Use this before the vehicle moves, the evidence
           disappears, or the filing window closes.
         </p>
-        <p className="mb-10 font-sans text-sm text-terracotta font-semibold">
+        <p className="mb-6 font-sans text-sm text-terracotta font-semibold">
           The report clock runs from TRIP END, not from when you found the
           damage. Check the trip end time in the app first.
         </p>
+
+        <a
+          href="#accident-track"
+          className="rescue-hide mb-10 block rounded-2xl border border-terracotta/40 bg-terracotta/[0.06] p-5 transition hover:border-terracotta/70 md:p-6"
+        >
+          <p className="font-sans text-sm font-bold text-terracotta">
+            Wrecked, not scratched?
+          </p>
+          <p className="mt-1 font-sans text-sm leading-relaxed text-white/75">
+            If the car was in a collision or had to be towed, the steps are
+            different. Safety and the accident report come first, and the car
+            has already moved. Skip to the accident steps →
+          </p>
+        </a>
 
         <div className="space-y-5">
           <Box
@@ -119,6 +133,79 @@ export default function RescueChecklistPage() {
               have, and when you reported. No accusations, no emotion. The
               photos do the arguing.
             </p>
+          </div>
+        </div>
+
+        {/* Accident / tow track: a different situation than a scratch */}
+        <div id="accident-track" className="mt-16 scroll-mt-28">
+          <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.28em] text-terracotta">
+            If the car was in a crash or got towed
+          </p>
+          <h2 className="mb-3 font-display text-2xl md:text-4xl font-semibold leading-tight">
+            Accident and tow steps
+          </h2>
+          <p className="mb-8 font-sans text-base text-white/75 leading-relaxed">
+            This is a different play than a scratch found at drop-off. People
+            come first, the accident gets reported right away, and the car has
+            already moved. Your guest was the driver, so the accident report and
+            the police report are theirs to make and yours to collect.
+          </p>
+
+          <div className="space-y-5">
+            <Box
+              title="Safety first"
+              items={[
+                "Confirm your guest and anyone else are safe and out of traffic",
+                "If anyone is hurt, the call is 911, not you",
+                "A car is replaceable and insured. Nothing comes before a person's safety",
+              ]}
+            />
+            <Box
+              title="Report the accident now"
+              items={[
+                "An accident is reported immediately, not at trip end",
+                "Confirm the guest reported it in the app (Turo support: 1-888-391-0460)",
+                "Note the date and time it was reported",
+              ]}
+            />
+            <Box
+              title="Get the scene facts from the guest"
+              items={[
+                "US collisions need a police report: get the report number",
+                "Other driver name, insurance, and plate",
+                "Any witness names and phone numbers",
+                "Scene photos: all vehicles, plates, wide surroundings",
+              ]}
+            />
+            <Box
+              title="The tow: get these details before the car is lost"
+              items={[
+                "Who arranged it: Turo roadside, police, or a third party",
+                "Tow company name and phone",
+                "Yard address, phone, and what it takes to release the car",
+                "Date the car arrived (storage fees run from here)",
+              ]}
+            />
+            <Box
+              title="Retrieve and photograph at the yard"
+              items={[
+                "Get the car released as soon as you can",
+                "Shoot it at the yard with the same photo shot list above",
+                "Save the tow invoice and storage records",
+                "Then file the damage claim with the accident file attached",
+              ]}
+            />
+            <div className="rounded-2xl border border-warm-gold/30 bg-warm-gold/[0.05] p-5 md:p-6">
+              <h3 className="mb-2 font-sans font-bold text-warm-gold">
+                The downtime is the real cost
+              </h3>
+              <p className="font-sans text-sm leading-relaxed text-white/80">
+                In the US, Turo hosts do not get loss-of-use while a car is
+                down. A towed car earns nothing until it is repaired and
+                re-listed. That is the reason to move fast on release and book
+                the repair early, not a reason to cut corners on documentation.
+              </p>
+            </div>
           </div>
         </div>
 

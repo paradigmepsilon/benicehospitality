@@ -46,6 +46,13 @@ export const STAGES: Array<{
     urgent: true,
   },
   {
+    slug: "accident",
+    label: "I had an accident or the car was towed",
+    sub: "Safety, the accident report, and getting your car back before storage fees pile up.",
+    href: "/claimproof/portal/emergency/accident-tow",
+    urgent: true,
+  },
+  {
     slug: "underpaid",
     label: "My claim was approved too low",
     sub: "Compare the appraisal to the shop estimate and build a supplement.",
