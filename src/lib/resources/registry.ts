@@ -375,6 +375,336 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
       "A clean print view to keep by the desk",
     ],
   },
+
+  "course-outline-checklist": {
+    slug: "course-outline-checklist",
+    name: "Course Outline & Progress Checklist",
+    blurb:
+      "The whole Room Rental Riches path on one page, from research to your first tenant. Check off each milestone and watch your launch progress climb.",
+    bullets: [
+      "Every phase of The Be Nice Way in order",
+      "Milestone checkboxes with a live progress score",
+      "A running list of exactly what is left to do",
+      "Autosaves in your browser, export to CSV or print",
+    ],
+    category: "property",
+    archetype: "checklist",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Progress Checklist",
+    headline: "Turn the book into\na built business.",
+    subhead:
+      "It is easy to finish a book with a pile of notes and no business. This checklist holds you to the work, phase by phase, so you finish with a co-living operation instead.",
+    howItWorks: [
+      "Check off the milestones you have already completed.",
+      "Watch your launch progress climb as you go.",
+      "See exactly which steps still stand between you and tenants.",
+    ],
+    whatYouGet: [
+      "The full path from research to first tenant",
+      "A live progress score you can pick up any time",
+      "The exact next steps still standing in your way",
+      "CSV export and a clean print view",
+    ],
+  },
+
+  "rental-type-comparison-chart": {
+    slug: "rental-type-comparison-chart",
+    name: "Rental Type Comparison Chart",
+    blurb:
+      "Short-term, mid-term, and long-term rentals side by side on income, hours, regulation, and startup cost, plus a 5-question quiz to find your fit.",
+    bullets: [
+      "A clean side-by-side of STR, MTR, and LTR",
+      "Honest pros, cons, and real income examples",
+      "A 5-question decision quiz to score your best model",
+      "Why mid-term room rentals hit the sweet spot",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Comparison Chart",
+    headline: "Which rental model\nactually fits you?",
+    subhead:
+      "Before you furnish a thing, see the three rental models on the numbers: what each earns, what each demands of your week, and which one matches your time, capital, and market.",
+    howItWorks: [
+      "Compare the three models across the metrics that matter.",
+      "Read the deep dive and real income example for each.",
+      "Answer five questions to score the model that fits you.",
+    ],
+    whatYouGet: [
+      "A side-by-side of income, hours, regulation, and cost",
+      "Real worked income examples for each model",
+      "A quick quiz that points you to your best fit",
+      "A clean print view to keep with your research",
+    ],
+  },
+
+  "photo-shot-list": {
+    slug: "photo-shot-list",
+    name: "Photo Shot List",
+    blurb:
+      "The exact shots a co-living listing needs, room by room, so your photos fill rooms instead of just filling space. Check them off on the shoot.",
+    bullets: [
+      "Every must-have shot, grouped by room and space",
+      "The hero-image and sequencing guidance that converts",
+      "Check items off live during the shoot",
+      "Autosaves in your browser, export to CSV or print",
+    ],
+    category: "property",
+    archetype: "checklist",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Photo Shot List",
+    headline: "Shoot a listing that\nfills the room.",
+    subhead:
+      "Your lead photo sets your click-through rate, and the rest either build trust or lose it. Here is the shot-by-shot list so you leave the shoot with every image the listing needs.",
+    howItWorks: [
+      "Walk the property with the list open on your phone.",
+      "Capture each shot and check it off as you go.",
+      "Leave with a complete, sequenced set ready to upload.",
+    ],
+    whatYouGet: [
+      "A room-by-room list of every shot to capture",
+      "Guidance on the hero image and photo order",
+      "A live count of what you still need to shoot",
+      "CSV export and a clean print view",
+    ],
+  },
+
+  "tenant-tracker": {
+    slug: "tenant-tracker",
+    name: "Tenant Tracker & Rent Collection Log",
+    blurb:
+      "One row per tenant for room, dates, rate, deposit, and status, plus a rent log so a late payment is a same-day conversation, not a month-end surprise.",
+    bullets: [
+      "Track who is in each room and their lease dates",
+      "Log rate, deposit, rent due, and payment status",
+      "A running count of active tenants and open items",
+      "Autosaves in your browser, CSV import and export",
+    ],
+    category: "property",
+    archetype: "tracker",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Tenant Tracker",
+    headline: "Know every room,\nrent, and date.",
+    subhead:
+      "Cash-flow problems are usually visibility problems. Keep one clean record of who is in each room, what they pay, and when, so nothing slips through the cracks when two rooms turn over in a week.",
+    howItWorks: [
+      "Add a row the day someone books a room.",
+      "Fill in their dates, rate, deposit, and status.",
+      "Update the rent log so late payments surface early.",
+    ],
+    whatYouGet: [
+      "A living record of every room and tenant",
+      "A rent log that flags late payments the same day",
+      "CSV import and export to move data anywhere",
+      "A clean print view for your monthly review",
+    ],
+  },
+
+  "room-rental-agreement": {
+    slug: "room-rental-agreement",
+    name: "Room Rental Agreement & House Rules Guide",
+    blurb:
+      "What belongs in a solid room rental agreement and co-living house rules, clause by clause, so you can build or review yours with confidence.",
+    bullets: [
+      "The essential clauses every room rental agreement needs",
+      "Co-living house rules that keep a shared home calm",
+      "Plain-English notes on what each section protects",
+      "Attorney-review reminders baked in throughout",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Agreement Guide",
+    headline: "Put it in writing,\nthe right way.",
+    subhead:
+      "A good agreement prevents most disputes before they start. Here is what a room rental agreement and a co-living house-rules document should cover, section by section, in plain English.",
+    howItWorks: [
+      "Read what each clause does and why it matters.",
+      "Draft or review your own agreement against the list.",
+      "Have a local attorney confirm it for your state.",
+    ],
+    whatYouGet: [
+      "The clause-by-clause anatomy of a room rental agreement",
+      "House-rules sections tuned for a shared home",
+      "Plain-English notes on what each part protects",
+      "A clean print view to take to your attorney",
+    ],
+  },
+
+  "legal-toolkit": {
+    slug: "legal-toolkit",
+    name: "The Legal Toolkit Overview",
+    blurb:
+      "The eight attorney-informed documents every co-living operator should have, what each one does, and when you reach for it. Frameworks to adapt, not legal advice.",
+    bullets: [
+      "All eight documents in the co-living legal stack",
+      "What each protects and when you use it",
+      "The key clauses to make sure yours includes",
+      "Clear guidance on getting local legal review",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Legal Toolkit",
+    headline: "The paperwork that\nprotects everything.",
+    subhead:
+      "Co-living runs on a handful of documents most new operators do not know they need until something goes wrong. Here is the full stack, what each does, and the clauses that matter, so you can build yours with a local attorney.",
+    howItWorks: [
+      "See the eight documents that make up the stack.",
+      "Learn what each protects and when it comes into play.",
+      "Adapt the frameworks with a licensed local attorney.",
+    ],
+    whatYouGet: [
+      "The complete co-living document checklist",
+      "The purpose and key clauses of each one",
+      "A clear reminder of where legal review is essential",
+      "A clean print view to review with counsel",
+    ],
+  },
+
+  "social-posting-calendar": {
+    slug: "social-posting-calendar",
+    name: "30-Day Social Posting Calendar",
+    blurb:
+      "Thirty days of post ideas that attract room renters, built on four weekly themes so you stay consistent without staring at a blank calendar.",
+    bullets: [
+      "Four weekly themes from visibility to urgency",
+      "A specific post idea for all 30 days",
+      "Formats spelled out: reels, stories, carousels, posts",
+      "Copy any day's prompt straight into your scheduler",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Posting Calendar",
+    headline: "Thirty days of posts,\nalready planned.",
+    subhead:
+      "Consistency is what fills rooms, and consistency is a plan, not a personality trait. Here is a month of post ideas built on four themes, so you always know what to post next.",
+    howItWorks: [
+      "Follow the four weekly themes in order.",
+      "Use each day's specific prompt and format.",
+      "Copy prompts into your scheduler and batch them.",
+    ],
+    whatYouGet: [
+      "A full month of ready-to-use post ideas",
+      "Weekly themes that build toward move-ins",
+      "The right format called out for each day",
+      "Copy-to-clipboard and a clean print view",
+    ],
+  },
+
+  "inquiry-script-bank": {
+    slug: "inquiry-script-bank",
+    name: "Inbound Inquiry Script Bank",
+    blurb:
+      "Confident, copy-and-send replies for every inquiry you get, from 'is this still available?' to 'that's more than I expected to pay,' so you turn messages into move-ins.",
+    bullets: [
+      "Scripts for eight common inquiry types",
+      "Two versions each: friendly-detailed and short-direct",
+      "Objection and ghost-prevention follow-ups included",
+      "Copy any reply to your clipboard in one click",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Script Bank",
+    headline: "Reply fast, book\nthe tour.",
+    subhead:
+      "Under-one-hour replies win the booking, but only if you are not writing from scratch each time. Here are proven, warm replies for every inquiry, ready to copy, personalize, and send.",
+    howItWorks: [
+      "Find the inquiry type you just received.",
+      "Copy the version that fits your voice and moment.",
+      "Drop in your details and send within the hour.",
+    ],
+    whatYouGet: [
+      "Two ready replies for each common inquiry",
+      "Objection handlers and follow-ups that re-engage",
+      "Wording that always points to the next step",
+      "Copy-to-clipboard and a clean print view",
+    ],
+  },
+
+  "nicelisting-ai": {
+    slug: "nicelisting-ai",
+    name: "NiceListing Builder",
+    blurb:
+      "Answer a few questions about your room and audience and get a platform-ready listing title and a four-part description, built on the framework that fills rooms.",
+    bullets: [
+      "A title in the Feature + Location + Benefit formula",
+      "A four-part description that sells the experience",
+      "Tuned to the tenant and platform you choose",
+      "Copy the finished listing straight to your clipboard",
+    ],
+    category: "property",
+    archetype: "worksheet",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Listing Builder",
+    headline: "A listing that reads\nlike it was written for them.",
+    subhead:
+      "Writing listing copy from a blank page is painful. Feed the builder your property details, your ideal tenant, and your amenities, and it assembles a title and description in the structure that converts.",
+    howItWorks: [
+      "Enter your room details, audience, and top amenities.",
+      "The builder assembles a title and four-part description.",
+      "Copy it, personalize the voice, and post it.",
+    ],
+    whatYouGet: [
+      "A platform-ready listing title",
+      "A four-part description built to convert",
+      "Copy tuned to your tenant and platform",
+      "One-click copy of the finished listing",
+    ],
+  },
+
+  "upsell-playbook": {
+    slug: "upsell-playbook",
+    name: "Revenue Maximization & Upsell Playbook",
+    blurb:
+      "How to earn more from the rooms you already have: the upsell menu with real margins, loyalty and referral engines, rent-raise timing, and the readiness test for property two.",
+    bullets: [
+      "An upsell menu with typical prices and your margin",
+      "Loyalty and referral systems that compound",
+      "When and how much to raise rent, professionally",
+      "The five-point checklist before you scale",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Revenue Playbook",
+    headline: "Earn more without\nadding a single room.",
+    subhead:
+      "You do not need more rooms to earn more. You need smarter monetization of the rooms you have. Here is the playbook: upsells, loyalty, referrals, rent optimization, and the path to property two.",
+    howItWorks: [
+      "Add two or three upsells and read the demand.",
+      "Turn tenants into renewals and referrals.",
+      "Use the readiness checklist before you scale.",
+    ],
+    whatYouGet: [
+      "An upsell menu with prices and realistic margins",
+      "Loyalty, referral, and rent-optimization playbooks",
+      "The five-box readiness test for your next property",
+      "A clean print view to plan your quarter",
+    ],
+  },
 };
 
 export function getResourceTool(slug: string): ResourceToolMeta | null {
