@@ -9,6 +9,7 @@ import {
 import { loginLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
 import { claimWorkspacesForUser } from "@/lib/claim-proof-workspace";
 
 export async function POST(request: Request) {
@@ -98,12 +99,13 @@ export async function POST(request: Request) {
       metadata: { role: user.role },
     });
     const posthog = getPostHogClient();
+    const personKey = personId(user.email);
     posthog.identify({
-      distinctId: String(user.id),
-      properties: { name: user.name, role: user.role },
+      distinctId: personKey,
+      properties: { name: user.name, role: user.role, user_id: user.id },
     });
     posthog.capture({
-      distinctId: String(user.id),
+      distinctId: personKey,
       event: "user_logged_in",
       properties: { role: user.role },
     });

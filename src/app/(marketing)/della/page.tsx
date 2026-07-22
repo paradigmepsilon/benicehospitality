@@ -268,6 +268,19 @@ export default function DellaPage() {
                 get a straight answer to. Start where you are.
               </p>
             </AnimatedItem>
+            <AnimatedItem>
+              <p className="font-sans text-base text-charcoal/70 leading-snug mt-5">
+                Want everything in one place instead?{" "}
+                <Link
+                  href="/co-living"
+                  className="text-primary-green font-medium border-b border-warm-gold hover:border-primary-green transition-colors"
+                >
+                  The co-living hub
+                </Link>{" "}
+                collects the tools, the course, the weekly live, and the gear
+                list on a single page.
+              </p>
+            </AnimatedItem>
           </div>
 
           <AnimatedDiv

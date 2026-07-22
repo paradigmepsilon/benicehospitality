@@ -7,6 +7,7 @@ import { scorecardSubmitBodySchema } from "@/lib/validation/scorecard";
 import { scorecardSubmitLimiter, getClientIp } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
@@ -80,7 +81,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const distinctId = userId ? String(userId) : email ?? token;
+  // Email first, always — it is the canonical person key and the only one that
+  // joins this submission to the rest of the funnel. The token fallback covers
+  // the genuinely anonymous case: the scorecard can be completed before the
+  // capture step, so there may be no email yet.
+  const distinctId = email ? personId(email) : token;
   const posthog = getPostHogClient();
   posthog.capture({
     distinctId,

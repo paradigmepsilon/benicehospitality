@@ -22,8 +22,8 @@ const OPERATORS: Operator[] = [
     heading: "If you run co-living properties",
     body:
       "Co-living operators renting rooms by the door, plus the short-term and mid-term portfolios that mix in. The math is the same. Direct bookings, automation, owned guest lists. The operators we work with are the ones who got tired of running their portfolios on Sunday nights and finally want their evenings back.",
-    ctaLabel: "Join the Room Rental Riches Masterclass",
-    ctaHref: "/courses/room-rental-riches",
+    ctaLabel: "Explore Co-living",
+    ctaHref: "/co-living",
     image: {
       src: "/images/Website Images/image4.png",
       alt: "Co-living property exterior at golden hour",

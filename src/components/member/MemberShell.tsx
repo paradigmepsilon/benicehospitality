@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import posthog from "posthog-js";
+import { personId } from "@/lib/posthog-identity";
 import type { PreviewMode } from "@/lib/preview-cookie";
 
 const MODE_LABEL: Record<NonNullable<PreviewMode>, string> = {
@@ -53,11 +54,13 @@ function NavIcon({ icon }: { icon: string }) {
 export default function MemberShell({
   children,
   userId,
+  userEmail,
   previewMode = null,
   previewPicker,
 }: {
   children: React.ReactNode;
   userId: number;
+  userEmail: string;
   previewMode?: PreviewMode;
   // Server-rendered preview-mode picker. Slotted in as a prop so this client
   // component doesn't have to import server actions directly.
@@ -69,9 +72,12 @@ export default function MemberShell({
   const isPreview = previewMode !== null;
 
   // Re-identify on every page load so returning sessions are linked to the user.
+  // Keyed on email (see lib/posthog-identity) so a member's course activity
+  // joins the same person as the free-resource unlock that first brought them
+  // in, rather than starting a second profile at account creation.
   useEffect(() => {
-    posthog.identify(String(userId));
-  }, [userId]);
+    posthog.identify(personId(userEmail), { user_id: userId });
+  }, [userId, userEmail]);
 
   async function handleLogout() {
     posthog.reset();

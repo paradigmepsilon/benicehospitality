@@ -8,6 +8,7 @@ import OAuthButtons, {
 } from "@/components/sections/auth/OAuthButtons";
 import { safeNext } from "@/lib/auth-redirect";
 import posthog from "posthog-js";
+import { personId } from "@/lib/posthog-identity";
 
 interface Props {
   enabledProviders?: EnabledProviders;
@@ -96,9 +97,14 @@ export default function LoginForm({
 
       const data = await res.json().catch(() => ({})) as { user?: { id?: number; name?: string; role?: string } };
       if (data.user?.id) {
-        posthog.identify(String(data.user.id), {
+        // Client-side identify is what merges this browser's anonymous history
+        // into the person. Keyed on email (see lib/posthog-identity) so it
+        // matches the server-side identify in the login route and the earlier
+        // resource-gate unlock, instead of forking a user-id-keyed profile.
+        posthog.identify(personId(email), {
           name: data.user.name,
           role: data.user.role,
+          user_id: data.user.id,
         });
       }
       posthog.capture("user_logged_in", { role: data.user?.role });

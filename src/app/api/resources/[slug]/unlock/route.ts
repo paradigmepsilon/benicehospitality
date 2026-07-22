@@ -85,6 +85,15 @@ export async function POST(
   const phone = parsed.data.phone?.trim() || null;
   const role = parsed.data.role ?? null;
   const optedIn = parsed.data.opted_in_newsletter === true;
+  const utmSource = parsed.data.utm_source || null;
+  const utmMedium = parsed.data.utm_medium || null;
+  const utmCampaign = parsed.data.utm_campaign || null;
+
+  // Where the CRM records this lead as having come from. A UTM source means the
+  // visit is traceable to a campaign — Della's bio page, a live session — and
+  // that is far more useful than knowing which tool they happened to open,
+  // which resource_leads.tool_slug already records anyway.
+  const leadSource = utmSource ?? `resource:${slug}`;
 
   const session = await getCurrentSession();
   const userId = session?.user.id ?? null;
@@ -97,6 +106,8 @@ export async function POST(
     `) as Array<{ id: number }>;
     if (existing.length > 0) {
       pipelineContactId = existing[0].id;
+      // `source` is deliberately not updated. It records first touch, so the
+      // campaign that originally found this person survives every later visit.
       await sql`
         UPDATE pipeline_contacts
         SET name = COALESCE(NULLIF(${name}, ''), name),
@@ -107,7 +118,7 @@ export async function POST(
     } else {
       const inserted = (await sql`
         INSERT INTO pipeline_contacts (name, email, phone, source, pipeline_stage)
-        VALUES (${name}, ${email}, ${phone}, ${"resource:" + slug}, 'prospect')
+        VALUES (${name}, ${email}, ${phone}, ${leadSource}, 'prospect')
         RETURNING id
       `) as Array<{ id: number }>;
       pipelineContactId = inserted[0].id;
@@ -119,9 +130,11 @@ export async function POST(
   try {
     await sql`
       INSERT INTO resource_leads
-        (tool_slug, email, name, role, phone, opted_in_newsletter, user_id, pipeline_contact_id)
+        (tool_slug, email, name, role, phone, opted_in_newsletter, user_id, pipeline_contact_id,
+         utm_source, utm_medium, utm_campaign)
       VALUES
-        (${slug}, ${email}, ${name}, ${role}, ${phone}, ${optedIn}, ${userId}, ${pipelineContactId})
+        (${slug}, ${email}, ${name}, ${role}, ${phone}, ${optedIn}, ${userId}, ${pipelineContactId},
+         ${utmSource}, ${utmMedium}, ${utmCampaign})
     `;
   } catch (err) {
     console.error("[resources/unlock] lead insert failed:", err);
@@ -184,11 +197,45 @@ export async function POST(
   }
 
   if (process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN) {
+    // How many distinct tools this person has now opened. Counted here rather
+    // than incremented client-side because the database is the only place that
+    // knows the true total across devices and sessions — it is the signal that
+    // separates a warm lead from a one-and-done download.
+    let toolsUnlockedCount = 1;
+    try {
+      const rows = (await sql`
+        SELECT COUNT(DISTINCT tool_slug)::int AS n
+        FROM resource_leads
+        WHERE LOWER(email) = ${email}
+      `) as Array<{ n: number }>;
+      toolsUnlockedCount = rows[0]?.n ?? 1;
+    } catch (countErr) {
+      console.error("[resources/unlock] tool count failed:", countErr);
+    }
+
     try {
       getPostHogClient().capture({
-        distinctId: userId ? String(userId) : email,
+        // Canonical identity key: the lowercased email. It is the only
+        // identifier that exists before an account does, so keying on it lets
+        // this event join the client-side identify() and every later purchase.
+        distinctId: email,
         event: "resource_unlocked",
-        properties: { tool_slug: slug, is_logged_in: Boolean(session) },
+        properties: {
+          tool_slug: slug,
+          is_logged_in: Boolean(session),
+          utm_source: utmSource,
+          utm_campaign: utmCampaign,
+          $set: {
+            email,
+            last_tool_slug: slug,
+            tools_unlocked_count: toolsUnlockedCount,
+            ...(userId ? { user_id: userId } : {}),
+          },
+          $set_once: {
+            first_touch_source: utmSource ?? "direct",
+            first_touch_campaign: utmCampaign ?? "none",
+          },
+        },
       });
     } catch (phErr) {
       console.error("[resources/unlock] posthog capture failed:", phErr);

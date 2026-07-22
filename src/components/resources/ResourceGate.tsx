@@ -3,6 +3,8 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import posthog from "posthog-js";
+import { getAttribution } from "@/lib/funnel-attribution";
 
 const ROLES = [
   { value: "owner", label: "Owner" },
@@ -58,6 +60,7 @@ export default function ResourceGate({
     }
 
     setSubmitting(true);
+    const attribution = getAttribution();
     try {
       const res = await fetch(`/api/resources/${slug}/unlock`, {
         method: "POST",
@@ -69,6 +72,9 @@ export default function ResourceGate({
           phone: phone.trim() || undefined,
           opted_in_newsletter: optedIn,
           turnstile_token: turnstileToken || "no-turnstile-configured",
+          utm_source: attribution.utm_source,
+          utm_medium: attribution.utm_medium,
+          utm_campaign: attribution.utm_campaign,
         }),
       });
 
@@ -77,6 +83,35 @@ export default function ResourceGate({
         setError(body.error || "Something went wrong. Please try again.");
         turnstileRef.current?.reset();
         return;
+      }
+
+      // THE identity moment. Most people in this funnel arrive from social and
+      // never create an account, so this gate — not login — is where anonymous
+      // becomes known. Identifying on the lowercased email (the canonical key
+      // across client and server) retroactively attaches everything they did
+      // before this point, including the pageview on Della's bio page that the
+      // cross-domain bootstrap carried over.
+      try {
+        posthog.identify(
+          email.trim().toLowerCase(),
+          {
+            email: email.trim().toLowerCase(),
+            name: name.trim(),
+            last_tool_slug: slug,
+            ...(role ? { operator_role: role } : {}),
+          },
+          {
+            // $set_once: first touch is written once and never overwritten, so a
+            // later direct visit cannot erase the fact that Della's bio page
+            // sent them.
+            first_touch_source: attribution.utm_source ?? "direct",
+            first_touch_campaign: attribution.utm_campaign ?? "none",
+            first_touch_landing: attribution.landing_path ?? "unknown",
+          },
+        );
+      } catch {
+        // Analytics must never block the unlock the visitor just paid for
+        // with their email.
       }
 
       // Cookie is set on the response; refresh so the server re-renders unlocked.

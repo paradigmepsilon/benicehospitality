@@ -11,6 +11,7 @@ import {
 import { getActiveEnrollment, getCourseBySlug } from "@/lib/lms";
 import { sql } from "@/lib/db";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
 
 const bodySchema = z.object({
   tierId: z.number().int().positive(),
@@ -112,7 +113,10 @@ export async function POST(request: Request) {
 
   const posthog = getPostHogClient();
   posthog.capture({
-    distinctId: String(session.user.id),
+    // Must match the distinctId used by course_enrollment_granted in the Stripe
+    // webhook, or the checkout funnel silently compares two different
+    // populations and every purchase looks like it came from nowhere.
+    distinctId: personId(session.user.email),
     event: "course_checkout_started",
     properties: {
       course_id: tier.courseId,

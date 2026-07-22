@@ -1688,6 +1688,15 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_resource_leads_created ON resource_leads(created_at DESC)`;
   console.log("  ✓ resource_leads table created");
 
+  // Funnel attribution on the lead itself. Della's social funnel routes through
+  // her bio page on a separate domain, so without this a lead that started on
+  // Instagram is indistinguishable from organic search once it lands in the CRM.
+  await sql`ALTER TABLE resource_leads ADD COLUMN IF NOT EXISTS utm_source TEXT`;
+  await sql`ALTER TABLE resource_leads ADD COLUMN IF NOT EXISTS utm_medium TEXT`;
+  await sql`ALTER TABLE resource_leads ADD COLUMN IF NOT EXISTS utm_campaign TEXT`;
+  await sql`CREATE INDEX IF NOT EXISTS idx_resource_leads_utm_source ON resource_leads(utm_source)`;
+  console.log("  ✓ resource_leads attribution columns added");
+
   // Resource tool state — server-side account-save for logged-in users. The
   // Phase 2 trackers (Maintenance, Contractor Rolodex, Inventory) and the
   // worksheet persist a JSONB blob per (user, tool) so a logged-in operator's

@@ -13,6 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/signal`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    // Door hubs and the founder pages behind them. /co-living matches /signal's
+    // weight: both are top-level audience doors. /della and /alex were never
+    // listed here at all despite being fully built, keyword-targeted pages.
+    { url: `${baseUrl}/co-living`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/della`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/alex`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/marketplace`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/labs`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/labs/guestally`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/labs/build-log`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },

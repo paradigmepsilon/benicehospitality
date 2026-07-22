@@ -29,6 +29,8 @@ import {
 import { makeClaimProofToken } from "@/lib/claim-proof-download";
 import { provisionWorkspaceForPurchase } from "@/lib/claim-proof-workspace";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
+import { findUserById } from "@/lib/community-auth";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -390,10 +392,24 @@ async function fulfillCheckout(session: Stripe.Checkout.Session): Promise<void> 
       : session.payment_intent?.id ?? null,
   );
 
+  // The buyer's email is the canonical person key. Stripe normally carries it
+  // on the session, but fall back to the account record so a missing
+  // customer_details never drops the purchase onto an orphan distinct_id.
+  const buyerEmail =
+    session.customer_details?.email ??
+    session.customer_email ??
+    (await findUserById(purchase.userId))?.email ??
+    null;
+
   try {
+    if (!buyerEmail) {
+      // Drop the analytics event rather than fork the person onto an orphan
+      // key. Fulfillment continues either way — the receipt below still sends.
+      throw new Error(`no buyer email resolvable for purchase ${purchase.id}`);
+    }
     const posthog = getPostHogClient();
     posthog.capture({
-      distinctId: String(purchase.userId),
+      distinctId: personId(buyerEmail),
       event: "course_enrollment_granted",
       properties: {
         course_id: purchase.courseId,
