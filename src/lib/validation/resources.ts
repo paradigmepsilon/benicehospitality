@@ -13,6 +13,12 @@ export const resourceUnlockBodySchema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal("")),
   opted_in_newsletter: z.boolean().optional(),
   turnstile_token: z.string().min(1).max(2048),
+  // Visit-scoped attribution, read back from sessionStorage by ResourceGate.
+  // Client-supplied and therefore untrusted, so it is length-capped here and
+  // only ever used as a label on the lead — never for access decisions.
+  utm_source: z.string().trim().max(120).optional(),
+  utm_medium: z.string().trim().max(120).optional(),
+  utm_campaign: z.string().trim().max(120).optional(),
 });
 
 export type ResourceUnlockBody = z.infer<typeof resourceUnlockBodySchema>;

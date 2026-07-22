@@ -11,6 +11,7 @@ import { sendVerificationEmail } from "@/lib/auth-email";
 import { signupLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
 
 const SignupBody = z.object({
   name: z.string().trim().min(2, "Please enter your full name.").max(120),
@@ -74,12 +75,15 @@ export async function POST(request: Request) {
         metadata: { method: "password", interests: body.serviceInterests },
       });
       const posthog = getPostHogClient();
+      // Keyed on email so an account created after a free-resource unlock lands
+      // on the SAME person, preserving everything they did before signing up.
+      const personKey = personId(body.email);
       posthog.identify({
-        distinctId: String(userId),
-        properties: { name: body.name, role: "member" },
+        distinctId: personKey,
+        properties: { name: body.name, role: "member", user_id: userId },
       });
       posthog.capture({
-        distinctId: String(userId),
+        distinctId: personKey,
         event: "user_signed_up",
         properties: { method: "password", service_interests: body.serviceInterests },
       });

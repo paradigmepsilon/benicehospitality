@@ -10,6 +10,7 @@ import {
 import { recordEvent } from "@/lib/analytics";
 import { PREVIEW_COOKIE_NAME } from "@/lib/preview-cookie";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { personId } from "@/lib/posthog-identity";
 
 interface LessonRefRow {
   course_id: number;
@@ -45,7 +46,7 @@ async function authorize(lessonId: number) {
     if (!enrollment) return { error: "Forbidden" as const, status: 403 };
   }
 
-  return { userId: session.user.id };
+  return { userId: session.user.id, userEmail: session.user.email };
 }
 
 function parseBody(body: unknown): number | null {
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
     });
     const posthog = getPostHogClient();
     posthog.capture({
-      distinctId: String(auth.userId),
+      distinctId: personId(auth.userEmail),
       event: "lesson_completed",
       properties: { lesson_id: lessonId },
     });
