@@ -14,6 +14,10 @@ export const BOOKING_SOURCES = {
   DELLA_HERO: "della_hero",
   DELLA_DOORS_CARD: "della_doors_card",
   DELLA_FINAL_CTA: "della_final_cta",
+  // Co-living hub — the destination for Della's social funnel.
+  COLIVING_HERO: "coliving_hero",
+  COLIVING_LIVE_BAND: "coliving_live_band",
+  COLIVING_FINAL_CTA: "coliving_final_cta",
   SIGNAL_HERO: "signal_hero",
   SIGNAL_ENGAGEMENTS_GRID: "signal_engagements_grid",
   SIGNAL_FREE_AUDIT_BODY: "signal_free_audit_body",
