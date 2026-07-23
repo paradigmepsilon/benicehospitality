@@ -27,6 +27,15 @@ import {
   recordClaimProofContact,
 } from "@/lib/claim-proof";
 import { makeClaimProofToken } from "@/lib/claim-proof-download";
+import {
+  BLUEPRINT_PRODUCT_TAG,
+  blueprintDeliveryEmail,
+  blueprintDownloadLink,
+  getBlueprintFromAddress,
+  makeBlueprintToken,
+  provisionBuyerAccount,
+} from "@/lib/blueprint";
+import { createPasswordResetToken } from "@/lib/community-auth";
 import { provisionWorkspaceForPurchase } from "@/lib/claim-proof-workspace";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { personId } from "@/lib/posthog-identity";
@@ -82,6 +91,8 @@ export async function POST(request: Request) {
             await fulfillHostsEdge(session);
           } else if (session.metadata?.product === CLAIM_PROOF_PRODUCT_TAG) {
             await fulfillClaimProof(session);
+          } else if (session.metadata?.product === BLUEPRINT_PRODUCT_TAG) {
+            await fulfillBlueprint(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -139,6 +150,90 @@ export async function POST(request: Request) {
  * throw, so one broken side-effect can't 500 the webhook and trigger endless
  * Stripe retries. (Stripe's own receipt is the payment record of truth.)
  */
+/**
+ * Room Rental Riches: The Blueprint ($32).
+ *
+ * Two jobs, in dependency order:
+ *   1. Provision the buyer's Nice Host Network account (Postgres). This is also
+ *      the durable buyer record — there is no separate buyer log, deliberately:
+ *      The Host's Edge appends to a local JSON file, which does not survive on
+ *      serverless.
+ *   2. Email the gated download links, plus a set-password link for a brand-new
+ *      account.
+ *
+ * Account provisioning runs FIRST so its result decides what the email says,
+ * but a provisioning failure must not cost the buyer their book — in that case
+ * we still send the downloads, just without the account block.
+ *
+ * Best-effort and isolated, same contract as fulfillHostsEdge: this never
+ * throws back into the webhook handler, because a 500 makes Stripe retry and
+ * the buyer would get a second copy of everything.
+ */
+async function fulfillBlueprint(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] Blueprint session ${session.id} has no email — cannot deliver`,
+    );
+    return;
+  }
+
+  // 1. Account. Idempotent by email, so a webhook retry finds the existing row.
+  let setPasswordUrl: string | undefined;
+  try {
+    const buyer = await provisionBuyerAccount(email, name);
+    if (buyer.isNew) {
+      const { rawToken } = await createPasswordResetToken(buyer.userId);
+      setPasswordUrl = `${getBaseUrl()}/login/reset/${encodeURIComponent(rawToken)}`;
+    }
+    console.log(
+      `[webhooks/stripe] Blueprint account for ${email} (${buyer.isNew ? "created" : "existing"}, user ${buyer.userId})`,
+    );
+  } catch (err) {
+    // Book still ships; the buyer can sign up by hand.
+    console.error(
+      `[webhooks/stripe] Blueprint account provisioning failed for ${email}:`,
+      err,
+    );
+  }
+
+  // 2. Delivery email with both formats.
+  try {
+    const { subject, html } = blueprintDeliveryEmail({
+      name,
+      pdfUrl: blueprintDownloadLink("pdf", makeBlueprintToken("pdf")),
+      epubUrl: blueprintDownloadLink("epub", makeBlueprintToken("epub")),
+      setPasswordUrl,
+    });
+    const result = await getResend().emails.send({
+      from: getBlueprintFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(
+        `[webhooks/stripe] Blueprint delivery email to ${email} failed:`,
+        `${result.error.name}: ${result.error.message}`,
+      );
+    } else {
+      console.log(
+        `[webhooks/stripe] Blueprint delivered to ${email} (session ${session.id})`,
+      );
+    }
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] Blueprint delivery email threw for ${email}:`,
+      err,
+    );
+  }
+}
+
 async function fulfillHostsEdge(
   session: Stripe.Checkout.Session,
 ): Promise<void> {

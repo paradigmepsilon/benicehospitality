@@ -16,6 +16,8 @@
     "resource:attach": "node --env-file=.env.local --import tsx scripts/attach-lesson-resource.ts",
     "resource:publish": "node --env-file=.env.local --import tsx scripts/publish-member-resource.ts",
     "claimproof:upload": "node --env-file=.env.local --import tsx scripts/upload-claimproof.ts",
+    "blueprint:upload": "node --env-file=.env.local --import tsx scripts/upload-blueprint.ts",
+    "blueprint:price": "node --env-file=.env.local --import tsx scripts/create-blueprint-price.ts",
     "smoke:bookings": "node --env-file=.env.local --import tsx scripts/smoke/booking-conflict.ts"
   },
   "dependencies": {
