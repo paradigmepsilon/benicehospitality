@@ -17,6 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // weight: both are top-level audience doors. /della and /alex were never
     // listed here at all despite being fully built, keyword-targeted pages.
     { url: `${baseUrl}/co-living`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/fleet`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/boutique-stays`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/della`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/alex`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/marketplace`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },

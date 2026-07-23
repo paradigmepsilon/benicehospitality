@@ -14,6 +14,14 @@ export type ResourceArchetype =
 
 export type ResourceAccess = "free-email";
 
+/**
+ * Audience lane a tool belongs to, matching src/lib/lanes.ts. Every Phase 1
+ * tool is "property" (co-living); the fleet and boutique lanes are declared so
+ * their door pages can query for tools before any exist — liveResourceTools()
+ * returns [] and those sections render their empty state.
+ */
+export type ResourceCategory = "property" | "fleet" | "boutique";
+
 export interface ResourceToolMeta {
   /** URL slug under /resources/<slug> and the `tool_slug` stored on leads. */
   slug: string;
@@ -24,7 +32,7 @@ export interface ResourceToolMeta {
   /** 3-4 bullet points for the index card. */
   bullets: string[];
   /** Audience tab on the index. All Phase 1 tools are "property". */
-  category: "property";
+  category: ResourceCategory;
   archetype: ResourceArchetype;
   access: ResourceAccess;
   status: "live" | "soon";

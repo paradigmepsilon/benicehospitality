@@ -1,3 +1,4 @@
+import Image from "next/image";
 import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
@@ -29,7 +30,7 @@ const MECHANICS = [
 
 export default function CoLivingOverview() {
   return (
-    <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+    <AnimatedSection theme="light" className="py-12 md:py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="max-w-3xl mb-14 md:mb-16">
           <AnimatedItem>
@@ -74,18 +75,18 @@ export default function CoLivingOverview() {
           ))}
         </AnimatedDiv>
 
+        {/* Closes the section on the payoff: a real shared living area, the
+            kind of common space the three mechanics above are describing. */}
         <AnimatedItem>
-          <div className="mt-14 md:mt-16 max-w-3xl bg-off-white border-t-2 border-warm-gold p-8 md:p-10">
-            <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
-              Della&rsquo;s take
-            </p>
-            <p className="font-display italic text-xl md:text-2xl text-deep-teal leading-snug">
-              Co-living is not for everybody, and I would rather tell you that
-              here than take your money and let you find out. If your property
-              is in a market with no hospital, no university, and no corporate
-              corridor, the demand is not there. Run the free score below. It
-              will tell you straight.
-            </p>
+          <div className="relative aspect-[16/9] md:aspect-[21/9] w-full overflow-hidden rounded-sm mt-14 md:mt-16">
+            <Image
+              src="/images/thehostsedge/hero-livingroom.png"
+              alt="The shared living area of a well-designed co-living property, styled for a mid-term stay"
+              fill
+              sizes="(min-width: 1280px) 1280px, 100vw"
+              className="object-cover"
+              style={{ filter: "saturate(0.85) contrast(1.05)" }}
+            />
           </div>
         </AnimatedItem>
       </div>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
@@ -8,6 +7,8 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import PageCTA from "@/components/sections/shared/PageCTA";
 import SectionDivider from "@/components/ui/SectionDivider";
+import LaneSection from "@/components/ui/LaneSection";
+import OfferingHero from "@/components/sections/shared/OfferingHero";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
@@ -173,62 +174,29 @@ const HERO_IMAGE = "/images/Website%20Images/signal%20header.png";
 
 export default function SignalPage() {
   return (
-    <>
-      {/* HERO with full-bleed image + overlay */}
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-24 md:pb-28 px-6 md:px-12 lg:px-20 overflow-hidden">
-        <Image
-          src={HERO_IMAGE}
-          alt="Boutique stay interior. The kind of property Signal builds AI services for."
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-40"
-          style={{ filter: "saturate(0.9) contrast(1.05)" }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-br from-near-black via-near-black/85 to-deep-teal/70"
-        />
-
-        <div className="relative z-10 max-w-4xl">
-          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.35em] uppercase text-warm-gold mb-7">
-            Signal by Be Nice Hospitality
-          </p>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold text-white leading-[1.02] tracking-tight mb-8 max-w-4xl">
-            AI services built for{" "}
-            <span className="italic text-warm-gold">boutique luxury</span>{" "}
-            stays.
-          </h1>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-2xl">
-            Direct booking lift. AI search visibility. OTA commission recovery.
-            Ops automation. Built for independent boutique stays. Hotels, inns,
-            and the design-forward short-term and vacation rentals guests book
-            on purpose.
-          </p>
-          <p className="font-sans text-base md:text-lg text-white/70 leading-snug mb-10 max-w-2xl">
-            We write the success criterion into the contract before kickoff.
-            We refund the engagement if we miss. No annual lock-in. No agency
-            theater.
-          </p>
-
-          <div className="flex">
-            <Button
-              href={bookingUrl({
-                callType: "discovery_call_45",
-                source: BOOKING_SOURCES.SIGNAL_HERO,
-              })}
-              variant="primary"
-              size="lg"
-            >
-              Book a Discovery Call
-            </Button>
-          </div>
-
-          <p className="font-sans text-sm text-white/55 mt-6 italic">
-            45 minutes. No discovery-call sales theater.
-          </p>
-        </div>
-      </section>
+    // Signal is the boutique-stays door. Boutique resolves to gold rather than
+    // its carousel charcoal, so this reads as the house palette deepened a
+    // notch, not a third color. See src/lib/lanes.ts.
+    <LaneSection lane="boutique">
+      <OfferingHero
+        eyebrow="Signal by Be Nice Hospitality"
+        headline="AI services built for"
+        accentWord="boutique luxury"
+        headlineTail="stays."
+        message="Direct booking lift. AI search visibility. OTA commission recovery. Ops automation. We write the success criterion into the contract before kickoff and refund the engagement if we miss."
+        primaryCta={{
+          label: "Book a Discovery Call",
+          href: bookingUrl({
+            callType: "discovery_call_45",
+            source: BOOKING_SOURCES.SIGNAL_HERO,
+          }),
+        }}
+        image={{
+          src: HERO_IMAGE,
+          alt: "Boutique stay interior. The kind of property Signal builds AI services for.",
+        }}
+        note="45 minutes. No discovery-call sales theater."
+      />
 
       {/* TRUST BAR */}
       <section className="bg-deep-teal py-10 md:py-12 px-6">
@@ -317,9 +285,9 @@ export default function SignalPage() {
           >
             {ENGAGEMENTS.map((e) => (
               <AnimatedItem key={e.name}>
-                <article className="bg-cream border-t-4 border-warm-gold rounded-sm p-8 md:p-10 h-full flex flex-col">
+                <article className="bg-(--lane-wash,var(--color-cream)) border-t-4 border-(--lane-accent,var(--color-warm-gold)) rounded-sm p-8 md:p-10 h-full flex flex-col">
                   <div className="flex items-start justify-between gap-4 mb-2">
-                    <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
+                    <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-(--lane-accent,var(--color-warm-gold))">
                       {e.timeline}
                     </p>
                   </div>
@@ -362,7 +330,7 @@ export default function SignalPage() {
                       >
                         <span
                           aria-hidden="true"
-                          className="text-warm-gold mt-[2px]"
+                          className="text-(--lane-accent,var(--color-warm-gold)) mt-[2px]"
                         >
                           &#10003;
                         </span>
@@ -413,7 +381,7 @@ export default function SignalPage() {
             {PROCESS.map((p) => (
               <AnimatedItem key={p.step}>
                 <div className="bg-white rounded-sm p-8 h-full border border-light-gray">
-                  <p className="font-display text-5xl font-semibold text-warm-gold leading-none mb-4">
+                  <p className="font-display text-5xl font-semibold text-(--lane-accent,var(--color-warm-gold)) leading-none mb-4">
                     {p.step}
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight mb-3">
@@ -460,10 +428,10 @@ export default function SignalPage() {
           >
             {GUARANTEES.map((g, i) => (
               <AnimatedItem key={g.title}>
-                <div className="border-l-2 border-warm-gold pl-6 md:pl-7 py-1">
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6 md:pl-7 py-1">
                   <p
                     aria-hidden
-                    className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2"
+                    className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-2"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </p>
@@ -505,7 +473,7 @@ export default function SignalPage() {
                       {item.q}
                     </h3>
                     <span
-                      className="font-sans text-2xl text-warm-gold flex-shrink-0 transition-transform duration-200 group-open:rotate-45"
+                      className="font-sans text-2xl text-(--lane-accent,var(--color-warm-gold)) flex-shrink-0 transition-transform duration-200 group-open:rotate-45"
                       aria-hidden="true"
                     >
                       +
@@ -524,6 +492,6 @@ export default function SignalPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.nearBlack} />
 
       <PageCTA audience="owner" />
-    </>
+    </LaneSection>
   );
 }

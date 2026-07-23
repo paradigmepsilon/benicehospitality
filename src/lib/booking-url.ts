@@ -18,6 +18,12 @@ export const BOOKING_SOURCES = {
   COLIVING_HERO: "coliving_hero",
   COLIVING_LIVE_BAND: "coliving_live_band",
   COLIVING_FINAL_CTA: "coliving_final_cta",
+  // Fleet and boutique door hubs. These are the lane pages, distinct from the
+  // pages they feed: /alex (founder) and /signal (services offer).
+  FLEET_HERO: "fleet_hero",
+  FLEET_FINAL_CTA: "fleet_final_cta",
+  BOUTIQUE_HERO: "boutique_hero",
+  BOUTIQUE_FINAL_CTA: "boutique_final_cta",
   SIGNAL_HERO: "signal_hero",
   SIGNAL_ENGAGEMENTS_GRID: "signal_engagements_grid",
   SIGNAL_FREE_AUDIT_BODY: "signal_free_audit_body",

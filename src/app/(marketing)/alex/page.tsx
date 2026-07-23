@@ -8,6 +8,7 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import SectionDivider from "@/components/ui/SectionDivider";
+import LaneSection from "@/components/ui/LaneSection";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import CarRentalRichesWaitlistTrigger from "@/components/sections/waitlist/CarRentalRichesWaitlistTrigger";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
@@ -110,12 +111,14 @@ const FAQS = [
 
 export default function AlexPage() {
   return (
-    <>
+    // Alex is the fleet door. The Signal card inside is scoped to the boutique
+    // lane, since that block belongs to a different vertical.
+    <LaneSection lane="fleet">
       {/* HERO */}
-      <section className="bg-cream pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
+      <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
           <div>
-            <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-charcoal/70 mb-6">
+            <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-6">
               Alex Henry &middot; Co-Founder, Be Nice Hospitality
             </p>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-deep-teal leading-[1.05] tracking-tight mb-7">
@@ -322,7 +325,7 @@ export default function AlexPage() {
             {/* Secondary card: Car Rental Riches */}
             <AnimatedItem>
               <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
-                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
+                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-4">
                   For fleet operators
                 </p>
                 <h3 className="font-display text-3xl font-semibold text-deep-teal leading-tight mb-4">
@@ -358,10 +361,12 @@ export default function AlexPage() {
               </div>
             </AnimatedItem>
 
-            {/* Tertiary card: Signal */}
+            {/* Tertiary card: Signal. Different vertical, so it carries the
+                boutique lane rather than the page's fleet lane. */}
             <AnimatedItem>
+              <LaneSection lane="boutique" className="h-full">
               <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
-                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
+                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-4">
                   For boutique stays
                 </p>
                 <h3 className="font-display text-3xl font-semibold text-deep-teal leading-tight mb-4">
@@ -393,6 +398,7 @@ export default function AlexPage() {
                   See Engagements
                 </Button>
               </div>
+              </LaneSection>
             </AnimatedItem>
           </AnimatedDiv>
         </div>
@@ -436,7 +442,7 @@ export default function AlexPage() {
 
             <AnimatedDiv stagger className="space-y-10">
               <AnimatedItem>
-                <div className="border-l-2 border-warm-gold pl-6">
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
                   <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
                     Before BNHG
                   </p>
@@ -459,7 +465,7 @@ export default function AlexPage() {
               </AnimatedItem>
 
               <AnimatedItem>
-                <div className="border-l-2 border-warm-gold pl-6">
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
                   <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
                     Building the vehicle arm
                   </p>
@@ -478,7 +484,7 @@ export default function AlexPage() {
               </AnimatedItem>
 
               <AnimatedItem>
-                <div className="border-l-2 border-warm-gold pl-6">
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
                   <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
                     Building Signal
                   </p>
@@ -498,7 +504,7 @@ export default function AlexPage() {
               </AnimatedItem>
 
               <AnimatedItem>
-                <div className="border-l-2 border-warm-gold pl-6">
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
                   <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
                     Why he builds here
                   </p>
@@ -542,7 +548,7 @@ export default function AlexPage() {
           >
             {EXPERTISE.map((item) => (
               <AnimatedItem key={item.title}>
-                <details className="group bg-off-white p-8 border-t-2 border-warm-gold">
+                <details className="group bg-off-white p-8 border-t-2 border-(--lane-accent,var(--color-warm-gold))">
                   <summary className="cursor-pointer list-none flex items-start justify-between gap-4">
                     <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
                       {item.title}
@@ -677,6 +683,6 @@ export default function AlexPage() {
           </div>
         </div>
       </section>
-    </>
+    </LaneSection>
   );
 }

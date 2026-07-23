@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { sql } from "@/lib/db";
 import AnimatedSection, {
@@ -23,6 +24,7 @@ interface PostCard {
   title: string;
   excerpt: string | null;
   category: string;
+  featured_image_url: string | null;
 }
 
 async function fetchPosts(): Promise<{
@@ -30,7 +32,7 @@ async function fetchPosts(): Promise<{
   usingCategory: boolean;
 }> {
   const scoped = (await sql`
-    SELECT slug, title, excerpt, category
+    SELECT slug, title, excerpt, category, featured_image_url
     FROM blog_posts
     WHERE published = true
       AND (published_at IS NULL OR published_at <= NOW())
@@ -42,7 +44,7 @@ async function fetchPosts(): Promise<{
   if (scoped.length > 0) return { posts: scoped, usingCategory: true };
 
   const latest = (await sql`
-    SELECT slug, title, excerpt, category
+    SELECT slug, title, excerpt, category, featured_image_url
     FROM blog_posts
     WHERE published = true
       AND (published_at IS NULL OR published_at <= NOW())
@@ -64,7 +66,7 @@ export default async function CoLivingInsights() {
     : "/insights";
 
   return (
-    <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+    <AnimatedSection theme="light" className="py-12 md:py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="max-w-3xl mb-12 md:mb-14">
           <AnimatedItem>
@@ -92,19 +94,39 @@ export default async function CoLivingInsights() {
             <AnimatedItem key={post.slug}>
               <Link
                 href={`/insights/${post.slug}`}
-                className="group block h-full bg-off-white border border-charcoal/10 rounded-sm p-7 hover:border-warm-gold transition-colors duration-200"
+                className="group flex flex-col h-full bg-off-white border border-charcoal/10 rounded-sm overflow-hidden hover:border-(--lane-accent,var(--color-warm-gold)) transition-colors duration-200"
               >
-                <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-warm-gold mb-3">
-                  {post.category}
-                </p>
-                <h3 className="font-display text-xl font-semibold text-deep-teal leading-tight mb-3 group-hover:text-primary-green-dark transition-colors">
-                  {post.title}
-                </h3>
-                {post.excerpt && (
-                  <p className="font-sans text-sm text-charcoal/80 leading-snug line-clamp-4">
-                    {post.excerpt}
+                <div className="relative aspect-[3/2] overflow-hidden bg-near-black">
+                  {post.featured_image_url ? (
+                    <Image
+                      src={post.featured_image_url}
+                      alt={post.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      style={{ filter: "saturate(0.85) contrast(1.05)" }}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-near-black to-deep-teal">
+                      <span className="font-display text-2xl italic text-white/30">
+                        BNHG
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col p-7">
+                  <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-3">
+                    {post.category}
                   </p>
-                )}
+                  <h3 className="font-display text-xl font-semibold text-deep-teal leading-tight mb-3 group-hover:text-primary-green-dark transition-colors">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="font-sans text-sm text-charcoal/80 leading-snug line-clamp-4">
+                      {post.excerpt}
+                    </p>
+                  )}
+                </div>
               </Link>
             </AnimatedItem>
           ))}

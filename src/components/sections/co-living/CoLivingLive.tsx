@@ -124,11 +124,11 @@ export default function CoLivingLive() {
   }
 
   return (
-    <AnimatedSection theme="dark" className="py-16 md:py-24 px-6">
+    <AnimatedSection theme="dark" className="py-12 md:py-16 px-6">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
         <div>
           <AnimatedItem>
-            <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
+            <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent-on-dark,var(--color-warm-gold)) mb-4">
               Every week, live
             </p>
           </AnimatedItem>

@@ -14,12 +14,22 @@ import { liveResourceTools } from "@/lib/resources/registry";
 //
 // The list is read from the registry rather than hardcoded, so adding a tool
 // there makes it appear here with no edit to this file.
+//
+// Only the first six are shown. The full library is twenty-plus tools, which
+// buried the rest of the page in a wall of identical cards; six is two clean
+// rows at the lg breakpoint. The button carries the real total so the cap is
+// never silent — a visitor can see there is more behind it.
+const PREVIEW_COUNT = 6;
 
 export default function CoLivingResources() {
-  const tools = liveResourceTools("property");
+  const allTools = liveResourceTools("property");
+  const tools = allTools.slice(0, PREVIEW_COUNT);
 
   return (
-    <AnimatedSection theme="off-white" className="py-16 md:py-24 px-6">
+    <AnimatedSection
+      theme="none"
+      className="bg-(--lane-wash,var(--color-off-white)) text-charcoal py-12 md:py-16 px-6"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="max-w-3xl mb-12 md:mb-14">
           <AnimatedItem>
@@ -93,9 +103,14 @@ export default function CoLivingResources() {
             <AnimatedItem key={tool.slug}>
               <Link
                 href={`/resources/${tool.slug}`}
-                className="group block h-full bg-white border border-charcoal/10 rounded-sm p-7 hover:border-warm-gold transition-colors duration-200"
+                className="group relative block h-full overflow-hidden bg-white border border-charcoal/10 rounded-sm p-7 hover:border-(--lane-accent,var(--color-warm-gold)) transition-colors duration-200"
               >
-                <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-warm-gold mb-3">
+                {/* The keyline: the carousel's color block cropped to 3px. */}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-0.75 bg-(--lane-accent,var(--color-warm-gold)) opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200"
+                />
+                <p className="font-sans text-[11px] font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-3">
                   {tool.archetype}
                 </p>
                 <h3 className="font-display text-xl font-semibold text-deep-teal leading-tight mb-3 group-hover:text-primary-green-dark transition-colors">
@@ -111,8 +126,8 @@ export default function CoLivingResources() {
 
         <AnimatedItem>
           <div className="mt-12 text-center">
-            <Button href="/resources" variant="secondary" size="md">
-              See the Full Library
+            <Button href="/resources" variant="secondary" size="lg">
+              See All {allTools.length} Tools
             </Button>
           </div>
         </AnimatedItem>

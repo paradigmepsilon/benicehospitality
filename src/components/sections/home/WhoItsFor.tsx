@@ -5,8 +5,11 @@ import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
+import LaneSection from "@/components/ui/LaneSection";
+import type { LaneId } from "@/lib/lanes";
 
 interface Operator {
+  lane: LaneId;
   eyebrow: string;
   heading: string;
   body: string;
@@ -18,6 +21,7 @@ interface Operator {
 // Unsplash placeholders until real photography ships.
 const OPERATORS: Operator[] = [
   {
+    lane: "coliving",
     eyebrow: "Co-living Properties",
     heading: "If you run co-living properties",
     body:
@@ -30,24 +34,26 @@ const OPERATORS: Operator[] = [
     },
   },
   {
+    lane: "boutique",
     eyebrow: "Boutique Stays",
     heading: "If you run independent boutique stays",
     body:
       "Independent boutique hotels, inns, and the design-forward short-term and vacation stays guests book on purpose. The OTAs are eating into your revenue, your tech stack is held together by a vendor who half-quit, and the last agency you hired left you with slides and an invoice. Signal works the way you'd actually want a partner to work. Outcome-tied, transparent, willing to be measured.",
-    ctaLabel: "Explore Signal Offerings",
-    ctaHref: "/signal",
+    ctaLabel: "Explore Boutique Stays",
+    ctaHref: "/boutique-stays",
     image: {
       src: "/images/Website Images/image3.png",
       alt: "Boutique stay exterior at dusk",
     },
   },
   {
+    lane: "fleet",
     eyebrow: "Autos",
     heading: "If you run a rental fleet",
     body:
       "Aspiring Turo hosts and small fleet operators running 3 to 30 economy vehicles can use our same methods, applied to fleet management: pricing, channel mix, ops cadence, customer flow. Car Rental Riches is in production now.",
-    ctaLabel: "Join the Car Rental Riches Waitlist",
-    ctaHref: "/alex",
+    ctaLabel: "Explore Fleet Management",
+    ctaHref: "/fleet",
     image: {
       src: "/images/Website Images/image5.png",
       alt: "A small rental fleet of 3 economy vehicles parked in a line",
@@ -70,7 +76,13 @@ export default function WhoItsFor() {
                 key={op.heading}
                 className="py-8 md:py-10 first:pt-0 last:pb-0"
               >
-                <article className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+                {/* Each door is its own lane. They're stacked in separate
+                    bands rather than side by side, so per-lane accents read as
+                    wayfinding instead of three colors competing at once. */}
+                <LaneSection
+                  lane={op.lane}
+                  className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center"
+                >
                   <div
                     className={`relative aspect-[4/3] overflow-hidden rounded-lg shadow-sm ${
                       reverse ? "md:order-2" : ""
@@ -85,8 +97,12 @@ export default function WhoItsFor() {
                       style={{ filter: "saturate(0.85) contrast(1.05)" }}
                     />
                   </div>
-                  <div className={reverse ? "md:order-1" : ""}>
-                    <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
+                  <div
+                    className={`border-l-2 border-(--lane-accent) pl-6 md:pl-8 ${
+                      reverse ? "md:order-1" : ""
+                    }`}
+                  >
+                    <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-(--lane-accent) mb-4">
                       {op.eyebrow}
                     </p>
                     <h3 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-tight mb-5">
@@ -98,14 +114,17 @@ export default function WhoItsFor() {
                     {op.ctaLabel && op.ctaHref && (
                       <Link
                         href={op.ctaHref}
-                        className="inline-flex items-center gap-2 font-sans text-sm font-semibold tracking-wide text-deep-teal hover:text-warm-gold transition-colors duration-200"
+                        className="group inline-flex items-center gap-2 font-sans text-sm font-semibold tracking-wide text-deep-teal hover:text-(--lane-accent) transition-colors duration-200"
                       >
                         {op.ctaLabel}
-                        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                        <ArrowRight
+                          className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                          aria-hidden="true"
+                        />
                       </Link>
                     )}
                   </div>
-                </article>
+                </LaneSection>
               </AnimatedItem>
             );
           })}
