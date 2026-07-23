@@ -13,6 +13,7 @@ const CATEGORIES = [
   "Hotel Technology",
   "Operations",
   "Industry Trends",
+  "Co-living",
 ];
 
 const categoryColors: Record<string, string> = {
@@ -21,6 +22,7 @@ const categoryColors: Record<string, string> = {
   "Hotel Technology": "bg-[#1a1a1a]/10 text-[#1a1a1a]",
   Operations: "bg-[#5b9a2f]/10 text-[#5b9a2f]",
   "Industry Trends": "bg-[#f5a623]/15 text-[#d4891a]",
+  "Co-living": "bg-[#c0674a]/15 text-[#c0674a]",
 };
 
 function slugify(text: string): string {

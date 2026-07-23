@@ -15,6 +15,7 @@ const categoryColors: Record<string, string> = {
   "Hotel Technology": "bg-near-black text-white",
   Operations: "bg-deep-teal text-white",
   "Industry Trends": "bg-warm-gold text-near-black",
+  "Co-living": "bg-terracotta text-white",
 };
 
 type PostRow = {

@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
       {
         pathname: "/images/**",
       },
+      // Blog/insight post covers are served through the DB-backed image route
+      // (e.g. /api/images/5). Without this, any page that renders a post card
+      // with such a cover 500s on next/image src validation.
+      {
+        pathname: "/api/images/**",
+      },
     ],
   },
 

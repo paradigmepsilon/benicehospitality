@@ -62,6 +62,11 @@ async function migrate() {
   await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}'`;
   console.log("  ✓ blog_posts SEO columns added");
 
+  // FAQ block for AEO (answer engine optimization). Array of {question, answer}
+  // objects; feeds a visible FAQ section plus FAQPage JSON-LD on the article page.
+  await sql`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS faq JSONB NOT NULL DEFAULT '[]'::jsonb`;
+  console.log("  ✓ blog_posts.faq column added");
+
   await sql`
     CREATE TABLE IF NOT EXISTS uploads (
       id SERIAL PRIMARY KEY,
