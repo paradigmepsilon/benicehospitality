@@ -44,8 +44,8 @@ export default function ProductCard({ p }: { p: Product }) {
   };
 
   const containerClass = inactive
-    ? "group flex flex-col bg-light-gray/60 border border-light-gray rounded-lg overflow-hidden h-full opacity-75 transition-all duration-200 hover:opacity-90"
-    : "group flex flex-col bg-white border border-light-gray rounded-lg overflow-hidden h-full transition-all duration-200 hover:border-warm-gold hover:shadow-lg hover:-translate-y-1";
+    ? "group relative flex flex-col bg-light-gray/60 border border-light-gray rounded-lg overflow-hidden h-full opacity-75 transition-all duration-200 hover:opacity-90"
+    : "group relative flex flex-col bg-white border border-light-gray rounded-lg overflow-hidden h-full transition-all duration-200 cursor-pointer hover:border-warm-gold hover:shadow-lg hover:-translate-y-1 focus-within:border-warm-gold focus-within:shadow-lg";
 
   return (
     <article className={containerClass}>
@@ -123,8 +123,9 @@ export default function ProductCard({ p }: { p: Product }) {
             target="_blank"
             rel="sponsored noopener noreferrer"
             onClick={handleClick}
-            className="mt-auto pt-2 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide text-warm-gold-dark hover:text-deep-teal transition-colors"
+            className="mt-auto pt-2 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide text-warm-gold-dark hover:text-deep-teal transition-colors outline-none before:absolute before:inset-0 before:z-10 before:content-['']"
           >
+            <span className="sr-only">{p.name}: </span>
             {cta}
             <span
               aria-hidden

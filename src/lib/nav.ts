@@ -2,8 +2,8 @@ import type { NavGroup, NavLink, UtilityNav } from "./types";
 
 /**
  * Primary nav: six top-level items split around a centered logo. Left of
- * logo: discovery (Courses, Resources, Community). Right of logo: brand
- * (Insights, About, Contact) plus the Login utility CTA.
+ * logo: discovery (Home, Resources, Insights). Right of logo: commerce and
+ * brand (Marketplace, About, Contact) plus the Login utility CTA.
  *
  * The header renders NAV_LEFT and NAV_RIGHT as two flanking groups. The
  * mobile sheet renders the combined NAV_TREE as one flat list.
@@ -13,20 +13,12 @@ import type { NavGroup, NavLink, UtilityNav } from "./types";
  */
 export const NAV_LEFT: NavGroup[] = [
   { label: "Home", href: "/" },
-  {
-    label: "Education",
-    children: [
-      {
-        label: "Room Rental Riches",
-        href: "/courses/room-rental-riches",
-      },
-    ],
-  },
   { label: "Resources", href: "/resources" },
+  { label: "Insights", href: "/insights" },
 ];
 
 export const NAV_RIGHT: NavGroup[] = [
-  { label: "Insights", href: "/insights" },
+  { label: "Marketplace", href: "/marketplace" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
