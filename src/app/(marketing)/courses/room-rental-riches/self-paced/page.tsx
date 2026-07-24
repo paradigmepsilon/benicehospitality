@@ -16,7 +16,6 @@ import {
   RRR_PRICES,
   RRR_PATHS,
   CURRICULUM_BY_PHASE,
-  LIVE_MODULE_COUNT,
   BONUS_PACK,
 } from "@/lib/room-rental-riches";
 
@@ -51,14 +50,14 @@ const TIER = { name: "Self-paced", slug: "self_paced" as const };
 export const metadata: Metadata = {
   title: `Room Rental Riches: Self-paced (${PRICE})`,
   description:
-    "The full Room Rental Riches curriculum on your own timeline. Twelve modules across six phases, the resource library, lifetime access, and a year in the Nice Host Network. Founding price $287.",
+    "Learn the complete Room Rental Riches Operating Manual at your own pace. Twelve modules across six phases, the resource library, lifetime access, and the Room Rental Riches Community. Founding price $287.",
   alternates: {
     canonical: `https://benicehospitality.com${RRR_PATHS.selfPaced}`,
   },
   openGraph: {
     title: "Room Rental Riches: Self-paced | Della Henry",
     description:
-      "The whole co-living operating system, on your couch. Twelve modules, six phases, lifetime access, and a year in the network.",
+      "Build a room rental business that runs on systems, not stress. Twelve modules, six phases, lifetime access, and the Room Rental Riches Community.",
     url: `https://benicehospitality.com${RRR_PATHS.selfPaced}`,
     type: "website",
     images: [
@@ -82,10 +81,10 @@ const PROMISES = [
 ];
 
 const SPECS = [
-  "12 modules",
-  "6 phases",
-  "Lifetime access",
-  "1 year in the network",
+  "12 Modules",
+  "6 Phases",
+  "Lifetime Course Access",
+  "Room Rental Riches Community",
 ];
 
 const FAQS = [
@@ -94,8 +93,8 @@ const FAQS = [
     a: "Modules one and two, which is fourteen lessons covering the co-living opportunity and the whole legal, regulatory, and business-setup layer. The remaining ten modules plus the Bonus Pack are written and in production. That is exactly why there is a waitlist here instead of a checkout button. Founding students get every module the day it ships, at the founding price, with no upgrade fee.",
   },
   {
-    q: "Do I need to own a property already?",
-    a: "No. Phases one and two are built for people who have not signed a lease or closed on anything yet. Opportunity framing, legal setup, path commitment, then market analysis and the outreach that lands a first deal. If you already have the house, start at Phase three and set it up properly.",
+    q: "Do I need a property to take the course?",
+    a: "No. The course is designed for both aspiring and existing room rental operators. Whether you're preparing to launch your first property or improving one you already own, the curriculum walks you through the complete Room Rental Riches Operating Manual.",
   },
   {
     q: "How is this different from the Blueprint book?",
@@ -103,7 +102,7 @@ const FAQS = [
   },
   {
     q: "How is this different from the Masterclass?",
-    a: "Same curriculum. What changes is whether Della is in the room. Self-paced is you and the material on your schedule. The Masterclass is a two-day workshop where you apply the manual to your real business, with an individual hot seat and a 60-minute private follow-up, capped at six operators, at $2,497. If you implement better with a room around you, that is the one to look at.",
+    a: "The course teaches you the complete Room Rental Riches Operating Manual at your own pace. The Masterclass is a two-day, small-group workshop where operators with at least one room rental property work directly with Della and Alex to apply those systems through live collaboration, Individual Business Reviews (Hot Seats), personalized action plans, and a private follow-up strategy session.",
   },
   {
     q: "Will this work outside the Southeast?",
@@ -151,15 +150,21 @@ export default function SelfPacedPage() {
               Room Rental Riches · Self-paced
             </p>
             <h1 className="mb-6 font-display text-3xl font-semibold leading-[1.05] tracking-tight text-white md:text-4xl lg:text-5xl">
-              The Whole Co-Living Operating System, on Your Own Schedule.
+              Build a Room Rental Business That Runs on Systems, Not Stress.
             </h1>
-            <p className="mb-8 max-w-2xl font-sans text-lg leading-snug text-white/85">
-              Twelve modules across six phases, from picking a property to
-              handing the operation to somebody else. The same system Alex and I
-              run across our own co-living homes, with the calculators,
-              templates, and vendor lists as working files. No cohort schedule.
-              No deadline but yours.
-            </p>
+            <div className="mb-8 max-w-2xl space-y-4 font-sans text-lg leading-snug text-white/85">
+              <p>
+                Learn the complete Room Rental Riches Operating Manual at your
+                own pace.
+              </p>
+              <p>
+                From choosing your first property to building systems that help
+                your business grow, this self-paced course includes the
+                frameworks, templates, calculators, and operating systems Della
+                and Alex use inside their own room rental portfolio.
+              </p>
+              <p>No cohort schedule. No deadlines. Learn when it works for you.</p>
+            </div>
 
             {/* Concrete, verifiable specs. Deliberately no lesson count — see
                 the file header. */}
@@ -191,7 +196,7 @@ export default function SelfPacedPage() {
             />
 
             <p className="mt-5 font-sans text-sm text-white/60">
-              Enrollment is not open yet. One note when it is, nothing else.
+              Lock in founding pricing before the next module release raises it.
             </p>
           </div>
         </div>
@@ -269,7 +274,7 @@ export default function SelfPacedPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="mb-8 mt-4 font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-              Two operators. One course.
+              Built for Every Stage
             </h2>
           </AnimatedItem>
 
@@ -279,40 +284,40 @@ export default function SelfPacedPage() {
           >
             <AnimatedItem>
               <p className="font-semibold text-deep-teal">
-                The aspiring operator without a door yet.
+                1. You&apos;re Launching Your First Property
               </p>
             </AnimatedItem>
             <AnimatedItem>
               <p>
-                You are looking at co-living because the math works and the W-2
-                does not, at least not for the next twenty years. You want to
-                operate somewhere in the Southeast. You have not signed a lease
-                or closed on anything, and you want a structured path from
-                reading about this on Reddit to a first booking. Phases one and
-                two are built for you.
+                You&apos;re looking for a step-by-step operating system to
+                confidently launch your first room rental property.
+              </p>
+            </AnimatedItem>
+            <AnimatedItem>
+              <p>
+                Whether you started with the Room Rental Riches Book or came
+                straight into the course, you&apos;ll learn how to evaluate
+                properties, secure your first deal, build your systems, and
+                launch with confidence.
               </p>
             </AnimatedItem>
             <AnimatedItem>
               <p className="pt-2 font-semibold text-deep-teal">
-                The operator past hosting.
+                2. You&apos;re Already Operating
               </p>
             </AnimatedItem>
             <AnimatedItem>
               <p>
-                You have somewhere between three and thirty units. Your revenue
-                is real. Your time is the bottleneck. You have outgrown the
-                spreadsheet phase, you are tired of Sunday-night cleaner
-                scrambles, and you pay enough in platform commission to fund a
-                part-time team member. Phases three through six are where you
-                will spend your time.
+                You already have one or more room rental properties and want
+                stronger systems, smoother operations, and more consistency.
               </p>
             </AnimatedItem>
             <AnimatedItem>
-              <p className="pt-2 font-semibold text-warm-gold">
-                And if you want passive income, this is the wrong page. Renting
-                by the room is a hospitality business with tenants, turnovers,
-                and vendors in it. The course makes it run on systems. It does
-                not make it run on nothing.
+              <p>
+                Use the course to implement the Room Rental Riches Operating
+                Manual into your existing business, then continue into the
+                Masterclass when you&apos;re ready for personalized guidance and
+                live implementation.
               </p>
             </AnimatedItem>
           </AnimatedDiv>
@@ -414,16 +419,13 @@ export default function SelfPacedPage() {
           <AnimatedItem>
             <div className="mt-12 border-l-2 border-warm-gold bg-white p-7 md:p-8">
               <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-warm-gold">
-                Where the build is
+                Course Development
               </p>
               <p className="font-sans text-base leading-relaxed text-charcoal/85">
-                {LIVE_MODULE_COUNT === 1
-                  ? "One module is"
-                  : `${LIVE_MODULE_COUNT} modules are`}{" "}
-                finished and in the platform right now. The rest are written and
-                in production, and they release as each one is done. Founding
-                students get every module the day it ships, at the founding
-                price, with no upgrade fee. That is what the seat reserves.
+                New modules are released as they&apos;re completed. As a founding
+                student, you&apos;ll receive every future module and update at no
+                additional cost. Your purchase includes lifetime access to the
+                complete curriculum as it continues to grow.
               </p>
             </div>
           </AnimatedItem>
@@ -456,7 +458,7 @@ export default function SelfPacedPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="mx-auto mt-4 max-w-2xl font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-              The curriculum, the files, and a year in the room.
+              Everything Included
             </h2>
           </AnimatedItem>
 
@@ -466,16 +468,16 @@ export default function SelfPacedPage() {
           >
             {[
               {
-                t: "The twelve modules",
-                b: "Six phases, foundation through scaling, yours for life including every update.",
+                t: "The Complete Course",
+                b: "Twelve modules across six phases, plus every future update.",
               },
               {
-                t: "The resource library",
-                b: "The pricing calculator, lease addendum templates, AI prompt libraries, SOPs, and the cleaning checklist.",
+                t: "Resource Library",
+                b: "Calculators, templates, SOPs, checklists, AI prompts, and operating tools you can immediately use in your business.",
               },
               {
-                t: "A year in the network",
-                b: "The Nice Host Network, two founder-led live sessions a week, plus quarterly office hours with Della.",
+                t: "Room Rental Riches Community",
+                b: "Continue learning through weekly Office Hours, discussions, and support from other room rental operators.",
               },
             ].map((x, i, arr) => (
               <Fragment key={x.t}>
@@ -524,8 +526,9 @@ export default function SelfPacedPage() {
 
           <AnimatedItem>
             <p className="mt-6 font-sans text-sm text-charcoal/60">
-              Founding price held for the first hundred students. One note when
-              enrollment opens, nothing else.
+              Founding pricing is available for a limited time. As new modules
+              are released and the curriculum expands, enrollment pricing will
+              increase.
             </p>
           </AnimatedItem>
         </div>
@@ -533,22 +536,96 @@ export default function SelfPacedPage() {
 
       <SectionDivider fromColor={C.white} toColor={C.cream} />
 
-      {/* CROSS-LINK — the Masterclass, for the reader who has decided they want
-          somebody in the room with them. */}
-      <AnimatedSection theme="off-white" className="px-6 py-12 md:py-14">
-        <div className="mx-auto max-w-4xl">
+      {/* THE PATH FORWARD — the value ladder. Where the reader is now, the
+          Masterclass as the next step once they are operating, and 1:1
+          advisement after that. */}
+      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+        <div className="mx-auto max-w-3xl">
           <AnimatedItem>
-            <div className="flex flex-col items-start gap-6 border-t-2 border-warm-gold bg-white p-7 md:flex-row md:items-center md:justify-between md:p-9">
-              <div className="max-w-xl">
+            <SectionLabel>The path forward</SectionLabel>
+          </AnimatedItem>
+          <AnimatedItem>
+            <h2 className="mb-10 mt-4 font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
+              Ready to Apply What You&apos;ve Learned?
+            </h2>
+          </AnimatedItem>
+
+          <AnimatedDiv stagger className="space-y-1">
+            {/* Step 1 — where the reader is now. */}
+            <AnimatedItem>
+              <div className="rounded-xl bg-deep-teal p-7 shadow-[0_16px_36px_rgba(26,77,79,0.28)] ring-1 ring-warm-gold/25 md:p-8">
                 <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-warm-gold">
-                  Would you rather not do it alone?
+                  You Are Here
                 </p>
-                <p className="font-sans text-base leading-relaxed text-charcoal/85">
-                  Same curriculum, a two-day workshop where you apply it to your
-                  real business, an individual hot seat of your own, and a room
-                  capped at six operators. That one is the Masterclass.
+                <h3 className="mb-3 font-display text-2xl font-semibold text-white">
+                  Room Rental Riches Course
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-white/85">
+                  Learn the complete Room Rental Riches Operating Manual through
+                  step-by-step lessons, templates, calculators, SOPs, and
+                  implementation resources designed to help you build or improve
+                  your room rental business.
                 </p>
               </div>
+            </AnimatedItem>
+
+            <AnimatedItem>
+              <div
+                aria-hidden
+                className="flex justify-center py-2 font-display text-3xl leading-none text-warm-gold"
+              >
+                ↓
+              </div>
+            </AnimatedItem>
+
+            {/* Step 2 — the Masterclass. */}
+            <AnimatedItem>
+              <div className="rounded-xl border border-deep-teal/15 bg-white p-7 shadow-[0_10px_28px_rgba(26,77,79,0.10)] md:p-8">
+                <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-warm-gold">
+                  Next Step
+                </p>
+                <h3 className="mb-3 font-display text-2xl font-semibold text-deep-teal">
+                  Room Rental Riches Masterclass
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-charcoal/80">
+                  Once you have at least one room rental property operating, join
+                  our two-day, small-group workshop. Work directly with Della and
+                  Alex, participate in Individual Business Reviews (Hot Seats),
+                  collaborate with five other operators, and leave with a
+                  personalized action plan and a private 60-minute follow-up
+                  session.
+                </p>
+              </div>
+            </AnimatedItem>
+
+            <AnimatedItem>
+              <div
+                aria-hidden
+                className="flex justify-center py-2 font-display text-3xl leading-none text-warm-gold"
+              >
+                ↓
+              </div>
+            </AnimatedItem>
+
+            {/* Step 3 — 1:1 advisement. */}
+            <AnimatedItem>
+              <div className="rounded-xl border border-deep-teal/15 bg-white p-7 shadow-[0_10px_28px_rgba(26,77,79,0.10)] md:p-8">
+                <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-warm-gold">
+                  Continue Growing
+                </p>
+                <h3 className="mb-3 font-display text-2xl font-semibold text-deep-teal">
+                  One-on-One Business Advisement
+                </h3>
+                <p className="font-sans text-base leading-relaxed text-charcoal/80">
+                  Receive personalized business strategy, operational guidance,
+                  and ongoing advisement tailored to your goals and portfolio.
+                </p>
+              </div>
+            </AnimatedItem>
+          </AnimatedDiv>
+
+          <AnimatedItem>
+            <div className="mt-10 flex justify-center">
               <Button href={RRR_PATHS.masterclass} variant="secondary" size="md">
                 See the Masterclass
               </Button>
