@@ -5,26 +5,31 @@ import AnimatedSection, {
 } from "@/components/ui/AnimatedSection";
 import SectionLabel from "@/components/ui/SectionLabel";
 
-// Sits directly beneath the hero on purpose. On social Della gives the five
-// W's and never the how — every live ends by sending people here. This is the
-// payoff for that promise, so it has to answer "what IS this" in about sixty
-// seconds before asking anyone for anything.
+// Two blocks in one component. The terminology block has to come first: the
+// site uses "co-living" and "room rentals" interchangeably, and a visitor who
+// arrived on one term needs to know the other means the same thing before any
+// of the copy below makes sense. The mechanics grid then answers "why does
+// this model work" without asking for anything.
+//
+// Kept as one component rather than two sections because both blocks sit on
+// the same white background — splitting them would mean a SectionDivider with
+// identical from/to colors, which renders nothing.
 
 const MECHANICS = [
   {
     numeral: "i",
-    heading: "You rent the room, not the house",
-    body: "One property, four to six private rooms, shared kitchen and living space. Each room is its own lease at its own rent. A house that fetches sixteen hundred a month whole can clear well past that by the door, because you are selling a room to somebody who needs one, not a whole house to somebody who does not.",
+    heading: "Rent by the Room",
+    body: "Increase a property's income potential by renting individual furnished bedrooms rather than leasing the home as a single unit.",
   },
   {
     numeral: "ii",
-    heading: "The stay is measured in months, not nights",
-    body: "Thirty days and up. Travel nurses on thirteen-week contracts. Corporate relocations. Insurance displacement placements after a house fire or a flood. These people need somewhere real to live for a season, and they are not price-shopping a hot tub on a Saturday.",
+    heading: "Longer Resident Stays",
+    body: "Longer stays reduce turnover, create more predictable income, and allow you to focus on improving operations instead of constantly replacing residents.",
   },
   {
     numeral: "iii",
-    heading: "The operations are boring, and that is the point",
-    body: "A weekend rental turns fifty-two times a year. A co-living room turns three or four. Fewer turns means fewer cleans, fewer messages, fewer emergencies at eleven at night. That is the whole reason I moved my portfolio here. My weekends came back.",
+    heading: "Systems Create Flexibility",
+    body: "Clear processes, documented standards, and operational systems make it easier to manage your properties consistently as your portfolio grows.",
   },
 ];
 
@@ -32,22 +37,59 @@ export default function CoLivingOverview() {
   return (
     <AnimatedSection theme="light" className="py-12 md:py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="max-w-3xl mb-14 md:mb-16">
+        <div className="max-w-3xl mb-16 md:mb-20">
           <AnimatedItem>
-            <SectionLabel>Start here</SectionLabel>
+            <SectionLabel>The language</SectionLabel>
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-              What co-living actually is.
+              Co-Living and Room Rentals
             </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <p className="font-sans text-lg text-charcoal leading-snug">
-              If you came here from one of my lives, this is the part I never
-              explain on camera. Co-living is not a hack and it is not a new
-              idea. It is a rooming house with better systems and a better
-              class of tenant. Three things make it work.
-            </p>
+            <div className="font-sans text-lg text-charcoal leading-snug space-y-5">
+              <p>You may hear us use both terms throughout this website.</p>
+              <p>
+                Co-living is the more formal industry term for renting
+                individual bedrooms within a shared home.
+              </p>
+              <p>
+                Room rentals is the language many operators use because it is
+                simpler, more recognizable, and better reflects how we run the
+                business day to day.
+              </p>
+              <p className="font-display italic text-xl md:text-2xl text-deep-teal">
+                They are the same business model.
+              </p>
+              <p>
+                Throughout the rest of this website, we will primarily use room
+                rentals for simplicity, but both terms refer to the same
+                operating model.
+              </p>
+            </div>
+          </AnimatedItem>
+        </div>
+
+        {/* Second block: why the model works. Shares this section's white
+            background, so it opens with its own heading instead of a divider. */}
+        <div className="max-w-3xl mb-14 md:mb-16">
+          <AnimatedItem>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mb-6">
+              Why Room Rentals Work
+            </h2>
+          </AnimatedItem>
+          <AnimatedItem>
+            <div className="font-sans text-lg text-charcoal leading-snug space-y-4">
+              <p>
+                A successful room rental business is not built by simply renting
+                bedrooms.
+              </p>
+              <p>
+                It is built by creating a repeatable operating system that
+                delivers a consistent resident experience while making the
+                business easier to manage.
+              </p>
+            </div>
           </AnimatedItem>
         </div>
 

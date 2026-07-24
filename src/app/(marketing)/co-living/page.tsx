@@ -8,6 +8,7 @@ import CoLivingCourse from "@/components/sections/co-living/CoLivingCourse";
 import CoLivingLive from "@/components/sections/co-living/CoLivingLive";
 import CoLivingGear from "@/components/sections/co-living/CoLivingGear";
 import CoLivingInsights from "@/components/sections/co-living/CoLivingInsights";
+import CoLivingNewsletter from "@/components/sections/co-living/CoLivingNewsletter";
 import SectionDivider from "@/components/ui/SectionDivider";
 import LaneSection from "@/components/ui/LaneSection";
 import Button from "@/components/ui/Button";
@@ -25,10 +26,12 @@ export const metadata: Metadata = {
       "Co-living | Rent by the Room in the Southeast | Be Nice Hospitality",
   },
   description:
-    "Co-living and mid-term rental operations from an operator running 12 units across 5 Southeast cities. Free property scoring tools, the Room Rental Riches course, weekly live sessions, and the gear list. Run by Della Henry.",
+    "We help property owners build profitable room rental (co-living) businesses through proven systems, practical education, and real-world operational support. Free calculators and checklists, the Room Rental Riches course, live sessions, and one-on-one advisement. Backed by 12 units across 5 Southeast cities.",
   keywords: [
     "co-living",
     "co-living properties",
+    "room rentals",
+    "room rental business",
     "rent by the room",
     "co-living operator",
     "mid-term rental",
@@ -36,15 +39,13 @@ export const metadata: Metadata = {
     "co-living Southeast",
     "travel nurse housing",
     "corporate housing",
-    "room rental business",
-    "Della Henry",
     "Be Nice Hospitality",
   ],
   alternates: { canonical: "https://benicehospitality.com/co-living" },
   openGraph: {
-    title: "Co-living, run like a business.",
+    title: "Build a Room Rental Business That Runs on Systems, Not Stress.",
     description:
-      "Free property scoring, the course, weekly lives, and the gear list. From an operator running 12 co-living and mid-term units across 5 Southeast cities.",
+      "Proven systems, practical education, and real-world operational support for room rental (co-living) operators. Free tools, the course, live sessions, and advisement. Backed by 12 units across 5 Southeast cities.",
     url: "https://benicehospitality.com/co-living",
     type: "website",
     images: [
@@ -72,16 +73,16 @@ export default function CoLivingPage() {
     // on the house teal/gold palette. See src/lib/lanes.ts.
     <LaneSection lane="coliving">
       <OfferingHero
-        eyebrow="Co-living · Run by Della Henry"
-        headline="Co-living, run like"
-        accentWord="a business."
-        message="I run twelve co-living and mid-term units across five Southeast cities. The calculators, the checklists, the course, and the answers I wish somebody had handed me in year one all live on this page."
+        eyebrow="Room Rentals · Co-living"
+        headline="Build a Room Rental Business That Runs on Systems,"
+        accentWord="Not Stress."
+        message="We help property owners build profitable room rental (co-living) businesses through proven systems, practical education, and real-world operational support. Whether you are evaluating your first property or improving an existing portfolio, you will find the tools, education, and support to build a business that runs with more consistency and less chaos."
         primaryCta={{
-          label: "Score Your Property Free",
-          href: "/resources/co-living-property-calculator",
+          label: "Explore Free Resources",
+          href: "#free-resources",
         }}
         secondaryCta={{
-          label: "Book a Call With Me",
+          label: "Book a Discovery Call",
           href: bookingUrl({
             founder: "della",
             source: BOOKING_SOURCES.COLIVING_HERO,
@@ -89,9 +90,9 @@ export default function CoLivingPage() {
         }}
         image={{
           src: "/images/Website%20Images/hf_20260510_014447_ef5dbd72-7cea-474b-b318-1c2098bc0723.png",
-          alt: "A Southeast craftsman bungalow under live oaks, the property type co-living operators convert room by room",
+          alt: "A Southeast craftsman bungalow under live oaks, the property type room rental operators convert room by room",
         }}
-        note="No sales theater. Calls are working sessions."
+        note="Whether you start with our free resources, the book, the course, or the Masterclass, we have organized everything to help you take the next step."
       />
 
       {/* Trust bar. Same four figures as /della — this is the same operator, and
@@ -111,54 +112,11 @@ export default function CoLivingPage() {
         </div>
       </section>
 
-      {/* Della's portrait moved here when the hero became the shared
-          OfferingHero. Her face still lands above the fold on most screens and
-          keeps the handoff from her bio page personal. Quote first, portrait
-          right: the words carry the weight, the face confirms who said them. */}
-      <section className="bg-(--lane-wash,var(--color-off-white)) py-10 md:py-14 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
-          <figure className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6 md:pl-8">
-            <span
-              aria-hidden
-              className="block font-display text-5xl md:text-6xl leading-none text-(--lane-accent,var(--color-warm-gold)) mb-2"
-            >
-              &ldquo;
-            </span>
-            <blockquote className="font-display italic text-xl md:text-2xl lg:text-3xl text-deep-teal leading-snug max-w-2xl">
-              Everything I know about renting by the room lives on this page.
-              Start with the free property score. It takes about ten minutes and
-              tells you whether your property is worth converting before you
-              spend a dollar on it.
-            </blockquote>
-            <figcaption className="mt-5 font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold))">
-              Della Henry
-              <span className="block mt-1 font-normal tracking-normal normal-case text-sm text-charcoal/70">
-                Co-founder, Be Nice Hospitality Group
-              </span>
-            </figcaption>
-          </figure>
-
-          <div className="relative w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 shrink-0 overflow-hidden rounded-sm lg:justify-self-end">
-            <Image
-              src="/images/Website%20Images/Della%20Casual.png"
-              alt="Della Henry, co-living and mid-term rental operator, co-founder of Be Nice Hospitality Group"
-              fill
-              sizes="(max-width: 768px) 10rem, (max-width: 1024px) 13rem, 15rem"
-              className="object-cover"
-              style={{ filter: "saturate(0.9) contrast(1.05)" }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Separates Della's quote from "What co-living actually is." The quote
-          band sits on the lane wash so this curve has two colors to work with —
-          a white-on-white divider would render invisible. */}
-      <SectionDivider
-        fromColor={LANES.coliving.wash}
-        toColor={C.white}
-        flip
-      />
+      {/* Curves straight out of the deep-teal stats bar into the terminology
+          section. fromColor must track whatever sits directly above it: a
+          pull-quote band on the lane wash used to live here, and leaving the
+          wash color behind after removing it would seam against the teal. */}
+      <SectionDivider fromColor={C.deepTeal} toColor={C.white} flip />
 
       <CoLivingOverview />
       {/* The one large-area use of the lane color on this page: the tools block
@@ -194,16 +152,19 @@ export default function CoLivingPage() {
       <section className="bg-deep-teal py-12 md:py-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
-            Still have a question
+            Ready to talk
           </p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
-            Bring it to a call.
+            Bring Your Questions to the Team
           </h2>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
-            A deal you are underwriting. A room that will not fill. A city
-            ordinance nobody can give you a straight answer on. Thirty minutes
-            with me beats another month of guessing. If I cannot help, I will
-            tell you on the call.
+          <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-2xl mx-auto">
+            Whether you are evaluating your first property or optimizing an
+            existing portfolio, we are here to help you make informed decisions.
+          </p>
+          <p className="font-sans text-base md:text-lg text-white/70 leading-snug mb-12 max-w-2xl mx-auto">
+            Every conversation starts with a Discovery Call so we can understand
+            your goals and determine whether we are the right fit to support
+            you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -214,17 +175,20 @@ export default function CoLivingPage() {
               variant="primary"
               size="lg"
             >
-              Book a Call With Della
+              Book a Discovery Call
             </Button>
             <Link
               href="/della"
               className="inline-flex items-center justify-center font-sans font-semibold text-white/85 hover:text-warm-gold transition-colors duration-200 text-lg underline underline-offset-4 decoration-warm-gold/40 hover:decoration-warm-gold"
             >
-              Or read her story first
+              Meet the Operator
             </Link>
           </div>
         </div>
       </section>
+
+      <SectionDivider fromColor={C.deepTeal} toColor={C.nearBlack} />
+      <CoLivingNewsletter />
     </LaneSection>
   );
 }

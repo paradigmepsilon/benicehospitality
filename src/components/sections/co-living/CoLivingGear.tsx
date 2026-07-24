@@ -20,16 +20,21 @@ export default function CoLivingGear() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-              What I put in every unit.
+              What We Put in Every Unit
             </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <p className="font-sans text-base md:text-lg text-charcoal leading-snug mb-8">
-              Locks, linen, mattresses, smart-home gear, and the consumables I
-              replace on every turnover. Nothing aspirational. If it is on the
-              list it is because it is in one of my houses right now and I would
-              buy it again.
-            </p>
+            <div className="font-sans text-base md:text-lg text-charcoal leading-snug space-y-4 mb-8">
+              <p>
+                Browse the products, supplies, furniture, technology, and
+                operating essentials we actually use across our room rental
+                portfolio.
+              </p>
+              <p>
+                Every recommendation comes from real-world experience and
+                products we trust in our own business.
+              </p>
+            </div>
           </AnimatedItem>
           <AnimatedItem>
             <Button
@@ -37,7 +42,7 @@ export default function CoLivingGear() {
               variant="secondary"
               size="lg"
             >
-              Open the Co-living Toolkit
+              Explore the Marketplace
             </Button>
           </AnimatedItem>
         </div>

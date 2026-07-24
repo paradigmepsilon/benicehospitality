@@ -15,17 +15,18 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 // block is a funnel summary of pages that own their own numbers, and hand-typed
 // copies are how those numbers drift apart.
 //
-// Operator ($7,497) is deliberately NOT a card here. It is not a self-serve
-// tier: it is the one-to-one engagement offered after someone reaches out and
-// takes a discovery call. It appears as the footnote under the grid instead.
+// Business Advisement ($7,497) is deliberately NOT a card here. It is not a
+// self-serve tier: it is the one-to-one engagement offered after someone
+// reaches out and takes a discovery call. It appears in the band under the
+// grid instead.
 
 const TIERS = [
   {
     name: "The book",
     price: `$${BLUEPRINT.priceUsd}`,
     note: `Normally $${BLUEPRINT.priceListUsd}. PDF and ePub, instant download.`,
-    tagline: "The whole idea, in one sitting.",
-    body: "Seven chapters on turning a house you already have into a co-living business. Property scoring, the real start-up numbers, furnishing, pricing, and keeping rooms full. The cheapest way to find out whether this is for you.",
+    tagline: "Best for future operators.",
+    body: "Learn the principles, framework, and operating philosophy behind successful room rental businesses. Perfect if you are exploring the model or deciding whether it is the right fit for you.",
     href: BLUEPRINT.path,
     cta: "Get the Book",
     image: {
@@ -38,10 +39,10 @@ const TIERS = [
     name: "Self-paced",
     price: `$${RRR_PRICES.selfPacedUsd}`,
     note: `Normally $${RRR_PRICES.selfPacedListUsd}. Twelve modules, lifetime access.`,
-    tagline: "The whole system, on your couch.",
-    body: "Twelve modules, lifetime access, no class schedule breathing down your neck. Property selection through scaling, with the SOPs, templates, and vendor lists I use.",
+    tagline: "Best for operators ready to build or improve a room rental business.",
+    body: "Learn the complete Room Rental Riches Operating Manual through step-by-step lessons, templates, calculators, SOPs, and implementation resources.",
     href: "/courses/room-rental-riches/self-paced",
-    cta: "See Self-paced",
+    cta: "Explore the Course",
     image: {
       src: "/images/Website%20Images/course-self-paced-student-v3.png",
       alt: "A student working through the course on a laptop at a home desk",
@@ -52,10 +53,11 @@ const TIERS = [
     name: "Masterclass",
     price: `$${RRR_PRICES.masterclassUsd.toLocaleString("en-US")}`,
     note: "Runs quarterly. A two-day workshop, capped at six operators.",
-    tagline: "The same system, with me in the room.",
-    body: "Everything in self-paced plus a two-day small-group workshop where we apply the manual to your real business, an individual hot seat of your own, a 60-minute private follow-up, and a year in the network. Four sessions a year, so seats are limited.",
+    tagline:
+      "Best for operators with at least one room rental property already operating.",
+    body: "Join our quarterly two-day workshop with a maximum of six operators. Participate in Individual Business Reviews (Hot Seats), collaborate with other operators, receive personalized action plans, and continue with a private follow-up strategy session.",
     href: RRR_PATHS.masterclass,
-    cta: "See the Masterclass",
+    cta: "Explore the Masterclass",
     image: {
       src: "/images/Website%20Images/course-masterclass-cohort-v2.png",
       alt: "The instructor teaching a small, diverse masterclass cohort in a conference room",
@@ -76,17 +78,21 @@ export default function CoLivingCourse() {
             <SectionLabel>The course</SectionLabel>
           </AnimatedItem>
           <AnimatedItem>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-              Room Rental Riches.
+            {/* One size step down from the house h2: this headline is nine
+                words and wraps to four lines on mobile at text-4xl. */}
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
+              Choose the Learning Path That&rsquo;s Right for You
             </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <p className="font-sans text-lg text-charcoal leading-snug">
-              The manual I wish I had in year one. Not a framework, not a
-              mindset course. The actual playbook I run every Monday morning,
-              written down. Three ways in, from a thirty-dollar book to two days
-              with me in the room.
-            </p>
+            <div className="font-sans text-lg text-charcoal leading-snug space-y-4">
+              <p>
+                Whether you are just getting started or already operating room
+                rentals, Room Rental Riches gives you multiple ways to learn the
+                same operating system.
+              </p>
+              <p>Choose the experience that best fits where you are today.</p>
+            </div>
           </AnimatedItem>
         </div>
 
@@ -206,23 +212,29 @@ export default function CoLivingCourse() {
           </p>
         </AnimatedItem>
 
-        {/* Operator is not self-serve, so it sits outside the pricing grid.
-            The only way in is a conversation, and the copy says so plainly
-            rather than dangling a button that skips the discovery call. */}
+        {/* Business Advisement is not self-serve, so it sits outside the
+            pricing grid. The only way in is a conversation, and the copy says
+            so plainly rather than dangling a button that skips the call. */}
         <AnimatedItem>
           {/* Spans the full section width to match the card grid above it. The
-              paragraph keeps its own measure so the line length stays readable
-              at 1280px rather than running the full width of the box. */}
+              paragraphs keep their own measure so the line length stays
+              readable at 1280px rather than running the full width of the box. */}
           <div className="mt-10 md:mt-12 bg-white border-t-2 border-(--lane-accent,var(--color-warm-gold)) p-7 md:p-10 text-center">
             <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-3">
-              Already have doors?
+              Already Have Doors?
             </p>
-            <p className="font-sans text-base text-charcoal/85 leading-snug mb-6 max-w-3xl mx-auto">
-              There is a fourth way in that is not on this page. Operator is a
-              one-to-one engagement where we diagnose what is leaking, build the
-              fix, and stay until it runs without you. It starts with a
-              discovery call, not a checkout page, because I will not sell it
-              until I know it is the right thing for your portfolio.
+            <h3 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-5">
+              Need Personalized Support?
+            </h3>
+            <p className="font-sans text-base text-charcoal/85 leading-snug mb-4 max-w-3xl mx-auto">
+              If you are already operating room rentals and want guidance
+              specific to your business, our one-on-one Business Advisement is
+              designed to help you improve operations, strengthen systems, solve
+              challenges, and grow with confidence.
+            </p>
+            <p className="font-sans text-base text-charcoal/70 leading-snug mb-6 max-w-3xl mx-auto">
+              Every engagement begins with a Discovery Call so we can determine
+              whether we are the right fit to support your goals.
             </p>
             <Button
               href={bookingUrl({

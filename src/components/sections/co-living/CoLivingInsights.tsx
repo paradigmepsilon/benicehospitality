@@ -74,15 +74,21 @@ export default async function CoLivingInsights() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-              Written from the actual reps.
+              Written From Experience
             </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <p className="font-sans text-lg text-charcoal leading-snug">
-              Longer thinking than a live session allows. Market notes, pricing
-              math, and the things that went wrong in my portfolio before they
-              went right.
-            </p>
+            <div className="font-sans text-lg text-charcoal leading-snug space-y-4">
+              <p>
+                Everything we publish comes directly from operating properties,
+                solving real challenges, testing systems, and continuously
+                improving our portfolio.
+              </p>
+              <p>
+                No recycled advice. Just practical lessons learned through
+                experience.
+              </p>
+            </div>
           </AnimatedItem>
         </div>
 

@@ -26,9 +26,11 @@ export default function CoLivingResources() {
   const tools = allTools.slice(0, PREVIEW_COUNT);
 
   return (
+    // id is the hero's "Explore Free Resources" anchor target.
     <AnimatedSection
+      id="free-resources"
       theme="none"
-      className="bg-(--lane-wash,var(--color-off-white)) text-charcoal py-12 md:py-16 px-6"
+      className="bg-(--lane-wash,var(--color-off-white)) text-charcoal py-12 md:py-16 px-6 scroll-mt-24"
     >
       <div className="max-w-7xl mx-auto">
         <div className="max-w-3xl mb-12 md:mb-14">
@@ -37,15 +39,20 @@ export default function CoLivingResources() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-              The tools I actually use.
+              Explore Our Free Resources
             </h2>
           </AnimatedItem>
           <AnimatedItem>
-            <p className="font-sans text-lg text-charcoal leading-snug">
-              These are the same spreadsheets and checklists I run my own
-              portfolio on, rebuilt so they work in a browser. One email
-              unlocks all of them. No drip sequence designed to wear you down.
-            </p>
+            <div className="font-sans text-lg text-charcoal leading-snug space-y-4">
+              <p>
+                Start with our free calculators, templates, and checklists to
+                evaluate properties, estimate your numbers, and identify
+                opportunities before making your next move.
+              </p>
+              <p>
+                They are the same resources we use across our own portfolio.
+              </p>
+            </div>
           </AnimatedItem>
         </div>
 
@@ -63,7 +70,7 @@ export default function CoLivingResources() {
               <p className="font-sans text-base md:text-lg text-white/85 leading-snug mb-7">
                 Forty weighted questions across seven sections. Score any
                 property in under ten minutes and get a plain-language fix list
-                for every gap you flag. Built for co-living specifically, not
+                for every gap you flag. Built for room rentals specifically, not
                 generic short-term rental scoring.
               </p>
               <Button
@@ -78,7 +85,7 @@ export default function CoLivingResources() {
               {[
                 "Seven operator sections, forty weighted questions",
                 "A score you can act on in ten minutes",
-                "A fix list written the way I would say it",
+                "A fix list written in plain language",
                 "Works before you own a single door",
               ].map((point) => (
                 <li
@@ -93,6 +100,14 @@ export default function CoLivingResources() {
               ))}
             </ul>
           </div>
+        </AnimatedItem>
+
+        <AnimatedItem>
+          <p className="font-sans text-base md:text-lg text-charcoal/85 leading-snug max-w-3xl mb-10 md:mb-12">
+            Every resource in this library is designed to help you launch,
+            operate, and improve a room rental business with greater confidence
+            and fewer costly mistakes.
+          </p>
         </AnimatedItem>
 
         <AnimatedDiv
