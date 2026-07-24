@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     // by 40–60% with zero component changes. Mobile devices fall back to
     // WebP if the browser doesn't accept AVIF.
     formats: ["image/avif", "image/webp"],
+    // Next 16 rejects any per-image `quality` prop not listed here. Marketing
+    // hero/detail art is served at q90 to avoid AVIF-over-WebP double-
+    // compression softness; 75 stays for everything else (the default).
+    qualities: [75, 90],
     // Add 360 and 414 to Next's defaults so the most common Android/iPhone
     // widths get a properly-sized source variant instead of upscaling from
     // 640.

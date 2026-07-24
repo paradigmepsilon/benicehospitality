@@ -27,7 +27,7 @@ const NINETY_DAY_ARC = [
   {
     phase: "Days 15–60",
     title: "Build",
-    body: "The 8-week Masterclass runs during this window. You're in the room with the Masterclass group across all 12 modules, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. 8 sessions land in this phase.",
+    body: "The two-day Masterclass workshop runs during this window. You join the six-operator group for the two-day intensive, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. The bulk of your 12 sessions land in this phase.",
   },
   {
     phase: "Days 61–90",
@@ -50,7 +50,7 @@ export default function OperatorPage() {
         }}
         previewTitle="What's included"
         previewItems={[
-          "Everything in the Masterclass tier: all 12 modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the 8 live weeks, the permanent archive",
+          "Everything in the Masterclass tier: all 12 modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the two-day workshop, the permanent archive",
           "12 60-minute 1:1 sessions with Della, 1 per module, spread across 90 days",
           "Lifetime access to the Nice Host Network: not 1 year, not 3, lifetime",
           "Direct messaging access to Della between sessions for the duration of the engagement",

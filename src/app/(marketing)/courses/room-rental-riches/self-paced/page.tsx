@@ -63,9 +63,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://benicehospitality.com/images/Website%20Images/course-self-paced-student-v3.png",
-        width: 1200,
-        height: 800,
+        url: "https://benicehospitality.com/images/Website%20Images/course-self-paced-student-v4.png",
+        width: 1208,
+        height: 1500,
         alt: "A student working through Room Rental Riches on a laptop at a home desk",
       },
     ],
@@ -103,7 +103,7 @@ const FAQS = [
   },
   {
     q: "How is this different from the Masterclass?",
-    a: "Same curriculum. What changes is whether Della is in the room. Self-paced is you and the material on your schedule. The Masterclass is eight weeks of live guided work with a weekly hot seat, capped at fifteen operators, at $2,497. If you implement better with a deadline and a room, that is the one to look at.",
+    a: "Same curriculum. What changes is whether Della is in the room. Self-paced is you and the material on your schedule. The Masterclass is a two-day workshop where you apply the manual to your real business, with an individual hot seat and a 60-minute private follow-up, capped at six operators, at $2,497. If you implement better with a room around you, that is the one to look at.",
   },
   {
     q: "Will this work outside the Southeast?",
@@ -130,10 +130,11 @@ export default function SelfPacedPage() {
             <div className="relative">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-[0_30px_70px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
                 <Image
-                  src="/images/Website%20Images/course-self-paced-student-v3.png"
+                  src="/images/Website%20Images/course-self-paced-student-v4.png"
                   alt="A student working through the Room Rental Riches curriculum on a laptop at a home desk"
                   fill
                   priority
+                  quality={90}
                   sizes="(min-width: 1024px) 24rem, (min-width: 640px) 28rem, 100vw"
                   className="object-cover"
                   style={{ filter: "saturate(0.85) contrast(1.05)" }}
@@ -543,9 +544,9 @@ export default function SelfPacedPage() {
                   Would you rather not do it alone?
                 </p>
                 <p className="font-sans text-base leading-relaxed text-charcoal/85">
-                  Same curriculum, eight weeks of live guided work, a weekly hot
-                  seat where you bring a real situation, and a room capped at
-                  fifteen operators. That one is the Masterclass.
+                  Same curriculum, a two-day workshop where you apply it to your
+                  real business, an individual hot seat of your own, and a room
+                  capped at six operators. That one is the Masterclass.
                 </p>
               </div>
               <Button href={RRR_PATHS.masterclass} variant="secondary" size="md">

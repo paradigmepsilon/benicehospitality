@@ -51,9 +51,9 @@ const TIERS = [
   {
     name: "Masterclass",
     price: `$${RRR_PRICES.masterclassUsd.toLocaleString("en-US")}`,
-    note: "Runs quarterly. Eight weeks, live, capped at fifteen operators.",
+    note: "Runs quarterly. A two-day workshop, capped at six operators.",
     tagline: "The same system, with me in the room.",
-    body: "Everything in self-paced plus eight weeks of live guided work, weekly hot seats where you bring a real situation, direct messaging with me throughout, and a year in the network. Four cohorts a year, so seats are limited.",
+    body: "Everything in self-paced plus a two-day small-group workshop where we apply the manual to your real business, an individual hot seat of your own, a 60-minute private follow-up, and a year in the network. Four sessions a year, so seats are limited.",
     href: RRR_PATHS.masterclass,
     cta: "See the Masterclass",
     image: {
@@ -84,8 +84,8 @@ export default function CoLivingCourse() {
             <p className="font-sans text-lg text-charcoal leading-snug">
               The manual I wish I had in year one. Not a framework, not a
               mindset course. The actual playbook I run every Monday morning,
-              written down. Three ways in, from a thirty-dollar book to eight
-              weeks with me in the room.
+              written down. Three ways in, from a thirty-dollar book to two days
+              with me in the room.
             </p>
           </AnimatedItem>
         </div>

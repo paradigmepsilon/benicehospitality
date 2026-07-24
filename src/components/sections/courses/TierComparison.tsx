@@ -35,7 +35,7 @@ const TIERS: readonly Tier[] = [
     name: "Masterclass",
     slug: "cohort",
     price: `$${RRR_PRICES.masterclassUsd.toLocaleString("en-US")}`,
-    cadence: "8 weeks live, capped at 15",
+    cadence: "2-day workshop, capped at 6",
     featured: true,
   },
   {
@@ -68,11 +68,11 @@ const COMPARISON: Array<{
     values: ["1 year", "1 year", "Lifetime"],
   },
   {
-    label: "8-week live Masterclass",
+    label: "2-day Masterclass workshop",
     values: [false, true, true],
   },
   {
-    label: "Weekly hot seat of your own",
+    label: "Individual Business Review (hot seat)",
     values: [false, true, true],
   },
   {
@@ -81,7 +81,7 @@ const COMPARISON: Array<{
   },
   {
     label: "Seats per cycle",
-    values: ["Open", "Open", "Capped at 5"],
+    values: ["Open", "Capped at 6", "Capped at 5"],
   },
 ];
 

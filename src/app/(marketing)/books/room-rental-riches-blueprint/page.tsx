@@ -171,6 +171,7 @@ export default function BlueprintPage() {
                 width={1400}
                 height={2100}
                 priority
+                quality={90}
                 className="w-full rounded-sm shadow-[0_30px_70px_rgba(0,0,0,0.6)] ring-1 ring-white/10"
               />
               <span className="absolute -right-3 -top-3 rotate-3 rounded bg-warm-gold px-3 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-near-black shadow-lg">
@@ -307,6 +308,7 @@ export default function BlueprintPage() {
                 src="/images/Website%20Images/Della%20Behind%20Desk.png"
                 alt="Della Henry at her desk, working on Southeast co-living operations"
                 fill
+                quality={90}
                 className="object-cover"
                 style={{ filter: "saturate(0.9) contrast(1.05)" }}
                 sizes="(min-width: 1024px) 20rem, (min-width: 640px) 24rem, 100vw"
@@ -407,6 +409,7 @@ export default function BlueprintPage() {
                       alt={pg.alt}
                       width={900}
                       height={1353}
+                      quality={90}
                       sizes="(min-width: 1024px) 360px, (min-width: 640px) 45vw, 90vw"
                       className="w-full"
                     />
@@ -434,6 +437,7 @@ export default function BlueprintPage() {
                   alt="A modern co-living kitchen where each cupboard and drawer is labeled with a brass plate for a different room — Room 1 through Room 5."
                   width={1264}
                   height={848}
+                  quality={90}
                   sizes="(min-width: 1024px) 960px, 100vw"
                   className="w-full"
                 />
@@ -511,6 +515,7 @@ export default function BlueprintPage() {
               alt="A 3D render of the Room Rental Riches: The Blueprint book, standing upright."
               width={529}
               height={790}
+              quality={90}
               sizes="(min-width: 768px) 220px, 180px"
               className="mx-auto mt-8 w-44 drop-shadow-[0_22px_28px_rgba(26,26,26,0.22)] md:w-56"
             />
