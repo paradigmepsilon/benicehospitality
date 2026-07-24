@@ -13,13 +13,16 @@ import { BLUEPRINT } from "@/lib/blueprint";
 import BuyBlueprintButton from "./_components/BuyBlueprintButton";
 
 /**
- * Room Rental Riches: The Blueprint — book sales page.
+ * Room Rental Riches: The Blueprint — sales page.
  *
- * Copy comes from the book itself: the back cover of blueprint_wrap_cover.png
- * and the module list in the manuscript. Nothing here is invented, and there
- * are deliberately NO testimonials — the only student quotes that exist are the
- * fabricated personas flagged in the monetization plan, which would be an FTC
- * problem to publish.
+ * Positioned as the operating manual for a co-living business, not "a book you
+ * buy." The promises are outcomes, each module leads with the result it gets
+ * you, and Della's own letter ("Why I wrote this") carries the credibility.
+ *
+ * Module titles and bodies still come straight from the manuscript, so nothing
+ * here is invented, and there are deliberately NO testimonials — the only
+ * student quotes that exist are the fabricated personas flagged in the
+ * monetization plan, which would be an FTC problem to publish.
  */
 
 const PRICE = `$${BLUEPRINT.priceUsd}`;
@@ -28,14 +31,14 @@ const LIST = `$${BLUEPRINT.priceListUsd}`;
 export const metadata: Metadata = {
   title: "Room Rental Riches: The Blueprint",
   description:
-    "Della Henry's field guide to mid-term co-living. Turn the home you already have into a cash-generating room rental business — property scoring, pricing, setup, operations, and scaling. PDF + ePub, $32.",
+    "The operating manual for building a co-living business that runs on systems, not stress. The exact system Della and Alex Henry use across their own co-living homes — property scoring, pricing, setup, operations, and scaling. PDF + ePub, $32.",
   alternates: {
     canonical: `https://benicehospitality.com${BLUEPRINT.path}`,
   },
   openGraph: {
     title: "Room Rental Riches: The Blueprint | Della Henry",
     description:
-      "Room by room, mid-term co-living turns spare space into steady income. The exact system Della and Alex Henry run across their own homes, handed to you step by step.",
+      "Not another real estate book. The exact operating system Della and Alex Henry use across their own co-living homes to create consistent income without living inside the business.",
     url: `https://benicehospitality.com${BLUEPRINT.path}`,
     type: "book",
     images: [
@@ -49,50 +52,53 @@ export const metadata: Metadata = {
   },
 };
 
-// The book's own back-cover promises.
+// Outcomes, not features. Each line is the result the reader walks away with,
+// rendered with the checkmark treatment below (so no literal ✓ in the string).
 const PROMISES = [
-  "Find and score a property that actually works, before you spend a dollar.",
-  "Furnish, price, and budget it for real profit instead of guesswork.",
-  "Fill your rooms and run them on systems, not stress.",
-  "Grow from one home toward a portfolio, on your own terms.",
+  "Avoid buying a property that never cash flows.",
+  "Know exactly what to charge for every room.",
+  "Fill your rooms without living in your inbox.",
+  "Build systems that keep working long after move-in.",
 ];
 
-// Modules as they appear in the manuscript.
+// Modules as they appear in the manuscript. `benefit` leads each card — the
+// result the module gets you — with the manuscript title kept underneath, since
+// the FAQ and the delivery email both point people to modules by number.
 const MODULES = [
   {
     n: "00",
+    benefit: "Pick the rental model that actually fits your life.",
     title: "Welcome to Room Rental Riches",
-    body: "The three rental models and where room rentals win. Who this is for and what the road ahead looks like.",
   },
   {
     n: "01",
+    benefit: "Know if a property will actually make money before you buy it.",
     title: "Property Viability and Target Audience",
-    body: "The five things that make a property viable, who you are actually renting to, and the two tools that take emotion out of the decision.",
   },
   {
     n: "02",
+    benefit: "Stop guessing what a room is worth.",
     title: "Financial Foundations",
-    body: "The six real start-up cost categories, a pricing formula that values each room on what it offers, and profit-first budgeting with a fifteen-minute review rhythm.",
   },
   {
     n: "03",
+    benefit: "Design for your residents, not your personal taste.",
     title: "Setup and Design, Without Being an Interior Designer",
-    body: "Design for your tenant's day rather than your taste. Mood board, furniture, cost-per-use buying, and staging that gets the listing clicked.",
   },
   {
     n: "04",
+    benefit: "Build a business that doesn't depend on you.",
     title: "Operations and Management",
-    body: "Listings across platforms, the five-touch messaging cadence, shared calendars, and money tracking. The systems that run the business so it does not run you.",
   },
   {
     n: "05",
+    benefit: "Create a marketing system that keeps rooms full.",
     title: "Marketing, and Keeping Your Rooms Full",
-    body: "The engine behind occupancy: where demand actually comes from and how to keep a pipeline rather than scrambling at every turnover.",
   },
   {
     n: "06",
+    benefit: "Scale with confidence instead of chaos.",
     title: "Maximizing Revenue and Scaling",
-    body: "The bonus chapter. Once it runs without you on call, how to take it further and grow toward a portfolio.",
   },
 ];
 
@@ -101,7 +107,7 @@ const MODULES = [
 const LOOK_INSIDE = [
   {
     src: "/images/blueprint_page_roadmap.webp",
-    alt: "The Be Nice Way five-phase roadmap page from the book",
+    alt: "The Be Nice Way five-phase roadmap page from the operating manual",
     caption:
       "Every chapter follows the same five-phase method, so you always know which part you are in.",
   },
@@ -130,7 +136,7 @@ const FAQS = [
   },
   {
     q: "How is this different from the course?",
-    a: "The Blueprint is the written system, start to finish, at your own pace. The Room Rental Riches course is the same body of work taught with live support, accountability, and time with Della, at three commitment levels. Plenty of people read the book first and take the course when they want someone in it with them.",
+    a: "The Blueprint is the written system, start to finish, at your own pace. The Room Rental Riches course is the same body of work taught with live support, accountability, and time with Della, at three commitment levels. Plenty of people read the operating manual first and take the course when they want someone in it with them.",
   },
   {
     q: "What is the Nice Host Network account?",
@@ -139,6 +145,10 @@ const FAQS = [
   {
     q: "Will this work outside the Southeast?",
     a: "The operating system travels. Property scoring, pricing logic, setup standards, guest experience, and the operational rhythms work anywhere. The market examples come from the Atlanta metro because that is where these homes actually run, so do your own homework on local rules for your city.",
+  },
+  {
+    q: "Who is this NOT for?",
+    a: "This isn't for someone looking for overnight passive income or a get-rich-quick strategy. It's for operators who want to build a real business with repeatable systems that create long-term flexibility.",
   },
 ];
 
@@ -173,14 +183,16 @@ export default function BlueprintPage() {
             <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold md:text-sm">
               Room Rental Riches · The Blueprint
             </p>
-            <h1 className="mb-6 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl">
-              The home you already have is a business waiting to happen.
+            <h1 className="mb-6 font-display text-3xl font-semibold leading-[1.05] tracking-tight text-white md:text-4xl lg:text-5xl">
+              The Operating Manual for Building a Co-Living Business That Runs on
+              Systems, Not Stress.
             </h1>
-            <p className="mb-8 max-w-xl font-sans text-lg leading-snug text-white/85">
-              Room by room, mid-term co-living turns spare space into steady
-              income, with less work than a short-term rental and far more profit
-              than a yearly lease. This is the exact system Della and Alex Henry
-              run across their own homes, handed to you step by step.
+            <p className="mb-8 max-w-2xl font-sans text-lg leading-snug text-white/85">
+              This isn&rsquo;t another real estate book. It&rsquo;s the exact
+              operating system Alex and I use across our own co-living homes to
+              create consistent income without living inside the business. Every
+              lesson has been tested in our own portfolio before making it into
+              these pages.
             </p>
 
             {/* concrete, verifiable specs — the stuff a buyer scans for */}
@@ -217,51 +229,53 @@ export default function BlueprintPage() {
             </p>
           </div>
         </div>
+
+        {/* The promise, in the hero rather than a scroll away — but below the
+            buy column and behind a rule, so it reads as its own band instead of
+            crowding the headline and CTA. Two-up on desktop keeps each line to
+            one line. */}
+        <div className="relative mx-auto mt-14 max-w-6xl border-t border-white/15 pt-10 md:mt-16">
+          <p className="mb-7 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold">
+            Inside, you will learn to
+          </p>
+          <ul className="grid grid-cols-1 gap-x-12 gap-y-5 md:grid-cols-2">
+            {PROMISES.map((p) => (
+              <li key={p} className="flex items-start gap-3.5">
+                <span
+                  aria-hidden
+                  className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-warm-gold/15"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    stroke="#B08D57"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                </span>
+                <span className="font-sans text-base leading-snug text-white/85 md:text-lg">
+                  {p}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
+      {/* PULL QUOTE — Della's voice, verbatim from the welcome letter. Runs
+          straight on from the hero's dark ground: the promise band closes the
+          pitch, the quote answers "says who?" before the page opens to light.
+          Same padding scale as the hero so the two hairline rules line up. */}
+      <section className="bg-near-black px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
+        {/* Closes the promise band. A curve divider would be invisible here —
+            both sides are near-black — so the rule does the separating. */}
+        <div aria-hidden className="mx-auto max-w-6xl border-t border-white/15" />
 
-      {/* WHAT YOU LEARN */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
-        <div className="mx-auto max-w-3xl">
-          <AnimatedItem>
-            <SectionLabel>Inside, you will learn to</SectionLabel>
-          </AnimatedItem>
-          <AnimatedDiv stagger className="mt-8 space-y-5">
-            {PROMISES.map((p) => (
-              <AnimatedItem key={p}>
-                <div className="flex items-start gap-4">
-                  <span
-                    aria-hidden
-                    className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-deep-teal/10"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="#1A4D4F"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M5 12.5l4.5 4.5L19 7.5" />
-                    </svg>
-                  </span>
-                  <p className="font-sans text-lg leading-relaxed text-charcoal">
-                    {p}
-                  </p>
-                </div>
-              </AnimatedItem>
-            ))}
-          </AnimatedDiv>
-        </div>
-      </AnimatedSection>
-
-      <SectionDivider fromColor={C.cream} toColor={C.nearBlack} />
-
-      {/* PULL QUOTE — Della's voice, verbatim from the welcome letter */}
-      <section className="bg-near-black px-6 py-14 md:py-20">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto mt-14 max-w-3xl text-center md:mt-16">
           <svg
             aria-hidden
             viewBox="0 0 24 24"
@@ -281,7 +295,84 @@ export default function BlueprintPage() {
         </div>
       </section>
 
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
+      <SectionDivider fromColor={C.nearBlack} toColor={C.white} />
+
+      {/* WHY I WROTE THIS — Della's letter. Short paragraphs on purpose; the
+          line breaks are the cadence of how she actually says it. */}
+      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
+          <AnimatedItem>
+            <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm lg:mx-0 lg:max-w-none">
+              <Image
+                src="/images/Website%20Images/Della%20Behind%20Desk.png"
+                alt="Della Henry at her desk, working on Southeast co-living operations"
+                fill
+                className="object-cover"
+                style={{ filter: "saturate(0.9) contrast(1.05)" }}
+                sizes="(min-width: 1024px) 20rem, (min-width: 640px) 24rem, 100vw"
+              />
+            </div>
+          </AnimatedItem>
+
+          <div>
+            <AnimatedItem>
+              <SectionLabel>Why I wrote this</SectionLabel>
+            </AnimatedItem>
+            <AnimatedItem>
+              <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
+                I wrote the guide I wish someone had handed me.
+              </h2>
+            </AnimatedItem>
+
+            <AnimatedDiv
+              stagger
+              className="mt-8 space-y-4 font-sans text-base leading-relaxed text-charcoal/80 md:text-lg"
+            >
+              <AnimatedItem>
+                <p>When Alex and I started, we made expensive mistakes.</p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p>We overthought purchases.</p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p>We learned lessons the hard way.</p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p>
+                  We built our operating systems one problem at a time.
+                </p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p className="pt-2">
+                  I wrote this because I wanted to create the guide I wish
+                  someone had handed me before our first room ever went live.
+                </p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p>
+                  Today those same systems run twelve co-living homes across the
+                  Southeast.
+                </p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p>
+                  If this Blueprint helps you avoid one bad property decision or
+                  one month of vacancy, it&rsquo;ll pay for itself many times
+                  over.
+                </p>
+              </AnimatedItem>
+            </AnimatedDiv>
+
+            <AnimatedItem>
+              <p className="mt-8 font-sans text-sm font-semibold uppercase tracking-[0.2em] text-warm-gold">
+                &mdash; Della Henry
+              </p>
+            </AnimatedItem>
+          </div>
+        </div>
+      </AnimatedSection>
+
+      <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* LOOK INSIDE — real pages rendered from the manuscript */}
       <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
@@ -297,8 +388,8 @@ export default function BlueprintPage() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="mt-5 font-sans text-base leading-relaxed text-charcoal/75 md:text-lg">
-                This is a working field guide, laid out to be used. Here are three
-                pages straight from the book.
+                This is a working operating manual, laid out to be used. Here
+                are three pages straight from it.
               </p>
             </AnimatedItem>
           </div>
@@ -389,22 +480,14 @@ export default function BlueprintPage() {
                         : "border-light-gray bg-cream hover:border-deep-teal/40",
                     ].join(" ")}
                   >
-                    <p
-                      aria-hidden
-                      className="mb-3 font-mono text-xs font-semibold tracking-[0.2em] text-warm-gold"
-                    >
-                      {isBonus ? `${m.n} · Bonus` : m.n}
+                    <p className="mb-3 font-mono text-xs font-semibold tracking-[0.2em] text-warm-gold">
+                      {isBonus ? `Module ${m.n} · Bonus` : `Module ${m.n}`}
                     </p>
-                    <h3 className="mb-3 font-display text-xl font-semibold leading-snug text-deep-teal">
-                      {m.title}
+                    <h3 className="mb-2 font-display text-xl font-semibold leading-snug text-deep-teal">
+                      {m.benefit}
                     </h3>
-                    <p
-                      className={[
-                        "font-sans text-sm leading-relaxed text-charcoal/75",
-                        isBonus ? "max-w-xl" : "",
-                      ].join(" ")}
-                    >
-                      {m.body}
+                    <p className="font-sans text-sm font-semibold text-charcoal/60">
+                      {m.title}
                     </p>
                   </article>
                 </AnimatedItem>
@@ -434,7 +517,7 @@ export default function BlueprintPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="mx-auto mt-8 max-w-2xl font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-              The book, both formats, and a seat in the network.
+              The operating manual, both formats, and a seat in the network.
             </h2>
           </AnimatedItem>
 
@@ -449,7 +532,7 @@ export default function BlueprintPage() {
               },
               {
                 t: "The ePub",
-                b: "The same book for your e-reader, included at no extra cost.",
+                b: "The same operating manual for your e-reader, included at no extra cost.",
               },
               {
                 t: "Your network account",
@@ -540,8 +623,8 @@ export default function BlueprintPage() {
           <AnimatedItem>
             <p className="mt-12 font-sans text-sm leading-relaxed text-charcoal/55">
               Educational content only, not legal, tax, or financial advice.
-              Dollar figures in the book are illustrative examples drawn from our
-              own operations, not a guarantee of what you will earn. Consult a
+              Dollar figures in these pages are illustrative examples drawn from
+              our own operations, not a guarantee of what you will earn. Consult a
               licensed attorney and tax professional in your area before making
               decisions.{" "}
               <Link
