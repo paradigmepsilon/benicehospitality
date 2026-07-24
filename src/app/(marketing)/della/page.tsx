@@ -344,7 +344,7 @@ export default function DellaPage() {
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
                   The full operating manual. 12 modules, video led, fully
                   self-paced. 500 dollars, lifetime access, no
-                  cohort schedule pressuring you. Watch on your couch in
+                  Masterclass schedule pressuring you. Watch on your couch in
                   pajamas.
                 </p>
                 <div className="space-y-3 mb-8">

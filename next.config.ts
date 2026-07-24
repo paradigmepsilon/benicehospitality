@@ -74,6 +74,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // The middle course tier was renamed Cohort -> Masterclass. Only the
+        // label and the route changed: the stored tier value in course_tiers,
+        // the WaitlistTier enum, and every /account and /admin path still use
+        // the string "cohort".
+        source: "/courses/room-rental-riches/cohort",
+        destination: "/courses/room-rental-riches/masterclass",
+        permanent: true,
+      },
+      {
         // Future free/paid tool suite lives under /tools. The Co-living Property
         // Calculator keeps its canonical /resources URL; /tools/property-viability
         // is the memorable alias.

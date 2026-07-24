@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { AnimatedItem } from "@/components/ui/AnimatedSection";
 import WaitlistModal from "@/components/sections/courses/WaitlistModal";
 import type { WaitlistTier } from "@/lib/validation/waitlist";
+import { RRR_PRICES } from "@/lib/room-rental-riches";
 import posthog from "posthog-js";
 
 type CompareValue = boolean | string;
@@ -17,25 +18,30 @@ interface Tier {
   featured: boolean;
 }
 
+// `name` is the label a human reads; `slug` is the stored value. The middle
+// tier is called the Masterclass everywhere on the site, but its slug is still
+// "cohort" — that string is in the course_tiers CHECK constraint, the
+// WaitlistTier enum, and every /account and /admin path. Renaming it is a
+// migration, not a copy change.
 const TIERS: readonly Tier[] = [
   {
     name: "Self-paced",
     slug: "self_paced",
-    price: "$497",
+    price: `$${RRR_PRICES.selfPacedUsd}`,
     cadence: "On your timeline",
     featured: false,
   },
   {
-    name: "Cohort",
+    name: "Masterclass",
     slug: "cohort",
-    price: "$2,497",
-    cadence: "8-week guided",
+    price: `$${RRR_PRICES.masterclassUsd.toLocaleString("en-US")}`,
+    cadence: "8 weeks live, capped at 15",
     featured: true,
   },
   {
     name: "Operator",
     slug: "operator",
-    price: "$7,497",
+    price: `$${RRR_PRICES.operatorUsd.toLocaleString("en-US")}`,
     cadence: "90-day 1:1 with Della",
     featured: false,
   },
@@ -62,11 +68,11 @@ const COMPARISON: Array<{
     values: ["1 year", "1 year", "Lifetime"],
   },
   {
-    label: "8-week guided cohort",
+    label: "8-week live Masterclass",
     values: [false, true, true],
   },
   {
-    label: "Weekly live cohort sessions",
+    label: "Weekly hot seat of your own",
     values: [false, true, true],
   },
   {

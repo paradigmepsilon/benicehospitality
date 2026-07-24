@@ -27,7 +27,7 @@ const NINETY_DAY_ARC = [
   {
     phase: "Days 15–60",
     title: "Build",
-    body: "The 8-week cohort runs during this window. You're in the room with the cohort group across all 12 modules, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. 8 sessions land in this phase.",
+    body: "The 8-week Masterclass runs during this window. You're in the room with the Masterclass group across all 12 modules, and you're also in monthly 1:1s with Della applying Modules 3 through 11 to your specific portfolio. 8 sessions land in this phase.",
   },
   {
     phase: "Days 61–90",
@@ -42,7 +42,7 @@ export default function OperatorPage() {
       <CourseHero
         eyebrow="Room Rental Riches · Operator · 5 seats per cycle"
         headline={<>$7,497.</>}
-        body="90 days. 12 sessions with Della. Cohort included. Lifetime in the Nice Host Network. Capped at 5 students per cycle, 2 cycles a year."
+        body="90 days. 12 sessions with Della. The Masterclass included. Lifetime in the Nice Host Network. Capped at 5 students per cycle, 2 cycles a year."
         primaryCta={{ label: "Login", href: "/login" }}
         secondaryCta={{
           label: "Compare Tiers",
@@ -50,7 +50,7 @@ export default function OperatorPage() {
         }}
         previewTitle="What's included"
         previewItems={[
-          "Everything in the Cohort tier: all 12 modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the 8-week guided cohort, the cohort archive",
+          "Everything in the Masterclass tier: all 12 modules, the Bonus Pack intro and Tier 2/3 Deep Dive, the 8 live weeks, the permanent archive",
           "12 60-minute 1:1 sessions with Della, 1 per module, spread across 90 days",
           "Lifetime access to the Nice Host Network: not 1 year, not 3, lifetime",
           "Direct messaging access to Della between sessions for the duration of the engagement",
@@ -133,7 +133,7 @@ export default function OperatorPage() {
               <p>
                 Della takes 5 operators per cycle. 2 cycles a year. The
                 cap isn&rsquo;t a marketing line. It&rsquo;s the math of how
-                much 1:1 work is sustainable while keeping the cohort and
+                much 1:1 work is sustainable while keeping the Masterclass and
                 community running.
               </p>
               <p className="text-warm-gold font-semibold">

@@ -935,9 +935,9 @@ async function migrate() {
     SELECT c.id, t.tier, t.name, t.description, t.price_cents, t.position
     FROM courses c
     CROSS JOIN (VALUES
-      ('self-paced'::text, 'Self-paced', 'Lifetime course access plus one year in the Nice Host Network. Read-the-docs pace.', 49700, 0),
-      ('cohort'::text, 'Cohort', 'Eight-week guided cohort with weekly sessions and a hot-seat slot. Most popular tier.', 249700, 1),
-      ('operator'::text, 'Operator (1:1)', '90 days of 1:1 with Della plus everything in cohort. Five seats per cycle.', 749700, 2)
+      ('self-paced'::text, 'Self-paced', 'Lifetime course access plus one year in the Nice Host Network. Read-the-docs pace.', 28700, 0),
+      ('cohort'::text, 'Masterclass', 'Eight weeks live with weekly sessions and a hot-seat slot, capped at fifteen. Most popular tier.', 249700, 1),
+      ('operator'::text, 'Operator (1:1)', '90 days of 1:1 with Della plus everything in the Masterclass. Five seats per cycle.', 749700, 2)
     ) AS t(tier, name, description, price_cents, position)
     WHERE c.slug = 'room-rental-riches'
     ON CONFLICT (course_id, tier) DO NOTHING

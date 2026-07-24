@@ -10,11 +10,12 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
+import { CURRICULUM, BONUS_PACK } from "@/lib/room-rental-riches";
 
 export const metadata: Metadata = {
   title: "Room Rental Riches",
   description:
-    "Run your co-living portfolio like a real business. 3 commitment tiers from $497 self-paced to $7,497 90-day Operator. Founding pricing for the first 100 students.",
+    "Run your co-living portfolio like a real business. 3 commitment tiers, from $287 self-paced to the $7,497 90-day Operator engagement. Founding pricing for the first 100 students.",
   alternates: {
     canonical: "https://benicehospitality.com/courses/room-rental-riches",
   },
@@ -27,118 +28,11 @@ export const metadata: Metadata = {
   },
 };
 
-const MODULE_IMAGE_BASE = "/images/Website Images";
-
-const CURRICULUM = [
-  {
-    number: "01",
-    phase: "Phase 1 · Foundation",
-    title: "The MTR + Co-Living Opportunity",
-    body: "Why now. The 2026 mid-term and co-living market. 19% MTR share. 136% growth since 2019. Atlanta as the case study. The 7-Southeast-metro opportunity map.",
-    image: `${MODULE_IMAGE_BASE}/module-01-opportunity.png`,
-    imageAlt: "Atlanta craftsman bungalow exterior at golden hour",
-  },
-  {
-    number: "02",
-    phase: "Phase 1 · Foundation",
-    title: "Legal, Regulatory & Business Setup",
-    body: "State-by-state matrix for GA, FL, TX, NC, SC, VA, TN. LLC formation. Insurance. Lease structure templates. The legal foundation that keeps the business standing.",
-    image: `${MODULE_IMAGE_BASE}/module-02-legal-setup.png`,
-    imageAlt: "Wooden desk with leather folio, fountain pen, and an olive plant",
-  },
-  {
-    number: "03",
-    phase: "Phase 1 · Foundation",
-    title: "Choosing Your Path",
-    body: "Arbitrage vs. ownership vs. co-host. The decision matrix and capital calculator. The forced-commitment exercise that gates the rest of the course. Pick a path before market analysis.",
-    image: `${MODULE_IMAGE_BASE}/module-03-choosing-path.png`,
-    imageAlt: "3 brass keys on a wooden surface beside a folded map",
-  },
-  {
-    number: "04",
-    phase: "Phase 2 · Acquisition",
-    title: "Market Analysis & Property Selection",
-    body: "AI-powered market research the competitors don't teach. 25+ prompts. Demand-driver mapping for 7 Southeast metros. AirDNA and Furnished Finder Pro integrated.",
-    image: `${MODULE_IMAGE_BASE}/module-04-market-analysis.png`,
-    imageAlt: "Laptop on a linen desk showing a stylized city map",
-  },
-  {
-    number: "05",
-    phase: "Phase 2 · Acquisition",
-    title: "Securing Your First Property",
-    body: "5 email pitch versions. 25+ landlord objection handlers. 15+ owner objection handlers. Attorney-reviewed lease addendum templates. The outreach work that lands the first deal.",
-    image: `${MODULE_IMAGE_BASE}/module-05-securing-property.png`,
-    imageAlt: "Hands signing a lease document with a fountain pen and brass key",
-  },
-  {
-    number: "06",
-    phase: "Phase 3 · Setup",
-    title: "Hospitality-Grade Design",
-    body: "5 tenant personas. Will Guidara's Unreasonable Hospitality framework, applied. 50+ signature touches. The BNHG welcome basket. Room-by-room design that earns 5 stars.",
-    image: `${MODULE_IMAGE_BASE}/module-06-design.png`,
-    imageAlt: "Linen armchair reading nook with stacked books and an olive plant",
-  },
-  {
-    number: "07",
-    phase: "Phase 3 · Setup",
-    title: "Your Modern Tech Stack",
-    body: "Hospitable + PriceLabs + Turno + smart locks + Stessa, configured. 30+ AI guest-messaging prompts. The smart-lock comparison. The stack that runs without you in the loop.",
-    image: `${MODULE_IMAGE_BASE}/module-07-tech-stack.png`,
-    imageAlt: "Matte-black smart lock on a paneled wooden door",
-  },
-  {
-    number: "08",
-    phase: "Phase 4 · Launch",
-    title: "Multi-Channel Listing Strategy",
-    body: "Furnished Finder first (50% travel-nurse audience), then Airbnb, Zillow, Apartments.com, Hospitable Direct. 15+ AI listing-copy prompts. 30+ headline formulas. Per-platform photo strategy.",
-    image: `${MODULE_IMAGE_BASE}/module-08-multi-channel.png`,
-    imageAlt: "Smartphone on a linen surface displaying a real estate listing",
-  },
-  {
-    number: "09",
-    phase: "Phase 4 · Launch",
-    title: "Pricing for Profit (MTR Math)",
-    body: "MTR Pricing Calculator V3. The length-of-stay framework other operators get wrong. 15 to 25% discounts vs. an industry that runs 35 to 46%. 7 Southeast seasonal calendars. The math behind a $9,720 per year per property delta.",
-    image: `${MODULE_IMAGE_BASE}/module-09-pricing.png`,
-    imageAlt: "Open leather notebook with handwritten number columns, calculator and coffee",
-  },
-  {
-    number: "10",
-    phase: "Phase 5 · Operations",
-    title: "Guest Experience Systems",
-    body: "23+ message templates across 6 phases. 25-scenario issue-resolution playbook. Repeat-guest rebooking funnel. Difficult-guest scripts. The communication cadence that holds 4.85+ stars.",
-    image: `${MODULE_IMAGE_BASE}/module-10-guest-experience.png`,
-    imageAlt: "Handwritten welcome card propped against a vase of fresh herbs on a bedside table",
-  },
-  {
-    number: "11",
-    phase: "Phase 5 · Operations",
-    title: "Cleaning, Maintenance & Vendor Management",
-    body: "70+ item hospitality-grade cleaning checklist. 6-vendor essential network. Preventive-maintenance calendar. Emergency response protocol. The operations layer that doesn't break.",
-    image: `${MODULE_IMAGE_BASE}/module-11-cleaning.png`,
-    imageAlt: "Folded cream linen towels on a wooden bench beside a woven basket of supplies",
-  },
-  {
-    number: "12",
-    phase: "Phase 6 · Growth",
-    title: "Scaling Beyond Your First Property",
-    body: "Property #1 readiness audit. SOP template library (15+ pre-built). VA hiring playbook. The 5 to 10 property roadmap. Path-to-W-2-Replacement calculator. Honest 24 to 36 month timeline.",
-    image: `${MODULE_IMAGE_BASE}/module-12-scaling.png`,
-    imageAlt: "Row of brass keys hanging on a leather key holder above a wooden console",
-  },
-];
-
-const BONUS_PACK = {
-  title: "Bonus Pack: Direct Booking & AI Visibility",
-  body: "The intro (4 lessons) ships in every tier. Schema, llms.txt, the foundation AI-visibility checklist. Cohort and Operator unlock the deep dive: GEO/AEO content strategy, third-party citations, MCP readiness, the AI-era brand. The work that pays off from 2026 through 2030.",
-};
-
-
 export default function RRRPage() {
   return (
     <>
       <CourseHero
-        eyebrow="Self-paced · Cohort · Operator"
+        eyebrow="Self-paced · Masterclass · Operator"
         headline={
           <>
             Room Rental
@@ -170,11 +64,15 @@ export default function RRRPage() {
 
       <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
 
+      {/* Every figure here has to be checkable. The old "125 Lessons" stat was
+          not: Postgres holds fourteen published lessons, with the remaining
+          modules still in production. Swapped for the regulatory coverage,
+          which is real and is in Module 2. */}
       <StatsStrip
         items={[
           { value: "12", label: "Modules + Bonus Pack" },
           { value: "6", label: "Phases" },
-          { value: "125", label: "Lessons" },
+          { value: "7", label: "Southeast states covered" },
           { value: "100", label: "Founding seats" },
         ]}
       />
@@ -259,11 +157,16 @@ export default function RRRPage() {
                 guest-experience systems, vendor networks, and the path to
                 W-2 replacement.
               </p>
+              {/* This used to name two students, Maya and James, with unit
+                  counts and backstories. Neither exists — they are personas
+                  from the monetization plan, and presenting them as real
+                  students is an FTC problem. The point they were making is
+                  true and survives without the names. */}
               <p className="text-warm-gold font-semibold pt-2">
-                Same curriculum, both directions. Maya runs 5 units in
-                suburban Atlanta and started in Phase 3. James was a travel
-                nurse with no property yet and started in Phase 1. The course
-                was built for both of them.
+                Same curriculum, both directions. An operator with 5 units
+                already running starts in Phase 3 and works forward. Someone
+                with no property yet starts in Phase 1 and works the whole arc.
+                The course was built to be entered from either end.
               </p>
             </div>
           </AnimatedItem>
@@ -382,12 +285,16 @@ export default function RRRPage() {
 
           <TierComparison />
 
+          {/* No post-founding escalation figures here any more. Naming a
+              number we would then have to honor on a date we have not set is
+              a promise with no plan behind it. The cap is the real constraint
+              and it is the one stated. */}
           <div className="text-center mt-10 max-w-2xl mx-auto">
             <p className="font-sans text-sm text-charcoal/70 italic">
-              Founding pricing: the first 100 students per tier get launch
-              pricing. After that, prices move to $697, $3,497, and $9,997.
-              Cohort and Operator tier prices include the launch cohort and
-              don&rsquo;t increase until the cap is met.
+              Founding pricing holds for the first 100 students per tier, and
+              enrollment is not open yet. Reserve a seat on any tier and you
+              lock the founding price plus every module the day it ships, with
+              no upgrade fee.
             </p>
           </div>
         </div>

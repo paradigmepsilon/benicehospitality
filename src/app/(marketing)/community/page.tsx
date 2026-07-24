@@ -38,7 +38,7 @@ const NETWORK_FEATURES = [
   },
   {
     title: "Bundled with every course tier",
-    body: "Buy any Room Rental Riches tier (self-paced, cohort, or operator) and you're in. Self-paced gets 1 year. Cohort gets 1 year plus the cohort. Operator gets lifetime.",
+    body: "Buy any Room Rental Riches tier (self-paced, Masterclass, or Operator) and you're in. Self-paced gets 1 year. Masterclass gets 1 year plus the eight live weeks. Operator gets lifetime.",
   },
   {
     title: "Asset-class channels",

@@ -141,7 +141,7 @@ export default function RoomRentalRichesPage() {
                   <p className="mb-5 font-sans text-sm leading-relaxed text-charcoal/75">
                     The same curriculum, taught with support and accountability.
                     Twelve modules across six phases, at three commitment levels
-                    — self-paced, cohort, or Operator, where we install it with
+                    — self-paced, the Masterclass, or Operator, where we install it with
                     you.
                   </p>
 

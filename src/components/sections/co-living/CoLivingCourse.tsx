@@ -7,12 +7,13 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import { BLUEPRINT } from "@/lib/blueprint";
+import { RRR_PRICES, RRR_PATHS } from "@/lib/room-rental-riches";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
-// Prices mirror the tier pages under /courses/room-rental-riches/* and the book
-// constants in lib/blueprint.ts. Those remain the source of truth — this is a
-// funnel summary, so a price change there must change here too. The book price
-// is imported rather than retyped so it can never drift.
+// Every price and path here is imported, never retyped: the book from
+// lib/blueprint.ts, the two course tiers from lib/room-rental-riches.ts. This
+// block is a funnel summary of pages that own their own numbers, and hand-typed
+// copies are how those numbers drift apart.
 //
 // Operator ($7,497) is deliberately NOT a card here. It is not a self-serve
 // tier: it is the one-to-one engagement offered after someone reaches out and
@@ -35,10 +36,10 @@ const TIERS = [
   },
   {
     name: "Self-paced",
-    price: "$497",
-    note: "Founding price for the first 100 students, then $697.",
+    price: `$${RRR_PRICES.selfPacedUsd}`,
+    note: `Normally $${RRR_PRICES.selfPacedListUsd}. Twelve modules, lifetime access.`,
     tagline: "The whole system, on your couch.",
-    body: "Twelve modules, lifetime access, no cohort schedule breathing down your neck. Property selection through scaling, with the SOPs, templates, and vendor lists I use.",
+    body: "Twelve modules, lifetime access, no class schedule breathing down your neck. Property selection through scaling, with the SOPs, templates, and vendor lists I use.",
     href: "/courses/room-rental-riches/self-paced",
     cta: "See Self-paced",
     image: {
@@ -49,11 +50,11 @@ const TIERS = [
   },
   {
     name: "Masterclass",
-    price: "$2,497",
+    price: `$${RRR_PRICES.masterclassUsd.toLocaleString("en-US")}`,
     note: "Runs quarterly. Eight weeks, live, capped at fifteen operators.",
     tagline: "The same system, with me in the room.",
     body: "Everything in self-paced plus eight weeks of live guided work, weekly hot seats where you bring a real situation, direct messaging with me throughout, and a year in the network. Four cohorts a year, so seats are limited.",
-    href: "/courses/room-rental-riches/cohort",
+    href: RRR_PATHS.masterclass,
     cta: "See the Masterclass",
     image: {
       src: "/images/Website%20Images/course-masterclass-cohort-v2.png",
