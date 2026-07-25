@@ -64,8 +64,9 @@ rememberAttribution();
 // own /ingest rewrite (next.config.ts) so ad blockers don't eat them. The
 // server-side client (src/lib/posthog-server.ts) shares the same token, so
 // client pageviews and webhook purchase events land in ONE project — the
-// Unified Ops funnel depends on that. Della's bio page uses the same token for
-// the same reason.
+// Unified Ops funnel depends on that. Della's bio page used to share this token
+// for the same reason, but since 2026-07-23 it reports into its own project
+// (DellHenryBio@c787904); the ph_did/ph_sid handoff below still links the two.
 posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
   api_host: "/ingest",
   ui_host: "https://us.posthog.com",
