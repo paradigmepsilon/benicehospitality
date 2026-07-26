@@ -15,26 +15,27 @@ import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
   title:
-    "Alex Henry | Fleet Management & Technology at Be Nice Hospitality (Atlanta, GA)",
+    "Alex Henry | Boutique Stay AI Consultant & Fleet Management at Be Nice Hospitality (Atlanta, GA)",
   description:
-    "Alex Henry, co-founder of Be Nice Hospitality. Leads the fleet management side of the company and the technology work behind everything else, including Signal services for boutique stays.",
+    "Alex Henry, co-founder of Be Nice Hospitality. Leads the AI systems work for boutique stays, including Signal services, and runs the fleet management side of the company.",
   keywords: [
+    "boutique stay AI consultant",
+    "AI services for boutique stays",
+    "AI search visibility hotels",
+    "hospitality automation",
+    "boutique stay technology",
+    "Signal by BNHG",
     "Car Rental Riches",
     "Turo fleet operations",
     "small fleet management",
-    "fleet management coaching",
-    "boutique stay technology",
-    "AI services for boutique stays",
-    "hospitality automation",
     "Alex Henry",
     "Be Nice Hospitality",
-    "Signal by BNHG",
   ],
   alternates: { canonical: "https://benicehospitality.com/alex" },
   openGraph: {
-    title: "Alex Henry. Vehicles, technology, and the build side of BNHG.",
+    title: "Alex Henry. AI systems for boutique stays, and the fleet arm of BNHG.",
     description:
-      "Della runs co-living properties. Alex runs vehicles and tech. Book a working call, get on the Car Rental Riches waitlist, or see what Signal does for boutique stays.",
+      "Della runs co-living properties. Alex builds AI systems for boutique stays and runs the vehicle fleet. Book a working call, see what Signal does for your property, or get on the Car Rental Riches waitlist.",
     url: "https://benicehospitality.com/alex",
     type: "profile",
     images: [
@@ -50,18 +51,6 @@ export const metadata: Metadata = {
 
 const EXPERTISE = [
   {
-    title: "Vehicle Fleet Operations",
-    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running 3 to 30 economy vehicles. The same operating discipline Della brings to co-living properties, applied to the cars sitting in your driveway.",
-  },
-  {
-    title: "Turo and Direct Channel Strategy",
-    body: "When to lean into Turo, when to diversify, and how to honestly model the trade-off. Most fleet teachers online treat Turo as the whole game. It is 1 channel. Building the others is where small fleets quietly outgrow the side-hustle bracket.",
-  },
-  {
-    title: "Tech Stack and Integrations",
-    body: "When the off-the-shelf tools stop talking to each other, Alex builds the bridge. PMS integrations, fleet management dashboards, the small automations that let 1 person run what used to take 3. You keep the code and the keys.",
-  },
-  {
     title: "AI Search and Visibility",
     body: "Getting your boutique stay or your fleet cited inside ChatGPT, Perplexity, and the AI overviews that are quietly replacing search. Structured content, schema, and a monitoring stack that proves the work is paying out.",
   },
@@ -73,19 +62,31 @@ const EXPERTISE = [
     title: "Automations and Internal Tools",
     body: "The repetitive work that eats your week. Pre-arrival messages, vendor flows, housekeeping routing, fleet inspection logs, guest comms. The boring infrastructure that gives an operator their evenings back.",
   },
+  {
+    title: "Tech Stack and Integrations",
+    body: "When the off-the-shelf tools stop talking to each other, Alex builds the bridge. PMS integrations, fleet management dashboards, the small automations that let 1 person run what used to take 3. You keep the code and the keys.",
+  },
+  {
+    title: "Vehicle Fleet Operations",
+    body: "Pricing, channel mix, cleaning cadence, and customer flow for operators running 3 to 30 economy vehicles. The same operating discipline Della brings to co-living properties, applied to the cars sitting in your driveway.",
+  },
+  {
+    title: "Turo and Direct Channel Strategy",
+    body: "When to lean into Turo, when to diversify, and how to honestly model the trade-off. Most fleet teachers online treat Turo as the whole game. It is 1 channel. Building the others is where small fleets quietly outgrow the side-hustle bracket.",
+  },
 ];
 
 const STATS = [
-  { figure: "3-30", label: "Vehicles in the CRR sweet spot" },
   { figure: "10-50", label: "Rooms in the Signal sweet spot" },
   { figure: "100%", label: "Signal scopes written down before kickoff" },
   { figure: "30", label: "Day money-back on productized work" },
+  { figure: "3-30", label: "Vehicles in the CRR sweet spot" },
 ];
 
 const FAQS = [
   {
     q: "What does Alex actually focus on at BNHG?",
-    a: "2 things, mostly. He runs the fleet management side of the company, which is where Car Rental Riches lives. And he leads the technology work that touches everything else, including Signal services for boutique stays. Della handles the co-living property coaching. Alex handles the cars, the tools, and the systems underneath all of it.",
+    a: "2 things, mostly. He leads the AI and technology work for boutique stays, which is where Signal lives. And he runs the fleet management side of the company, home of Car Rental Riches. Della handles the co-living property coaching. Alex handles the AI systems, the tools, and the cars.",
   },
   {
     q: "How is Car Rental Riches different from Room Rental Riches?",
@@ -93,7 +94,7 @@ const FAQS = [
   },
   {
     q: "Do I need to operate vehicles to work with Alex?",
-    a: "No. Plenty of his work is on the co-living property side too. Signal services for boutique stays, custom automations, integrations that connect tools you already pay for. If your operation is mostly co-living but the tech is the thing holding you back, you are in the right room.",
+    a: "No. Most of his work is on the boutique stay side. Signal services, custom automations, AI search visibility, integrations that connect tools you already pay for. Vehicles are the second lane. If the tech is the thing holding your property back, you are in the right room.",
   },
   {
     q: "What is Signal and who is it for?",
@@ -111,9 +112,10 @@ const FAQS = [
 
 export default function AlexPage() {
   return (
-    // Alex is the fleet door. The Signal card inside is scoped to the boutique
+    // Alex leads with boutique-stay AI consulting, so the page carries the
+    // boutique lane. The Car Rental Riches card inside is scoped to the fleet
     // lane, since that block belongs to a different vertical.
-    <LaneSection lane="fleet">
+    <LaneSection lane="boutique">
       {/* HERO */}
       <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
@@ -122,18 +124,20 @@ export default function AlexPage() {
               Alex Henry &middot; Co-Founder, Be Nice Hospitality
             </p>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-deep-teal leading-[1.05] tracking-tight mb-7">
-              Vehicles, technology, and the build side of BNHG.
+              AI systems for boutique stays. And the fleet arm of BNHG.
             </h1>
             <p className="font-sans text-lg md:text-xl text-charcoal leading-snug mb-8 max-w-xl">
-              Della runs the co-living side of the house. Alex runs vehicles
-              and tech. If you operate cars, run a boutique stay that needs
-              real systems, or you are tired of paying for software that does
-              not quite fit, you are in the right place.
+              Della runs the co-living side of the house. Alex is the AI
+              consultant behind the boutique stay work, and he runs the
+              vehicle fleet with the same discipline. If your property needs
+              real systems instead of another agency deck, or you operate
+              cars, you are in the right place.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
-              You have 3 doors. Book a working call. Get on the Car Rental
-              Riches waitlist. Or see what Signal can do for your boutique stay.
-              Pick the one that fits where you actually are right now.
+              You have 3 doors. Book a working call. See what Signal can do
+              for your boutique stay. Or get on the Car Rental Riches
+              waitlist. Pick the one that fits where you actually are right
+              now.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -147,9 +151,9 @@ export default function AlexPage() {
               >
                 Book a Discovery Call
               </Button>
-              <CarRentalRichesWaitlistTrigger variant="secondary" size="lg">
-                Car Rental Riches Waitlist
-              </CarRentalRichesWaitlistTrigger>
+              <Button href="/signal" variant="secondary" size="lg">
+                Explore Signal Engagements
+              </Button>
             </div>
 
             <p className="font-sans text-sm text-charcoal/60 mt-6 italic">
@@ -208,8 +212,8 @@ export default function AlexPage() {
           <AnimatedItem>
             <div className="space-y-5 font-sans text-lg text-charcoal leading-snug">
               <p>
-                A 5-vehicle Turo fleet runs on the same patchwork as a
-                20-room boutique stay. A notes app. 2 spreadsheets.
+                A 20-room boutique stay runs on the same patchwork as a
+                5-vehicle Turo fleet. A notes app. 2 spreadsheets.
                 3 messaging threads. Prayer.
               </p>
               <p>
@@ -225,8 +229,8 @@ export default function AlexPage() {
                 people are willing to actually build them.
               </p>
               <p className="font-medium text-deep-teal">
-                Alex builds those systems. For fleet operators. For boutique
-                stays. For the people running real businesses at a scale
+                Alex builds those systems. For boutique stays. For fleet
+                operators. For the people running real businesses at a scale
                 where they still know everybody by name.
               </p>
             </div>
@@ -239,8 +243,8 @@ export default function AlexPage() {
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
-              src="/images/Website%20Images/Alex%20Turo%20Shot.png"
-              alt="Alex Henry with one of the fleet vehicles behind the Car Rental Riches playbook"
+              src="/images/Website%20Images/alex%20in%20hotel%20lobby.png"
+              alt="Alex in a boutique hotel lobby, the kind of independent stay Signal builds AI systems for"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -266,9 +270,10 @@ export default function AlexPage() {
             </AnimatedItem>
             <AnimatedItem>
               <p className="font-sans text-lg text-charcoal/85 leading-snug">
-                Most people start with a call or the waitlist. Signal comes
-                in when a boutique stay is ready for real engineering work
-                instead of another deck. Start where you actually are.
+                Most people start with a call. Signal comes in when a
+                boutique stay is ready for real AI and engineering work
+                instead of another deck. The waitlist is for fleet
+                operators. Start where you actually are.
               </p>
             </AnimatedItem>
           </div>
@@ -290,7 +295,7 @@ export default function AlexPage() {
                   Book a 1:1 Call
                 </h3>
                 <p className="font-sans text-base text-white/85 leading-snug mb-8 flex-grow">
-                  30 focused minutes on your fleet, your co-living property, or the
+                  30 focused minutes on your boutique stay, your fleet, or the
                   one piece of the stack that is driving you crazy. If Alex is
                   not the right fit, he tells you on the call.
                 </p>
@@ -322,8 +327,47 @@ export default function AlexPage() {
               </div>
             </AnimatedItem>
 
-            {/* Secondary card: Car Rental Riches */}
+            {/* Secondary card: Signal, the boutique-stay AI door. */}
             <AnimatedItem>
+              <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
+                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-4">
+                  For boutique stays
+                </p>
+                <h3 className="font-display text-3xl font-semibold text-deep-teal leading-tight mb-4">
+                  Signal Engagements
+                </h3>
+                <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
+                  Productized engagements and custom builds for independent
+                  boutique stays: hotels, inns, and the design-forward
+                  short-term rentals guests book on purpose. Quick Wins,
+                  Sprints, retainers, and bespoke work. Every scope written
+                  down before kickoff and backed by a money-back guarantee on
+                  productized work.
+                </p>
+                <div className="space-y-3 mb-8">
+                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
+                    <span className="text-deep-teal mt-1">&rarr;</span>
+                    AI search visibility and AEO
+                  </p>
+                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
+                    <span className="text-deep-teal mt-1">&rarr;</span>
+                    OTA reconciliation and revenue recovery
+                  </p>
+                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
+                    <span className="text-deep-teal mt-1">&rarr;</span>
+                    Voice agents and ops automation
+                  </p>
+                </div>
+                <Button href="/signal" variant="secondary" size="md" fullWidth>
+                  See Engagements
+                </Button>
+              </div>
+            </AnimatedItem>
+
+            {/* Tertiary card: Car Rental Riches. Different vertical, so it
+                carries the fleet lane rather than the page's boutique lane. */}
+            <AnimatedItem>
+              <LaneSection lane="fleet" className="h-full">
               <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
                 <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-4">
                   For fleet operators
@@ -358,45 +402,6 @@ export default function AlexPage() {
                 >
                   Join the Waitlist
                 </CarRentalRichesWaitlistTrigger>
-              </div>
-            </AnimatedItem>
-
-            {/* Tertiary card: Signal. Different vertical, so it carries the
-                boutique lane rather than the page's fleet lane. */}
-            <AnimatedItem>
-              <LaneSection lane="boutique" className="h-full">
-              <div className="bg-white border border-charcoal/10 p-10 h-full flex flex-col rounded-sm">
-                <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-4">
-                  For boutique stays
-                </p>
-                <h3 className="font-display text-3xl font-semibold text-deep-teal leading-tight mb-4">
-                  Signal Engagements
-                </h3>
-                <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
-                  Productized engagements and custom builds for independent
-                  boutique stays: hotels, inns, and the design-forward
-                  short-term rentals guests book on purpose. Quick Wins,
-                  Sprints, retainers, and bespoke work. Every scope written
-                  down before kickoff and backed by a money-back guarantee on
-                  productized work.
-                </p>
-                <div className="space-y-3 mb-8">
-                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
-                    <span className="text-deep-teal mt-1">&rarr;</span>
-                    AI search visibility and AEO
-                  </p>
-                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
-                    <span className="text-deep-teal mt-1">&rarr;</span>
-                    OTA reconciliation and revenue recovery
-                  </p>
-                  <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
-                    <span className="text-deep-teal mt-1">&rarr;</span>
-                    Voice agents and ops automation
-                  </p>
-                </div>
-                <Button href="/signal" variant="secondary" size="md" fullWidth>
-                  See Engagements
-                </Button>
               </div>
               </LaneSection>
             </AnimatedItem>
@@ -467,6 +472,26 @@ export default function AlexPage() {
               <AnimatedItem>
                 <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
                   <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
+                    Building Signal
+                  </p>
+                  <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
+                    AI services for boutique stays that were tired of
+                    decks.
+                  </h3>
+                  <p className="font-sans text-base text-charcoal/85 leading-snug">
+                    Signal came out of a pattern Alex kept seeing. Boutique
+                    stays paying agencies for slides and PDFs while their
+                    booking engine was slow on mobile and their PMS was not
+                    talking to their channel manager. So he built a services
+                    arm that ships working AI systems instead, with the
+                    scope written down before kickoff.
+                  </p>
+                </div>
+              </AnimatedItem>
+
+              <AnimatedItem>
+                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
+                  <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
                     Building the vehicle arm
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
@@ -479,26 +504,6 @@ export default function AlexPage() {
                     flow that turns a Turo side hustle into a fleet you can
                     actually run. Car Rental Riches is the result. Ships
                     later this year.
-                  </p>
-                </div>
-              </AnimatedItem>
-
-              <AnimatedItem>
-                <div className="border-l-2 border-(--lane-accent,var(--color-warm-gold)) pl-6">
-                  <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-2">
-                    Building Signal
-                  </p>
-                  <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
-                    Tech services for boutique stays that were tired of
-                    decks.
-                  </h3>
-                  <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    Signal came out of a pattern Alex kept seeing. Boutique
-                    stays paying agencies for slides and PDFs while their
-                    booking engine was slow on mobile and their PMS was not
-                    talking to their channel manager. So he built a services
-                    arm that ships working software instead, with the scope
-                    written down before kickoff.
                   </p>
                 </div>
               </AnimatedItem>
@@ -636,8 +641,8 @@ export default function AlexPage() {
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
-              src="/images/Website%20Images/alex%20in%20hotel%20lobby.png"
-              alt="Alex in a boutique hotel lobby, the kind of independent stay Signal builds services for"
+              src="/images/Website%20Images/Alex%20Turo%20Shot.png"
+              alt="Alex Henry with one of the fleet vehicles behind the Car Rental Riches playbook"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}
@@ -660,8 +665,8 @@ export default function AlexPage() {
           </h2>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
             30 minutes with Alex will save you weeks of guessing. Bring
-            the fleet, the co-living property, or the integration that has been driving
-            you crazy. Walk away with a plan you can actually run.
+            the boutique stay, the fleet, or the integration that has been
+            driving you crazy. Walk away with a plan you can actually run.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
