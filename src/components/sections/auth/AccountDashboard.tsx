@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, Users, Sparkles, Bell } from "lucide-react";
 import PushOptInButton from "@/components/PushOptInButton";
 import { LANES, type LaneId } from "@/lib/lanes";
+import type { ScorecardBand } from "@/lib/scorecard/score";
+import { BAND_CHIP, BAND_SHORT } from "@/lib/scorecard/bands";
 
 interface Session {
   email: string;
@@ -30,12 +32,24 @@ export interface SavedToolSummary {
   lane: LaneId;
 }
 
+/** A finished Co-living Viability Calculator report on the member's shelf. */
+export interface SavedScorecardSummary {
+  id: number;
+  token: string;
+  propertyNickname: string;
+  overallPct: number;
+  band: ScorecardBand;
+}
+
 interface AccountDashboardProps {
   initialUser: Session;
   enrollments: EnrollmentSummary[];
   /** Most recently used first, already capped by the server. */
   savedTools: SavedToolSummary[];
   savedToolsTotal: number;
+  /** Newest first, already capped by the server. */
+  scorecards: SavedScorecardSummary[];
+  scorecardsTotal: number;
 }
 
 // Lane order for the grouped shelf. Fixed rather than derived so the sections
@@ -54,6 +68,8 @@ export default function AccountDashboard({
   enrollments,
   savedTools,
   savedToolsTotal,
+  scorecards,
+  scorecardsTotal,
 }: AccountDashboardProps) {
   const session = initialUser;
   const displayName = session.name || session.email.split("@")[0];
@@ -77,6 +93,8 @@ export default function AccountDashboard({
         enrollments={enrollments}
         savedTools={savedTools}
         savedToolsTotal={savedToolsTotal}
+        scorecards={scorecards}
+        scorecardsTotal={scorecardsTotal}
       />
     </div>
   );
@@ -86,10 +104,14 @@ function UserPanels({
   enrollments,
   savedTools,
   savedToolsTotal,
+  scorecards,
+  scorecardsTotal,
 }: {
   enrollments: EnrollmentSummary[];
   savedTools: SavedToolSummary[];
   savedToolsTotal: number;
+  scorecards: SavedScorecardSummary[];
+  scorecardsTotal: number;
 }) {
   return (
     <>
@@ -177,13 +199,22 @@ function UserPanels({
           </Link>
         </div>
 
+        {/* Scored properties come first: a member who has run the viability
+            calculator is mid-decision on a specific deal, which outranks the
+            tool shelf. */}
+        {scorecardsTotal > 0 && (
+          <ScorecardPanel scorecards={scorecards} total={scorecardsTotal} />
+        )}
+
         {savedToolsTotal === 0 ? (
-          <EmptyState
-            title="Nothing saved yet."
-            body="Start filling in any free tool and it lands here automatically, or hit 'Add to my dashboard' on a card in the resource library."
-            ctaLabel="Browse the library"
-            ctaHref="/resources"
-          />
+          scorecardsTotal === 0 && (
+            <EmptyState
+              title="Nothing saved yet."
+              body="Start filling in any free tool and it lands here automatically, or hit 'Add to my dashboard' on a card in the resource library."
+              ctaLabel="Browse the library"
+              ctaHref="/resources"
+            />
+          )
         ) : (
           <>
             {LANE_ORDER.map((lane) => {
@@ -281,6 +312,67 @@ function UserPanels({
         </div>
       </section>
     </>
+  );
+}
+
+/**
+ * Properties the member has scored with the Co-living Viability Calculator.
+ *
+ * Rows link out to the public token report rather than to a member-side copy —
+ * that report IS the artifact, and the same URL is what landed in their inbox.
+ * Renaming and removing live on /account/resources/scorecards.
+ */
+function ScorecardPanel({
+  scorecards,
+  total,
+}: {
+  scorecards: SavedScorecardSummary[];
+  total: number;
+}) {
+  return (
+    <div className="mb-7">
+      <div className="flex items-center gap-2 mb-3">
+        <span
+          aria-hidden
+          className="inline-block w-2 h-2 rounded-full shrink-0"
+          style={{ background: LANES.coliving.accent }}
+        />
+        <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/70">
+          Property scorecards
+        </p>
+      </div>
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {scorecards.map((s) => (
+          <li key={s.id}>
+            <Link
+              href={`/resources/co-living-viability-calculator/results/${s.token}`}
+              className="flex items-baseline gap-3 bg-white border border-light-gray rounded-lg px-5 py-4 hover:border-primary-green/40 transition-colors group"
+            >
+              <span className="min-w-0 truncate font-display text-base font-semibold text-deep-teal group-hover:text-warm-gold transition-colors">
+                {s.propertyNickname}
+              </span>
+              <span
+                className={`shrink-0 font-sans text-[11px] font-semibold px-1.5 py-0.5 rounded ${BAND_CHIP[s.band]}`}
+              >
+                {BAND_SHORT[s.band]}
+              </span>
+              <span className="ml-auto shrink-0 font-sans text-sm text-charcoal/60 tabular-nums">
+                {s.overallPct}%
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Link
+        href="/account/resources/scorecards"
+        className="mt-3 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary-green hover:text-primary-green-dark"
+      >
+        {total > scorecards.length
+          ? `View all ${total} scorecards`
+          : "Manage your scorecards"}
+        <ArrowRight className="w-4 h-4" aria-hidden />
+      </Link>
+    </div>
   );
 }
 

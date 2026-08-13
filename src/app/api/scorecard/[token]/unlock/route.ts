@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
+import { getCurrentSession } from "@/lib/community-auth";
 import { SCORECARD_MAX_SCORE } from "@/lib/scorecard/questions";
 import { scorecardUnlockBodySchema } from "@/lib/validation/scorecard";
 import { scorecardUnlockLimiter, getClientIp } from "@/lib/rate-limit";
@@ -122,6 +123,14 @@ export async function POST(
     console.error("[scorecard/unlock] pipeline_contacts upsert failed:", crmErr);
   }
 
+  // Someone can be logged in and still land here: the capture modal is driven by
+  // the submit response, and a member who signs in mid-session (or in another
+  // tab) reaches unlock with a session. Stamping user_id claims the scorecard
+  // for their dashboard outright instead of leaving it to the email match in
+  // @/lib/scorecard/saved. COALESCE so a re-unlock never orphans a claimed row.
+  const session = await getCurrentSession();
+  const sessionUserId = session?.user.id ?? null;
+
   try {
     await sql`
       UPDATE viability_scorecards
@@ -132,6 +141,7 @@ export async function POST(
           phone = ${phone},
           opted_in_newsletter = ${optedIn},
           pipeline_contact_id = ${pipelineContactId},
+          user_id = COALESCE(user_id, ${sessionUserId}),
           unlocked_at = NOW()
       WHERE token = ${token}
     `;

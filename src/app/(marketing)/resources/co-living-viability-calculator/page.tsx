@@ -35,6 +35,7 @@ const WHAT_YOU_GET = [
   "An overall band (High / Moderate / Low) with what it means",
   "A printable report you can revisit or share with a partner",
   "A recommended next move tied to your band",
+  "Every property you score, saved side by side in your account",
 ];
 
 const WHO_ITS_FOR = [

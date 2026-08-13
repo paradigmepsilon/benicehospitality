@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { LANES, laneVars, type LaneId } from "@/lib/lanes";
 import type { MemberResource } from "@/lib/resources";
+import type { ScorecardBand } from "@/lib/scorecard/score";
+import { BAND_CHIP, BAND_SHORT } from "@/lib/scorecard/bands";
 import SaveToolButton from "@/components/resources/SaveToolButton";
 import type { TabId } from "./tabs";
 
@@ -54,8 +56,29 @@ export interface SavedAnalysis {
   updatedAt: string;
 }
 
+/**
+ * A finished Co-living Viability Calculator report.
+ *
+ * Scorecards are NOT saved tools: the calculator is a public lead-capture flow
+ * that writes to viability_scorecards, so it has no registry entry and no shelf
+ * row to remove. They ride in the co-living panel as their own block rather
+ * than as a synthetic SavedToolCard, which would have put a "Remove" button
+ * over a resource_tool_state row that does not exist.
+ */
+export interface SavedScorecard {
+  id: number;
+  token: string;
+  propertyNickname: string;
+  overallPct: number;
+  band: ScorecardBand;
+  createdAt: string;
+}
+
 /** Beyond this the card stops being a card. */
 const ANALYSES_PREVIEW = 3;
+
+/** Same reasoning as ANALYSES_PREVIEW — the full list is one click away. */
+const SCORECARDS_PREVIEW = 3;
 
 const LANE_TABS: { id: LaneId; label: string }[] = [
   { id: "coliving", label: "Co-living" },
@@ -73,6 +96,8 @@ interface SavedResourcesTabsProps {
   defaultTab: TabId;
   savedByLane: Record<LaneId, SavedToolCard[]>;
   memberResources: MemberResource[];
+  /** Newest first. Co-living only — the calculator scores co-living properties. */
+  scorecards: SavedScorecard[];
   readOnly: boolean;
   inPreview: boolean;
 }
@@ -81,13 +106,19 @@ export default function SavedResourcesTabs({
   defaultTab,
   savedByLane,
   memberResources,
+  scorecards,
   readOnly,
   inPreview,
 }: SavedResourcesTabsProps) {
   const [active, setActive] = useState<TabId>(defaultTab);
 
+  // Scorecards count toward the co-living tab: to a member they are saved
+  // co-living work, and a "0" over a tab holding four scored properties reads
+  // as a bug.
   const countFor = (id: TabId) =>
-    id === "courses" ? memberResources.length : savedByLane[id].length;
+    id === "courses"
+      ? memberResources.length
+      : savedByLane[id].length + (id === "coliving" ? scorecards.length : 0);
 
   return (
     <div>
@@ -153,10 +184,16 @@ export default function SavedResourcesTabs({
               // tree without pulling in the server-side LaneSection wrapper.
               style={laneVars(t.id)}
             >
+              {t.id === "coliving" && scorecards.length > 0 && (
+                <ScorecardBlock scorecards={scorecards} />
+              )}
               <SavedToolGrid
                 tools={savedByLane[t.id]}
                 laneName={LANES[t.id].name}
                 readOnly={readOnly}
+                // The full empty state under a list of scored properties would
+                // say "nothing saved here" to someone looking at their work.
+                compactEmpty={t.id === "coliving" && scorecards.length > 0}
               />
             </div>
           ),
@@ -175,14 +212,78 @@ export default function SavedResourcesTabs({
   );
 }
 
+/**
+ * Scored properties, above the saved-tool grid in the co-living panel.
+ *
+ * Read-only here by design. Renaming and removing live on
+ * /account/resources/scorecards, next to the report they change, for the same
+ * reason the planner keeps analysis management inside the tool.
+ */
+function ScorecardBlock({ scorecards }: { scorecards: SavedScorecard[] }) {
+  return (
+    <section className="bg-white border border-light-gray rounded-lg p-6 mb-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
+        <h3 className="font-display text-lg font-semibold text-deep-teal">
+          Your property scorecards
+        </h3>
+        <Link
+          href="/resources/co-living-viability-calculator"
+          className="font-sans text-xs font-semibold text-primary-green hover:text-primary-green-dark inline-flex items-center gap-1"
+        >
+          Score another
+          <ArrowUpRight className="w-3.5 h-3.5" aria-hidden />
+        </Link>
+      </div>
+      <p className="font-sans text-sm text-charcoal/70 leading-relaxed mb-4">
+        Every property you&apos;ve run through the Co-living Viability
+        Calculator, newest first.
+      </p>
+
+      <ul className="space-y-1.5">
+        {scorecards.slice(0, SCORECARDS_PREVIEW).map((s) => (
+          <li key={s.id}>
+            <Link
+              href={`/resources/co-living-viability-calculator/results/${s.token}`}
+              className="group flex items-baseline gap-2 font-sans text-sm hover:text-primary-green"
+            >
+              <span className="min-w-0 truncate text-near-black group-hover:text-primary-green">
+                {s.propertyNickname}
+              </span>
+              <span
+                className={`shrink-0 text-[11px] font-semibold px-1.5 py-0.5 rounded ${BAND_CHIP[s.band]}`}
+              >
+                {BAND_SHORT[s.band]}
+              </span>
+              <span className="ml-auto shrink-0 text-charcoal/55 tabular-nums text-xs">
+                {s.overallPct}%
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <Link
+        href="/account/resources/scorecards"
+        className="inline-block mt-3 font-sans text-xs font-semibold text-primary-green hover:text-primary-green-dark"
+      >
+        {scorecards.length > SCORECARDS_PREVIEW
+          ? `View all ${scorecards.length} →`
+          : "Manage your scorecards →"}
+      </Link>
+    </section>
+  );
+}
+
 function SavedToolGrid({
   tools,
   laneName,
   readOnly,
+  compactEmpty = false,
 }: {
   tools: SavedToolCard[];
   laneName: string;
   readOnly: boolean;
+  compactEmpty?: boolean;
 }) {
   /**
    * Slugs removed in this session.
@@ -194,6 +295,20 @@ function SavedToolGrid({
    */
   const [removed, setRemoved] = useState<Set<string>>(new Set());
   const visible = tools.filter((t) => !removed.has(t.slug));
+
+  if (tools.length === 0 && compactEmpty) {
+    return (
+      <p className="font-sans text-sm text-charcoal/70">
+        No {laneName} tools on your dashboard yet.{" "}
+        <Link
+          href="/resources"
+          className="font-semibold text-primary-green hover:text-primary-green-dark"
+        >
+          Browse the library →
+        </Link>
+      </p>
+    );
+  }
 
   if (tools.length === 0) {
     return (

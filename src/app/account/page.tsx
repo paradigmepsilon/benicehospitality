@@ -9,9 +9,13 @@ import {
   synthesizeEnrollmentsForTier,
 } from "@/lib/lms";
 import { listSavedResourceTools } from "@/lib/resources/saved";
+import { listScorecardsForMember } from "@/lib/scorecard/saved";
 
 /** How many saved tools the dashboard shows before deferring to the full page. */
 const DASHBOARD_SAVED_LIMIT = 6;
+
+/** Same idea for scored properties — the full list is one click away. */
+const DASHBOARD_SCORECARD_LIMIT = 4;
 
 export const metadata: Metadata = {
   title: "Your Account",
@@ -39,11 +43,14 @@ export default async function AccountPage() {
   // would show under a member's identity. Empty shelf while previewing.
   const inPreview = ctx.previewMode !== null;
 
-  const [enrollments, savedTools] = await Promise.all([
+  const [enrollments, savedTools, scorecards] = await Promise.all([
     ctx.effectiveTier !== null
       ? synthesizeEnrollmentsForTier(ctx.effectiveTier)
       : listEnrollmentsForUser(ctx.userId),
     inPreview ? Promise.resolve([]) : listSavedResourceTools(ctx.userId),
+    inPreview
+      ? Promise.resolve([])
+      : listScorecardsForMember(ctx.userId, ctx.userEmail),
   ]);
 
   return (
@@ -78,6 +85,14 @@ export default async function AccountPage() {
           lane: t.lane,
         }))}
         savedToolsTotal={savedTools.length}
+        scorecards={scorecards.slice(0, DASHBOARD_SCORECARD_LIMIT).map((s) => ({
+          id: s.id,
+          token: s.token,
+          propertyNickname: s.propertyNickname,
+          overallPct: s.overallPct,
+          band: s.band,
+        }))}
+        scorecardsTotal={scorecards.length}
       />
     </>
   );

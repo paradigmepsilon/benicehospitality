@@ -30,5 +30,15 @@ export const scorecardUnlockBodySchema = z.object({
   turnstile_token: z.string().min(1).max(2048),
 });
 
+/**
+ * Renaming a saved scorecard from the member dashboard. Unlike the submit body,
+ * the nickname is required and non-empty — a member clearing the field is
+ * telling us nothing, and "Untitled property" is what the read layer already
+ * shows for a blank one.
+ */
+export const scorecardRenameBodySchema = z.object({
+  property_nickname: z.string().trim().min(1).max(120),
+});
+
 export type ScorecardSubmitBody = z.infer<typeof scorecardSubmitBodySchema>;
 export type ScorecardUnlockBody = z.infer<typeof scorecardUnlockBodySchema>;

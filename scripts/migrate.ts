@@ -1950,6 +1950,20 @@ async function migrate() {
   `;
   console.log("  ✓ property_detail_cache table created");
 
+  // Members track several properties on the Co-living Viability Calculator the
+  // same way they track several on the profitability worksheet, so a scorecard
+  // needs a way to leave the dashboard.
+  //
+  // A soft hide rather than a DELETE: the row is a captured lead with a
+  // pipeline_contact behind it and a results link already emailed out. Member
+  // surfaces filter on dashboard_hidden_at IS NULL; admin and the token results
+  // page ignore it. See src/lib/scorecard/saved.ts.
+  await sql`
+    ALTER TABLE viability_scorecards
+      ADD COLUMN IF NOT EXISTS dashboard_hidden_at TIMESTAMPTZ
+  `;
+  console.log("  ✓ viability_scorecards.dashboard_hidden_at column ready");
+
   console.log("Migrations complete!");
 }
 

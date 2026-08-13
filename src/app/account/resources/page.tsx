@@ -10,6 +10,7 @@ import {
 import { listSavedResourceToolsByLane } from "@/lib/resources/saved";
 import { listAnalysesForUser, type AnalysisSummary } from "@/lib/resources/analyses";
 import { ANALYSIS_TOOL_SLUGS } from "@/lib/resources/analysis-schemas";
+import { listScorecardsForMember } from "@/lib/scorecard/saved";
 import type { LaneId } from "@/lib/lanes";
 import SavedResourcesTabs, {
   type SavedToolCard,
@@ -54,19 +55,25 @@ export default async function ResourcesIndexPage({
 
   // Analyses ride the same Promise.all and the same inPreview short-circuit, so
   // the nested lists cost no extra round trip and preview safety comes free.
-  const [savedByLane, memberResources, analysesBySlug] = await Promise.all([
-    inPreview
-      ? Promise.resolve(EMPTY_BY_LANE)
-      : listSavedResourceToolsByLane(ctx.userId).then((byLane) => ({
-          coliving: byLane.coliving.map(toCard),
-          boutique: byLane.boutique.map(toCard),
-          fleet: byLane.fleet.map(toCard),
-        })),
-    listResourcesForTier(effective),
-    inPreview
-      ? Promise.resolve(new Map<string, AnalysisSummary[]>())
-      : listAnalysesForUser(ctx.userId, ANALYSIS_TOOL_SLUGS),
-  ]);
+  const [savedByLane, memberResources, analysesBySlug, scorecards] =
+    await Promise.all([
+      inPreview
+        ? Promise.resolve(EMPTY_BY_LANE)
+        : listSavedResourceToolsByLane(ctx.userId).then((byLane) => ({
+            coliving: byLane.coliving.map(toCard),
+            boutique: byLane.boutique.map(toCard),
+            fleet: byLane.fleet.map(toCard),
+          })),
+      listResourcesForTier(effective),
+      inPreview
+        ? Promise.resolve(new Map<string, AnalysisSummary[]>())
+        : listAnalysesForUser(ctx.userId, ANALYSIS_TOOL_SLUGS),
+      // Same inPreview short-circuit: the viability calculator's rows belong to
+      // the real member, not to whoever an admin is previewing as.
+      inPreview
+        ? Promise.resolve([])
+        : listScorecardsForMember(ctx.userId, ctx.userEmail),
+    ]);
 
   // Attach after the fetch so toCard stays a pure projection of the registry.
   for (const lane of Object.values(savedByLane)) {
@@ -102,6 +109,14 @@ export default async function ResourcesIndexPage({
         defaultTab={parseTab(tab)}
         savedByLane={savedByLane}
         memberResources={memberResources}
+        scorecards={scorecards.map((s) => ({
+          id: s.id,
+          token: s.token,
+          propertyNickname: s.propertyNickname,
+          overallPct: s.overallPct,
+          band: s.band,
+          createdAt: s.createdAt,
+        }))}
         readOnly={ctx.isReadOnlyPreview}
         inPreview={inPreview}
       />
