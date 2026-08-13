@@ -8,6 +8,10 @@ import {
   listEnrollmentsForUser,
   synthesizeEnrollmentsForTier,
 } from "@/lib/lms";
+import { listSavedResourceTools } from "@/lib/resources/saved";
+
+/** How many saved tools the dashboard shows before deferring to the full page. */
+const DASHBOARD_SAVED_LIMIT = 6;
 
 export const metadata: Metadata = {
   title: "Your Account",
@@ -31,10 +35,16 @@ export default async function AccountPage() {
   // at the previewed tier so the dashboard renders as a real member would see
   // it. God view (effectiveTier === null while effectiveIsAdmin) keeps the
   // admin's actual enrollments, typically empty, which is fine.
-  const enrollments =
+  // ctx.userId is the admin's real id during preview, so their own saved tools
+  // would show under a member's identity. Empty shelf while previewing.
+  const inPreview = ctx.previewMode !== null;
+
+  const [enrollments, savedTools] = await Promise.all([
     ctx.effectiveTier !== null
-      ? await synthesizeEnrollmentsForTier(ctx.effectiveTier)
-      : await listEnrollmentsForUser(ctx.userId);
+      ? synthesizeEnrollmentsForTier(ctx.effectiveTier)
+      : listEnrollmentsForUser(ctx.userId),
+    inPreview ? Promise.resolve([]) : listSavedResourceTools(ctx.userId),
+  ]);
 
   return (
     <>
@@ -61,6 +71,13 @@ export default async function AccountPage() {
           totalLessons: e.totalLessons,
           completedLessons: e.completedLessons,
         }))}
+        savedTools={savedTools.slice(0, DASHBOARD_SAVED_LIMIT).map((t) => ({
+          slug: t.toolSlug,
+          name: t.tool.name,
+          blurb: t.tool.blurb,
+          lane: t.lane,
+        }))}
+        savedToolsTotal={savedTools.length}
       />
     </>
   );

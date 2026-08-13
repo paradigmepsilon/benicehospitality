@@ -6,7 +6,6 @@ import { downloadCsv, buildCsv } from "@/components/resources/useResourceTool";
 import { getResourceTool } from "@/lib/resources/registry";
 import {
   MATRIX_TABLES,
-  MATRIX_HOWTO,
   type MatrixTable,
 } from "@/lib/resources/target-audience-matrix/config";
 
@@ -15,6 +14,62 @@ const TOOL_NAME = getResourceTool(SLUG)!.name;
 
 function tableToTsv(t: MatrixTable): string {
   return [t.columns.join("\t"), ...t.rows.map((r) => r.join("\t"))].join("\n");
+}
+
+/**
+ * One table row rendered as a segment card. Column 0 is the card title,
+ * column 1 the subtitle, the table's highlightColumn (if any) becomes the
+ * emphasized block at the bottom, and everything else is a labeled field.
+ * Cards replaced the old wide <table> so no column ever hides behind a
+ * horizontal scroll.
+ */
+function SegmentCard({ table, row }: { table: MatrixTable; row: string[] }) {
+  const highlightIdx = table.highlightColumn
+    ? table.columns.indexOf(table.highlightColumn)
+    : -1;
+
+  const fields = table.columns
+    .map((label, i) => ({ label, value: row[i], i }))
+    .filter(({ i }) => i > 1 && i !== highlightIdx);
+
+  return (
+    <article className="bg-white border border-light-gray rounded-lg p-5 flex flex-col">
+      <header className="mb-3 pb-3 border-b border-light-gray/70">
+        <h4 className="font-display text-base font-semibold text-near-black">
+          {row[0]}
+        </h4>
+        <p className="font-sans text-xs text-charcoal/60 mt-0.5">
+          <span className="font-semibold">{table.columns[1]}:</span> {row[1]}
+        </p>
+      </header>
+
+      <dl className="space-y-2.5">
+        {fields.map(({ label, value }) => (
+          <div key={label}>
+            <dt className="font-sans text-[11px] font-semibold tracking-[0.12em] uppercase text-charcoal/50">
+              {label}
+            </dt>
+            <dd className="font-sans text-sm text-charcoal/85 leading-relaxed mt-0.5">
+              {value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      {highlightIdx >= 0 && (
+        <div className="mt-auto pt-3">
+          <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-md px-3 py-2.5">
+            <p className="font-sans text-[11px] font-semibold tracking-[0.12em] uppercase text-charcoal/55">
+              {table.columns[highlightIdx]}
+            </p>
+            <p className="font-sans text-sm text-charcoal/90 leading-relaxed mt-0.5">
+              {row[highlightIdx]}
+            </p>
+          </div>
+        </div>
+      )}
+    </article>
+  );
 }
 
 export default function AudienceMatrixTool() {
@@ -31,71 +86,25 @@ export default function AudienceMatrixTool() {
 
   return (
     <ResourceToolShell title={TOOL_NAME} onExportCsv={exportCsv}>
-      <div className="space-y-8">
+      <div className="space-y-10">
         {MATRIX_TABLES.map((t) => (
-          <div key={t.id}>
-            <div className="flex items-center justify-between gap-3 mb-3">
+          <section key={t.id}>
+            <div className="flex items-center justify-between gap-3 mb-4">
               <h3 className="font-display text-lg font-semibold text-near-black">
                 {t.label}
               </h3>
+              {/* Copies the original tabular form for pasting into a sheet. */}
               <div className="no-print">
                 <CopyButton text={tableToTsv(t)} label="Copy table" />
               </div>
             </div>
-            <div className="overflow-x-auto border border-light-gray rounded-lg bg-white">
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="bg-off-white">
-                    {t.columns.map((c) => (
-                      <th
-                        key={c}
-                        className="text-left font-sans text-xs font-semibold text-charcoal/70 px-3 py-2.5 border-b border-light-gray align-bottom min-w-[9rem]"
-                      >
-                        {c}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {t.rows.map((r, ri) => (
-                    <tr key={ri} className="hover:bg-off-white/50 align-top">
-                      {r.map((cell, ci) => (
-                        <td
-                          key={ci}
-                          className={[
-                            "px-3 py-2.5 border-b border-light-gray/70 font-sans text-sm leading-relaxed",
-                            ci === 0
-                              ? "font-semibold text-near-black whitespace-nowrap"
-                              : "text-charcoal/85",
-                          ].join(" ")}
-                        >
-                          {cell}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {t.rows.map((row) => (
+                <SegmentCard key={row[0]} table={t} row={row} />
+              ))}
             </div>
-          </div>
+          </section>
         ))}
-
-        {/* How to use */}
-        <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-5 sm:p-6">
-          <h3 className="font-display text-lg font-semibold text-near-black mb-3">
-            How to use this matrix
-          </h3>
-          <ol className="list-decimal pl-5 space-y-1.5">
-            {MATRIX_HOWTO.map((h, i) => (
-              <li
-                key={i}
-                className="font-sans text-sm text-charcoal/85 leading-relaxed"
-              >
-                {h}
-              </li>
-            ))}
-          </ol>
-        </div>
       </div>
     </ResourceToolShell>
   );

@@ -58,7 +58,7 @@ export default async function ResourceDetailPage({ params }: PageProps) {
           access is 1 tier below.
         </p>
         <Link
-          href="/account/resources"
+          href="/account/resources?tab=courses"
           className="inline-flex items-center justify-center bg-transparent text-primary-green border-2 border-primary-green hover:bg-primary-green hover:text-white font-sans font-semibold tracking-wide rounded-lg px-7 py-3.5 transition-colors"
         >
           Back to resources
@@ -70,7 +70,7 @@ export default async function ResourceDetailPage({ params }: PageProps) {
   return (
     <div className="max-w-3xl">
       <Link
-        href="/account/resources"
+        href="/account/resources?tab=courses"
         className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/60 hover:text-primary-green mb-6"
       >
         ← All resources

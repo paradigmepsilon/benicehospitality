@@ -86,25 +86,64 @@ const nextConfig: NextConfig = {
         destination: "/courses/room-rental-riches/masterclass",
         permanent: true,
       },
+      // The tool has been renamed three times: "MTR Viability Scorecard" ->
+      // "Co-living Property Calculator" -> "Co-living Viability Calculator".
+      // Every legacy slug points straight at the CURRENT one rather than
+      // chaining through the intermediate name. Next.js emits each redirect as
+      // its own 308, so a chain would cost every old link an extra round trip.
       {
-        // Future free/paid tool suite lives under /tools. The Co-living Property
-        // Calculator keeps its canonical /resources URL; /tools/property-viability
-        // is the memorable alias.
+        // Future free/paid tool suite lives under /tools. The calculator keeps
+        // its canonical /resources URL; /tools/property-viability is the
+        // memorable alias.
         source: "/tools/property-viability",
-        destination: "/resources/co-living-property-calculator",
+        destination: "/resources/co-living-viability-calculator",
         permanent: true,
       },
       {
-        // Legacy slug: the tool was renamed from "MTR Viability Calculator" to
-        // "Co-living Property Calculator". Preserve old links + SEO.
         source: "/resources/mtr-viability-scorecard",
-        destination: "/resources/co-living-property-calculator",
+        destination: "/resources/co-living-viability-calculator",
         permanent: true,
       },
       {
         // ...including deep links to saved results (/results/:token).
         source: "/resources/mtr-viability-scorecard/:path*",
-        destination: "/resources/co-living-property-calculator/:path*",
+        destination: "/resources/co-living-viability-calculator/:path*",
+        permanent: true,
+      },
+      {
+        source: "/resources/co-living-property-calculator",
+        destination: "/resources/co-living-viability-calculator",
+        permanent: true,
+      },
+      {
+        // Keeps /results/:token links alive in scorecard emails already sent.
+        source: "/resources/co-living-property-calculator/:path*",
+        destination: "/resources/co-living-viability-calculator/:path*",
+        permanent: true,
+      },
+      // The Room Rental Price Calculator and the Start-Up Cost Projection
+      // Worksheet merged into the Co-Living Property Profitability Analysis
+      // Worksheet: one priced
+      // a single room and stopped, the other budgeted a launch with no idea
+      // what the property earned. Both slugs point straight at the merged tool.
+      {
+        source: "/resources/room-rental-price-calculator",
+        destination: "/resources/breakeven-analysis-worksheet",
+        permanent: true,
+      },
+      {
+        source: "/resources/room-rental-price-calculator/:path*",
+        destination: "/resources/breakeven-analysis-worksheet/:path*",
+        permanent: true,
+      },
+      {
+        source: "/resources/startup-cost-calculator",
+        destination: "/resources/breakeven-analysis-worksheet",
+        permanent: true,
+      },
+      {
+        source: "/resources/startup-cost-calculator/:path*",
+        destination: "/resources/breakeven-analysis-worksheet/:path*",
         permanent: true,
       },
     ];

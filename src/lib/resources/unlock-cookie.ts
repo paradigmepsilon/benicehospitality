@@ -1,11 +1,22 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 
-// Front-door gate cookie. Once a visitor gives their name + email to open any
-// free resource tool, this signed cookie lets every free tool render without
-// re-asking. It carries the captured email + an issued-at timestamp, HMAC'd so
-// it cannot be forged. Low-stakes (it only gates free lead magnets), but signed
-// so a random string can't wave the gate open.
+// Front-door gate cookie, now READ-ONLY and on a timer.
+//
+// This used to be issued by /api/resources/[slug]/unlock when a visitor traded
+// their name + email for the free tools. That endpoint is gone: the tools are
+// account-gated now. Nothing writes this cookie any more.
+//
+// What survives is the read path, which grandfathers visitors who unlocked
+// before the cutover — getResourceAccess() maps a valid cookie to the
+// "grandfathered" mode, which renders the tool plus a create-an-account
+// banner. TTL_DAYS below is 90, so the last cookie ever issued expires 90 days
+// after the cutover deploy. On or after that date this entire module, the
+// `grandfathered` branch in ResourceGate, and the GrandfatherBanner component
+// can be deleted outright.
+//
+// makeUnlockCookieValue() and unlockCookieOptions() are kept only so the
+// format stays self-documenting alongside the verifier. They have no callers.
 
 export const RESOURCE_UNLOCK_COOKIE = "bnhg_resource_unlock";
 const TTL_DAYS = 90;

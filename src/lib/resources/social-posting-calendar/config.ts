@@ -3,12 +3,15 @@ import { type ReferenceContent } from "@/components/resources/ReferenceTool";
 // 30-Day Social Posting Calendar: four weekly themes that build from visibility
 // to urgency, with a specific, copy-ready prompt for each day.
 export const CALENDAR_CONTENT: ReferenceContent = {
+  tabbed: true,
   sections: [
     {
       intro:
         "Consistency is what fills rooms, and consistency is a plan. Follow the four weekly themes in order, use each day's prompt, and batch a week at a time. Copy any prompt straight into your scheduler.",
     },
     {
+      id: "week1",
+      shortLabel: "Week 1",
       heading: "Week 1 — Visibility + Availability",
       columns: 2,
       items: [
@@ -22,6 +25,8 @@ export const CALENDAR_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "week2",
+      shortLabel: "Week 2",
       heading: "Week 2 — Value + Trust",
       columns: 2,
       items: [
@@ -35,6 +40,8 @@ export const CALENDAR_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "week3",
+      shortLabel: "Week 3",
       heading: "Week 3 — Community + Lifestyle",
       columns: 2,
       items: [
@@ -48,6 +55,8 @@ export const CALENDAR_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "week4",
+      shortLabel: "Week 4",
       heading: "Week 4 — Scarcity + Urgency",
       columns: 2,
       items: [
@@ -61,6 +70,8 @@ export const CALENDAR_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "bonus",
+      shortLabel: "Bonus",
       heading: "Bonus days (use any time)",
       columns: 2,
       items: [

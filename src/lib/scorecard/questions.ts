@@ -13,13 +13,31 @@ export interface ScorecardQuestion {
   recommendation: string;
 }
 
+/**
+ * An optional "go look it up" link rendered in the section header. Most people
+ * answer these from memory and guess. A link to the place that actually holds
+ * the answer costs nothing and makes the score honest.
+ */
+export interface ScorecardSectionHelper {
+  label: string;
+  href: string;
+  hint: string;
+}
+
 export interface ScorecardSection {
   id: ScorecardSectionId;
   label: string;
   blurb: string;
   weight: number;
+  helper?: ScorecardSectionHelper;
   questions: ScorecardQuestion[];
 }
+
+const ZILLOW_HELPER = (hint: string): ScorecardSectionHelper => ({
+  label: "Look it up on Zillow",
+  href: "https://www.zillow.com/homes/",
+  hint,
+});
 
 export const SCORECARD_SECTIONS: ScorecardSection[] = [
   {
@@ -27,10 +45,15 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Location",
     blurb: "Where the property sits decides who can rent it.",
     weight: 4.5,
+    helper: {
+      label: "Open Google Maps",
+      href: "https://www.google.com/maps",
+      hint: "Search the address, then check what sits around it: hospitals, campuses, employers, and transit.",
+    },
     questions: [
       {
         id: "l1",
-        text: "Is the property within 30 minutes of a major hospital, hospital system, or medical campus?",
+        text: "Is the property within 15 minutes of a major hospital, hospital system, or medical campus?",
         recommendation:
           "Nurses, techs, and traveling healthcare staff are a reliable co-living cohort, and many want a room near work. A hospital nearby keeps your rooms filled with steady, employed tenants.",
       },
@@ -64,6 +87,30 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
         recommendation:
           "Tenants without cars lean on transit, and traveling workers need airport access. Strong highway or transit links widen the pool of people who can live here.",
       },
+      {
+        id: "l9",
+        text: "Are there already rooms for rent within a few miles you can price against?",
+        recommendation:
+          "Live comps tell you the real ceiling and prove somebody is actually renting rooms here. Check Furnished Finder, Roomster, SpareRoom, and local Facebook housing groups. Zero rooms listed anywhere nearby usually means no market, not an untapped one.",
+      },
+      {
+        id: "l10",
+        text: "Is the property within 15 minutes of a military base, VA campus, or large government facility?",
+        recommendation:
+          "Service members on orders, contractors, and VA staff rotate in on 30 to 180 day assignments and need a furnished room fast. In the Southeast that is Fort Moore, Fort Stewart, Robins, and Dobbins. A separate cohort from hospitals and campuses, and it holds up in a downturn.",
+      },
+      {
+        id: "l11",
+        text: "Does this area hold demand year round, or is it seasonal?",
+        recommendation:
+          "College towns go quiet from May through August. Beach and mountain markets flip the other way. Pull 12 months of local rent and vacancy data before you count on full occupancy. A market with a dead season needs a second tenant cohort or three months of reserves.",
+      },
+      {
+        id: "l12",
+        text: "Does the local economy have more than one major employer?",
+        recommendation:
+          "One plant, one hospital, one campus is one point of failure. If that employer cuts a shift, every room empties the same month. Look up the metro's top five employers and make sure at least two of them can fill your house on their own.",
+      },
     ],
   },
   {
@@ -71,6 +118,9 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Shared Spaces & Operations",
     blurb: "The biggest lever. What is inside and how it runs.",
     weight: 6.0,
+    helper: ZILLOW_HELPER(
+      "Pull the listing and read the photos and appliance details before you answer.",
+    ),
     questions: [
       {
         id: "a1",
@@ -103,18 +153,6 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
           "Most co-living tenants own a car. One spot per bedroom, or parking becomes the house's number one fight.",
       },
       {
-        id: "a6",
-        text: "Is there a smart lock with keyless entry (Schlage, Yale, August)?",
-        recommendation:
-          "Keyless entry lets each tenant have their own code that you change at turnover. No copying keys, no lock changes. A Schlage Encode runs about $220.",
-      },
-      {
-        id: "a7",
-        text: "Are there outdoor security cameras at entry points?",
-        recommendation:
-          "Most co-living and rooming-house policies now expect them, and shared entries benefit most. A Wyze v3 four-pack runs about $140. Cheap protection against disputes and claims.",
-      },
-      {
         id: "a8",
         text: "Is there sufficient outdoor lighting around entries and walkways?",
         recommendation:
@@ -126,12 +164,6 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
         recommendation:
           "A full house with no outdoor access feels claustrophobic. A small patio with a couple of chairs gives tenants somewhere to decompress.",
       },
-      {
-        id: "a10",
-        text: "Do you have a cleaner already lined up for recurring common-area cleans and room turnovers?",
-        recommendation:
-          "Shared common areas need regular cleaning or they become the number one tenant complaint. Lock in a cleaner before you fill rooms.",
-      },
     ],
   },
   {
@@ -139,6 +171,9 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Property Size & Layout",
     blurb: "Bones of the house.",
     weight: 2.25,
+    helper: ZILLOW_HELPER(
+      "The listing gives you beds, baths, square footage, and usually a floor plan.",
+    ),
     questions: [
       {
         id: "s1",
@@ -171,6 +206,9 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Property Condition",
     blurb: "What the photos will actually look like.",
     weight: 2.5,
+    helper: ZILLOW_HELPER(
+      "Interior photos and year built tell you most of this. Check the price history for a recent renovation.",
+    ),
     questions: [
       {
         id: "c1",
@@ -215,13 +253,10 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Room Features",
     blurb: "What each bedroom needs to be a real bedroom.",
     weight: 1.33,
+    helper: ZILLOW_HELPER(
+      "Work through the bedroom photos and the floor plan one room at a time.",
+    ),
     questions: [
-      {
-        id: "r1",
-        text: "Does each bedroom fit a queen bed comfortably with walking space around it?",
-        recommendation:
-          "Queens are the floor for a furnished room. Anything smaller and the rent that room commands drops about 20 percent.",
-      },
       {
         id: "r2",
         text: "Does each bedroom have a closet or wardrobe with hanging space and shelves?",
@@ -253,6 +288,9 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
     label: "Neighborhood",
     blurb: "The block your photos cannot hide.",
     weight: 1.92,
+    helper: ZILLOW_HELPER(
+      "Use the neighborhood tab and street view. Then drive it yourself before you sign anything.",
+    ),
     questions: [
       {
         id: "n1",
@@ -290,7 +328,7 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
         id: "z1",
         text: "Are 30+ day rentals allowed under local zoning (no STR-only ordinance)?",
         recommendation:
-          "Most cities allow 30-day-plus leases without STR permits, but co-living can trip separate 'unrelated occupant' limits. Confirm both with planning, in writing.",
+          "Most cities allow 30-day-plus leases without STR permits, but plenty still write the rule as STR-only. Confirm the duration rule with planning, in writing. Ask about the unrelated-adult occupancy cap on the same call: most cities allow two to five, and a five-room house in a three-adult city is a violation on day one that no amount of finish work fixes.",
       },
       {
         id: "z2",
@@ -309,12 +347,6 @@ export const SCORECARD_SECTIONS: ScorecardSection[] = [
         text: "Do you have a business license or short-term lodging permit if your jurisdiction requires one?",
         recommendation:
           "Some cities require a license for stays under 90 days. Quick call to the city clerk before listing.",
-      },
-      {
-        id: "z5",
-        text: "Were property upgrades (electrical, plumbing, additions) permitted and signed off?",
-        recommendation:
-          "Unpermitted work voids insurance claims and can blow up a sale. If you do not know, hire an inspector.",
       },
     ],
   },

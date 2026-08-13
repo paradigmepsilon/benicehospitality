@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, Users, Sparkles, Bell } from "lucide-react";
 import PushOptInButton from "@/components/PushOptInButton";
+import { LANES, type LaneId } from "@/lib/lanes";
 
 interface Session {
   email: string;
@@ -22,18 +23,24 @@ export interface EnrollmentSummary {
   completedLessons: number;
 }
 
+export interface SavedToolSummary {
+  slug: string;
+  name: string;
+  blurb: string;
+  lane: LaneId;
+}
+
 interface AccountDashboardProps {
   initialUser: Session;
   enrollments: EnrollmentSummary[];
+  /** Most recently used first, already capped by the server. */
+  savedTools: SavedToolSummary[];
+  savedToolsTotal: number;
 }
 
-const PLACEHOLDER_RESOURCES = [
-  {
-    name: "Direct Booking Snapshot",
-    summary: "Your most recent run is from 12 days ago.",
-    href: "/resources",
-  },
-];
+// Lane order for the grouped shelf. Fixed rather than derived so the sections
+// don't reshuffle as the member saves things.
+const LANE_ORDER: LaneId[] = ["coliving", "boutique", "fleet"];
 
 const TIER_LABEL: Record<EnrollmentSummary["tier"], string> = {
   "self-paced": "Self-paced",
@@ -45,6 +52,8 @@ const TIER_LABEL: Record<EnrollmentSummary["tier"], string> = {
 export default function AccountDashboard({
   initialUser,
   enrollments,
+  savedTools,
+  savedToolsTotal,
 }: AccountDashboardProps) {
   const session = initialUser;
   const displayName = session.name || session.email.split("@")[0];
@@ -64,12 +73,24 @@ export default function AccountDashboard({
         </p>
       </header>
 
-      <UserPanels enrollments={enrollments} />
+      <UserPanels
+        enrollments={enrollments}
+        savedTools={savedTools}
+        savedToolsTotal={savedToolsTotal}
+      />
     </div>
   );
 }
 
-function UserPanels({ enrollments }: { enrollments: EnrollmentSummary[] }) {
+function UserPanels({
+  enrollments,
+  savedTools,
+  savedToolsTotal,
+}: {
+  enrollments: EnrollmentSummary[];
+  savedTools: SavedToolSummary[];
+  savedToolsTotal: number;
+}) {
   return (
     <>
       <section className="mb-10">
@@ -148,38 +169,69 @@ function UserPanels({ enrollments }: { enrollments: EnrollmentSummary[] }) {
             </h2>
           </div>
           <Link
-            href="/account/resources"
+            href="/resources"
             className="font-sans text-sm font-semibold text-primary-green hover:text-primary-green-dark inline-flex items-center gap-1.5"
           >
-            Browse the library
+            Browse all tools
             <ArrowRight className="w-4 h-4" aria-hidden />
           </Link>
         </div>
 
-        {PLACEHOLDER_RESOURCES.length === 0 ? (
+        {savedToolsTotal === 0 ? (
           <EmptyState
-            title="No saved resources yet."
-            body="Run a Labs diagnostic, save a template, or unlock the Labs Pass to surface them here."
+            title="Nothing saved yet."
+            body="Start filling in any free tool and it lands here automatically, or hit 'Add to my dashboard' on a card in the resource library."
             ctaLabel="Browse the library"
-            ctaHref="/account/resources"
+            ctaHref="/resources"
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {PLACEHOLDER_RESOURCES.map((r) => (
-              <Link
-                key={r.name}
-                href={r.href}
-                className="block bg-white border border-light-gray rounded-lg p-6 hover:border-primary-green/40 transition-colors group"
-              >
-                <h3 className="font-display text-lg font-semibold text-deep-teal leading-tight mb-2 group-hover:text-warm-gold transition-colors">
-                  {r.name}
-                </h3>
-                <p className="font-sans text-sm text-charcoal/75 leading-relaxed">
-                  {r.summary}
-                </p>
-              </Link>
-            ))}
-          </div>
+          <>
+            {LANE_ORDER.map((lane) => {
+              const tools = savedTools.filter((t) => t.lane === lane);
+              if (tools.length === 0) return null;
+              return (
+                <div key={lane} className="mb-7 last:mb-0">
+                  <div className="flex items-center gap-2 mb-3">
+                    {/* Full-strength accent is fine on a mark this small; see
+                        the area/saturation rule in src/lib/lanes.ts. */}
+                    <span
+                      aria-hidden
+                      className="inline-block w-2 h-2 rounded-full shrink-0"
+                      style={{ background: LANES[lane].accent }}
+                    />
+                    <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/70">
+                      {LANES[lane].name}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {tools.map((t) => (
+                      <Link
+                        key={t.slug}
+                        href={`/resources/${t.slug}`}
+                        className="block bg-white border border-light-gray rounded-lg p-6 hover:border-primary-green/40 transition-colors group"
+                      >
+                        <h3 className="font-display text-lg font-semibold text-deep-teal leading-tight mb-2 group-hover:text-warm-gold transition-colors">
+                          {t.name}
+                        </h3>
+                        <p className="font-sans text-sm text-charcoal/75 leading-relaxed">
+                          {t.blurb}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            <Link
+              href="/account/resources"
+              className="mt-5 inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary-green hover:text-primary-green-dark"
+            >
+              {savedToolsTotal > savedTools.length
+                ? `View all ${savedToolsTotal}`
+                : "Manage your resources"}
+              <ArrowRight className="w-4 h-4" aria-hidden />
+            </Link>
+          </>
         )}
       </section>
 

@@ -1,13 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import CopyButton from "@/components/resources/CopyButton";
+import {
+  SectionTabStrip,
+  TabPanel,
+  TabPager,
+  scrollToPanel,
+  panelAnchor,
+  type TabDef,
+} from "@/components/resources/SectionTabs";
 
 // Generic, config-driven reference tool: renders a sequence of sections, each of
 // which can hold an intro, a comparison table, a set of cards (with optional
 // copy-to-clipboard bodies and bullet lists), and a highlighted callout. Powers
 // the reference-style resources (comparison chart, script bank, posting calendar,
 // upsell playbook, legal overviews) the same way DataTableTool powers trackers.
+//
+// `content.tabbed` opts a config into tabs: sections WITHOUT a `heading` (an
+// opening intro or disclaimer callout) are pinned above the tab strip and
+// always visible; sections WITH a `heading` become the tabs. Omitting the flag
+// (legal-toolkit's case — one real document list, not several) renders every
+// section in a flat stack exactly as before, so existing non-tabbed content is
+// byte-for-byte unaffected.
 
 export interface RefItem {
   title?: string;
@@ -21,6 +37,9 @@ export interface RefItem {
 }
 
 export interface RefSection {
+  /** Stable id + tab-strip pill text — only required when the section is a tab (see `tabbed` above). */
+  id?: string;
+  shortLabel?: string;
   heading?: string;
   intro?: string;
   table?: { head: string[]; rows: string[][]; highlightCol?: number };
@@ -32,32 +51,25 @@ export interface RefSection {
 
 export interface ReferenceContent {
   sections: RefSection[];
+  /** Render headed sections as tabs, with headerless ones pinned above. Default false: one flat stack. */
+  tabbed?: boolean;
 }
 
-export default function ReferenceTool({
-  title,
-  content,
-}: {
-  title: string;
-  content: ReferenceContent;
-}) {
+function SectionBody({ s }: { s: RefSection }) {
   return (
-    <ResourceToolShell title={title}>
-      <div className="space-y-10">
-        {content.sections.map((s, si) => (
-          <section key={si} className="space-y-4">
-            {s.heading && (
-              <h2 className="font-display text-2xl font-semibold text-near-black">
-                {s.heading}
-              </h2>
-            )}
-            {s.intro && (
-              <p className="font-sans text-sm text-charcoal/75 leading-relaxed whitespace-pre-wrap">
-                {s.intro}
-              </p>
-            )}
+    <>
+      {s.heading && (
+        <h2 className="font-display text-2xl font-semibold text-near-black">
+          {s.heading}
+        </h2>
+      )}
+      {s.intro && (
+        <p className="font-sans text-sm text-charcoal/75 leading-relaxed whitespace-pre-wrap">
+          {s.intro}
+        </p>
+      )}
 
-            {s.table && (
+      {s.table && (
               <div className="overflow-x-auto border border-light-gray rounded-lg bg-white">
                 <table className="w-full border-collapse text-sm">
                   <thead>
@@ -166,15 +178,101 @@ export default function ReferenceTool({
               </div>
             )}
 
-            {s.callout && (
-              <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-5">
-                <p className="font-sans text-sm text-charcoal/85 leading-relaxed whitespace-pre-wrap">
-                  {s.callout}
-                </p>
-              </div>
-            )}
-          </section>
-        ))}
+      {s.callout && (
+        <div className="bg-warm-gold/10 border border-warm-gold/30 rounded-lg p-5">
+          <p className="font-sans text-sm text-charcoal/85 leading-relaxed whitespace-pre-wrap">
+            {s.callout}
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function ReferenceTool({
+  title,
+  content,
+}: {
+  title: string;
+  content: ReferenceContent;
+}) {
+  const tabbed = content.tabbed ?? false;
+  // Headerless sections (an opening intro, a disclaimer callout) apply to the
+  // whole tool and sit above the strip, always visible; headed sections are
+  // the tabs. Only meaningful when `tabbed` — the flat branch below ignores it.
+  const pinned = tabbed ? content.sections.filter((s) => !s.heading) : [];
+  const tabSections = tabbed
+    ? content.sections.filter((s) => s.heading)
+    : content.sections;
+
+  const [activeSection, setActiveSection] = useState<string>(
+    tabSections[0]?.id ?? "",
+  );
+
+  function goTo(id: string) {
+    setActiveSection(id);
+    scrollToPanel(panelAnchor(title, id));
+  }
+
+  if (!tabbed) {
+    return (
+      <ResourceToolShell title={title}>
+        <div className="space-y-10">
+          {content.sections.map((s, si) => (
+            <section key={s.id ?? si} className="space-y-4">
+              <SectionBody s={s} />
+            </section>
+          ))}
+        </div>
+      </ResourceToolShell>
+    );
+  }
+
+  const tabs: TabDef[] = tabSections.map((s) => ({
+    id: s.id!,
+    label: s.heading!,
+    shortLabel: s.shortLabel,
+  }));
+
+  return (
+    <ResourceToolShell title={title}>
+      {pinned.length > 0 && (
+        <div className="space-y-4 mb-6">
+          {pinned.map((s, si) => (
+            <section key={s.id ?? si} className="space-y-4">
+              <SectionBody s={s} />
+            </section>
+          ))}
+        </div>
+      )}
+
+      <SectionTabStrip
+        tabs={tabs}
+        activeId={activeSection}
+        onSelect={goTo}
+        ariaLabel={`${title} sections`}
+      />
+
+      {/* Sections — all mounted (for Print/Save-as-PDF), only the active one
+          visible on screen. */}
+      <div className="space-y-10">
+        {tabSections.map((s, si) => {
+          const id = s.id ?? String(si);
+          return (
+            <TabPanel
+              key={id}
+              anchorId={panelAnchor(title, id)}
+              current={id === activeSection}
+              className="space-y-4"
+            >
+              <SectionBody s={s} />
+            </TabPanel>
+          );
+        })}
+      </div>
+
+      <div className="mt-6">
+        <TabPager tabs={tabs} activeId={activeSection} onSelect={goTo} />
       </div>
     </ResourceToolShell>
   );

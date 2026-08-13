@@ -1,16 +1,24 @@
 // Target Audience Identification Matrix — reference data. Digitized from Della's
-// handout: two lookup tables of co-living tenant segments plus how to use them.
+// handout: two lookup tables of co-living tenant segments. The how-to guidance
+// lives in the registry's howItWorks tiles at the top of the page, not here.
 
 export interface MatrixTable {
   id: string;
   label: string;
   columns: string[];
   rows: string[][];
+  /**
+   * Column rendered as the emphasized block at the bottom of each segment
+   * card — the "so what" of the row. Must match a `columns` entry exactly;
+   * omit for tables where no single column deserves the spotlight.
+   */
+  highlightColumn?: string;
 }
 
 export const SEGMENT_TABLE: MatrixTable = {
   id: "segments",
   label: "Audience segments — needs, channels & messaging",
+  highlightColumn: "Messaging Strategy",
   columns: [
     "Audience Segment",
     "Demographics",
@@ -53,11 +61,3 @@ export const FIT_TABLE: MatrixTable = {
 };
 
 export const MATRIX_TABLES = [SEGMENT_TABLE, FIT_TABLE];
-
-export const MATRIX_HOWTO: string[] = [
-  "Identify the two or three segments that best match your property and market.",
-  "Use the messaging column to tailor listing copy and ad creative to each one.",
-  "Use the preferred-channels column to choose where to run each campaign.",
-  "Address the needs and pain points directly in your amenities and copy.",
-  "Revisit the matrix as you learn what actually converts in your market.",
-];

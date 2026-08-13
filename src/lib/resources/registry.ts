@@ -5,6 +5,8 @@
 //
 // Adding a Phase 2 tool = add an entry here + its config/component/page.
 
+import type { LaneId } from "@/lib/lanes";
+
 export type ResourceArchetype =
   | "calculator"
   | "checklist"
@@ -22,6 +24,25 @@ export type ResourceAccess = "free-email";
  */
 export type ResourceCategory = "property" | "fleet" | "boutique";
 
+/**
+ * The registry's `category` predates src/lib/lanes.ts and says "property"
+ * where the lane system says "coliving". Everything user-facing downstream of
+ * the saved-resources shelf (tabs, accent colors, labels) speaks LaneId, so we
+ * translate here rather than renaming twenty entries plus the index tabs, the
+ * sitemap, and liveResourceTools()'s default argument — pure churn with a real
+ * chance of typoing a tool off the index. lanes.ts imports nothing from this
+ * module, so this direction is cycle-free.
+ */
+export const RESOURCE_CATEGORY_TO_LANE: Record<ResourceCategory, LaneId> = {
+  property: "coliving",
+  boutique: "boutique",
+  fleet: "fleet",
+};
+
+export function laneForTool(tool: ResourceToolMeta): LaneId {
+  return RESOURCE_CATEGORY_TO_LANE[tool.category];
+}
+
 export interface ResourceToolMeta {
   /** URL slug under /resources/<slug> and the `tool_slug` stored on leads. */
   slug: string;
@@ -35,6 +56,34 @@ export interface ResourceToolMeta {
   category: ResourceCategory;
   archetype: ResourceArchetype;
   access: ResourceAccess;
+  /**
+   * Where this tool's state lives, and therefore what "used it" means.
+   *
+   *   "none"     — reference content with nothing to fill in. Lands on the
+   *                member's dashboard when they OPEN it, because there is no
+   *                interaction to wait for.
+   *   "blob"     — one JSONB row per (user, tool) in resource_tool_state.
+   *   "analyses" — many named rows in resource_analyses.
+   *
+   * Both persisted kinds land on the dashboard on the first WRITE, never on
+   * open. That distinction is the whole point: a member browsing the catalogue
+   * should not collect nineteen dashboard cards.
+   *
+   * Required, not optional-with-a-default, so a new tool that forgets it fails
+   * the typecheck instead of silently picking a behaviour.
+   *
+   * It happens to line up with `archetype === "reference"` today. Do NOT derive
+   * it from archetype — that couples what a tool IS to where its bytes go, and
+   * the first interactive reference tool would break both.
+   */
+  persistence: "none" | "blob" | "analyses";
+  /**
+   * The tool ships a completed, read-only example (its component wires up
+   * ExampleMode and answers /resources/<slug>?example=1). Drives the
+   * "See a completed example" link on the dashboard card. Optional so the
+   * tools without one stay untouched.
+   */
+  hasExample?: boolean;
   status: "live" | "soon";
   /** Hero background image path under /public. */
   heroImage: string;
@@ -68,6 +117,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "checklist",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Setup Checklist",
@@ -87,69 +137,48 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     ],
   },
 
-  "room-rental-price-calculator": {
-    slug: "room-rental-price-calculator",
-    name: "Room Rental Price Calculator",
+  // Replaces the Room Rental Price Calculator and the Start-Up Cost Projection
+  // Worksheet, which each answered half a question: one priced a single room
+  // and stopped, the other totalled launch costs with no idea what the property
+  // would earn. Both slugs 308 here from next.config.ts. This is also the first
+  // tool to keep MULTIPLE NAMED ANALYSES per member (see resource_analyses),
+  // which is why its bullets promise something the other twenty cannot.
+  "breakeven-analysis-worksheet": {
+    slug: "breakeven-analysis-worksheet",
+    // The URL keeps the old slug on purpose. It is the canonical the sitemap
+    // has been serving, two retired tools 308 into it, and every member's
+    // saved analyses and shelf rows are keyed to it. Renaming the display name
+    // costs nothing; renaming the slug is a redirect chain plus a four-table
+    // production backfill, and buys only tidiness.
+    name: "Co-Living Property Profitability Analysis Worksheet",
     blurb:
-      "Turn a comparable one-bedroom rent plus your property and room features into a defensible per-room monthly price.",
+      "Price every room, total what it costs to open and to run, and see your monthly net, three-year projection, and the month you break even.",
     bullets: [
-      "Starts from a real one-bedroom comp in your market",
-      "Adjusts for amenities, upgrades, and room features",
-      "Gives you a suggested monthly room rent",
-      "Shows the math so you can defend the number",
+      "Price each room from a real market comp, as many rooms as you have",
+      "Launch costs and monthly costs, with an estimate on every line",
+      "Monthly net, a three-year projection, and your break-even month",
+      "Keep one analysis per property and come back to any of them",
     ],
     category: "property",
     archetype: "calculator",
     access: "free-email",
+    persistence: "analyses",
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Price Calculator",
-    headline: "What should you charge\nper room?",
+    eyebrow: "Profitability Analysis",
+    headline: "Will this property\nactually make money?",
     subhead:
-      "Guessing at rent leaves money on the table or scares off good tenants. Start from a real comp, layer in what your property actually offers, and get a price you can stand behind.",
+      "Pricing a room is the easy part. The question that decides the deal is whether the rent covers the mortgage, the utilities, the turnover, and the furniture you have not bought yet. Work it end to end and get a break-even month you can plan around.",
     howItWorks: [
-      "Enter the fair-market rent of a comparable one-bedroom.",
-      "Tick the amenities, upgrades, and room features you offer.",
-      "Get a suggested monthly rent with the reasoning attached.",
+      "Price every room from a comparable one-bedroom in your market.",
+      "Tick your launch costs and monthly costs, adjusting our estimates.",
+      "Read your monthly net, three-year projection, and break-even month.",
     ],
     whatYouGet: [
-      "A suggested per-room monthly rent",
-      "A feature-by-feature breakdown of how it was built",
-      "A number grounded in a real market comp, not a guess",
-      "CSV export and a clean print view",
-    ],
-  },
-
-  "startup-cost-calculator": {
-    slug: "startup-cost-calculator",
-    name: "Start-Up Cost Projection Worksheet",
-    blurb:
-      "Every pre-launch expense a co-living property incurs, by category, so you know how much capital you need before the first guest.",
-    bullets: [
-      "Furniture, setup, marketing, legal, and safety categories",
-      "Enter estimates, mark what is already purchased",
-      "Live total projected start-up budget",
-      "Autosaves in your browser, export to CSV or print",
-    ],
-    category: "property",
-    archetype: "worksheet",
-    access: "free-email",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Start-Up Costs",
-    headline: "What will it cost to\nopen your doors?",
-    subhead:
-      "The surprises that sink a first property are the costs you did not plan for. Line them up by category, estimate each one, and see your true launch budget before you commit.",
-    howItWorks: [
-      "Go category by category through every pre-launch expense.",
-      "Enter an estimate and mark what you have already bought.",
-      "Read your total projected start-up budget at the bottom.",
-    ],
-    whatYouGet: [
-      "A category-by-category launch budget",
-      "A percent-secured view of what is already handled",
-      "A realistic number to take into loan or partner talks",
-      "CSV export and a clean print view",
+      "A defensible price for every room in the property",
+      "A launch budget and a true monthly cost, side by side",
+      "A three-year projection and the month you break even",
+      "One saved analysis per property, plus CSV export and a clean print view",
     ],
   },
 
@@ -167,6 +196,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "calculator",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Profit & Loss",
@@ -200,6 +230,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "tracker",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Maintenance Tracker",
@@ -233,6 +264,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "tracker",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Contractor Rolodex",
@@ -266,6 +298,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "tracker",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Inventory Tracker",
@@ -299,6 +332,8 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "worksheet",
     access: "free-email",
+    persistence: "blob",
+    hasExample: true,
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Market Demand",
@@ -332,6 +367,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Audience Matrix",
@@ -339,9 +375,9 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     subhead:
       "Generic listings attract no one. This matrix breaks co-living demand into real tenant segments, what each values, where they look, and the message that lands, so every listing and ad speaks to someone specific.",
     howItWorks: [
-      "Find the segments that fit your property and market.",
-      "Read their needs, channels, and messaging angle.",
-      "Copy the language straight into your listings and ads.",
+      "Identify the two or three segments that best match your property and market.",
+      "Tailor each listing and ad using that segment's messaging, preferred channels, and pain points.",
+      "Address their needs in your amenities and copy, then revisit the matrix as you learn what actually converts.",
     ],
     whatYouGet: [
       "Six ready-to-use tenant personas",
@@ -365,6 +401,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Guest Messaging",
@@ -398,6 +435,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "checklist",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Progress Checklist",
@@ -431,6 +469,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Comparison Chart",
@@ -464,6 +503,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "checklist",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Photo Shot List",
@@ -497,6 +537,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "tracker",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Tenant Tracker",
@@ -530,6 +571,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Agreement Guide",
@@ -563,6 +605,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Legal Toolkit",
@@ -596,6 +639,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Posting Calendar",
@@ -629,6 +673,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Script Bank",
@@ -662,6 +707,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "worksheet",
     access: "free-email",
+    persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Listing Builder",
@@ -695,6 +741,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     category: "property",
     archetype: "reference",
     access: "free-email",
+    persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
     eyebrow: "Revenue Playbook",

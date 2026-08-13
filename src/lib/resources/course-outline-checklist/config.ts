@@ -5,7 +5,9 @@ import { type CheckSection } from "@/components/resources/ChecklistTool";
 // pile of notes. Mirrors the book's Welcome and Chapters 1-6.
 export const COURSE_SECTIONS: CheckSection[] = [
   {
+    id: "getting-started",
     label: "Getting Started (Welcome)",
+    shortLabel: "Getting Started",
     items: [
       { id: "why", label: "Write down why you are doing this and the monthly income that makes it worth it" },
       { id: "space", label: "Take an honest inventory of your space: bedrooms, bathrooms, condition" },
@@ -14,7 +16,9 @@ export const COURSE_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "ch1",
     label: "Chapter 1 — Property Viability & Audience",
+    shortLabel: "Ch 1: Viability",
     items: [
       { id: "viability", label: "Score your target property in the Property Viability Calculator" },
       { id: "audience", label: "Build your Target Audience Matrix for your top one to three segments" },
@@ -23,20 +27,26 @@ export const COURSE_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "ch2",
     label: "Chapter 2 — Financial Foundations",
+    shortLabel: "Ch 2: Financials",
     items: [
       { id: "tier", label: "Choose your budget tier (economy, standard, premium)" },
-      { id: "startup", label: "Complete the Start-Up Cost Projection Worksheet across all six categories" },
+      // Label only. The `id` is persisted in every member's saved checklist
+      // state, so renaming it would silently untick this row for everyone.
+      { id: "startup", label: "Complete the launch-cost section of the Co-Living Property Profitability Analysis Worksheet" },
       { id: "reserve", label: "Set your operating reserve at two to three months of fixed costs" },
       { id: "comps", label: "Research eight to ten comparable listings and record their rates" },
-      { id: "price", label: "Set introductory weekly and monthly prices with the Price Calculator" },
+      { id: "price", label: "Set introductory per-room prices in the Co-Living Property Profitability Analysis Worksheet" },
       { id: "projection", label: "Build a 12-month revenue projection with best, likely, and worst cases" },
       { id: "profitfirst", label: "Set your profit-first percentage and open a separate profit account" },
       { id: "pandl", label: "Set up the Profit & Loss tracker before your first booking" },
     ],
   },
   {
+    id: "ch3",
     label: "Chapter 3 — Setup & Design",
+    shortLabel: "Ch 3: Setup",
     items: [
       { id: "profile", label: "Write the audience profile that drives every design decision" },
       { id: "zones", label: "Measure your rooms and define zones (sleep, work, connect)" },
@@ -47,7 +57,9 @@ export const COURSE_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "ch4",
     label: "Chapter 4 — Operations & Management",
+    shortLabel: "Ch 4: Operations",
     items: [
       { id: "platforms", label: "Choose your primary and secondary listing platforms and create profiles" },
       { id: "listing", label: "Draft your listing: title, 12-15 sequenced photos, four-part description, positive rules" },
@@ -60,7 +72,9 @@ export const COURSE_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "ch5",
     label: "Chapter 5 — Marketing",
+    shortLabel: "Ch 5: Marketing",
     items: [
       { id: "brand", label: "Define your brand: positioning, visual identity, and voice" },
       { id: "content", label: "Build your content system: a monthly plan, batched creation, and a schedule" },
@@ -70,7 +84,9 @@ export const COURSE_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "ch6",
     label: "Chapter 6 — Maximizing Revenue & Scaling",
+    shortLabel: "Ch 6: Scaling",
     items: [
       { id: "upsell", label: "Add two or three upsells and read the demand" },
       { id: "loyalty", label: "Launch your loyalty and referral systems" },

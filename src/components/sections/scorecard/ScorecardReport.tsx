@@ -94,7 +94,7 @@ export default function ScorecardReport({
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
             <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
-              Co-living Property Calculator
+              Co-living Viability Calculator
             </p>
             <p className="font-sans text-xs text-white/50 tabular-nums">
               Scored {createdLabel}
@@ -125,7 +125,7 @@ export default function ScorecardReport({
             <div className="flex items-center gap-3">
               <PrintButton />
               <Link
-                href="/resources/co-living-property-calculator"
+                href="/resources/co-living-viability-calculator"
                 className="font-sans text-sm font-semibold text-white/70 hover:text-white transition-colors underline-offset-4 hover:underline"
               >
                 Score another property
@@ -205,7 +205,12 @@ export default function ScorecardReport({
 
           <div className="space-y-10">
             {SCORECARD_SECTIONS.map((section) => {
-              const gaps = section.questions.filter((q) => !answers[q.id]);
+              // Only count questions this respondent was actually asked. A
+              // report issued before a question existed has no key for it, and
+              // `!undefined` would otherwise render it as a gap they never saw.
+              const gaps = section.questions.filter(
+                (q) => q.id in answers && !answers[q.id],
+              );
               if (gaps.length === 0) {
                 return (
                   <div

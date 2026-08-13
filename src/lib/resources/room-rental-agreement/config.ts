@@ -4,12 +4,15 @@ import { type ReferenceContent } from "@/components/resources/ReferenceTool";
 // solid co-living agreement and house-rules document, in plain English. This is
 // educational, not legal advice, and not the editable template itself.
 export const AGREEMENT_CONTENT: ReferenceContent = {
+  tabbed: true,
   sections: [
     {
       callout:
         "Important: this is an educational guide, not legal advice, and not a substitute for a reviewed contract. Landlord-tenant law varies by state and city and changes over time. Always have a licensed local real estate attorney review any agreement before you use it. The editable Room Rental Agreement and House Rules templates are included with your Room Rental Riches enrollment.",
     },
     {
+      id: "agreement",
+      shortLabel: "Agreement Clauses",
       heading: "What a room rental agreement should cover",
       intro:
         "A good agreement prevents most disputes before they start. Whether you draft your own or adapt a template, make sure it addresses each of these, then have an attorney confirm it for your market.",
@@ -28,6 +31,8 @@ export const AGREEMENT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "house-rules",
+      shortLabel: "House Rules",
       heading: "What co-living house rules should cover",
       intro:
         "House rules keep a shared home calm and set expectations before anyone moves in. Frame them positively, and put them in the listing, the pre-arrival message, and printed in the home.",

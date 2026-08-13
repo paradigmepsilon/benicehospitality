@@ -53,7 +53,7 @@ export default function DataTableTool({
   columns,
   csvFilename,
   addLabel = "Add row",
-  loggedIn = false,
+  canSync = false,
   variant = "table",
   entryNoun = "entry",
 }: {
@@ -62,7 +62,7 @@ export default function DataTableTool({
   columns: DataColumn[];
   csvFilename: string;
   addLabel?: string;
-  loggedIn?: boolean;
+  canSync?: boolean;
   /**
    * "table" (default): one wide row per entry, horizontal scroll.
    * "cards": one stacked block per entry, vertical scroll only. Better for
@@ -76,7 +76,7 @@ export default function DataTableTool({
   const { state, setState, reset } = useResourceTool<State>(
     slug,
     { rows: [blankRow(columns)] },
-    { sync: loggedIn },
+    { sync: canSync },
   );
 
   const rows = state.rows.length ? state.rows : [blankRow(columns)];
@@ -237,7 +237,7 @@ export default function DataTableTool({
           onChange={onImportFile}
           className="hidden"
         />
-        {loggedIn && (
+        {canSync && (
           <span className="font-sans text-xs text-charcoal/50">
             Saved to your account
           </span>
@@ -327,7 +327,7 @@ export default function DataTableTool({
       <p className="no-print font-sans text-xs text-charcoal/55 mt-3">
         Add rows as you go. Export to CSV any time, or import a CSV that matches
         these columns.
-        {loggedIn
+        {canSync
           ? " Your entries are saved to your account and this browser."
           : " Your entries autosave in this browser. Log in to save them to your account across devices."}
       </p>

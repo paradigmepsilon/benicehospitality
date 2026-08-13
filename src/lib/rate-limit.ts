@@ -47,15 +47,40 @@ export const auditTrackLimiter = createLimiter(30, 60 * 1000);
 export const auditRequestLimiter = createLimiter(3, 60 * 1000);
 export const unsubscribeLimiter = createLimiter(10, 60 * 1000);
 
-// Co-living Property Calculator limiters
+// Co-living Viability Calculator limiters
 export const scorecardSubmitLimiter = createLimiter(5, 60 * 1000);
 export const scorecardUnlockLimiter = createLimiter(3, 60 * 1000);
 
-// Resource tools front-door gate — each unlock captures a lead + may send email.
-export const resourceUnlockLimiter = createLimiter(5, 60 * 1000);
-
 // Resource tool account-save — debounced writes from logged-in users; lenient.
 export const resourceStateLimiter = createLimiter(60, 60 * 1000);
+
+// "Add to my dashboard" bookmark toggles — a member working down the resource
+// index may hit this many times in a row; each is one tiny upsert or delete.
+export const savedResourceLimiter = createLimiter(60, 60 * 1000);
+
+// Address lookup proxies to the Census geocoder. Tighter than the other
+// resource limiters because each call costs an outbound request to someone
+// else's service, and a human filling in one address does not need twenty.
+export const addressLookupLimiter = createLimiter(20, 60 * 1000);
+
+// Each property lookup is a grounded Gemini call: several web searches plus a
+// model response, billed per request. Tighter than the address geocoder
+// because this one costs real money per call, not just goodwill.
+export const propertyDetailsLimiter = createLimiter(8, 60 * 1000);
+
+// Named analyses (Co-Living Property Profitability Analysis Worksheet) —
+// autosave PATCHes plus the
+// occasional create / rename / duplicate / delete. Its own bucket so a member
+// modelling a property cannot lock themselves out of the trackers, and a higher
+// ceiling because this tool writes far more often than any other.
+//
+// Known weakness: createLimiter keys on IP alone, so a coworking space or a
+// household behind one NAT shares a bucket. The client side is what keeps this
+// safe — a 1200ms debounce plus a single-in-flight guard caps one tab near 50
+// writes/min, and the hook treats a 429 as retry-with-backoff rather than an
+// error. Keying on userId when a session exists is the real fix and touches
+// every limiter call site, so it is deliberately left as a follow-up.
+export const resourceAnalysisLimiter = createLimiter(90, 60 * 1000);
 
 // Course waitlist — 3 signups per minute per IP
 export const waitlistLimiter = createLimiter(3, 60 * 1000);

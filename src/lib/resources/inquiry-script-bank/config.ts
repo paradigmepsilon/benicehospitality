@@ -4,12 +4,15 @@ import { type ReferenceContent } from "@/components/resources/ReferenceTool";
 // so a message becomes a tour and a tour becomes a move-in. Brackets like [price]
 // are yours to fill in.
 export const SCRIPT_CONTENT: ReferenceContent = {
+  tabbed: true,
   sections: [
     {
       intro:
         "Speed wins the booking. Find the inquiry you just received, copy the version that fits your voice, drop in your details, and reply within the hour. Every script ends by pointing to the next step.",
     },
     {
+      id: "available",
+      shortLabel: "Available?",
       heading: '"Is this room still available?"',
       columns: 2,
       items: [
@@ -28,6 +31,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "rent-price",
+      shortLabel: "Rent Price",
       heading: '"How much is rent?"',
       columns: 2,
       items: [
@@ -44,6 +49,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "location",
+      shortLabel: "Location",
       heading: '"Where is it located?"',
       columns: 2,
       items: [
@@ -60,6 +67,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "lease-length",
+      shortLabel: "Lease Length",
       heading: '"How long is the lease?"',
       columns: 2,
       items: [
@@ -76,6 +85,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "apply",
+      shortLabel: "How to Apply",
       heading: '"I\'m interested, how do I apply?"',
       columns: 2,
       items: [
@@ -92,6 +103,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "follow-up",
+      shortLabel: "Follow-Up",
       heading: "Ghost-prevention follow-up (no reply)",
       columns: 2,
       items: [
@@ -108,6 +121,8 @@ export const SCRIPT_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "objection",
+      shortLabel: "Price Objection",
       heading: '"That\'s more than I expected to pay"',
       columns: 2,
       items: [

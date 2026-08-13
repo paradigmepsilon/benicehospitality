@@ -6,6 +6,10 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import { liveResourceTools } from "@/lib/resources/registry";
+import {
+  SCORECARD_QUESTION_COUNT,
+  SCORECARD_SECTIONS,
+} from "@/lib/scorecard/questions";
 
 // The top of the funnel and the identity moment in one. Every tool here sits
 // behind the shared email gate, so one address unlocks the whole library — and
@@ -65,16 +69,17 @@ export default function CoLivingResources() {
                 Start with this one
               </p>
               <h3 className="font-display text-3xl md:text-4xl font-semibold leading-tight mb-5">
-                Co-living Property Calculator
+                Co-living Viability Calculator
               </h3>
               <p className="font-sans text-base md:text-lg text-white/85 leading-snug mb-7">
-                Forty weighted questions across seven sections. Score any
-                property in under ten minutes and get a plain-language fix list
-                for every gap you flag. Built for room rentals specifically, not
-                generic short-term rental scoring.
+                {SCORECARD_QUESTION_COUNT} weighted questions across{" "}
+                {SCORECARD_SECTIONS.length} sections. Score any property in
+                under ten minutes and get a plain-language fix list for every
+                gap you flag. Built for room rentals specifically, not generic
+                short-term rental scoring.
               </p>
               <Button
-                href="/resources/co-living-property-calculator"
+                href="/resources/co-living-viability-calculator"
                 variant="primary"
                 size="lg"
               >
@@ -83,7 +88,7 @@ export default function CoLivingResources() {
             </div>
             <ul className="space-y-3">
               {[
-                "Seven operator sections, forty weighted questions",
+                `${SCORECARD_SECTIONS.length} operator sections, ${SCORECARD_QUESTION_COUNT} weighted questions`,
                 "A score you can act on in ten minutes",
                 "A fix list written in plain language",
                 "Works before you own a single door",

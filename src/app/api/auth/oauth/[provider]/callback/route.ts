@@ -10,6 +10,7 @@ import {
   setUserSessionCookie,
 } from "@/lib/community-auth";
 import { recordEvent } from "@/lib/analytics";
+import { upsertPipelineContact } from "@/lib/resources/leads";
 import { getClientIp, loginLimiter } from "@/lib/rate-limit";
 import {
   clearOAuthCookies,
@@ -204,6 +205,16 @@ export async function GET(
       eventType: "auth.signup",
       metadata: { method: "oauth", provider },
     });
+    // Mirror the password-signup path: every new account lands in the CRM.
+    // Without this an OAuth signup that never opens a resource tool would be
+    // invisible to /admin/crm. Best-effort; never blocks the redirect.
+    void upsertPipelineContact({
+      name: user.name,
+      email: user.email,
+      source: `signup:${provider}`,
+    }).catch((err) =>
+      console.error("[oauth/callback] pipeline contact upsert failed:", err),
+    );
     const onboardingUrl = new URL("/onboarding", request.url);
     if (next && next !== "/account") {
       onboardingUrl.searchParams.set("next", next);

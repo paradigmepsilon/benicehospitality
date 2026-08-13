@@ -3,8 +3,11 @@ import { type ReferenceContent } from "@/components/resources/ReferenceTool";
 // Rental Type Comparison Chart: short-term vs mid-term vs long-term, side by side,
 // with honest pros/cons, real income examples, and a 5-question fit quiz.
 export const COMPARISON_CONTENT: ReferenceContent = {
+  tabbed: true,
   sections: [
     {
+      id: "compare",
+      shortLabel: "Compare All",
       heading: "How the three models compare",
       intro:
         "Before you furnish anything, see the three rental models on the numbers. The mid-term column is highlighted because it is the sweet spot this course is built around: near short-term income at a fraction of the hours.",
@@ -23,6 +26,8 @@ export const COMPARISON_CONTENT: ReferenceContent = {
       },
     },
     {
+      id: "str",
+      shortLabel: "Short-Term",
       heading: "Short-Term Rentals (STR)",
       columns: 2,
       items: [
@@ -48,6 +53,8 @@ export const COMPARISON_CONTENT: ReferenceContent = {
         "Real example: a 3-bed beachfront condo in Miami at $120/night and 60% occupancy grosses about $6,480/month. After cleaning, utilities, and a 15% manager fee, roughly $4,600 net. High income, but it demands constant attention.",
     },
     {
+      id: "mtr",
+      shortLabel: "Mid-Term",
       heading: "Mid-Term Rentals (MTR) — our focus",
       columns: 2,
       items: [
@@ -73,6 +80,8 @@ export const COMPARISON_CONTENT: ReferenceContent = {
         "Real example: a 3-bed Atlanta house at $1,200 x 3 rooms is $3,600/month base. A Wi-Fi upgrade and one parking add-on push it to about $3,850. Tenants turn over twice a year, not twelve times. About 12 hours a month, roughly $2,800/month net.",
     },
     {
+      id: "ltr",
+      shortLabel: "Long-Term",
       heading: "Long-Term Rentals (LTR)",
       columns: 2,
       items: [
@@ -96,6 +105,8 @@ export const COMPARISON_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "quiz",
+      shortLabel: "Fit Quiz",
       heading: "Which model fits you?",
       intro:
         "Answer these five questions and score each response 1 to 3 points, then total your score. 5 to 8 points points to long-term, 9 to 13 to mid-term, 14+ to short-term.",
@@ -110,6 +121,8 @@ export const COMPARISON_CONTENT: ReferenceContent = {
         "Your score: 5 to 8 = long-term is your fit, embrace the stability. 9 to 13 = mid-term is your sweet spot, and what this course teaches. 14+ = short-term suits your skills, prepare for high involvement.",
     },
     {
+      id: "why-mtr",
+      shortLabel: "Why MTR",
       heading: "Why we teach mid-term",
       items: [
         {

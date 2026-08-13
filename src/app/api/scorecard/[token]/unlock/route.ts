@@ -170,7 +170,7 @@ export async function POST(
 
   const propertyNickname = scorecard.property_nickname || "Your property";
   const overallScore = Number(scorecard.overall_score);
-  const resultsUrl = `${SITE_URL}/resources/co-living-property-calculator/results/${token}`;
+  const resultsUrl = `${SITE_URL}/resources/co-living-viability-calculator/results/${token}`;
   const bookingUrl = `${SITE_URL}/book`;
 
   if (process.env.RESEND_API_KEY) {
@@ -178,7 +178,7 @@ export async function POST(
       await getResend().emails.send({
         from: SCORECARD_FROM_EMAIL,
         to: email,
-        subject: `Your Co-living Property Calculator is ready (${propertyNickname})`,
+        subject: `Your Co-living Viability Calculator is ready (${propertyNickname})`,
         html: scorecardReadyEmail({
           name,
           propertyNickname,
@@ -198,7 +198,7 @@ export async function POST(
         from: SCORECARD_FROM_EMAIL,
         to: SCORECARD_NOTIFY_TO,
         replyTo: email,
-        subject: `New Co-living Property Calculator: ${propertyNickname} (${scorecard.band})`,
+        subject: `New Co-living Viability Calculator: ${propertyNickname} (${scorecard.band})`,
         html: internalScorecardRequestEmail({
           email,
           name,
@@ -215,5 +215,5 @@ export async function POST(
     }
   }
 
-  return NextResponse.json({ ok: true, results_url: `/resources/co-living-property-calculator/results/${token}` });
+  return NextResponse.json({ ok: true, results_url: `/resources/co-living-viability-calculator/results/${token}` });
 }

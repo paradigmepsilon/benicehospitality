@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getResourceTool } from "@/lib/resources/registry";
-import { hasResourceUnlock } from "@/lib/resources/unlock-cookie";
-import { getCurrentSession } from "@/lib/community-auth";
+import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import MarketDemandTool from "@/components/resources/market-demand-worksheet/MarketDemandTool";
@@ -22,17 +22,24 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const [session, cookieUnlock] = await Promise.all([
-    getCurrentSession(),
-    hasResourceUnlock(),
-  ]);
-  const loggedIn = Boolean(session);
-  const unlocked = loggedIn || cookieUnlock;
+  const access = await getResourceAccess(tool);
+  const canSync = access.canSync;
 
   return (
-    <ResourceToolLayout tool={tool}>
-      <ResourceGate slug={tool.slug} toolName={tool.name} unlocked={unlocked}>
-        <MarketDemandTool loggedIn={loggedIn} />
+    <ResourceToolLayout tool={tool} access={access}>
+      <ResourceGate slug={tool.slug} toolName={tool.name} access={access}>
+        {/* MarketDemandTool reads ?example=1 to open the completed example,
+            and useSearchParams needs a Suspense boundary — same pattern as
+            the breakeven planner's ?a= deep link. */}
+        <Suspense
+          fallback={
+            <p className="font-sans text-sm text-charcoal/60 py-8 text-center">
+              Loading the worksheet…
+            </p>
+          }
+        >
+          <MarketDemandTool canSync={canSync} />
+        </Suspense>
       </ResourceGate>
     </ResourceToolLayout>
   );

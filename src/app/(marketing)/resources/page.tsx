@@ -8,18 +8,28 @@ import ResourceCatalog, {
   type ResourceTab,
 } from "./_components/ResourceCatalog";
 import { liveResourceTools } from "@/lib/resources/registry";
+import {
+  SCORECARD_QUESTION_COUNT,
+  SCORECARD_SECTIONS,
+} from "@/lib/scorecard/questions";
 
-// Interactive, gated property tools (Price Calculator, Start-Up Cost, P&L,
-// Setup Checklist) are sourced straight from the registry so the index never
-// drifts from the tools themselves.
+// Interactive property tools (Launch & Profit Planner, P&L, Setup Checklist)
+// are sourced straight from the registry so the index never drifts from the
+// tools themselves.
+//
+// `savableSlug` is set ONLY here, from the registry. That is what keeps the
+// "Add to my dashboard" button off cards with no real tool behind them — the
+// Labs Pass diagnostics, the boutique audits, and the course entries below all
+// omit it, and the save API validates the slug against the registry anyway.
 const RESOURCE_TOOL_CARDS: Resource[] = liveResourceTools("property").map(
   (t) => ({
     name: t.name,
     body: t.blurb,
     bullets: t.bullets,
-    access: "free-email",
+    access: "free-account",
     href: `/resources/${t.slug}`,
     status: "live",
+    savableSlug: t.slug,
   }),
 );
 
@@ -43,16 +53,16 @@ export const metadata: Metadata = {
 
 const PROPERTY_RESOURCES: Resource[] = [
   {
-    name: "Co-living Property Calculator",
-    body: "40 weighted questions across 7 sections. Score any single property in under 10 minutes and get a Della-voice fix list for every gap.",
+    name: "Co-living Viability Calculator",
+    body: `${SCORECARD_QUESTION_COUNT} weighted questions across ${SCORECARD_SECTIONS.length} sections. Score any single property in under 10 minutes and get a Della-voice fix list for every gap.`,
     bullets: [
-      "40 weighted questions across 7 operator sections",
-      "Score a property in under 10 minutes",
+      `${SCORECARD_QUESTION_COUNT} weighted questions across ${SCORECARD_SECTIONS.length} operator sections`,
+      "Google Maps and Zillow links built into every section",
       "Della-voice fix list for every gap you flag",
       "Built specifically for co-living, not generic STR scoring",
     ],
     access: "free-email",
-    href: "/resources/co-living-property-calculator",
+    href: "/resources/co-living-viability-calculator",
     status: "live",
   },
   ...RESOURCE_TOOL_CARDS,

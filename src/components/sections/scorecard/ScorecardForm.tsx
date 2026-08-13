@@ -97,7 +97,7 @@ export default function ScorecardForm({
       if (data.requires_capture) {
         setCaptureToken(data.token);
       } else {
-        router.push(`/resources/co-living-property-calculator/results/${data.token}`);
+        router.push(`/resources/co-living-viability-calculator/results/${data.token}`);
       }
     } catch {
       setError("Something went wrong. Please try again.");
@@ -237,6 +237,36 @@ export default function ScorecardForm({
             <p className="font-sans text-sm text-charcoal/70 mt-1.5">
               {currentSection.blurb}
             </p>
+            {currentSection.helper && (
+              <div className="mt-3">
+                <a
+                  href={currentSection.helper.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-primary-green underline-offset-4 hover:underline transition-colors"
+                >
+                  {currentSection.helper.label}
+                  <svg
+                    className="w-3.5 h-3.5 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+                <p className="font-sans text-xs text-charcoal/60 mt-1 leading-relaxed">
+                  {currentSection.helper.hint}
+                </p>
+              </div>
+            )}
             {sectionCheckedCount > 0 && (
               <p className="font-sans text-xs text-charcoal/60 mt-3 tabular-nums">
                 {sectionCheckedCount} of {currentSection.questions.length} ticked in this section.

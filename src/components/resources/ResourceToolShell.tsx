@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useToolSave } from "./ToolSaveContext";
 
 // Shared chrome for a resource tool: an action bar with CSV export, print, and
 // reset, plus the tool body. Keeps every tool's controls consistent and gives
@@ -15,6 +16,7 @@ export default function ResourceToolShell({
   onReset,
   children,
   actionsRight,
+  footerNote,
 }: {
   /** Tool name, shown in the print-only document header. */
   title?: string;
@@ -23,7 +25,19 @@ export default function ResourceToolShell({
   children: ReactNode;
   /** Optional extra content on the right side of the action bar (e.g. a result chip). */
   actionsRight?: ReactNode;
+  /**
+   * Overrides the footer line entirely. Rarely needed now: the default below
+   * asks the save bridge whether this tool is actually writing to the account,
+   * rather than assuming. Kept for tools that want to say something else.
+   */
+  footerNote?: ReactNode;
 }) {
+  // Null outside ResourceToolLayout, and `registered` is false until a syncing
+  // tool publishes its save loop — so this is "is this member's work really
+  // going to their account", not "might it".
+  const save = useToolSave();
+  const accountBacked = save?.registered ?? false;
+
   return (
     <div className="resource-tool">
       {/* Print-only branded header */}
@@ -81,8 +95,18 @@ export default function ResourceToolShell({
       {children}
 
       <p className="no-print mt-8 text-center font-sans text-xs text-charcoal/50">
-        Your entries autosave in this browser. Export to CSV to keep a copy or
-        move it elsewhere.
+        {footerNote ??
+          (accountBacked ? (
+            <>
+              Your entries save to your account as you work, and to this browser
+              as a backup. Export to CSV to keep a copy elsewhere.
+            </>
+          ) : (
+            <>
+              Your entries autosave in this browser. Export to CSV to keep a copy
+              or move it elsewhere.
+            </>
+          ))}
       </p>
     </div>
   );

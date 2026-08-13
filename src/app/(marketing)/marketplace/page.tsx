@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { STOCK_LIBRARY } from "@/lib/stock-images";
@@ -153,7 +154,14 @@ export default async function MarketplacePage() {
           </p>
           <p className="font-sans text-sm text-white/55 italic max-w-2xl">
             We earn a commission on some of these links. We only recommend what
-            we use ourselves.
+            we use ourselves.{" "}
+            <Link
+              href="/affiliate-disclosure"
+              className="not-italic text-warm-gold hover:underline"
+            >
+              How this works
+            </Link>
+            .
           </p>
         </div>
       </section>

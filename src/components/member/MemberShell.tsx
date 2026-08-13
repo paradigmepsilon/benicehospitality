@@ -17,7 +17,7 @@ const NAV_ITEMS = [
   { label: "Overview", href: "/account", icon: "grid" },
   { label: "Courses", href: "/account/courses", icon: "book" },
   { label: "Community", href: "/account/community", icon: "users" },
-  { label: "Resources", href: "/account/resources", icon: "edit" },
+  { label: "Your resources", href: "/account/resources", icon: "edit" },
 ];
 
 function NavIcon({ icon }: { icon: string }) {
@@ -164,7 +164,18 @@ export default function MemberShell({
               </span>
             )}
           </div>
-          {isPreview && previewPicker}
+          <div className="flex items-center gap-3">
+            {isPreview && previewPicker}
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 text-sm text-[#3d3d3d] hover:text-[#1a1a1a] transition-colors whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span className="hidden sm:inline">Back to BNHG website</span>
+            </Link>
+          </div>
         </header>
 
         <main className="flex-1 p-6 lg:p-8 overflow-auto">{children}</main>

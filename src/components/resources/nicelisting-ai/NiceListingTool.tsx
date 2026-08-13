@@ -38,8 +38,18 @@ const inputClass =
 const labelClass =
   "block font-sans text-xs font-semibold uppercase tracking-wide text-charcoal/60 mb-1.5";
 
-export default function NiceListingTool() {
-  const { state, setState, reset } = useResourceTool<State>(SLUG, INITIAL);
+export default function NiceListingTool({ canSync = false }: {
+  /**
+   * May this visitor's work be written to their account? `access.canSync` from
+   * getResourceAccess — true only for a logged-in member who is not an admin
+   * previewing a member tier. Not `loggedIn`: that is true for a previewing
+   * admin too, and their keystrokes would land on their own row.
+   */
+  canSync?: boolean;
+}) {
+  const { state, setState, reset } = useResourceTool<State>(SLUG, INITIAL, {
+    sync: canSync,
+  });
 
   const result = useMemo(
     () =>

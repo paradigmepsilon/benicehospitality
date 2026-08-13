@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import SectionLabel from "@/components/ui/SectionLabel";
 import ResourceCard, { type Resource } from "./ResourceCard";
+import { SavedToolsProvider } from "@/components/resources/SavedToolsProvider";
 
 export type ResourceTabId = "property" | "hotel" | "auto";
 
@@ -85,6 +86,9 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
       : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
 
   return (
+    // One /api/resources/saved fetch here resolves the save state for every
+    // card in every tab, rather than one request per card.
+    <SavedToolsProvider>
     <section className="bg-off-white py-14 md:py-16 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Tab strip */}
@@ -286,6 +290,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
         </div>
       </div>
     </section>
+    </SavedToolsProvider>
   );
 }
 

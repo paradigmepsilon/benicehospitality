@@ -449,7 +449,7 @@ export function bookingConfirmationEmail({
 }
 
 // ============================================================================
-// Co-living Property Calculator emails
+// Co-living Viability Calculator emails
 // ============================================================================
 
 const SCORECARD_BAND_COPY: Record<
@@ -490,7 +490,7 @@ function scorecardCallout({
   const meta = SCORECARD_BAND_COPY[band];
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px;background-color:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
     <tr><td style="padding:24px 28px;">
-      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">Co-living Property Calculator</p>
+      <p style="margin:0 0 6px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#f5a623;text-transform:uppercase;letter-spacing:1.5px;">Co-living Viability Calculator</p>
       <p style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:15px;color:#1a1a1a;line-height:1.4;">
         ${propertyNickname}
       </p>
@@ -517,10 +517,10 @@ export function scorecardReadyEmail(p: ScorecardReadyPayload) {
   return auditLayout({
     preheader: `${p.propertyNickname}: ${p.overallScore.toFixed(1)} / ${p.maxScore.toFixed(0)}, ${meta.label}.`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your Co-living Property Calculator is ready</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your Co-living Viability Calculator is ready</h1>
       ${goldDivider()}
       <p style="margin:0 0 16px;">Hi ${p.name},</p>
-      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the Co-living Property Calculator.</p>
+      <p style="margin:0 0 8px;">Here is where <strong>${p.propertyNickname}</strong> landed on the Co-living Viability Calculator.</p>
       ${scorecardCallout({ propertyNickname: p.propertyNickname, overallScore: p.overallScore, maxScore: p.maxScore, band: p.band })}
       <p style="margin:0 0 16px;">${meta.line}</p>
       <p style="margin:0 0 16px;">Your full report includes section-by-section scores and a specific recommendation for every gap. The link stays active so you can come back any time.</p>
@@ -561,7 +561,7 @@ export function internalScorecardRequestEmail(
   return auditLayout({
     preheader: `New scorecard: ${p.propertyNickname} (${meta.label})`,
     bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New Co-living Property Calculator submission</h1>
+      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;line-height:1.3;">New Co-living Viability Calculator submission</h1>
       ${goldDivider()}
       <p style="margin:0 0 18px;">A visitor just unlocked their scorecard.</p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f6f1;border:1px solid #e8e4dd;border-radius:8px;">
@@ -579,32 +579,14 @@ export function internalScorecardRequestEmail(
 }
 
 // ============================================================================
-// Resource tools: generic gated-tool unlock emails. Parameterized by tool name
-// + URL so every /resources tool (Price Calculator, Start-Up Cost, P&L, Setup
-// Checklist, and Phase 2 tools) reuses one lead-facing + one internal template.
+// Resource tools: internal lead notification for the gated tools.
+//
+// The lead-FACING "your tool is unlocked" email that used to live here is
+// gone. The tools are account-gated now, so signup already sends a
+// verification email and the member is looking at the tool when the lead
+// fires — a second "here is your link" email was pure noise. Della's internal
+// notification stream is unchanged.
 // ============================================================================
-
-export interface ResourceUnlockedPayload {
-  name: string;
-  toolName: string;
-  toolUrl: string;
-}
-
-export function resourceUnlockedEmail(p: ResourceUnlockedPayload) {
-  return auditLayout({
-    preheader: `Your ${p.toolName} is unlocked. Pick up where you left off any time.`,
-    bodyHtml: `
-      <h1 style="margin:0;font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your ${p.toolName} is ready</h1>
-      ${goldDivider()}
-      <p style="margin:0 0 16px;">Hi ${p.name},</p>
-      <p style="margin:0 0 16px;">Here is your link to the <strong>${p.toolName}</strong>. It stays open on this device, and this email is your way back in from anywhere else.</p>
-      ${primaryButton(p.toolUrl, `Open the ${p.toolName}`)}
-      <p style="margin:32px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:18px;color:#1a1a1a;font-weight:600;">Want a second set of eyes?</p>
-      <p style="margin:8px 0 0;">Della and the BNHG team run free 30-minute strategy calls for operators working through co-living. Bring what you build here and we will pressure-test it with you.</p>
-      <p style="margin:24px 0 0;color:#1a1a1a;font-weight:500;">The BNHG team</p>
-    `,
-  });
-}
 
 export interface InternalResourceLeadPayload {
   name: string;

@@ -1065,7 +1065,9 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_lesson_assets_lesson ON lesson_assets(lesson_id)`;
   console.log("  ✓ lesson_assets table created");
 
-  // MTR Viability Calculator — gated lead-magnet results stored as JSONB.
+  // Co-living Viability Calculator: gated lead-magnet results stored as JSONB.
+  // Table name predates two renames and stays as-is so existing rows keep
+  // working; same for pipeline_contacts.source = 'viability_scorecard'.
   // Token-addressable so guests can revisit via emailed magic-link.
   await sql`
     CREATE TABLE IF NOT EXISTS viability_scorecards (
@@ -1666,8 +1668,9 @@ async function migrate() {
 
   // ===========================================================================
   // Resource tools — generic lead capture for the gated /resources tools
-  // (Room Rental Price Calculator, Start-Up Cost Worksheet, P&L, Setup
-  // Checklist, and the Phase 2 trackers/worksheets/reference libraries).
+  // (Co-Living Property Profitability Analysis Worksheet, P&L, Setup
+  // Checklist, and the Phase 2
+  // trackers/worksheets/reference libraries).
   //
   // One row per (tool_slug, unlock) so the same person opening two tools is
   // logged twice — that per-tool interest is the point. Access itself is
@@ -1719,6 +1722,233 @@ async function migrate() {
   `;
   await sql`CREATE INDEX IF NOT EXISTS idx_resource_tool_state_user ON resource_tool_state(user_id)`;
   console.log("  ✓ resource_tool_state table created");
+
+  // Saved resource tools — the member's "Your Resources" shelf. One row per
+  // (user, tool). Rows are created two ways: an explicit "Add to my dashboard"
+  // click, and automatically the first time a logged-in member opens a tool
+  // page. `source` records which, so the shelf can label auto-adds and the
+  // funnel can tell deliberate saves from incidental ones.
+  //
+  // Deliberately NO lane/category column. The lane is a property of the TOOL,
+  // not of the save, and it lives in src/lib/resources/registry.ts. Every read
+  // path already hits the registry for the name and blurb, so a denormalized
+  // copy would buy zero queries while creating a second source of truth that
+  // silently rots the day a tool's category is corrected. There are no
+  // transactions on this connection, so resyncing would mean a backfill script.
+  //
+  // No FK on tool_slug either: the registry is a TS module, not a table. Same
+  // choice resource_tool_state.tool_slug already makes above.
+  await sql`
+    CREATE TABLE IF NOT EXISTS saved_resource_tools (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      tool_slug TEXT NOT NULL,
+      source TEXT NOT NULL DEFAULT 'manual',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      last_opened_at TIMESTAMPTZ,
+      UNIQUE (user_id, tool_slug)
+    )
+  `;
+  // Composite index serves both the ordered shelf read and the bulk
+  // slug-membership lookup (leftmost prefix), so no separate user_id index.
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_saved_resource_tools_user
+    ON saved_resource_tools(user_id, created_at DESC)
+  `;
+  console.log("  ✓ saved_resource_tools table created");
+
+  // Named, multi-instance analyses for resource tools. resource_tool_state
+  // above holds ONE blob per (user, tool) — right for a tracker, wrong for the
+  // Co-Living Property Profitability Analysis Worksheet, where an operator
+  // evaluates several
+  // properties side by side and needs to keep, name, and return to each.
+  //
+  // Generic on tool_slug rather than planner-specific: the co-living profit
+  // calculator wants the same one-per-property treatment next, and a table per
+  // tool means a table per tool. Same no-FK-on-slug choice the two tables above
+  // make — the registry is a TS module. src/lib/resources/analysis-schemas.ts
+  // holds the real allowlist, and a slug absent from it 404s from every route
+  // even when it is in the registry. That map is what stops this table rotting
+  // into a dumping ground.
+  //
+  // `data` is the whole tool payload. `schema_version` lets the CLIENT migrate
+  // an old payload forward rather than the server rejecting it. `revision` is
+  // the optimistic-concurrency token — an integer, not an updated_at
+  // comparison, because timestamp round-tripping through the driver is a silent
+  // correctness risk and a counter is not.
+  //
+  // The three summary_* columns are denormalized figures computed from `data`,
+  // recomputed server-side on every write, existing so the shelf and the list
+  // query never parse JSONB. Real columns rather than a summary JSONB for
+  // exactly that reason. Display-only — nothing reads them back into the tool,
+  // so a stale one shows a wrong label, never wrong math. Same shape as
+  // cp_claims.appraisal_amount beside cp_claim_data, and
+  // viability_scorecards.overall_score beside answers.
+  await sql`
+    CREATE TABLE IF NOT EXISTS resource_analyses (
+      id SERIAL PRIMARY KEY,
+      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      tool_slug TEXT NOT NULL,
+      name TEXT NOT NULL CHECK (char_length(name) BETWEEN 1 AND 120),
+      data JSONB NOT NULL DEFAULT '{}'::jsonb,
+      schema_version SMALLINT NOT NULL DEFAULT 1,
+      revision INT NOT NULL DEFAULT 0,
+      summary_monthly_net NUMERIC(12,2),
+      summary_break_even_month INT,
+      summary_startup_total NUMERIC(12,2),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  // One composite index serves all three read shapes via leftmost prefixes: the
+  // per-tool list (all three columns), the per-user cap count (first two), and
+  // a cross-tool account roll-up (first). No second index needed.
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_resource_analyses_owner
+    ON resource_analyses(user_id, tool_slug, updated_at DESC)
+  `;
+  console.log("  ✓ resource_analyses table created");
+
+  // A fourth denormalized display column, same rationale as the three above:
+  // the list query never reads `data`, so without this the account dashboard
+  // cannot show which property a row is about beyond its name. "Douglasville,
+  // GA", recomputed from the payload on every write.
+  await sql`
+    ALTER TABLE resource_analyses ADD COLUMN IF NOT EXISTS summary_location TEXT
+  `;
+  console.log("  ✓ resource_analyses.summary_location column ready");
+
+  // Splits "opened" from "saved".
+  //
+  // saved_resource_tools used to conflate the two: opening a tool while logged
+  // in inserted a row, so the tool page's button read "Saved" before the member
+  // had done anything, and clicking it REMOVED the tool. The control announced
+  // a state nobody chose and then did the opposite of what its label implied.
+  //
+  // Now a row means "this member has opened this tool" — which is still what
+  // carries last_opened_at and gates the one-time CRM lead write — and
+  // saved_at IS NOT NULL means "and they put it on their dashboard". Reads
+  // filter on saved_at; the auto-add on open no longer sets it.
+  const savedAtExisted = (await sql`
+    SELECT EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_name = 'saved_resource_tools' AND column_name = 'saved_at'
+    ) AS present
+  `) as Array<{ present: boolean }>;
+
+  await sql`
+    ALTER TABLE saved_resource_tools ADD COLUMN IF NOT EXISTS saved_at TIMESTAMPTZ
+  `;
+
+  // One-time backfill: every row that exists today is currently ON someone's
+  // dashboard, so it stays there. Nulling them would silently empty every
+  // member's shelf, which is a worse trade than a few tools they never
+  // deliberately saved. The new rule applies to opens from here forward.
+  //
+  // Guarded on the column having been absent, because migrate is re-runnable
+  // and an unguarded UPDATE would promote every later auto-open row.
+  if (!savedAtExisted[0]?.present) {
+    await sql`UPDATE saved_resource_tools SET saved_at = COALESCE(created_at, NOW())`;
+    console.log("  ✓ saved_at backfilled for existing shelf rows");
+  }
+  console.log("  ✓ saved_resource_tools.saved_at column ready");
+
+  // The Room Rental Price Calculator and Start-Up Cost Projection Worksheet
+  // merged into the Co-Living Property Profitability Analysis Worksheet.
+  // Saved rows under the two
+  // retired slugs are filtered out on read by rowToSavedTool(), so without this
+  // a member who shelved either tool silently loses the card and gains nothing.
+  // Idempotent, and harmless once the old slugs have no rows left.
+  //
+  // 'manual' + saved_at set: this card descends from one the member already had
+  // on their dashboard, so it arrives already saved rather than making them
+  // re-add a tool they never removed.
+  await sql`
+    INSERT INTO saved_resource_tools (user_id, tool_slug, source, created_at, saved_at)
+    SELECT DISTINCT user_id, 'breakeven-analysis-worksheet', 'manual', NOW(), NOW()
+    FROM saved_resource_tools
+    WHERE tool_slug IN ('room-rental-price-calculator', 'startup-cost-calculator')
+    ON CONFLICT (user_id, tool_slug) DO NOTHING
+  `;
+  console.log("  ✓ planner shelf backfill applied");
+
+  // Admin-editable overrides for the planner's cost defaults and affiliate
+  // links. The TypeScript config in
+  // src/lib/resources/breakeven-analysis-worksheet/costs.ts stays the
+  // baseline; a row here replaces individual fields on one line.
+  //
+  // NULL means INHERIT, and that distinction is load-bearing: zero is a
+  // legitimate value (op_biztax and op_misc both default to 0), so "cleared
+  // back to the config default" cannot be represented as 0. Resetting a field
+  // sets it NULL; resetting a whole line deletes the row.
+  //
+  // An override may only change VALUES. It cannot add a line, remove one, move
+  // one between categories, or give a line a bucket the config did not declare
+  // — line ids are the keys of every saved analysis and of the legacy import,
+  // so the id set has to be a compile-time constant. buildCatalog() drops rows
+  // whose line_id is not in COST_LINE_BY_ID, which is also what makes deleting
+  // a line from the config safe.
+  await sql`
+    CREATE TABLE IF NOT EXISTS planner_cost_overrides (
+      line_id TEXT PRIMARY KEY,
+      one_time_cost NUMERIC(12,2),
+      monthly_cost NUMERIC(12,2),
+      monthly_percent NUMERIC(6,4),
+      source_note TEXT,
+      product_name TEXT,
+      affiliate_url TEXT,
+      network TEXT,
+      price NUMERIC(12,2),
+      price_checked_at DATE,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_by TEXT
+    )
+  `;
+  console.log("  ✓ planner_cost_overrides table created");
+
+  // Cache for the worksheet's web property lookup.
+  //
+  // One row per address, shared across every member. A lookup costs about four
+  // cents and twenty seconds, and two members evaluating the same house should
+  // pay that once.
+  //
+  // WHY `searched` EXISTS. The route only asks for fields the member left
+  // blank, so a null in `details` is ambiguous on its own: it can mean "we
+  // looked and nothing is published" or "nobody has asked yet". Those need
+  // opposite handling — the first must never be re-searched, the second must
+  // be. `searched` records which fields have actually been through a lookup,
+  // and the row accumulates coverage as different members ask for different
+  // fields. Caching a confirmed null is the single biggest saving here: an
+  // address with no listing would otherwise be re-searched forever.
+  //
+  // NO user_id COLUMN, DELIBERATELY. The values are public property data, but
+  // which member looked up which address is not, and a shared cache that
+  // recorded it would leak who is evaluating what. Nothing here identifies a
+  // member, and the UI shows no lookup date, so a cache hit is indistinguishable
+  // from a fresh call.
+  //
+  // Alex accepted the Gemini terms exposure on 2026-08-11 with the caching
+  // restriction quoted to him. See the note in property-detail-cache.ts.
+  await sql`
+    CREATE TABLE IF NOT EXISTS property_detail_cache (
+      address_key TEXT PRIMARY KEY,
+      address TEXT NOT NULL,
+      details JSONB NOT NULL DEFAULT '{}'::jsonb,
+      searched JSONB NOT NULL DEFAULT '[]'::jsonb,
+      sources JSONB NOT NULL DEFAULT '[]'::jsonb,
+      notes TEXT NOT NULL DEFAULT '',
+      hits INT NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  // Lets the staleness sweep find expired rows without a full scan once this
+  // grows past a few thousand addresses.
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_property_detail_cache_updated
+      ON property_detail_cache(updated_at)
+  `;
+  console.log("  ✓ property_detail_cache table created");
 
   console.log("Migrations complete!");
 }

@@ -91,51 +91,124 @@ body {
   display: none;
 }
 .resource-print-header {
-  margin: 0 0 16px;
-  padding: 0 0 12px;
-  border-bottom: 2px solid #1a1a1a;
+  /* One band, not a title page. Org and date sit on the same baseline above a
+     single rule so the header costs ~12mm of the first sheet rather than the
+     ~30mm the stacked version took. */
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+  padding: 0 0 6px;
+  border-bottom: 1.5px solid #1a1a1a;
 }
 .resource-print-header .rp-org {
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 8px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #807868;
   margin: 0;
+  order: 1;
+  flex: 1 1 100%;
 }
 .resource-print-header .rp-title {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 22px;
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.2;
   color: #1a1a1a;
-  margin: 2px 0 0;
+  margin: 1px 0 0;
+  order: 2;
+  flex: 1 1 auto;
 }
 .resource-print-header .rp-date {
-  font-size: 11px;
+  font-size: 8px;
   color: #807868;
-  margin: 4px 0 0;
+  margin: 0;
+  order: 3;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 @media print {
   @page {
-    margin: 14mm;
+    /* 12mm leaves a 192mm content box ≈ 726 CSS px, which stays above
+       Tailwind's `sm` breakpoint (640px). That one number is why every
+       `sm:grid-cols-*` in a tool keeps its columns on paper instead of
+       collapsing into one tall stack. Do not raise it past 22mm. */
+    margin: 12mm;
   }
 
-  /* Isolate the tool: hide the whole page, reveal only the tool subtree, and
-     pull it to the top of the sheet. Reliable across the site chrome without
-     knowing nav/footer selectors. */
-  body * {
-    visibility: hidden !important;
+  /* Isolate the tool — by taking everything else OUT OF THE FLOW, not by
+     making it invisible.
+
+     This used to be `body * { visibility: hidden }` plus an absolutely
+     positioned tool. `visibility: hidden` keeps an element's boxes, so the
+     entire marketing page — hero, how-it-works, aside, footer — went on
+     paginating underneath, and every printout ended in however many blank
+     sheets that chrome happened to need. That is the trailing empty page, and
+     it was there no matter how short the worksheet was.
+
+     `:has()` picks out the ancestor path to the tool so it survives; the path
+     is then flattened, because on screen the tool sits in a 3/5 grid column
+     and would otherwise print into that column. Flattening it is also what
+     lets the tool go back to being ordinary flow content instead of an
+     absolutely positioned overlay. */
+  body *:not(:has(.resource-tool)):not(.resource-tool):not(.resource-tool *) {
+    display: none !important;
   }
-  .resource-tool,
-  .resource-tool * {
-    visibility: visible !important;
+  body:has(.resource-tool),
+  body *:has(.resource-tool) {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
   }
   .resource-tool {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     background: #fff !important;
+
+    /* ── Density, in custom properties rather than class overrides ──────────
+       Tailwind v4 compiles every padding, margin, gap and fixed width to
+       calc(var(--spacing) * n), and every type step to a --text-* token. Both
+       inherit, so redeclaring them here re-resolves the whole utility set for
+       this subtree at once. Nothing to keep in sync when a className changes,
+       and no !important arms race.
+
+       Screen spacing is tuned for a ~640px column read at arm's length. On
+       paper the same values read as holes, which is the whole "too loose"
+       complaint: it was mostly whitespace, not type size. */
+    --spacing: 0.165rem; /* 4px → 2.64px */
+    --leading-relaxed: 1.4;
+    --leading-normal: 1.35;
+
+    /* Body lands near 12px (9pt) — dense, but a normal document size. The
+       display steps come down hardest: a headline figure at 48px is 36pt,
+       which is signage, not a report. */
+    --text-xs: 0.625rem; /* 12 → 10 */
+    --text-sm: 0.75rem; /* 14 → 12 */
+    --text-base: 0.8125rem; /* 16 → 13 */
+    --text-lg: 0.875rem; /* 18 → 14 */
+    --text-xl: 1rem; /* 20 → 16 */
+    --text-2xl: 1.125rem; /* 24 → 18 */
+    --text-3xl: 1.25rem; /* 30 → 20 */
+    --text-4xl: 1.5rem; /* 36 → 24 */
+    --text-5xl: 1.625rem; /* 48 → 26 */
+  }
+  /* The two arbitrary sizes the resource tools use for eyebrows and badges.
+     They are literal px, so the tokens above cannot reach them — and left
+     alone they would end up LARGER than --text-xs and invert the hierarchy. */
+  .resource-tool .text-\[10px\] {
+    font-size: 8.5px !important;
+  }
+  .resource-tool .text-\[11px\] {
+    font-size: 9px !important;
   }
 
   .no-print {
@@ -144,14 +217,33 @@ body {
   .print-only {
     display: block !important;
   }
+  /* ...except the document header, which is one of them and is a flex band.
+     `.print-only`'s !important would otherwise flatten it back to a stack. */
+  .resource-print-header {
+    display: flex !important;
+  }
+
+  /* ── Ink ─────────────────────────────────────────────────────────────── */
 
   /* Neutralize dark result cards so they print on white, ink-light. */
   .resource-tool .bg-near-black {
     background: #fff !important;
-    border: 1px solid #d9d5cc !important;
+    border: 1px solid #cfcabf !important;
   }
   .resource-tool [class*="text-white"] {
     color: #1a1a1a !important;
+  }
+  /* Borders matter as much as backgrounds here: white-on-white rules inside
+     the headline card were invisible, so its four-line breakdown ran together
+     as one block of numbers. */
+  .resource-tool [class*="border-white"] {
+    border-color: #d9d5cc !important;
+  }
+  /* ...and the muted sublines have to stay muted, or every line in that card
+     prints at the same weight as the figure it is explaining. */
+  .resource-tool .text-white\/60,
+  .resource-tool .text-white\/70 {
+    color: #6b6558 !important;
   }
   .resource-tool .text-warm-gold,
   .resource-tool [class*="text-warm-gold"] {
@@ -163,23 +255,78 @@ body {
     print-color-adjust: exact;
   }
 
+  /* ── Flow ────────────────────────────────────────────────────────────── */
+
   /* Undo sticky/scroll so nothing is cut off or floating. */
   .resource-tool .sticky {
     position: static !important;
   }
-  .resource-tool .overflow-x-auto {
+  .resource-tool .overflow-x-auto,
+  .resource-tool .overflow-hidden {
     overflow: visible !important;
   }
 
-  /* Inputs print as their plain values, no boxes. */
-  .resource-tool input,
-  .resource-tool select {
+  /* Text inputs print as their plain values, no boxes — and without the 44px
+     touch floor, which turned a ten-field page into 440px of empty rectangle.
+
+     VERTICAL padding only. Collapsing the horizontal padding too is what put
+     the "$" straight on top of the number in "Comparable 1-bedroom rent" and
+     "Whole-house rent": the currency prefix is absolutely positioned at
+     left-2.5 and the input clears it with pl-6, so zeroing pl-6 sat the value
+     underneath the prefix. Same trap on every %/mo suffix. */
+  .resource-tool input:not([type="checkbox"]):not([type="radio"]),
+  .resource-tool select,
+  .resource-tool textarea {
     border-color: transparent !important;
     box-shadow: none !important;
     -webkit-appearance: none;
     appearance: none;
-    padding-left: 2px !important;
-    padding-right: 2px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  /* An input that follows a span is one with a currency prefix sitting on top
+     of it (ui.tsx Field, and the money column in SectionCosts). pl-6 scales
+     down with everything else and leaves only ~3px between the "$" and the
+     first digit, which reads as a collision at 12px. Buy back a few. */
+  .resource-tool .relative > span + input {
+    padding-left: 20px !important;
+  }
+  /* Most cost values print as PLACEHOLDERS, not values — the tool deliberately
+     leaves our estimate in the placeholder so clearing the field is the reset.
+     At the browser default grey those numbers are the faintest thing on a
+     budget. Dark enough to read, still visibly lighter than a figure the
+     operator typed, which is the distinction the screen makes too. */
+  .resource-tool ::placeholder {
+    color: #55504a !important;
+    opacity: 1 !important;
+  }
+  /* Muted greys are tuned for a backlit screen. Below ~45% on paper, at these
+     sizes, they stop being subtle and start being unreadable — and some of them
+     carry real content (source notes, the "× 5 rooms" multiplier, the currency
+     prefix). Floor them all at one legible grey. */
+  .resource-tool .text-charcoal\/30,
+  .resource-tool .text-charcoal\/35,
+  .resource-tool .text-charcoal\/40,
+  .resource-tool .text-charcoal\/45,
+  .resource-tool .text-charcoal\/50,
+  .resource-tool .text-charcoal\/55 {
+    color: #5c6672 !important;
+  }
+  .resource-tool .text-white\/50 {
+    color: #6b6558 !important;
+  }
+  /* Checkboxes are the exception, and the reason the rule above is scoped.
+     `appearance: none` applied to them stripped the tick, so every checklist
+     and every ticked room feature printed as a blank square. */
+  .resource-tool input[type="checkbox"],
+  .resource-tool input[type="radio"] {
+    width: 9px !important;
+    height: 9px !important;
+    margin-top: 1px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   /* Tables: fit the page, keep light gridlines, avoid row splits. */
@@ -189,16 +336,142 @@ body {
     font-size: 9px !important;
     border-collapse: collapse !important;
   }
+  /* Repeat the header when a table crosses a sheet. Without this the second
+     half of a projection is four unlabelled columns of money. */
+  .resource-tool thead {
+    display: table-header-group;
+  }
   .resource-tool table th,
   .resource-tool table td {
     border: 0.5px solid #e2ddd3 !important;
     padding: 2px 4px !important;
   }
 
-  /* Keep cards and rows from breaking across pages awkwardly. */
-  .resource-tool .rounded-lg,
+  /* ── Pagination ──────────────────────────────────────────────────────── */
+
+  /* Cards and rows do not split. `:not(.plp-step)` is load-bearing: a step is
+     itself a rounded card, and asking a full page of costs to stay intact just
+     pushes the whole thing onto the next sheet and leaves this one blank. */
+  .resource-tool .rounded-lg:not(.plp-step),
+  .resource-tool fieldset,
+  .resource-tool figure,
   .resource-tool tr {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .resource-tool h3,
+  .resource-tool h4 {
+    break-after: avoid;
+  }
+  .resource-tool p,
+  .resource-tool li {
+    orphans: 2;
+    widows: 2;
+  }
+
+  /* Every worksheet page prints, not just the one on screen. Two lines only
+     because the pages you are not on stay mounted and toggle `hidden` —
+     unmounting them would mean rendering every page before print and putting
+     them back afterwards. */
+  .resource-tool .plp-step,
+  .resource-tool .plp-section-body {
+    display: block !important;
+  }
+
+  /* Every SectionTabs-driven tool (see components/resources/SectionTabs.tsx):
+     same mount-everything, toggle-`hidden` approach as .plp-step above, keyed
+     on the shared `role="tabpanel"` rather than a tool-specific class, so
+     Print/Save-as-PDF outputs every section regardless of which tab is open
+     on screen — for every tool that uses it, not just one. No page-break
+     choreography needed here — each panel is already `rounded-lg`, which the
+     general break-inside:avoid rule above already keeps from splitting. */
+  .resource-tool [role="tabpanel"] {
+    display: block !important;
+  }
+
+  /* THREE SHEETS, placed on purpose:
+       1  The property        — its own sheet
+       2  Rooms + 3 One-time + 4 Recurring — together on the second
+       5  The result          — its own sheet
+
+     Every break here is declared. The steps in the middle carry no break rule
+     of their own, so nothing lands on a fourth sheet by accident; if that
+     middle group does outgrow one sheet it spills at a category boundary
+     rather than through a row, because of the avoid rules above.
+
+     Previously each step forced its own sheet — five sheets minimum, and step
+     five came out as a sheet containing the words "The result" and nothing
+     else, because .plp-report inside it then forced a second break.
+
+     The break sits on the step, not on .plp-report, so the heading travels
+     with the report instead of stranding at the foot of the costs. */
+  .resource-tool .plp-step {
+    break-inside: auto;
+  }
+  .resource-tool .plp-step:first-of-type {
+    break-after: page;
+  }
+  .resource-tool .plp-step:last-of-type {
+    break-before: page;
+  }
+  .resource-tool .plp-step > h3 {
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  /* No trailing blank sheet. The steps container ends in pb-20 — 20 spacing
+     units of nothing — and when the report happens to finish near the foot of
+     its sheet that padding is enough to claim another one. Chrome will emit a
+     page for an empty box. */
+  .resource-tool .plp-steps {
+    padding-bottom: 0 !important;
+  }
+  .resource-tool > *:last-child,
+  .resource-tool .plp-steps > *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* ── What a printed worksheet does not need ──────────────────────────── */
+
+  /* A printed budget headed for a lender is not an advertisement. */
+  .resource-tool .plp-buy {
+    display: none !important;
+  }
+  /* Cost lines the operator never ticked. The catalog is ~55 rows; printing
+     the unticked ones as a column of em-dashes was most of two wasted sheets. */
+  .resource-tool .plp-row-off,
+  .resource-tool .plp-cat-empty {
+    display: none !important;
+  }
+  /* Each ticked cost line's hint sits on its own row on screen. Inline on
+     paper: it is the difference between one line per cost and two, which
+     across ~20 ticked lines is most of a sheet. */
+  .resource-tool .plp-hint {
+    width: auto !important;
+  }
+
+  /* The cumulative-cash chart is the point of the report; keep its fills. At
+     full page width its 640×220 viewBox is ~250px tall for a single line, so
+     it prints as a centred plate instead. */
+  .resource-tool svg {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .resource-tool figure {
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Step badges are a coloured disc with white text. Backgrounds are not
+     printed by default, so on paper that was a white numeral on white. Redraw
+     as an outlined numeral. Must follow the .bg-near-black rule above, which
+     otherwise wins on the report step's badge. */
+  .resource-tool .plp-step > h3 > span:first-child {
+    background: transparent !important;
+    color: #1a1a1a !important;
+    border: 1px solid #1a1a1a !important;
+    width: 14px !important;
+    height: 14px !important;
   }
 }

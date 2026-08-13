@@ -1,18 +1,29 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ResourceToolMeta } from "@/lib/resources/registry";
+import type { ResourceAccess } from "@/lib/resources/access";
+import SaveToolButton from "@/components/resources/SaveToolButton";
+import SaveProgressButton from "@/components/resources/SaveProgressButton";
+import { ToolSaveProvider } from "@/components/resources/ToolSaveContext";
 
 const SITE_URL = "https://benicehospitality.com";
 
 // Shared page chrome for every gated resource tool: dark hero, three-step
 // "how it works", and a two-column tool region (gated tool + "what you'll get"
 // aside). Driven entirely by the registry meta so each tool page is a thin
-// wrapper that just computes `unlocked` and passes the gated tool as children.
+// wrapper that resolves access once and passes the gated tool as children.
+//
+// Everything here renders for everyone, including logged-out crawlers. Only
+// the `children` slot is gated, which is what keeps these twenty pages
+// indexable after the account cutover.
 export default function ResourceToolLayout({
   tool,
+  access,
   children,
 }: {
   tool: ResourceToolMeta;
+  access: ResourceAccess;
   children: ReactNode;
 }) {
   const serviceSchema = {
@@ -90,8 +101,16 @@ export default function ResourceToolLayout({
         </div>
       </section>
 
-      {/* Tool + side panel */}
+      {/* Tool + side panel.
+
+          The provider spans BOTH columns because that is the only thing they
+          share: the tool's autosave lives in `children`, the Save progress
+          button lives in the aside, and this layout is a server component that
+          cannot hold either one's state. `children` stays server-rendered — its
+          element identity never changes, so React skips it when the provider's
+          status ticks. See ToolSaveContext.tsx. */}
       <section className="py-16 sm:py-20 px-6 bg-off-white">
+        <ToolSaveProvider>
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
           <div className="lg:col-span-3">{children}</div>
 
@@ -123,13 +142,46 @@ export default function ResourceToolLayout({
                   </li>
                 ))}
               </ul>
+              {/* Four cases, and only one of them is a working save control.
+                  A reference tool has no progress to save; a visitor with no
+                  account has nowhere to save it; a previewing admin must not
+                  write to their own row under a member's identity. */}
+              {access.mode !== "locked" && (
+                <div className="mb-5">
+                  {tool.persistence === "none" ? (
+                    <p className="font-sans text-xs text-charcoal/70">
+                      Opening this one puts it on your dashboard, so it is easy
+                      to find again.{" "}
+                      <Link
+                        href="/account/resources"
+                        className="text-primary-green font-medium hover:underline"
+                      >
+                        Your resources
+                      </Link>
+                    </p>
+                  ) : !access.canSync ? (
+                    <SaveToolButton
+                      slug={tool.slug}
+                      toolName={tool.name}
+                      variant="page"
+                      loggedIn={access.loggedIn}
+                      initialSaved={access.saved}
+                      readOnly={access.isReadOnlyPreview}
+                    />
+                  ) : (
+                    <SaveProgressButton toolName={tool.name} />
+                  )}
+                </div>
+              )}
               <p className="text-xs text-charcoal/60 leading-relaxed border-t border-light-gray pt-4">
-                Unlock once with your email and every free tool in the library
-                opens. We email you a link so you can pick up any time.
+                Free with a Be Nice Hospitality account. Every tool you use is
+                saved to your dashboard, so your entries are still here the
+                next time you sign in, on any device.
               </p>
             </div>
           </aside>
         </div>
+        </ToolSaveProvider>
       </section>
     </>
   );

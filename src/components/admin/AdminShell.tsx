@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: "Courses", href: "/admin/courses", icon: "book" },
   { label: "Resources", href: "/admin/resources", icon: "edit" },
   { label: "Marketplace", href: "/admin/marketplace", icon: "shopping-bag" },
+  { label: "Worksheet Costs", href: "/admin/planner-costs", icon: "edit" },
   { label: "Daily Approval", href: "/admin/daily-approval/today", icon: "clock" },
   { label: "Outreach", href: "/admin/outreach", icon: "send" },
   { label: "Audits", href: "/admin/audits", icon: "chart" },

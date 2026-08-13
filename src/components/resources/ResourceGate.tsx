@@ -1,247 +1,206 @@
 "use client";
 
-import { FormEvent, ReactNode, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { useEffect, type ReactNode } from "react";
+import Link from "next/link";
 import posthog from "posthog-js";
+import { Lock, Check } from "lucide-react";
 import { getAttribution } from "@/lib/funnel-attribution";
-
-const ROLES = [
-  { value: "owner", label: "Owner" },
-  { value: "investor", label: "Investor" },
-  { value: "manager", label: "Property Manager" },
-  { value: "considering", label: "Considering buying" },
-] as const;
+import { personId } from "@/lib/posthog-identity";
+import type { ResourceAccess } from "@/lib/resources/access";
 
 /**
- * Front-door gate. When `unlocked` (logged in or a valid unlock cookie), it
- * renders the tool. Otherwise it renders an inline name + email capture card;
- * on success it sets the unlock cookie server-side and refreshes so the server
- * re-renders with the tool visible.
+ * Front-door gate for a resource tool. Three states, resolved server-side by
+ * getResourceAccess():
+ *
+ *   member         → the tool, plus the PostHog identify.
+ *   grandfathered  → the tool, plus a banner nudging account creation. These
+ *                    are visitors holding a pre-cutover email unlock cookie;
+ *                    the cookie has a 90-day TTL and no writer any more, so
+ *                    this branch retires itself.
+ *   locked         → a create-account prompt in place of the tool. The
+ *                    marketing chrome around it (hero, how it works, what
+ *                    you'll get) is rendered by ResourceToolLayout and stays
+ *                    visible to everyone, including crawlers.
  */
 export default function ResourceGate({
   slug,
   toolName,
-  unlocked,
+  access,
   children,
 }: {
   slug: string;
   toolName: string;
-  unlocked: boolean;
+  access: ResourceAccess;
   children: ReactNode;
 }) {
-  const router = useRouter();
-  const turnstileRef = useRef<TurnstileInstance>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<string>("");
-  const [phone, setPhone] = useState("");
-  const [optedIn, setOptedIn] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-
-  if (unlocked) return <>{children}</>;
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError(null);
-
-    if (!name.trim() || !email.trim()) {
-      setError("Please enter your name and email.");
-      return;
-    }
-
-    const turnstileToken = turnstileRef.current?.getResponse();
-    if (siteKey && !turnstileToken) {
-      setError("Please wait a moment and try again.");
-      return;
-    }
-
-    setSubmitting(true);
-    const attribution = getAttribution();
-    try {
-      const res = await fetch(`/api/resources/${slug}/unlock`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          role: role || undefined,
-          phone: phone.trim() || undefined,
-          opted_in_newsletter: optedIn,
-          turnstile_token: turnstileToken || "no-turnstile-configured",
-          utm_source: attribution.utm_source,
-          utm_medium: attribution.utm_medium,
-          utm_campaign: attribution.utm_campaign,
-        }),
-      });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        setError(body.error || "Something went wrong. Please try again.");
-        turnstileRef.current?.reset();
-        return;
-      }
-
-      // THE identity moment. Most people in this funnel arrive from social and
-      // never create an account, so this gate — not login — is where anonymous
-      // becomes known. Identifying on the lowercased email (the canonical key
-      // across client and server) retroactively attaches everything they did
-      // before this point, including the pageview on Della's bio page that the
-      // cross-domain bootstrap carried over.
-      try {
-        posthog.identify(
-          email.trim().toLowerCase(),
-          {
-            email: email.trim().toLowerCase(),
-            name: name.trim(),
-            last_tool_slug: slug,
-            ...(role ? { operator_role: role } : {}),
-          },
-          {
-            // $set_once: first touch is written once and never overwritten, so a
-            // later direct visit cannot erase the fact that Della's bio page
-            // sent them.
-            first_touch_source: attribution.utm_source ?? "direct",
-            first_touch_campaign: attribution.utm_campaign ?? "none",
-            first_touch_landing: attribution.landing_path ?? "unknown",
-          },
-        );
-      } catch {
-        // Analytics must never block the unlock the visitor just paid for
-        // with their email.
-      }
-
-      // Cookie is set on the response; refresh so the server re-renders unlocked.
-      router.refresh();
-    } catch {
-      setError("Something went wrong. Please try again.");
-      turnstileRef.current?.reset();
-    } finally {
-      setSubmitting(false);
-    }
+  if (access.mode === "member") {
+    return (
+      <>
+        <ResourceIdentify
+          slug={slug}
+          email={access.userEmail}
+          name={access.userName}
+        />
+        {children}
+      </>
+    );
   }
+
+  if (access.mode === "grandfathered") {
+    return (
+      <>
+        <GrandfatherBanner slug={slug} />
+        {children}
+      </>
+    );
+  }
+
+  return <ResourceLockedPrompt slug={slug} toolName={toolName} />;
+}
+
+/**
+ * The identity moment, preserved from the deleted email gate.
+ *
+ * This is load-bearing and easy to mistake for dead code. First-touch
+ * attribution lives in sessionStorage, so the server-side identify in the
+ * signup route structurally cannot set it — without this, every lead that
+ * arrived from Della's bio page loses first_touch_source.
+ */
+function ResourceIdentify({
+  slug,
+  email,
+  name,
+}: {
+  slug: string;
+  email: string | null;
+  name: string | null;
+}) {
+  useEffect(() => {
+    if (!email) return;
+    try {
+      const attribution = getAttribution();
+      posthog.identify(
+        personId(email),
+        {
+          email: personId(email),
+          ...(name ? { name } : {}),
+          last_tool_slug: slug,
+        },
+        {
+          // $set_once: first touch is written once and never overwritten, so a
+          // later direct visit cannot erase the campaign that found them.
+          first_touch_source: attribution.utm_source ?? "direct",
+          first_touch_campaign: attribution.utm_campaign ?? "none",
+          first_touch_landing: attribution.landing_path ?? "unknown",
+        },
+      );
+    } catch {
+      // Analytics must never block the tool.
+    }
+  }, [slug, email, name]);
+
+  return null;
+}
+
+function GrandfatherBanner({ slug }: { slug: string }) {
+  return (
+    <div className="mb-8 bg-warm-gold/10 border border-warm-gold/50 rounded-lg p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+      <div>
+        <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold-dark mb-1.5">
+          Your email access still works
+        </p>
+        <p className="font-sans text-sm text-charcoal/85 leading-relaxed max-w-2xl">
+          You unlocked these tools with your email. Create a free account to
+          save your work across devices, build your resource dashboard, and
+          keep access after this unlock expires.
+        </p>
+      </div>
+      <Link
+        href={`/signup?next=/resources/${slug}`}
+        className="inline-flex items-center justify-center whitespace-nowrap rounded-lg font-sans text-sm font-semibold tracking-wide px-6 py-3 bg-warm-gold text-near-black hover:bg-warm-gold-dark transition-colors"
+      >
+        Create your account
+      </Link>
+    </div>
+  );
+}
+
+const ACCOUNT_BENEFITS = [
+  "Every free tool in the library, no per-tool signup",
+  "Your entries saved and synced across devices",
+  "A dashboard of the resources you use, by category",
+  "Pick up exactly where you left off, any time",
+];
+
+function ResourceLockedPrompt({
+  slug,
+  toolName,
+}: {
+  slug: string;
+  toolName: string;
+}) {
+  useEffect(() => {
+    try {
+      posthog.capture("resource_gate_viewed", { tool_slug: slug });
+    } catch {
+      // Analytics must never block the prompt from rendering.
+    }
+  }, [slug]);
+
+  const next = `/resources/${slug}`;
 
   return (
     <div className="mx-auto max-w-lg">
       <div className="bg-white rounded-lg shadow-xl border border-light-gray/70 overflow-hidden">
         <div className="p-6 sm:p-8">
-          <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold mb-2">
-            Free · 1 quick step
+          <p className="font-sans text-[11px] font-semibold tracking-[0.18em] uppercase text-warm-gold mb-2 inline-flex items-center gap-1.5">
+            <Lock className="w-3.5 h-3.5" aria-hidden />
+            Free · account required
           </p>
           <h2 className="font-display text-2xl sm:text-3xl font-semibold text-near-black leading-tight mb-3">
-            Get instant access to the {toolName}
+            Create a free account to use the {toolName}.
           </h2>
           <p className="font-sans text-sm text-charcoal/70 leading-relaxed mb-6">
-            Tell us where to send it. You will unlock this tool right here, and we
-            will email you a link so you can pick up where you left off any time.
+            The tools are free. An account is what lets us save your work, so
+            the numbers you enter today are still here the next time you open
+            it.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="rg-name"
-                className="block font-sans text-sm font-semibold text-near-black mb-1.5"
+          <ul className="space-y-2.5 mb-7">
+            {ACCOUNT_BENEFITS.map((benefit) => (
+              <li
+                key={benefit}
+                className="flex gap-2.5 font-sans text-sm text-charcoal/85 leading-relaxed"
               >
-                Your name
-              </label>
-              <input
-                id="rg-name"
-                type="text"
-                autoComplete="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full border border-light-gray bg-white px-4 py-2.5 text-base text-near-black focus:outline-none focus:border-primary-green rounded-md transition-colors"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="rg-email"
-                className="block font-sans text-sm font-semibold text-near-black mb-1.5"
-              >
-                Email
-              </label>
-              <input
-                id="rg-email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full border border-light-gray bg-white px-4 py-2.5 text-base text-near-black placeholder:text-charcoal/40 focus:outline-none focus:border-primary-green rounded-md transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block font-sans text-sm font-semibold text-near-black mb-2">
-                Your role <span className="font-normal text-charcoal/50">(optional)</span>
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {ROLES.map((r) => (
-                  <button
-                    key={r.value}
-                    type="button"
-                    onClick={() => setRole(role === r.value ? "" : r.value)}
-                    aria-pressed={role === r.value}
-                    className={[
-                      "border-2 rounded-md px-3 py-2 text-sm font-medium transition-colors text-center",
-                      role === r.value
-                        ? "border-primary-green bg-primary-green/5 text-near-black"
-                        : "border-light-gray bg-white text-charcoal/70 hover:border-primary-green/40",
-                    ].join(" ")}
-                  >
-                    {r.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <label className="flex items-start gap-2.5 cursor-pointer pt-1">
-              <input
-                type="checkbox"
-                checked={optedIn}
-                onChange={(e) => setOptedIn(e.target.checked)}
-                className="mt-1 h-4 w-4 accent-primary-green shrink-0"
-              />
-              <span className="font-sans text-xs text-charcoal/80 leading-relaxed">
-                Send me the BNHG operator newsletter.
-              </span>
-            </label>
-
-            {error && (
-              <div className="bg-terracotta/10 border border-terracotta/30 text-terracotta text-sm px-4 py-2.5 rounded-md">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full inline-flex items-center justify-center bg-primary-green hover:bg-primary-green-dark text-white font-semibold px-6 py-3 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
-            >
-              {submitting ? "Unlocking..." : `Unlock the ${toolName}`}
-            </button>
-
-            {siteKey && (
-              <div className="flex justify-center">
-                <Turnstile
-                  ref={turnstileRef}
-                  siteKey={siteKey}
-                  options={{ size: "invisible" }}
+                <Check
+                  className="w-4 h-4 text-primary-green mt-0.5 shrink-0"
+                  aria-hidden
                 />
-              </div>
-            )}
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
 
-            <p className="font-sans text-[11px] text-charcoal/60 text-center leading-relaxed pt-1">
-              We will not share your information. By submitting you agree to be
-              contacted by Be Nice Hospitality Group about co-living operations.
-            </p>
-          </form>
+          <div className="space-y-3">
+            <Link
+              href={`/signup?next=${next}`}
+              className="w-full inline-flex items-center justify-center bg-primary-green hover:bg-primary-green-dark text-white font-semibold px-6 py-3 rounded-md transition-colors min-h-[48px]"
+            >
+              Create a free account
+            </Link>
+            <Link
+              href={`/login?next=${next}`}
+              className="w-full inline-flex items-center justify-center border-2 border-light-gray hover:border-primary-green text-near-black font-semibold px-6 py-3 rounded-md transition-colors min-h-[48px]"
+            >
+              I already have an account
+            </Link>
+          </div>
+
+          <p className="font-sans text-[11px] text-charcoal/60 text-center leading-relaxed pt-4">
+            Free forever. We will not share your information. By creating an
+            account you agree to be contacted by Be Nice Hospitality Group
+            about co-living operations.
+          </p>
         </div>
       </div>
     </div>

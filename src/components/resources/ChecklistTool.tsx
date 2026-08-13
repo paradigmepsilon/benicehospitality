@@ -1,16 +1,26 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import {
   useResourceTool,
   downloadCsv,
   buildCsv,
 } from "@/components/resources/useResourceTool";
+import {
+  SectionTabStrip,
+  TabPanel,
+  TabPager,
+  scrollToPanel,
+  panelAnchor,
+  type TabDef,
+} from "@/components/resources/SectionTabs";
 
 // Generic, config-driven checklist: sections of checkable items with a live
 // completion score, a "what is still left" recap, CSV export and print. Driven
-// by a `sections` prop the same way DataTableTool is driven by `columns`.
+// by a `sections` prop the same way DataTableTool is driven by `columns`. Every
+// consumer's sections render as tabs — both current consumers (photo-shot-list,
+// course-outline-checklist) want that, so it isn't behind a flag.
 
 export interface CheckItem {
   id: string;
@@ -19,7 +29,10 @@ export interface CheckItem {
 }
 
 export interface CheckSection {
+  id: string;
   label: string;
+  /** Tab-strip pill text. Falls back to `label` when omitted. */
+  shortLabel?: string;
   items: CheckItem[];
 }
 
@@ -29,6 +42,7 @@ export default function ChecklistTool({
   sections,
   csvFilename,
   unit = "complete",
+  canSync = false,
 }: {
   slug: string;
   title: string;
@@ -36,10 +50,28 @@ export default function ChecklistTool({
   csvFilename: string;
   /** Word after the percentage in the action bar, e.g. "complete" or "ready". */
   unit?: string;
+  /**
+   * May this visitor's work be written to their account? `access.canSync` from
+   * getResourceAccess — true only for a logged-in member who is not an admin
+   * previewing a member tier. Not `loggedIn`: that is true for a previewing
+   * admin too, and their keystrokes would land on their own row.
+   */
+  canSync?: boolean;
 }) {
   const { state, setState, reset, hydrated } = useResourceTool<
     Record<string, boolean>
-  >(slug, {});
+  >(slug, {}, { sync: canSync });
+
+  /**
+   * Which tab is open. Local, not saved state: chrome, not progress — every
+   * visit opens on the first section.
+   */
+  const [activeSection, setActiveSection] = useState<string>(sections[0].id);
+
+  function goTo(id: string) {
+    setActiveSection(id);
+    scrollToPanel(panelAnchor(slug, id));
+  }
 
   const allItems = useMemo(() => sections.flatMap((s) => s.items), [sections]);
   const requiredCount = useMemo(
@@ -54,10 +86,31 @@ export default function ChecklistTool({
     ? Math.round((requiredDone / requiredCount) * 100)
     : 0;
 
+  // Done count per section, for the tab badges.
+  const sectionDone = useMemo(
+    () =>
+      Object.fromEntries(
+        sections.map((s) => [s.id, s.items.filter((i) => state[i.id]).length]),
+      ) as Record<string, number>,
+    [sections, state],
+  );
+
+  const tabs: TabDef[] = useMemo(
+    () =>
+      sections.map((s) => ({
+        id: s.id,
+        label: s.label,
+        shortLabel: s.shortLabel,
+        badge: `${sectionDone[s.id]}/${s.items.length}`,
+      })),
+    [sections, sectionDone],
+  );
+
   const remaining = useMemo(
     () =>
       sections
         .map((s) => ({
+          id: s.id,
           label: s.label,
           items: s.items.filter((i) => !state[i.id]),
         }))
@@ -114,14 +167,25 @@ export default function ChecklistTool({
         </div>
       </div>
 
-      {/* Sections */}
+      <SectionTabStrip
+        tabs={tabs}
+        activeId={activeSection}
+        onSelect={goTo}
+        ariaLabel={`${title} sections`}
+      />
+
+      {/* Sections — all mounted (for Print/Save-as-PDF), only the active one
+          visible on screen. */}
       <div className="space-y-5">
         {sections.map((s) => {
+          const isCurrent = s.id === activeSection;
           const done = s.items.filter((i) => state[i.id]).length;
           return (
-            <div
-              key={s.label}
-              className="bg-white border border-light-gray rounded-lg p-5 sm:p-6 break-inside-avoid"
+            <TabPanel
+              key={s.id}
+              anchorId={panelAnchor(slug, s.id)}
+              current={isCurrent}
+              className="bg-white border border-light-gray rounded-lg p-5 sm:p-6"
             >
               <div className="flex items-center justify-between gap-3 mb-3">
                 <h3 className="font-display text-lg font-semibold text-near-black">
@@ -161,9 +225,11 @@ export default function ChecklistTool({
                   </label>
                 ))}
               </div>
-            </div>
+            </TabPanel>
           );
         })}
+
+        <TabPager tabs={tabs} activeId={activeSection} onSelect={goTo} />
       </div>
 
       {hydrated && remaining.length > 0 && (
@@ -173,8 +239,15 @@ export default function ChecklistTool({
           </p>
           <ul className="space-y-1">
             {remaining.map((g) => (
-              <li key={g.label} className="font-sans text-sm text-charcoal/80">
-                {g.label}: {g.items.length} item{g.items.length === 1 ? "" : "s"}
+              <li key={g.id} className="font-sans text-sm text-charcoal/80">
+                <button
+                  type="button"
+                  onClick={() => goTo(g.id)}
+                  className="hover:text-primary-green cursor-pointer underline decoration-dotted underline-offset-2"
+                >
+                  {g.label}
+                </button>
+                : {g.items.length} item{g.items.length === 1 ? "" : "s"}
               </li>
             ))}
           </ul>

@@ -4,8 +4,11 @@ import { type ReferenceContent } from "@/components/resources/ReferenceTool";
 // have through upsells, loyalty, referrals, rent optimization, and disciplined
 // scaling. Condensed from Della's playbook.
 export const PLAYBOOK_CONTENT: ReferenceContent = {
+  tabbed: true,
   sections: [
     {
+      id: "overview",
+      shortLabel: "Overview",
       heading: "Beyond rent: your real revenue potential",
       intro:
         "A typical 3-room property at $1,200/room earns $3,600/month in base rent. With upsells and premium services, realistic potential is $4,200 to $4,800/month. That's $600 to $1,200 more per month, or $7,200 to $14,400 a year, from the same four walls.",
@@ -13,6 +16,8 @@ export const PLAYBOOK_CONTENT: ReferenceContent = {
         "The key insight: you don't need more rooms to earn more. You need smarter monetization of the rooms you have. Professional tenants would rather pay you for cleaning, Wi-Fi, and parking than arrange it themselves. That isn't gouging, it's providing value.",
     },
     {
+      id: "upsell-menu",
+      shortLabel: "Upsell Menu",
       heading: "The upsell menu",
       intro:
         "The most reliable upsells, with a typical price and your rough monthly margin. Start with two or three (parking, Wi-Fi, cleaning), read the demand, and add more as you scale.",
@@ -33,6 +38,8 @@ export const PLAYBOOK_CONTENT: ReferenceContent = {
       },
     },
     {
+      id: "loyalty",
+      shortLabel: "Loyalty",
       heading: "Tenant loyalty program",
       intro:
         "Your best revenue multiplier is keeping tenants longer. A renewing tenant is worth about 3x a new one: no turnover, no vacancy, no marketing.",
@@ -46,6 +53,8 @@ export const PLAYBOOK_CONTENT: ReferenceContent = {
       columns: 1,
     },
     {
+      id: "referrals",
+      shortLabel: "Referrals",
       heading: "The referral engine",
       intro:
         "One tenant who stays six months and refers one friend who also stays six months is $7,200+ in revenue from a $100 to $200 bonus. A 36 to 72x return.",
@@ -60,6 +69,8 @@ export const PLAYBOOK_CONTENT: ReferenceContent = {
       ],
     },
     {
+      id: "rent-optimization",
+      shortLabel: "Rent Increases",
       heading: "Rent optimization: when and how to raise",
       items: [
         {
@@ -83,6 +94,8 @@ export const PLAYBOOK_CONTENT: ReferenceContent = {
       columns: 2,
     },
     {
+      id: "scaling",
+      shortLabel: "Scaling Check",
       heading: "Ready for property two?",
       intro: "Check all five before you scale. Missing even one means: focus on Property 1 until it's tight.",
       items: [

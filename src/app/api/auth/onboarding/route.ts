@@ -9,6 +9,8 @@ import {
 } from "@/lib/community-auth";
 import { onboardingLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
+import { sql } from "@/lib/db";
+import { upsertAudienceContact } from "@/lib/resend-audience";
 
 const OnboardingBody = z.object({
   // For Google users the deep form is the first place we collect phone +
@@ -71,6 +73,34 @@ export async function POST(request: Request) {
         );
       }
       throw err;
+    }
+
+    // Newsletter consent. The resource gate's opt-in checkbox went away with
+    // the account-required cutover, so user_profiles.marketing_opt_in is now
+    // the only consent signal we collect — and nothing else propagates it to
+    // newsletter_subscribers or the Resend audience. Best-effort: a failure
+    // here must not block onboarding, but it does get logged.
+    if (parsed.data.marketingOptIn === true) {
+      const email = session.user.email.toLowerCase().trim();
+      try {
+        await sql`
+          INSERT INTO newsletter_subscribers (email, source)
+          VALUES (${email}, ${"signup"})
+          ON CONFLICT (email) DO NOTHING
+        `;
+      } catch (subErr) {
+        console.error("[auth/onboarding] newsletter subscribe failed:", subErr);
+      }
+      const added = await upsertAudienceContact({
+        email,
+        firstName: session.user.name.split(" ")[0],
+      });
+      if (!added) {
+        console.error(
+          "[auth/onboarding] resend audience upsert skipped/failed for",
+          email,
+        );
+      }
     }
 
     void recordEvent({

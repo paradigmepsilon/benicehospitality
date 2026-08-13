@@ -5,13 +5,17 @@ import { type CheckSection } from "@/components/resources/ChecklistTool";
 // lead with the rental room, and end on the neighborhood.
 export const SHOT_SECTIONS: CheckSection[] = [
   {
+    id: "hero-shot",
     label: "The Hero Shot (do this first)",
+    shortLabel: "Hero Shot",
     items: [
       { id: "hero", label: "Your single best rental-room image, straight on, in bright natural light. This one sets your click-through rate" },
     ],
   },
   {
+    id: "rental-room",
     label: "The Rental Room",
+    shortLabel: "Rental Room",
     items: [
       { id: "room-wide", label: "Wide shot from the doorway, showing the whole room" },
       { id: "room-bed", label: "Bed straight on, made and styled with layered bedding" },
@@ -23,6 +27,7 @@ export const SHOT_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "kitchen",
     label: "Kitchen",
     items: [
       { id: "kitchen-wide", label: "Wide shot of the whole kitchen, counters clear" },
@@ -32,6 +37,7 @@ export const SHOT_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "bathrooms",
     label: "Bathrooms",
     items: [
       { id: "bath-wide", label: "Wide shot of each bathroom the tenant uses" },
@@ -40,7 +46,9 @@ export const SHOT_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "common",
     label: "Shared & Common Spaces",
+    shortLabel: "Common Areas",
     items: [
       { id: "living-wide", label: "Wide shot of the living or common area" },
       { id: "living-seating", label: "Seating arranged for how people actually gather" },
@@ -49,7 +57,9 @@ export const SHOT_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "exterior",
     label: "Entry & Exterior",
+    shortLabel: "Exterior",
     items: [
       { id: "ext-front", label: "Front of the house, curb view" },
       { id: "ext-entry", label: "Entry and front door, welcoming" },
@@ -58,6 +68,7 @@ export const SHOT_SECTIONS: CheckSection[] = [
     ],
   },
   {
+    id: "neighborhood",
     label: "Neighborhood",
     items: [
       { id: "hood-1", label: "A nearby highlight: transit, campus, or hospital" },

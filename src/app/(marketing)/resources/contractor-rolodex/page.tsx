@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getResourceTool } from "@/lib/resources/registry";
-import { hasResourceUnlock } from "@/lib/resources/unlock-cookie";
-import { getCurrentSession } from "@/lib/community-auth";
+import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import DataTableTool from "@/components/resources/DataTableTool";
@@ -23,23 +22,19 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const [session, cookieUnlock] = await Promise.all([
-    getCurrentSession(),
-    hasResourceUnlock(),
-  ]);
-  const loggedIn = Boolean(session);
-  const unlocked = loggedIn || cookieUnlock;
+  const access = await getResourceAccess(tool);
+  const canSync = access.canSync;
 
   return (
-    <ResourceToolLayout tool={tool}>
-      <ResourceGate slug={tool.slug} toolName={tool.name} unlocked={unlocked}>
+    <ResourceToolLayout tool={tool} access={access}>
+      <ResourceGate slug={tool.slug} toolName={tool.name} access={access}>
         <DataTableTool
           slug={tool.slug}
           title={tool.name}
           columns={CONTRACTOR_COLUMNS}
           csvFilename="contractor-rolodex.csv"
           addLabel="Add contractor"
-          loggedIn={loggedIn}
+          canSync={canSync}
         />
       </ResourceGate>
     </ResourceToolLayout>

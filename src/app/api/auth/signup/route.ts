@@ -12,6 +12,7 @@ import { signupLimiter, getClientIp } from "@/lib/rate-limit";
 import { recordEvent } from "@/lib/analytics";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { personId } from "@/lib/posthog-identity";
+import { upsertPipelineContact } from "@/lib/resources/leads";
 
 const SignupBody = z.object({
   name: z.string().trim().min(2, "Please enter your full name.").max(120),
@@ -74,6 +75,18 @@ export async function POST(request: Request) {
         eventType: "auth.signup",
         metadata: { method: "password", interests: body.serviceInterests },
       });
+      // Land every new account in the CRM. Before the resource tools went
+      // account-gated the unlock endpoint was the only writer of
+      // pipeline_contacts, so someone who signed up without ever opening a
+      // tool was invisible to /admin/crm. Best-effort by design.
+      void upsertPipelineContact({
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+        source: "signup",
+      }).catch((err) =>
+        console.error("[auth/signup] pipeline contact upsert failed:", err),
+      );
       const posthog = getPostHogClient();
       // Keyed on email so an account created after a free-resource unlock lands
       // on the SAME person, preserving everything they did before signing up.

@@ -5,15 +5,24 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { WaitlistTier } from "@/lib/validation/waitlist";
 import WaitlistInlineForm from "@/components/sections/waitlist/WaitlistInlineForm";
+import SaveToolButton from "@/components/resources/SaveToolButton";
 
-export type Access = "free" | "free-email" | "labs-pass" | "course";
+export type Access =
+  | "free"
+  | "free-email"
+  | "free-account"
+  | "labs-pass"
+  | "course";
 
 const ACCESS_META: Record<
   Access,
   { label: string; tone: "neutral" | "gold" | "green" | "teal" }
 > = {
   free: { label: "Free", tone: "neutral" },
+  // Still accurate for the boutique audits, which really are email requests.
   "free-email": { label: "Free · email required", tone: "gold" },
+  // The registry tools: free, but you need an account to open or save one.
+  "free-account": { label: "Free · account required", tone: "gold" },
   "labs-pass": { label: "Free · Pro on Labs Pass", tone: "teal" },
   course: { label: "Inside Room Rental Riches", tone: "green" },
 };
@@ -28,6 +37,10 @@ export interface Resource {
   // When set, the modal renders a name/email waitlist form posting to
   // /api/waitlist instead of the default "Get in touch" CTA.
   waitlist?: { courseSlug: string; tier: WaitlistTier };
+  // Registry tool slug. Only set for real tools from liveResourceTools(), so
+  // the "Add to my dashboard" button can never appear on a card that has no
+  // saveable tool behind it (Labs Pass diagnostics, boutique audits, courses).
+  savableSlug?: string;
 }
 
 function AccessBadge({
@@ -144,6 +157,34 @@ export default function ResourceCard({
   const isGreyed = r.status === "soon" || r.access === "labs-pass";
   // Modal click: no direct destination, or coming-soon (force contact flow).
   const useModal = !r.href || r.status === "soon";
+
+  // Savable tool: the card needs an interactive save control alongside the
+  // navigation. A <button> nested inside an <a> is invalid HTML and its click
+  // gets swallowed by the navigation, so the link becomes a stretched overlay
+  // and the button sits above it on its own stacking layer.
+  if (!useModal && r.href && r.savableSlug) {
+    return (
+      <div className={`${cardContainerClass(variant, false)} relative`}>
+        <Link
+          href={r.href}
+          aria-label={r.name}
+          className="absolute inset-0 z-0 rounded-lg"
+        />
+        <div className="relative z-10 pointer-events-none flex flex-col h-full">
+          {/* Access is otherwise only surfaced inside the modal, which these
+              direct-link cards never open — without this the visitor has no
+              signal that a tool needs an account until they click through. */}
+          <div className="mb-3">
+            <AccessBadge access={r.access} light={variant === "dark"} />
+          </div>
+          <CardInner r={r} variant={variant} inactive={false} />
+          <div className="pointer-events-auto pt-4">
+            <SaveToolButton slug={r.savableSlug} toolName={r.name} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Direct link: navigate to the existing detail page.
   if (!useModal && r.href) {

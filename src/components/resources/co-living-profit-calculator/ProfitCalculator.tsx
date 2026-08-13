@@ -40,8 +40,18 @@ function compact(n: number) {
   return n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 }
 
-export default function ProfitCalculator() {
-  const { state, setState, reset } = useResourceTool<State>(SLUG, {});
+export default function ProfitCalculator({ canSync = false }: {
+  /**
+   * May this visitor's work be written to their account? `access.canSync` from
+   * getResourceAccess — true only for a logged-in member who is not an admin
+   * previewing a member tier. Not `loggedIn`: that is true for a previewing
+   * admin too, and their keystrokes would land on their own row.
+   */
+  canSync?: boolean;
+}) {
+  const { state, setState, reset } = useResourceTool<State>(SLUG, {}, {
+    sync: canSync,
+  });
 
   const calc = useMemo(() => {
     const lineAnnual = (id: string) =>
