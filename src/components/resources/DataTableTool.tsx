@@ -9,6 +9,17 @@ import {
   parseCsv,
 } from "@/components/resources/useResourceTool";
 
+/**
+ * Declarative spec for a read-only computed column. Kept as data (not a
+ * function) because column configs are defined in Server Component pages and
+ * passed as props into this Client Component — functions can't cross that
+ * boundary.
+ */
+export type ComputeSpec =
+  | { op: "diff"; a: string; b: string; clampMin0?: boolean }
+  | { op: "lessThan"; a: string; b: string; trueLabel: string; falseLabel: string }
+  | { op: "diffCurrency"; a: string; b: string };
+
 export interface DataColumn {
   key: string;
   label: string;
@@ -19,10 +30,40 @@ export interface DataColumn {
   /** In the card layout, let this field span two grid columns (long text). */
   wide?: boolean;
   /** Read-only computed value derived from the row (e.g. "Restock needed?"). */
-  compute?: (row: Record<string, string>) => string;
+  compute?: ComputeSpec;
 }
 
 export type DataRow = { _id: string } & Record<string, string>;
+
+function toNum(v: string | undefined): number {
+  const n = parseFloat(v ?? "");
+  return Number.isFinite(n) ? n : NaN;
+}
+
+function computeValue(row: Record<string, string>, spec: ComputeSpec): string {
+  switch (spec.op) {
+    case "diff": {
+      const a = toNum(row[spec.a]);
+      const b = toNum(row[spec.b]);
+      if (Number.isNaN(a) || Number.isNaN(b)) return "";
+      const diff = a - b;
+      return String(spec.clampMin0 ? Math.max(0, diff) : diff);
+    }
+    case "lessThan": {
+      const a = toNum(row[spec.a]);
+      const b = toNum(row[spec.b]);
+      if (Number.isNaN(a) || Number.isNaN(b)) return "";
+      return a < b ? spec.trueLabel : spec.falseLabel;
+    }
+    case "diffCurrency": {
+      const a = toNum(row[spec.a]);
+      const b = toNum(row[spec.b]);
+      if (Number.isNaN(a)) return "";
+      const bal = a - (Number.isNaN(b) ? 0 : b);
+      return bal > 0 ? `$${bal}` : "$0";
+    }
+  }
+}
 
 interface State {
   rows: DataRow[];
@@ -83,7 +124,7 @@ export default function DataTableTool({
 
   const valueOf = useMemo(
     () => (row: DataRow, col: DataColumn) =>
-      col.compute ? col.compute(row) : (row[col.key] ?? ""),
+      col.compute ? computeValue(row, col.compute) : (row[col.key] ?? ""),
     [],
   );
 

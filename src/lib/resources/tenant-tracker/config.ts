@@ -29,13 +29,7 @@ export const TENANT_COLUMNS: DataColumn[] = [
     key: "balance",
     label: "Balance",
     width: "7rem",
-    compute: (r) => {
-      const rate = parseFloat(r.rate ?? "");
-      const paid = parseFloat(r.paid ?? "");
-      if (!Number.isFinite(rate)) return "";
-      const bal = rate - (Number.isFinite(paid) ? paid : 0);
-      return bal > 0 ? `$${bal}` : "$0";
-    },
+    compute: { op: "diffCurrency", a: "rate", b: "paid" },
   },
   { key: "notes", label: "Notes", type: "text", width: "12rem", wide: true },
 ];

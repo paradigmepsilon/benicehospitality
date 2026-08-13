@@ -290,9 +290,9 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     blurb:
       "Track consumables and supplies against par levels so you never run out of toilet paper or overspend on overstock.",
     bullets: [
-      "Par levels vs. current quantity, with auto restock flags",
-      "Category, location, supplier, and last-restocked tracking",
-      "Add, edit, and delete rows; import or export CSV",
+      "A live restock list that updates as you count",
+      "One-line quick add, then tap the counts up and down",
+      "Grouped by category with out / low / stocked at a glance",
       "Saves to your account when you are logged in",
     ],
     category: "property",
@@ -306,14 +306,14 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     subhead:
       "Set a par level for every supply and let the tracker tell you what to reorder. The unglamorous system that keeps a co-living property running smoothly.",
     howItWorks: [
-      "List each supply with its par level and current quantity.",
-      "The tracker flags what needs restocking automatically.",
-      "Update quantities after each restock and reorder run.",
+      "Add each supply once: what it is, where it lives, and the par level you want on hand.",
+      "Walk the property and tap counts up or down. Anything below par jumps to the restock list at the top.",
+      "Buy what the list says, then hit Mark restocked to reset the count to par and date it.",
     ],
     whatYouGet: [
-      "A live restock list based on your par levels",
-      "Supplier and location detail for every item",
-      "Fewer emergency store runs and less overstock",
+      "A restock list you can shop straight from, with our picks where they fit",
+      "Out of stock, running low, and stocked visible without reading a single row",
+      "Filters and search for a property with fifty line items",
       "CSV import/export and a clean print view",
     ],
   },
