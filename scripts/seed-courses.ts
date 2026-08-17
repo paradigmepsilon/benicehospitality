@@ -168,17 +168,21 @@ const CRR: SeedCourse = {
   slug: "car-rental-riches",
   title: "Car Rental Riches",
   summary:
-    "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same eight-module backbone, applied to fleet utilization, rental contracts, dynamic pricing, and damage protocols.",
+    "Build a profitable car rental business in the 2026 earnings-plan era. Taught by Alex Henry, operator of a real Atlanta rental fleet: underwriting method, claims defense, and the direct-booking system that doesn't depend on any platform.",
   hero_image_url: "",
-  is_published: false,
-  is_placeholder: true,
+  // Founding presale is live: the course row must be published (visible) but
+  // its lessons drip in as modules clear quality gates. Flipped from the
+  // placeholder state 2026-08-15 for the founding launch.
+  is_published: true,
+  is_placeholder: false,
   lessons: [
     {
-      slug: "coming-q3-2026",
-      title: "Coming Q3 2026",
-      summary: "The auto operator's playbook is in production.",
-      body: `<p>Car Rental Riches is in production with launch planned for Q3 2026. The course mirrors the eight-module RRR backbone, retuned for the realities of fleet operation: Turo platform mechanics, fleet-mix optimization, rental-contract design, damage and risk protocols, and the financing structure that determines whether vehicle 11 is worth buying.</p>
-<p>If you're an existing RRR student, you'll get founding-pricing access when CRR launches. If you'd like to beta-test, reply to any course email and we'll add you to the early-access list.</p>`,
+      slug: "founding-welcome",
+      title: "Welcome, Founding Member",
+      summary: "What you've locked in, and when each module lands.",
+      body: `<p>You're in as a Founding Member. Here's the plain deal: Modules 1 through 3 (the 2026 Turo opportunity, market analysis and vehicle underwriting with the real calculator, and protection, claims and damage defense) go live within 30 days of the founding launch. The remaining nine modules drip in weekly as each one clears the quality bar, and Alex sends a short build update each week so you can watch it come together.</p>
+<p>Your access is lifetime, and every future update (including the quarterly platform-facts refresh) is included. Thirty-day unconditional money-back guarantee. Questions? Reply to any course email and it goes to Alex.</p>
+<p><em>Car Rental Riches is an independent educational product, not affiliated with Turo Inc.</em></p>`,
     },
   ],
 };

@@ -35,6 +35,19 @@ import {
   makeBlueprintToken,
   provisionBuyerAccount,
 } from "@/lib/blueprint";
+import {
+  CRR_COURSE_SLUG,
+  CRR_FOUNDING_PRODUCT_TAG,
+  crrFoundingWelcomeEmail,
+  getCrrFromAddress,
+} from "@/lib/car-rental-riches";
+import {
+  CRR_BLUEPRINT_PRODUCT_TAG,
+  crrBlueprintDeliveryEmail,
+  crrBlueprintDownloadLink,
+  getCrrBlueprintFromAddress,
+  makeCrrBlueprintToken,
+} from "@/lib/crr-blueprint";
 import { createPasswordResetToken } from "@/lib/community-auth";
 import { provisionWorkspaceForPurchase } from "@/lib/claim-proof-workspace";
 import { getPostHogClient } from "@/lib/posthog-server";
@@ -93,6 +106,10 @@ export async function POST(request: Request) {
             await fulfillClaimProof(session);
           } else if (session.metadata?.product === BLUEPRINT_PRODUCT_TAG) {
             await fulfillBlueprint(session);
+          } else if (session.metadata?.product === CRR_BLUEPRINT_PRODUCT_TAG) {
+            await fulfillCrrBlueprint(session);
+          } else if (session.metadata?.product === CRR_FOUNDING_PRODUCT_TAG) {
+            await fulfillCrrPresale(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -231,6 +248,219 @@ async function fulfillBlueprint(
       `[webhooks/stripe] Blueprint delivery email threw for ${email}:`,
       err,
     );
+  }
+}
+
+/**
+ * The Car Rental Riches Blueprint ($32): Alex's book, not the $197 presale.
+ *
+ * Two jobs, in dependency order, mirroring fulfillBlueprint exactly:
+ *   1. Provision the buyer's Nice Host Network account (Postgres). This is also
+ *      the durable buyer record, via the same shared helper as the RRR
+ *      Blueprint and the CRR founding presale, idempotent by email.
+ *   2. Email the gated download links, plus a set-password link for a brand-new
+ *      account.
+ *
+ * Account provisioning runs FIRST so its result decides what the email says,
+ * but a provisioning failure must not cost the buyer their book: in that case
+ * we still send the downloads, just without the account block.
+ *
+ * Best-effort and isolated, same contract as fulfillBlueprint: this never
+ * throws back into the webhook handler, because a 500 makes Stripe retry and
+ * the buyer would get a second copy of everything.
+ */
+async function fulfillCrrBlueprint(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] CRR Blueprint session ${session.id} has no email, cannot deliver`,
+    );
+    return;
+  }
+
+  // 1. Account. Idempotent by email, so a webhook retry finds the existing row.
+  let setPasswordUrl: string | undefined;
+  try {
+    const buyer = await provisionBuyerAccount(email, name);
+    if (buyer.isNew) {
+      const { rawToken } = await createPasswordResetToken(buyer.userId);
+      setPasswordUrl = `${getBaseUrl()}/login/reset/${encodeURIComponent(rawToken)}`;
+    }
+    console.log(
+      `[webhooks/stripe] CRR Blueprint account for ${email} (${buyer.isNew ? "created" : "existing"}, user ${buyer.userId})`,
+    );
+  } catch (err) {
+    // Book still ships; the buyer can sign up by hand.
+    console.error(
+      `[webhooks/stripe] CRR Blueprint account provisioning failed for ${email}:`,
+      err,
+    );
+  }
+
+  // 2. Delivery email with both formats.
+  try {
+    const { subject, html } = crrBlueprintDeliveryEmail({
+      name,
+      pdfUrl: crrBlueprintDownloadLink("pdf", makeCrrBlueprintToken("pdf")),
+      epubUrl: crrBlueprintDownloadLink("epub", makeCrrBlueprintToken("epub")),
+      setPasswordUrl,
+    });
+    const result = await getResend().emails.send({
+      from: getCrrBlueprintFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(
+        `[webhooks/stripe] CRR Blueprint delivery email to ${email} failed:`,
+        `${result.error.name}: ${result.error.message}`,
+      );
+    } else {
+      console.log(
+        `[webhooks/stripe] CRR Blueprint delivered to ${email} (session ${session.id})`,
+      );
+    }
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] CRR Blueprint delivery email threw for ${email}:`,
+      err,
+    );
+  }
+}
+
+/**
+ * Car Rental Riches — Founding Member presale ($197, anonymous checkout).
+ *
+ * Three jobs, in dependency order:
+ *   1. Provision the buyer's account (reuses the Blueprint helper — idempotent
+ *      by email, so webhook retries find the existing row).
+ *   2. Grant the self-paced enrollment on the car-rental-riches course, so the
+ *      buyer is a real LMS student and sees modules the moment they drip in.
+ *      grantEnrollment upserts on (user_id, course_id) — also retry-safe.
+ *   3. Send the founding welcome email (Alex's voice, doors-open promise,
+ *      set-password link for brand-new accounts).
+ *
+ * Same best-effort contract as the other digital fulfillments: never throws
+ * back into the handler; each side-effect is isolated so one failure can't
+ * cost the buyer the rest.
+ */
+async function fulfillCrrPresale(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] CRR founding session ${session.id} has no email — cannot fulfill`,
+    );
+    return;
+  }
+
+  // 1. Account.
+  let userId: number | null = null;
+  let setPasswordUrl: string | undefined;
+  try {
+    const buyer = await provisionBuyerAccount(email, name);
+    userId = buyer.userId;
+    if (buyer.isNew) {
+      const { rawToken } = await createPasswordResetToken(buyer.userId);
+      setPasswordUrl = `${getBaseUrl()}/login/reset/${encodeURIComponent(rawToken)}`;
+    }
+    console.log(
+      `[webhooks/stripe] CRR founding account for ${email} (${buyer.isNew ? "created" : "existing"}, user ${buyer.userId})`,
+    );
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] CRR founding account provisioning failed for ${email}:`,
+      err,
+    );
+  }
+
+  // 2. Enrollment. Needs the account; without one there is nothing to enroll,
+  // but the welcome email below still goes out so the buyer can reply and be
+  // fixed up by hand rather than hearing nothing.
+  if (userId !== null) {
+    try {
+      const courseRows = (await sql`
+        SELECT id FROM courses WHERE slug = ${CRR_COURSE_SLUG} LIMIT 1
+      `) as Array<{ id: number }>;
+      const courseId = courseRows[0]?.id;
+      if (!courseId) {
+        console.error(
+          `[webhooks/stripe] CRR course row missing (slug ${CRR_COURSE_SLUG}) — enrollment skipped for ${email}`,
+        );
+      } else {
+        await grantEnrollment({
+          userId,
+          courseId,
+          tier: "self-paced",
+          grantedByUserId: null,
+          notes: `Founding presale, Stripe session ${session.id}`,
+        });
+        console.log(
+          `[webhooks/stripe] CRR founding enrollment granted to ${email} (user ${userId}, course ${courseId})`,
+        );
+      }
+    } catch (err) {
+      console.error(
+        `[webhooks/stripe] CRR founding enrollment failed for ${email}:`,
+        err,
+      );
+    }
+  }
+
+  // 3. Welcome email.
+  try {
+    const { subject, html } = crrFoundingWelcomeEmail({
+      name,
+      courseUrl: `${getBaseUrl()}/account/courses/${CRR_COURSE_SLUG}`,
+      setPasswordUrl,
+    });
+    const result = await getResend().emails.send({
+      from: getCrrFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(
+        `[webhooks/stripe] CRR founding welcome email to ${email} failed:`,
+        `${result.error.name}: ${result.error.message}`,
+      );
+    } else {
+      console.log(
+        `[webhooks/stripe] CRR founding welcome sent to ${email} (session ${session.id})`,
+      );
+    }
+  } catch (err) {
+    console.error(
+      `[webhooks/stripe] CRR founding welcome email threw for ${email}:`,
+      err,
+    );
+  }
+
+  try {
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: personId(email),
+      event: "crr_founding_purchased",
+      properties: {
+        stripe_session_id: session.id,
+        amount_cents: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+      },
+    });
+    await posthog.flush();
+  } catch (err) {
+    console.error(`[webhooks/stripe] PostHog capture for CRR founding threw:`, err);
   }
 }
 

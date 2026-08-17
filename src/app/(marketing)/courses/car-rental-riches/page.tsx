@@ -4,6 +4,7 @@ import CourseHero from "@/components/sections/courses/CourseHero";
 import StatsStrip from "@/components/sections/courses/StatsStrip";
 import CarRentalRichesTierPreview from "@/components/sections/courses/CarRentalRichesTierPreview";
 import CarRentalRichesWaitlistTrigger from "@/components/sections/waitlist/CarRentalRichesWaitlistTrigger";
+import CrrFoundingBuyButton from "@/components/sections/courses/CrrFoundingBuyButton";
 import AnimatedSection, {
   AnimatedDiv,
   AnimatedItem,
@@ -15,7 +16,7 @@ import { SECTION_COLORS as C } from "@/lib/section-colors";
 export const metadata: Metadata = {
   title: "Car Rental Riches",
   description:
-    "The Host-to-Operator method retuned for Turo hosts and small fleet operators. 3 commitment tiers, same operator-grade depth. Founding pricing announced 2026. Join the waitlist.",
+    "Build a profitable car rental business in the 2026 earnings-plan era. Taught by a real Atlanta fleet operator. Founding Member pricing open now: $197.",
   alternates: {
     canonical: "https://benicehospitality.com/courses/car-rental-riches",
   },
@@ -30,100 +31,103 @@ export const metadata: Metadata = {
 
 const MODULE_IMAGE_BASE = "/images/Website Images";
 
+// Mirrors the production master plan (Car Rental Riches workspace,
+// 01_Course/course_master_plan.md). Keep this in sync with what the modules
+// actually teach — the page must sell the course that exists.
 const CURRICULUM = [
   {
     number: "01",
     phase: "Phase 1 · Foundation",
-    title: "The Turo + Fleet Rental Opportunity",
-    body: "Why now. The 2026 peer-to-peer car-rental and fleet landscape. Why Turo unit economics still work after the platform fee changes. The Southeast metro map and the airport-vs-neighborhood demand split.",
+    title: "The 2026 Turo Opportunity",
+    body: "What actually changed in 2026: the three earnings plans, variable host share, and why the new rules reward operators over dabblers. Turo's real numbers with gross and net labeled honestly, and a clear-eyed look at whether this business fits you.",
     image: `${MODULE_IMAGE_BASE}/crr-module-01-opportunity.png`,
     imageAlt: "Clean white economy sedan parked in a suburban driveway at golden hour",
   },
   {
     number: "02",
     phase: "Phase 1 · Foundation",
-    title: "Legal, Insurance & Business Setup",
-    body: "Commercial vs. personal insurance, the Turo protection plans demystified, LLC formation for fleet operators, lien-holder rules by state, and the paperwork stack that keeps you covered when something goes wrong.",
+    title: "Business Foundation",
+    body: "Entity choice without the LLC mythology, banking and bookkeeping from day one, the startup budget for car #1, and the insurance conversation you must have first: most personal policies exclude peer-to-peer car sharing entirely.",
     image: `${MODULE_IMAGE_BASE}/crr-module-02-legal-setup.png`,
     imageAlt: "Wooden desk with paperwork folio, fountain pen, car keys, and an olive plant",
   },
   {
     number: "03",
-    phase: "Phase 1 · Foundation",
-    title: "Choosing Your Path",
-    body: "Solo host vs. fleet operator vs. co-host. The capital calculator, the time-to-payback exercise, and the forced-commitment decision that gates the rest of the course. Pick a path before you go shopping for vehicles.",
-    image: `${MODULE_IMAGE_BASE}/crr-module-03-choosing-path.png`,
-    imageAlt: "Overhead view of a folded road map with three sets of car keys placed on it",
-  },
-  {
-    number: "04",
     phase: "Phase 2 · Acquisition",
-    title: "Market & Vehicle Selection",
-    body: "AI-powered market research the competition doesn't teach. Which makes and models actually earn in your metro. 20+ prompts. Demand-driver mapping for 7 Southeast metros. The vehicle-class matrix (economy, mid, premium, EV, specialty).",
+    title: "Market Analysis & Vehicle Underwriting",
+    body: "The signature method: read your local market, score a candidate car on six factors, and run it through the real Vehicle Profitability Calculator, net of Turo's share, depreciation, and every operating cost. PROCEED, CAUTION, or PASS before you spend a dollar.",
     image: `${MODULE_IMAGE_BASE}/crr-module-04-market-vehicle.png`,
     imageAlt: "Hands holding a phone showing a Southeast map with a blurred economy car behind",
   },
   {
-    number: "05",
+    number: "04",
     phase: "Phase 2 · Acquisition",
-    title: "Securing Your First Vehicles",
-    body: "Cash purchase vs. financed vs. lease-takeover vs. fleet partnerships. The dealer-negotiation playbook. The credit-stacking framework for operators going from 1 to 3 cars. The lien-friendly insurance setup most people miss.",
+    title: "Acquisition & Financing",
+    body: "Where operators actually buy, inspection discipline inside Turo's eligibility box, the cash-car versus financing debate taught fairly, business credit without the free-Lamborghini mythology, and pre-listing prep through trip-ready.",
     image: `${MODULE_IMAGE_BASE}/crr-module-05-securing-vehicles.png`,
     imageAlt: "Handshake over a dealership desk with car keys and a Toyota Corolla visible through the window",
   },
   {
+    number: "05",
+    phase: "Phase 3 · Launch",
+    title: "Listing & Pricing Mastery",
+    body: "Photos and copy that convert, then the 2026 pricing levers: base rates from your underwriting, the non-refundable option, long-trip discounts, and the variable-share game where advance bookings can pay up to 100 percent of trip price.",
+    image: `${MODULE_IMAGE_BASE}/crr-module-08-listing-strategy.png`,
+    imageAlt: "Photographer shooting a clean white Toyota Corolla against a stucco wall at golden hour",
+  },
+  {
     number: "06",
-    phase: "Phase 3 · Setup",
-    title: "Hospitality-Grade Vehicle Prep",
-    body: "The BNHG vehicle-handoff experience. Welcome kit, scent strategy, what to keep in the glovebox, the detail checklist that earns 5 stars. The 25+ signature touches that separate you from the host renting the dirty Camry.",
+    phase: "Phase 3 · Launch",
+    title: "Operations That Scale From Day One",
+    body: "The turnover system built around Turo's 24-hour photo windows, hospitality-grade cleaning, maintenance as a system (including the rating rule that can delist your car), and the automation stack with an honest weekly hour budget.",
     image: `${MODULE_IMAGE_BASE}/crr-module-06-vehicle-prep.png`,
     imageAlt: "Pristine economy car interior with a handwritten welcome card on the passenger seat",
   },
   {
     number: "07",
-    phase: "Phase 3 · Setup",
-    title: "Your Modern Tech Stack",
-    body: "Turo Pro tooling, telematics and GPS, smart-key handover, dash cams, fuel and toll automation, mileage logging, and the accounting stack (Stessa or QBO) configured for vehicle depreciation. The stack that runs without you in the loop.",
+    phase: "Phase 4 · Protection",
+    title: "Protection, Claims & Damage Defense",
+    body: "What Turo's protection actually is (and is not), choosing your damage responsibility like an underwriter, the photo-metadata protocol that wins claims under the 2026 rules, the claims-day walkthrough, and coverage beyond Turo.",
     image: `${MODULE_IMAGE_BASE}/crr-module-07-tech-stack.png`,
     imageAlt: "iPhone on a wooden desk showing a rental app dashboard next to a black key fob",
   },
   {
     number: "08",
-    phase: "Phase 4 · Launch",
-    title: "Listing & Distribution Strategy",
-    body: "Turo first (the channel where your first 100 trips live), then the off-platform direct-booking play. 15+ AI listing-copy prompts. The photo strategy that earns the impression. Headline formulas tuned to the vehicle category.",
-    image: `${MODULE_IMAGE_BASE}/crr-module-08-listing-strategy.png`,
-    imageAlt: "Photographer shooting a clean white Toyota Corolla against a stucco wall at golden hour",
+    phase: "Phase 4 · Protection",
+    title: "Guest Experience & Five-Star Defense",
+    body: "The communication cadence across the trip lifecycle, expectation-setting that prevents issues, scripts for when guests go wrong, and the review engine that compounds into search visibility and bookings.",
+    image: `${MODULE_IMAGE_BASE}/crr-module-10-guest-experience.png`,
+    imageAlt: "Host handing car keys to a traveler with a carry-on bag beside a white Honda Civic",
   },
   {
     number: "09",
-    phase: "Phase 4 · Launch",
-    title: "Pricing for Profit",
-    body: "Dynamic pricing tuned for the Turo algorithm. The length-of-trip framework most hosts get wrong. Seasonal calendars for 7 Southeast metros. The math behind the difference between a $9,000 a year vehicle and a $14,000 a year vehicle.",
+    phase: "Phase 5 · Growth",
+    title: "The Money Module",
+    body: "Your real P&L: gross versus cash net versus true net after depreciation. The Fleet Financial Model, tax concepts without the mythology (professionally reviewed), and the monthly KPI ritual that tells you when to reprice, hold, or sell.",
     image: `${MODULE_IMAGE_BASE}/crr-module-09-pricing.png`,
     imageAlt: "Open notebook with handwritten number columns, calculator, car key, and coffee on a wooden desk",
   },
   {
     number: "10",
-    phase: "Phase 5 · Operations",
-    title: "Guest Experience Systems",
-    body: "20+ message templates across the trip lifecycle. The 25-scenario incident playbook (damage, late return, smoking, mileage overage, mechanical issue). Difficult-guest scripts. The communication cadence that protects your 4.95+ rating.",
-    image: `${MODULE_IMAGE_BASE}/crr-module-10-guest-experience.png`,
-    imageAlt: "Host handing car keys to a traveler with a carry-on bag beside a white Honda Civic",
-  },
-  {
-    number: "11",
-    phase: "Phase 5 · Operations",
-    title: "Cleaning, Detailing & Maintenance",
-    body: "The hospitality-grade detail checklist. Preventive-maintenance calendar by mileage and time. 6-vendor essential network (detailer, mobile mechanic, tire shop, glass repair, body shop, tow). Emergency response protocol when a trip goes sideways.",
+    phase: "Phase 5 · Growth",
+    title: "Scaling: Car #2 to Fleet",
+    body: "The car-#2 readiness rule, systems before staff, what breaks at three to five cars, your first hire, and co-hosting in both directions, including Turo's official program.",
     image: `${MODULE_IMAGE_BASE}/crr-module-11-cleaning-maintenance.png`,
     imageAlt: "Detailer in a clean apron wiping down the hood of a Toyota Corolla economy sedan",
   },
   {
+    number: "11",
+    phase: "Phase 5 · Growth",
+    title: "Beyond the Marketplace",
+    body: "The BNHG signature module: direct booking as a system. The legal and insurance floor, the booking stack, finding direct customers the way Be Nice Autos does with rideshare drivers, and the hybrid model that stops any platform from owning your revenue.",
+    image: `${MODULE_IMAGE_BASE}/crr-module-03-choosing-path.png`,
+    imageAlt: "Overhead view of a folded road map with three sets of car keys placed on it",
+  },
+  {
     number: "12",
-    phase: "Phase 6 · Growth",
-    title: "Scaling Beyond Your First Vehicle",
-    body: "Vehicle #1 readiness audit. SOP template library (15+ pre-built). VA hiring playbook for fleet operators. The 5 to 15 vehicle roadmap. Path-to-W-2-Replacement calculator. Honest 24 to 36 month timeline.",
+    phase: "Phase 6 · Launch Plan",
+    title: "The 90-Day Launch Plan",
+    body: "Week by week from zero to first booking to steady state, the failure-mode playbook for when it goes wrong, and the capstone: a full underwriting workbook on a real car in your market.",
     image: `${MODULE_IMAGE_BASE}/crr-module-12-scaling.png`,
     imageAlt: "Row of three clean economy sedans parked side by side in a gravel lot at golden hour",
   },
@@ -134,11 +138,47 @@ const BONUS_PACK = {
   body: "The intro (4 lessons) ships in every tier. Schema, llms.txt, the foundation AI-visibility checklist tuned for vehicle listings. Cohort and Operator unlock the deep dive: GEO/AEO content strategy, third-party citations, MCP readiness, the off-Turo direct-booking brand. The work that pays off from 2026 through 2030.",
 };
 
-export default function CRRPage() {
+export default async function CRRPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ purchase?: string }>;
+}) {
+  const { purchase } = await searchParams;
+  const justPurchased = purchase === "success";
   return (
     <>
+      {justPurchased && (
+        <section className="bg-deep-teal">
+          <div className="mx-auto max-w-3xl px-6 py-10 text-center">
+            <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-3">
+              Founding Member confirmed
+            </p>
+            <h2 className="font-display text-2xl md:text-3xl font-semibold text-white leading-tight">
+              You&apos;re in. Check your email for your login link and the
+              founding welcome from Alex.
+            </h2>
+            <p className="font-sans text-sm text-white/80 mt-4 leading-relaxed">
+              One more thing worth grabbing while you&apos;re here: Turo&apos;s
+              2026 claim rules reject photos without date, time, and location
+              metadata. <strong>ClaimProof</strong> is the damage-dispute
+              defense kit Alex uses to survive claims, and it&apos;s the
+              backbone of Module 7.
+            </p>
+            <a
+              href="/claimproof"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-lg border-2 border-warm-gold bg-warm-gold px-8 py-3 mt-6 font-sans text-base font-semibold tracking-wide text-near-black transition-all duration-200 hover:border-gold-light hover:bg-gold-light"
+            >
+              Add ClaimProof from $47
+            </a>
+          </div>
+        </section>
+      )}
       <CourseHero
-        eyebrow="Coming 2026 · Join the waitlist"
+        eyebrow={
+          justPurchased
+            ? "Founding Member · Welcome aboard"
+            : "Founding launch · $197 (retail $297)"
+        }
         headline={
           <>
             Car Rental
@@ -146,7 +186,7 @@ export default function CRRPage() {
             Riches.
           </>
         }
-        body="The Host-to-Operator method retuned for Turo hosts and small fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026."
+        body="Turo rewrote its rules in 2026, and most advice you'll find is now stale. This is the operator's course: real underwriting math, claims defense, and the direct-booking system, from a real Atlanta fleet. Founding Members lock in $197."
         primaryCta={{ label: "See the curriculum", href: "#curriculum" }}
         secondaryCta={{
           label: "Login",
@@ -378,8 +418,9 @@ export default function CRRPage() {
               <p className="font-sans text-base md:text-lg text-charcoal/75 leading-relaxed mt-5">
                 Every tier ships the full 12-module curriculum and the
                 Bonus Pack. What changes is how much support, accountability,
-                and time with Della you get. Founding pricing and exact
-                numbers drop when the doors open in 2026.
+                and time with Alex you get. Founding pricing is open now on
+                the self-paced tier; cohort and operator numbers drop when
+                those doors open.
               </p>
             </AnimatedItem>
           </div>
@@ -388,18 +429,34 @@ export default function CRRPage() {
 
           <div className="text-center mt-10 max-w-2xl mx-auto">
             <p className="font-sans text-sm text-charcoal/70 italic">
-              Founding pricing: the first 100 students per tier will get launch
-              pricing when Car Rental Riches opens in 2026. The waitlist is
-              first in line, ahead of any public announcement.
+              Founding Members lock in $197 (retail $297), get Modules 1-3
+              within 30 days of launch with the rest dripping weekly, lifetime
+              access with every future update, and a 30-day unconditional
+              money-back guarantee.
             </p>
           </div>
 
-          <div className="flex justify-center mt-10">
+          <div className="flex flex-col items-center gap-4 mt-10">
             <AnimatedItem>
-              <CarRentalRichesWaitlistTrigger variant="primary" size="lg">
-                Join the waitlist
-              </CarRentalRichesWaitlistTrigger>
+              <CrrFoundingBuyButton source="page-footer" />
             </AnimatedItem>
+            <AnimatedItem>
+              <p className="font-sans text-sm text-charcoal/60">
+                Not ready?{" "}
+                <CarRentalRichesWaitlistTrigger variant="ghost" size="sm">
+                  Join the waitlist instead
+                </CarRentalRichesWaitlistTrigger>
+              </p>
+            </AnimatedItem>
+          </div>
+
+          <div className="text-center mt-8 max-w-2xl mx-auto">
+            <p className="font-sans text-xs text-charcoal/50">
+              Car Rental Riches is an independent educational product and is not
+              affiliated with or endorsed by Turo Inc. Educational content only,
+              not financial, legal, tax, or insurance advice. Earnings figures
+              discussed are illustrative, not a promise of results.
+            </p>
           </div>
         </div>
       </AnimatedSection>

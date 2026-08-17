@@ -21,7 +21,9 @@
     "smoke:bookings": "node --env-file=.env.local --import tsx scripts/smoke/booking-conflict.ts",
     "smoke:planner": "tsx scripts/smoke/planner-projection.ts",
     "affiliate:prices": "tsx scripts/refresh-affiliate-prices.ts",
-    "smoke:shelf": "node --env-file=.env.local --import tsx scripts/smoke/resource-shelf.ts"
+    "smoke:shelf": "node --env-file=.env.local --import tsx scripts/smoke/resource-shelf.ts",
+    "crr-book:build": "tsx scripts/build-crr-book.ts",
+    "crr-book:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
@@ -65,6 +67,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "exceljs": "^4.4.0",
+    "marked": "^18.0.9",
     "playwright": "^1.61.1",
     "pptxgenjs": "^4.0.1",
     "tailwindcss": "^4",

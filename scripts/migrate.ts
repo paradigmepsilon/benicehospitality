@@ -958,7 +958,28 @@ async function migrate() {
       display_position = 10
     WHERE slug = 'car-rental-riches' AND category_slug IS NULL
   `;
-  console.log("  ✓ course_tiers seeded for RRR; category_slug assigned");
+
+  // Seed CRR's founding self-paced tier + make the course purchasable.
+  // Founding price $197 (retail flips to $297 at doors-open by creating a new
+  // Stripe Price: null stripe_price_id, update price_cents, re-run
+  // stripe:sync). Cohort/operator tiers are deliberately NOT seeded yet —
+  // they launch later with their own pricing. Idempotent on re-run.
+  await sql`
+    INSERT INTO course_tiers (course_id, tier, name, description, price_cents, position)
+    SELECT c.id, t.tier, t.name, t.description, t.price_cents, t.position
+    FROM courses c
+    CROSS JOIN (VALUES
+      ('self-paced'::text, 'Founding Member (Self-paced)', 'Founding launch price. Lifetime access, every future update included, modules drip weekly as they clear quality gates. 30-day unconditional guarantee.', 19700, 0)
+    ) AS t(tier, name, description, price_cents, position)
+    WHERE c.slug = 'car-rental-riches'
+    ON CONFLICT (course_id, tier) DO NOTHING
+  `;
+
+  await sql`
+    UPDATE courses SET is_purchasable = true
+    WHERE slug = 'car-rental-riches' AND is_purchasable = false
+  `;
+  console.log("  ✓ course_tiers seeded for RRR + CRR founding; category_slug assigned");
 
   // ---------------------------------------------------------------------------
   // Course curriculum: modules + lesson columns + lesson_assets.

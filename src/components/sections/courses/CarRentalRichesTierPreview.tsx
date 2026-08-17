@@ -3,6 +3,8 @@
 import { Check } from "lucide-react";
 import { AnimatedItem } from "@/components/ui/AnimatedSection";
 import CarRentalRichesWaitlistTrigger from "@/components/sections/waitlist/CarRentalRichesWaitlistTrigger";
+import CrrFoundingBuyButton from "@/components/sections/courses/CrrFoundingBuyButton";
+import { CRR } from "@/lib/car-rental-riches";
 
 type CompareValue = boolean | string;
 
@@ -10,23 +12,34 @@ interface Tier {
   name: string;
   cadence: string;
   featured: boolean;
+  priceLabel: string;
+  priceNote?: string;
+  /** Founding presale is buyable today; the other tiers stay waitlist. */
+  buyable: boolean;
 }
 
 const TIERS: readonly Tier[] = [
   {
     name: "Self-paced",
     cadence: "On your timeline",
-    featured: false,
+    featured: true,
+    priceLabel: `$${CRR.foundingPriceUsd} founding`,
+    priceNote: `$${CRR.retailPriceUsd} at doors-open`,
+    buyable: true,
   },
   {
     name: "Cohort",
     cadence: "8-week guided",
-    featured: true,
+    featured: false,
+    priceLabel: "Pricing TBA",
+    buyable: false,
   },
   {
     name: "Operator",
-    cadence: "90-day 1:1 with Della",
+    cadence: "90-day 1:1 with Alex",
     featured: false,
+    priceLabel: "Pricing TBA",
+    buyable: false,
   },
 ] as const;
 
@@ -59,7 +72,7 @@ const COMPARISON: Array<{
     values: [false, true, true],
   },
   {
-    label: "12 1:1 sessions with Della",
+    label: "12 1:1 sessions with Alex",
     values: [false, false, "90 days"],
   },
   {
@@ -67,8 +80,6 @@ const COMPARISON: Array<{
     values: ["Open", "Open", "Capped at 5"],
   },
 ];
-
-const PRICE_LABEL = "Pricing TBA";
 
 export default function CarRentalRichesTierPreview() {
   return (
@@ -92,15 +103,20 @@ export default function CarRentalRichesTierPreview() {
               >
                 {t.featured && (
                   <p className="font-sans text-[10px] font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
-                    Most popular
+                    Founding open now
                   </p>
                 )}
                 <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
                   {t.name}
                 </h3>
                 <p className="font-display text-3xl font-semibold text-charcoal mt-2 mb-1">
-                  {PRICE_LABEL}
+                  {t.priceLabel}
                 </p>
+                {t.priceNote && (
+                  <p className="font-sans text-xs text-charcoal/55 mb-1">
+                    {t.priceNote}
+                  </p>
+                )}
                 <p className="font-sans text-sm text-charcoal/65 italic leading-tight">
                   {t.cadence}
                 </p>
@@ -153,13 +169,21 @@ export default function CarRentalRichesTierPreview() {
                   t.featured ? "bg-warm-gold/5" : "bg-cream/40",
                 ].join(" ")}
               >
-                <CarRentalRichesWaitlistTrigger
-                  variant={t.featured ? "primary" : "secondary"}
-                  size="md"
-                  fullWidth
-                >
-                  Join the waitlist
-                </CarRentalRichesWaitlistTrigger>
+                {t.buyable ? (
+                  <CrrFoundingBuyButton
+                    source="tiers-mobile"
+                    fullWidth
+                    label={`Join founding — $${CRR.foundingPriceUsd}`}
+                  />
+                ) : (
+                  <CarRentalRichesWaitlistTrigger
+                    variant="secondary"
+                    size="md"
+                    fullWidth
+                  >
+                    Join the waitlist
+                  </CarRentalRichesWaitlistTrigger>
+                )}
               </div>
             </div>
           ))}
@@ -191,15 +215,20 @@ export default function CarRentalRichesTierPreview() {
                 >
                   {t.featured && (
                     <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
-                      Most popular
+                      Founding open now
                     </p>
                   )}
                   <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
                     {t.name}
                   </h3>
                   <p className="font-display text-3xl font-semibold text-charcoal mt-2 mb-2">
-                    {PRICE_LABEL}
+                    {t.priceLabel}
                   </p>
+                  {t.priceNote && (
+                    <p className="font-sans text-xs text-charcoal/55 mb-2">
+                      {t.priceNote}
+                    </p>
+                  )}
                   <p className="font-sans text-sm text-charcoal/65 italic leading-tight">
                     {t.cadence}
                   </p>
@@ -280,13 +309,21 @@ export default function CarRentalRichesTierPreview() {
                     t.featured ? "bg-warm-gold/5" : "",
                   ].join(" ")}
                 >
-                  <CarRentalRichesWaitlistTrigger
-                    variant={t.featured ? "primary" : "secondary"}
-                    size="md"
-                    fullWidth
-                  >
-                    Join the waitlist
-                  </CarRentalRichesWaitlistTrigger>
+                  {t.buyable ? (
+                    <CrrFoundingBuyButton
+                      source="tiers-desktop"
+                      fullWidth
+                      label={`Join founding — $${CRR.foundingPriceUsd}`}
+                    />
+                  ) : (
+                    <CarRentalRichesWaitlistTrigger
+                      variant="secondary"
+                      size="md"
+                      fullWidth
+                    >
+                      Join the waitlist
+                    </CarRentalRichesWaitlistTrigger>
+                  )}
                 </div>
               ))}
             </div>
