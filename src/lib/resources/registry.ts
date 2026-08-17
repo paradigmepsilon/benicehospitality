@@ -629,12 +629,12 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     slug: "social-posting-calendar",
     name: "30-Day Social Posting Calendar",
     blurb:
-      "Thirty days of post ideas that attract room renters, built on four weekly themes so you stay consistent without staring at a blank calendar.",
+      "Thirty days of ready-to-post content that attracts room renters: the platform, the format, the shot list, and a written caption for every single day.",
     bullets: [
-      "Four weekly themes from visibility to urgency",
-      "A specific post idea for all 30 days",
-      "Formats spelled out: reels, stories, carousels, posts",
-      "Copy any day's prompt straight into your scheduler",
+      "A full production brief for all 30 days",
+      "Platform, format, best posting time, and shot list",
+      "A written, copy-ready caption for every day",
+      "Shuffle it so your month is not everyone else's",
     ],
     category: "property",
     archetype: "reference",
@@ -645,17 +645,17 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     eyebrow: "Posting Calendar",
     headline: "Thirty days of posts,\nalready planned.",
     subhead:
-      "Consistency is what fills rooms, and consistency is a plan, not a personality trait. Here is a month of post ideas built on four themes, so you always know what to post next.",
+      "Consistency is what fills rooms, and consistency is a plan, not a personality trait. Here is a month of posts already written: where each one goes, what to shoot, when to post it, and the exact caption to use.",
     howItWorks: [
-      "Follow the four weekly themes in order.",
-      "Use each day's specific prompt and format.",
-      "Copy prompts into your scheduler and batch them.",
+      "Set up your four channels once, in 30 minutes.",
+      "Batch a week of shots and captions in one sitting.",
+      "Shuffle any day you want a different angle on.",
     ],
     whatYouGet: [
-      "A full month of ready-to-use post ideas",
-      "Weekly themes that build toward move-ins",
-      "The right format called out for each day",
-      "Copy-to-clipboard and a clean print view",
+      "30 daily briefs: platform, format, timing, shot list",
+      "A written caption for every day, ready to copy",
+      "Three interchangeable angles per day, shuffleable",
+      "CSV export for your scheduler and a clean print view",
     ],
   },
 

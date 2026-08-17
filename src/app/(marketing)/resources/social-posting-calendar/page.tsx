@@ -3,8 +3,7 @@ import { getResourceTool } from "@/lib/resources/registry";
 import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
-import ReferenceTool from "@/components/resources/ReferenceTool";
-import { CALENDAR_CONTENT } from "@/lib/resources/social-posting-calendar/config";
+import SocialCalendarTool from "@/components/resources/social-posting-calendar/SocialCalendarTool";
 
 const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("social-posting-calendar")!;
@@ -27,7 +26,7 @@ export default async function Page() {
   return (
     <ResourceToolLayout tool={tool} access={access}>
       <ResourceGate slug={tool.slug} toolName={tool.name} access={access}>
-        <ReferenceTool title={tool.name} content={CALENDAR_CONTENT} />
+        <SocialCalendarTool />
       </ResourceGate>
     </ResourceToolLayout>
   );
