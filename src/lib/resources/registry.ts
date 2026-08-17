@@ -760,6 +760,492 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
       "A clean print view to plan your quarter",
     ],
   },
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // FLEET (Car Rental Riches). Turo plan figures in these tools trace to the
+  // CRR fact base (verified 2026-08-15); when Turo changes terms, each tool's
+  // config.ts is the single place its numbers live.
+  // ───────────────────────────────────────────────────────────────────────────
+
+  "vehicle-profitability-calculator": {
+    slug: "vehicle-profitability-calculator",
+    name: "Vehicle Profitability Calculator",
+    blurb:
+      "Underwrite any car like a deal before you buy it: real 2026 earnings-plan math, weekly and monthly discount modeling, every operating cost, depreciation, a three-year forecast, and a PROCEED / CAUTION / PASS verdict.",
+    bullets: [
+      "True net after Turo's share, costs, and depreciation",
+      "The three 2026 earnings plans with damage responsibility",
+      "Weekly, monthly, and 90-day discounts priced against turnovers saved",
+      "A three-year forecast with payback, equity, and total return",
+      "A PROCEED / CAUTION / PASS verdict on true-net ROI",
+      "The daily rate this car needs to actually work",
+    ],
+    category: "fleet",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-04-market-vehicle.png",
+    eyebrow: "Vehicle Underwriting",
+    headline: "Would this car\nactually make money?",
+    subhead:
+      "The income screenshots quote gross. Your bank account gets net, after Turo's share, cleaning, maintenance, financing, and the depreciation nobody screenshots. Run the whole waterfall and get a verdict before you spend a dollar.",
+    howItWorks: [
+      "Enter the car, your market rate, and your real costs.",
+      "Split your booked days by trip length, then set your discounts.",
+      "Read the verdict, then the three-year forecast underneath it.",
+    ],
+    whatYouGet: [
+      "The full gross-to-true-net monthly waterfall",
+      "Cash-on-cash ROI judged against operator thresholds",
+      "What your weekly and monthly discounts cost versus the turnovers they save",
+      "A three-year forecast: cash, depreciation, equity, payback, total return",
+      "Your damage-responsibility exposure per claim",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "fleet-pnl-dashboard": {
+    slug: "fleet-pnl-dashboard",
+    name: "Fleet P&L Dashboard",
+    blurb:
+      "One card per car, up to ten: true net after every cost and depreciation, fleet totals, best and worst performers, and the readiness rule for adding the next car.",
+    bullets: [
+      "Per-car gross, cash net, true net, and ROI on cash",
+      "Fleet totals plus best-car and worst-car tiles",
+      "The 2026 earnings plans with damage responsibility",
+      "The car-#2 readiness rule as a live status strip",
+    ],
+    category: "fleet",
+    archetype: "tracker",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-12-scaling.png",
+    eyebrow: "Fleet Operations",
+    headline: "Which cars earn,\nwhich cars drain?",
+    subhead:
+      "A fleet hides its losers inside its totals. Track every car on the same true-net math as the underwriting calculator, see the fleet roll-up live, and let the readiness rule tell you when the next car is actually earned.",
+    howItWorks: [
+      "Add each car with its price, rate, plan, and real costs.",
+      "Watch per-car true net, ROI, and the fleet totals update live.",
+      "Check the readiness strip before you buy the next car.",
+    ],
+    whatYouGet: [
+      "True net and ROI on cash for every car, plus fleet totals",
+      "Best-car and worst-car tiles that name names",
+      "Your cash reserve bar: one damage responsibility per car",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "vehicle-maintenance-tracker": {
+    slug: "vehicle-maintenance-tracker",
+    name: "Vehicle Maintenance Tracker",
+    blurb:
+      "A per-vehicle service log with cost totals, a preventive schedule reference by mileage, and the delisting rule that makes the paper trail non-negotiable.",
+    bullets: [
+      "Log every service: date, odometer, type, cost, notes",
+      "Per-vehicle totals and a cost-per-month tile",
+      "Preventive schedule from weekly checks to major services",
+      "The 30% maintenance-rating delisting rule, up front",
+    ],
+    category: "fleet",
+    archetype: "tracker",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-11-cleaning-maintenance.png",
+    eyebrow: "Maintenance System",
+    headline: "The log that keeps\nyour cars listed.",
+    subhead:
+      "Below a 30% five-star maintenance rating over your last 10 trips, Turo delists the car, and reinstatement takes an ASE-certified inspection. A dated service log with mileage and costs is your defense, your resale record, and your cost-control tool in one place.",
+    howItWorks: [
+      "Add your vehicles by nickname, then log each service as it happens.",
+      "Watch per-vehicle totals and cost per month update live.",
+      "Run the preventive schedule so guests never rate a problem first.",
+    ],
+    whatYouGet: [
+      "A filterable service log across your whole fleet",
+      "Cost totals and cost per month for every vehicle",
+      "The Module 6 mileage schedule as a built-in reference",
+      "CSV export and import, plus autosave to your account",
+    ],
+  },
+
+  "fleet-guest-message-templates": {
+    slug: "fleet-guest-message-templates",
+    name: "Guest Message Template Bank",
+    blurb:
+      "The ten Turo trip-lifecycle messages, inquiry through review ask, personalized with your guest, car, and pickup spot in one pass and copied in one click.",
+    bullets: [
+      "All 10 lifecycle messages, booking confirmation to review ask",
+      "Type guest, car, and pickup once; every template updates live",
+      "2026 photo-protocol wording built into check-in and check-out",
+      "Host-only notes kept visible but out of the copied text",
+    ],
+    category: "fleet",
+    archetype: "reference",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-10-guest-experience.png",
+    eyebrow: "Guest Messaging",
+    headline: "The right message,\nalready written.",
+    subhead:
+      "Reviews are won in the messages: the on-time reminder, the clear check-in, the calm fix when something breaks. Ten field-tested templates cover the whole trip, and three fields personalize all of them at once.",
+    howItWorks: [
+      "Enter the guest name, car nickname, and pickup location once.",
+      "Watch all ten templates fill in as you type.",
+      "Copy the message for the moment you are in and send it.",
+    ],
+    whatYouGet: [
+      "Ten templates covering the full trip lifecycle",
+      "Live personalization across every template at once",
+      "One-click copy with host-only notes kept separate",
+      "The 2026 photo-rule wording guests actually follow",
+    ],
+  },
+
+  "claims-day-playbook": {
+    slug: "claims-day-playbook",
+    name: "Claims-Day Playbook",
+    blurb:
+      "A calm, step-by-step walkthrough for the day a guest damages your car: freeze, document, report, invoice, follow up, with your plan's real deadlines counting down.",
+    bullets: [
+      "Five stages with checkable steps, one screen at a time",
+      "Live countdowns: the 24-hour photo window and your invoice window",
+      "Plan picker with 2026 damage responsibility and 5/4/3-day windows",
+      "The metadata warning that keeps your photos valid",
+    ],
+    category: "fleet",
+    archetype: "reference",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-06-vehicle-prep.png",
+    eyebrow: "Incident Response",
+    headline: "Damage found.\nHere is what you do.",
+    subhead:
+      "Claims are won on documentation and deadlines. Two clocks started at trip end: the 24-hour photo window and your plan's invoice window. Pick your plan, set the trip end time, and work the stages in order.",
+    howItWorks: [
+      "Pick your earnings plan and enter when the trip ended.",
+      "Watch both deadline countdowns update live.",
+      "Work the five stages in order, checking off each step.",
+    ],
+    whatYouGet: [
+      "The full claims-day procedure from freeze to close-out",
+      "Deadline countdowns computed from your actual trip end",
+      "Your plan's damage responsibility and invoice window up front",
+      "CSV export and autosave so the claim record survives the day",
+    ],
+  },
+
+  "risk-coverage-guide": {
+    slug: "risk-coverage-guide",
+    name: "Risk & Coverage Guide",
+    blurb:
+      "The 2026 rules in one navigable reference: earnings plans, why Turo's protection is not insurance, the personal-policy gap, coverage options, and the photo protocol.",
+    bullets: [
+      "The three 2026 earnings plans, side by side",
+      "Protection vs insurance: caps, exclusions, and the WA exception",
+      "Gap-coverage categories with honest unverified-pricing caveats",
+      "The photo protocol and a printable risk matrix",
+    ],
+    category: "fleet",
+    archetype: "reference",
+    access: "free-email",
+    persistence: "none",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-02-legal-setup.png",
+    eyebrow: "Risk & Coverage",
+    headline: "Know exactly what\nyou are exposed to.",
+    subhead:
+      "If you learned Turo's protection system before January 2026, most of it is obsolete. This guide covers the current plans, what the protection actually promises, the gap your personal policy leaves, and how to close it.",
+    howItWorks: [
+      "Start with the 2026 plans table and find your tier.",
+      "Read the protection and personal-policy sections twice.",
+      "Print the risk matrix and score your own fleet.",
+    ],
+    whatYouGet: [
+      "The 2026 plans with shares, damage responsibility, and windows",
+      "Plain-language limits: ACV cap, exclusions, tracker withholding",
+      "Four gap-coverage categories to price with your own agent",
+      "A fill-in risk matrix and the full photo protocol",
+    ],
+  },
+
+  "listing-optimization-checklist": {
+    slug: "listing-optimization-checklist",
+    name: "Listing Optimization Checklist",
+    blurb:
+      "Every item a Turo listing needs before it publishes, and once a month after: the eligibility gate, vehicle prep, photography, listing copy, the 2026 pricing levers, and settings.",
+    bullets: [
+      "The eligibility gate: age, miles, title, tracker",
+      "Photography and listing copy that convert",
+      "Every 2026 pricing lever in one place",
+      "Live readiness score with a remaining-items list",
+    ],
+    category: "fleet",
+    archetype: "checklist",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-08-listing-strategy.png",
+    eyebrow: "Listing Optimization",
+    headline: "A listing is a storefront.\nMaintain it like one.",
+    subhead:
+      "Run this twice: once before you publish, and once a month after. Eligibility gate first, then prep, photos, copy, the 2026 pricing levers, and the settings that quietly decide your ranking.",
+    howItWorks: [
+      "Clear the eligibility gate before you touch anything else.",
+      "Work the six sections; your readiness score updates live.",
+      "Rerun the checklist monthly. Listings drift.",
+    ],
+    whatYouGet: [
+      "A six-section launch and maintenance checklist",
+      "The 2026 pricing levers, including pilot-market advance booking",
+      "A live readiness score and remaining-items list",
+      "CSV export, print, and autosave to your account",
+    ],
+  },
+
+  "ninety-day-launch-plan": {
+    slug: "ninety-day-launch-plan",
+    name: "90-Day Launch Plan",
+    blurb:
+      "Zero to first booking to steady state in twelve weeks: each week's 3 to 6 tasks, honest workload notes, and the rule that decides when car #2 is earned.",
+    bullets: [
+      "Twelve weeks of concrete tasks, in order",
+      "Honest workload notes for every phase",
+      "Tracks the week you are actually in",
+      "The car #2 readiness rule, built in",
+    ],
+    category: "fleet",
+    archetype: "checklist",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-12-scaling.png",
+    eyebrow: "90-Day Launch",
+    headline: "Twelve weeks from zero\nto a running system.",
+    subhead:
+      "Market analysis before money, underwriting before buying, SOPs before guests. Check off each week's tasks, mark the week you are in, and let the car #2 rule tell you when you have earned the second vehicle.",
+    howItWorks: [
+      "Mark the week you are in; the plan meets you there.",
+      "Check off each week's tasks as you complete them.",
+      "Score yourself against the car #2 rule at week 12.",
+    ],
+    whatYouGet: [
+      "All 12 weeks with 3 to 6 tasks each",
+      "Honest workload notes so nothing blindsides you",
+      "The car #2 readiness rule as a live scorecard",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "turnover-photo-protocol": {
+    slug: "turnover-photo-protocol",
+    name: "Turnover & Photo Protocol",
+    blurb:
+      "The per-trip runbook for check-in and check-out: the photo sequence, the 24-hour windows, the metadata rule, and your plan's incidental invoice deadline.",
+    bullets: [
+      "Check-in and check-out modes, built for a phone",
+      "The 2026 photo windows, impossible to miss",
+      "No metadata means the photo is invalid",
+      "Your plan's 3, 4, or 5 day invoice window",
+    ],
+    category: "fleet",
+    archetype: "checklist",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-11-cleaning-maintenance.png",
+    eyebrow: "Trip Runbook",
+    headline: "Every trip documented.\nEvery window met.",
+    subhead:
+      "Turo's 2026 photo rules are strict: miss a 24-hour window or strip the metadata and your documentation may be worthless in a claim. This is the driveway checklist that keeps every trip protected.",
+    howItWorks: [
+      "Pick your earnings plan once; your deadlines load.",
+      "Tap through check-in before handoff, check-out after return.",
+      "Start a new trip; the counter keeps score.",
+    ],
+    whatYouGet: [
+      "The full pre-trip and post-trip photo sequence",
+      "Timing callouts for both 24-hour windows",
+      "Your plan's incidental invoice deadline",
+      "CSV export and a completed-trips counter",
+    ],
+  },
+
+  "earnings-plan-optimizer": {
+    slug: "earnings-plan-optimizer",
+    name: "Earnings Plan Optimizer",
+    blurb:
+      "The three 2026 Turo earnings plans side by side on your numbers: what each pays per year, what each costs per claim, and which one this car should run.",
+    bullets: [
+      "All three 2026 plans priced on your gross",
+      "Extra annual income of each step up",
+      "Claims per year that erase the savings",
+      "A recommendation built on car value and risk",
+    ],
+    category: "fleet",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-09-pricing.png",
+    eyebrow: "Plan Selection",
+    headline: "Which earnings plan\nshould this car run?",
+    subhead:
+      "Higher share means higher damage responsibility when a claim hits. That trade has a number. Put your gross through all three 2026 plans and see exactly how many claims a year it takes to erase the extra income.",
+    howItWorks: [
+      "Enter your monthly gross, or build it from rate and utilization.",
+      "Compare all three plans: share, exposure, and the gut-check math.",
+      "Read the recommendation and pressure-test it against your risk.",
+    ],
+    whatYouGet: [
+      "Monthly and annual host share under every plan",
+      "Damage responsibility exposure per claim",
+      "The claims-per-year break-even between plans",
+      "A plan recommendation with the reasoning shown",
+    ],
+  },
+
+  "depreciation-exit-analyzer": {
+    slug: "depreciation-exit-analyzer",
+    name: "Depreciation & Exit Analyzer",
+    blurb:
+      "The five year hold picture for any car: estimated value, cumulative cash net, total position, and the year the exit rule says sell or reprice.",
+    bullets: [
+      "Year by year value at your depreciation rate",
+      "Cumulative cash net stacked against the decline",
+      "Total position: value plus cash earnings minus price",
+      "A hold or sell verdict for every year",
+    ],
+    category: "fleet",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-12-scaling.png",
+    eyebrow: "Hold or Sell",
+    headline: "When does this car\nstop paying you?",
+    subhead:
+      "Every car has a stretch where holding it costs more than it earns. The exit rule finds it: when next year's expected true net falls below next year's depreciation, the car is paying you less than it costs to hold. Run your numbers and see where that lands.",
+    howItWorks: [
+      "Enter price, depreciation rate, and your annual true net.",
+      "Read the five year picture: value, earnings, total position.",
+      "Find the crossover year and plan the exit before it arrives.",
+    ],
+    whatYouGet: [
+      "Estimated vehicle value at each year end",
+      "Cumulative true net and total position per year",
+      "The exit rule verdict for all five years",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "startup-budget-builder": {
+    slug: "startup-budget-builder",
+    name: "Startup Budget Builder",
+    blurb:
+      "Everything car number one costs before its first trip: acquisition, prep, operating float, and the cash reserve most hosts skip. One honest day-one number.",
+    bullets: [
+      "Every launch line item with editable amounts",
+      "Reserve floor set by your 2026 earnings plan",
+      "Cash to first trip and cash needed on day one",
+      "A readiness check before you list",
+    ],
+    category: "fleet",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-02-legal-setup.png",
+    eyebrow: "Launch Budget",
+    headline: "What does car #1 cost\nbefore its first trip?",
+    subhead:
+      "Most new hosts budget for the car and let the first month nickel them to death. Registration, a detail, a cleaning kit, photos, an insurance decision, and a reserve they never funded. Build the whole number now, with real quotes, before you spend a dollar.",
+    howItWorks: [
+      "Work the line items, replacing our defaults with real quotes.",
+      "Pick your earnings plan; the reserve floor sets itself.",
+      "Fund the reserve, decide insurance, and read your day-one number.",
+    ],
+    whatYouGet: [
+      "A complete launch budget across four sections",
+      "Your cash-to-first-trip and day-one totals",
+      "A reserve target tied to the plan you choose",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "market-underwriting-scorecard": {
+    slug: "market-underwriting-scorecard",
+    name: "Market Underwriting Scorecard",
+    blurb:
+      "Grade every candidate car on the six-factor underwriting method, kill the weak ones early, and send only the finalists to full calculator math.",
+    bullets: [
+      "Six factors scored 1 to 5 with the criteria inline",
+      "A ranked shortlist of every candidate, out of 30",
+      "Strong / Investigate / Pass bands plus veto flags",
+      "CSV export and autosave to your account",
+    ],
+    category: "fleet",
+    archetype: "worksheet",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-05-securing-vehicles.png",
+    eyebrow: "Vehicle Underwriting",
+    headline: "Score the deal\nbefore you fall for the car.",
+    subhead:
+      "Your consumer brain asks whether you like the car. Your underwriter brain asks whether the deal works. Six factors, scored with evidence, decide which candidates earn full calculator math and which die in fifteen minutes.",
+    howItWorks: [
+      "Add each candidate car with its price and notes.",
+      "Score all six factors using the criteria on screen.",
+      "Read the ranked shortlist and run the finalists through the calculator.",
+    ],
+    whatYouGet: [
+      "The six-factor method with scoring criteria inline",
+      "A ranked shortlist across every candidate you add",
+      "Veto flags so one weak factor cannot hide in a good average",
+      "CSV export and autosave to your account",
+    ],
+  },
+
+  "fleet-business-plan-builder": {
+    slug: "fleet-business-plan-builder",
+    name: "Fleet Business Plan Builder",
+    blurb:
+      "Build a complete car rental business plan section by section: market, vehicles, operations, risk, true-net financials, and the milestones that gate car #2.",
+    bullets: [
+      "Seven guided sections with the prompts built in",
+      "Completion meter per section as you fill it in",
+      "Startup, operating, and true-net math that totals itself",
+      "A clean document view, plus CSV export and print",
+    ],
+    category: "fleet",
+    archetype: "worksheet",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: "/images/Website Images/crr-module-03-choosing-path.png",
+    eyebrow: "Business Plan",
+    headline: "A plan built on true net,\nnot screenshots.",
+    subhead:
+      "Most car rental plans are built on gross numbers, and plans built on gross numbers fail quietly. This builder walks you through every section of a real plan, labels every dollar gross or true net, and keeps the questions that matter in front of you.",
+    howItWorks: [
+      "Work through the seven sections; every prompt is on screen.",
+      "Pull your vehicle numbers from the Vehicle Profitability Calculator.",
+      "Flip to document view, then print or export the finished plan.",
+    ],
+    whatYouGet: [
+      "A complete business plan you can hand to an advisor or lender",
+      "Section-by-section completion tracking",
+      "True-net financial math wired to the calculator's method",
+      "A clean document view, plus CSV export and print",
+    ],
+  },
 };
 
 export function getResourceTool(slug: string): ResourceToolMeta | null {

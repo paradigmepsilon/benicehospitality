@@ -267,7 +267,21 @@ const HOTEL_RESOURCES: Resource[] = [
 // Audience: Auto Operators (Turo / peer-to-peer fleet)
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Interactive fleet tools come from the registry, same as the property tab —
+// the index never drifts from the tools themselves, and `savableSlug` stays
+// registry-validated.
+const FLEET_TOOL_CARDS: Resource[] = liveResourceTools("fleet").map((t) => ({
+  name: t.name,
+  body: t.blurb,
+  bullets: t.bullets,
+  access: "free-account",
+  href: `/resources/${t.slug}`,
+  status: "live",
+  savableSlug: t.slug,
+}));
+
 const AUTO_RESOURCES: Resource[] = [
+  ...FLEET_TOOL_CARDS,
   {
     name: "Fleet Utilization Report",
     body: "Per-vehicle utilization, day-of-week patterns, fleet-mix optimization. Built for Turo hosts and small fleet operators running 3 or more vehicles.",
@@ -324,7 +338,7 @@ const TABS: ResourceTab[] = [
     label: "Autos",
     sectionLabel: "For auto operators",
     headline: "Turo and peer-to-peer fleet.",
-    body: "Our newest segment, so the library is intentionally short. What's here today is what we use ourselves; Car Rental Riches ships next and will bring a full set of fleet-grade tools with it.",
+    body: "Fleet-grade interactive tools for Turo hosts and peer-to-peer operators, built on the same underwriting method Car Rental Riches teaches — 2026 earnings-plan math, true-net thinking, no gross-number theater. The set is growing as the course ships.",
     image: {
       src: "/images/Website Images/hf_20260502_232029_ed24d441-412f-4958-94ae-c47d67d782f0.png",
       alt: "Auto operator vehicle in a peer-to-peer rental fleet setting",

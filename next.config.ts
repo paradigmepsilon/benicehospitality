@@ -78,6 +78,14 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // Public lead-magnet URL for the CRR funnel (emails, social, book CTA).
+        // Not permanent: the short link may someday point at a dedicated
+        // landing page instead of the resource tool.
+        source: "/turo-calculator",
+        destination: "/resources/vehicle-profitability-calculator",
+        permanent: false,
+      },
+      {
         // The middle course tier was renamed Cohort -> Masterclass. Only the
         // label and the route changed: the stored tier value in course_tiers,
         // the WaitlistTier enum, and every /account and /admin path still use
