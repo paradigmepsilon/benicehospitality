@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import {
   useResourceTool,
@@ -10,35 +10,29 @@ import {
 import { getResourceTool } from "@/lib/resources/registry";
 import {
   MONTHS,
+  MONTH_NAMES,
+  PNL_ALL_LINES,
   REVENUE_LINES,
   OPEX_LINES,
   OTHER_LINES,
-  PNL_ALL_LINES,
   type PnlLine,
 } from "@/lib/resources/co-living-profit-calculator/config";
+import {
+  baselineKey,
+  cell,
+  computeYear,
+  hasAnyBaseline,
+  monthKey,
+  type PnlState,
+} from "@/lib/resources/co-living-profit-calculator/model";
+import BaselineScreen from "./BaselineScreen";
+import MonthScreen from "./MonthScreen";
+import YearGrid from "./YearGrid";
+import TallyHeader from "./TallyHeader";
+import { money } from "./Fields";
 
 const SLUG = "co-living-profit-calculator";
 const TOOL_NAME = getResourceTool(SLUG)!.name;
-
-type State = Record<string, string>; // key: `${lineId}_${monthIndex}`
-
-function key(lineId: string, m: number) {
-  return `${lineId}_${m}`;
-}
-function num(v: string | undefined): number {
-  const n = parseFloat(v ?? "");
-  return Number.isFinite(n) ? n : 0;
-}
-function money(n: number) {
-  return n.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
-}
-function compact(n: number) {
-  return n.toLocaleString("en-US", { maximumFractionDigits: 0 });
-}
 
 export default function ProfitCalculator({ canSync = false }: {
   /**
@@ -49,283 +43,215 @@ export default function ProfitCalculator({ canSync = false }: {
    */
   canSync?: boolean;
 }) {
-  const { state, setState, reset } = useResourceTool<State>(SLUG, {}, {
+  const { state, setState, reset } = useResourceTool<PnlState>(SLUG, {}, {
     sync: canSync,
   });
 
-  const calc = useMemo(() => {
-    const lineAnnual = (id: string) =>
-      MONTHS.reduce((sum, _, m) => sum + num(state[key(id, m)]), 0);
-    const sectionMonth = (lines: PnlLine[], m: number) =>
-      lines.reduce((sum, l) => sum + num(state[key(l.id, m)]), 0);
-    const sectionAnnual = (lines: PnlLine[]) =>
-      lines.reduce((sum, l) => sum + lineAnnual(l.id), 0);
+  // WHERE YOU ARE IS NOT SAVED STATE, deliberately. `useResourceTool` treats any
+  // setState as proof the member used the tool, and a save shelves it on their
+  // dashboard — so persisting the current screen would mean clicking "Next"
+  // twice without typing anything counted as using the calculator. Losing your
+  // place on refresh is the cheaper of the two costs.
+  const [view, setView] = useState<"flow" | "year">("flow");
+  const [onBaseline, setOnBaseline] = useState(true);
+  const [month, setMonth] = useState(0);
 
-    const revMonth = MONTHS.map((_, m) => sectionMonth(REVENUE_LINES, m));
-    const opexMonth = MONTHS.map((_, m) => sectionMonth(OPEX_LINES, m));
-    const otherMonth = MONTHS.map((_, m) => sectionMonth(OTHER_LINES, m));
-    const noiMonth = MONTHS.map((_, m) => revMonth[m] - opexMonth[m]);
-    const netMonth = MONTHS.map((_, m) => noiMonth[m] - otherMonth[m]);
+  const calc = useMemo(() => computeYear(state), [state]);
 
-    return {
-      lineAnnual,
-      revMonth,
-      opexMonth,
-      otherMonth,
-      noiMonth,
-      netMonth,
-      revAnnual: sectionAnnual(REVENUE_LINES),
-      opexAnnual: sectionAnnual(OPEX_LINES),
-      otherAnnual: sectionAnnual(OTHER_LINES),
-      noiAnnual: revMonth.reduce((s, v, m) => s + v - opexMonth[m], 0),
-      netAnnual: netMonth.reduce((s, v) => s + v, 0),
-    };
-  }, [state]);
+  const setCell = useCallback(
+    (lineId: string, m: number, value: string) => {
+      setState((prev) => ({ ...prev, [monthKey(lineId, m)]: value }));
+    },
+    [setState],
+  );
 
-  function setCell(lineId: string, m: number, value: string) {
-    setState((p) => ({ ...p, [key(lineId, m)]: value }));
+  /** Drop a month override so the line falls back to the baseline again. */
+  const clearCell = useCallback(
+    (lineId: string, m: number) => {
+      setState((prev) => {
+        const next = { ...prev };
+        delete next[monthKey(lineId, m)];
+        return next;
+      });
+    },
+    [setState],
+  );
+
+  const setBaseline = useCallback(
+    (lineId: string, value: string) => {
+      setState((prev) => ({ ...prev, [baselineKey(lineId)]: value }));
+    },
+    [setState],
+  );
+
+  // Advancing a screen should land you at the top of it. Skipped on first
+  // render so simply opening the page never yanks the window.
+  const topRef = useRef<HTMLDivElement | null>(null);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    const el = topRef.current;
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 88;
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  }, [view, month, onBaseline]);
+
+  const goToMonth = useCallback((m: number) => {
+    setOnBaseline(false);
+    setMonth(m);
+    setView("flow");
+  }, []);
+
+  function resetAll() {
+    reset();
+    setView("flow");
+    setOnBaseline(true);
+    setMonth(0);
   }
 
   function exportCsv() {
-    const header = ["Line", ...MONTHS, "Annual"];
-    const rows: (string | number)[][] = [header];
+    const rows: (string | number)[][] = [];
+
+    // Provenance before numbers. The annual column silently includes months
+    // nobody entered, and a spreadsheet that does not say so is a spreadsheet
+    // someone will quote back as though it were record.
+    const derived = MONTHS.filter((_, m) => !calc.entered[m]);
+    if (derived.length > 0 && hasAnyBaseline(state)) {
+      rows.push([
+        `Note: ${derived.join(", ")} ${derived.length === 1 ? "is" : "are"} carried from your baseline month, not entered as actuals.`,
+      ]);
+      rows.push([]);
+    }
+
+    rows.push(["Line", ...MONTHS, "Annual"]);
+
     const lineRow = (l: PnlLine) => [
       l.label,
-      ...MONTHS.map((_, m) => num(state[key(l.id, m)])),
+      ...MONTHS.map((_, m) => cell(state, l.id, m).n),
       calc.lineAnnual(l.id),
     ];
-    const totalRow = (label: string, month: number[], annual: number) => [
+    const totalRow = (label: string, byMonth: number[], annual: number) => [
       label,
-      ...month,
+      ...byMonth,
       annual,
     ];
 
     rows.push(["REVENUE"]);
     REVENUE_LINES.forEach((l) => rows.push(lineRow(l)));
-    rows.push(totalRow("Total Revenue", calc.revMonth, calc.revAnnual));
+    rows.push(totalRow("Total Revenue", calc.revenue, calc.annual.revenue));
     rows.push(["OPERATING EXPENSES"]);
     OPEX_LINES.forEach((l) => rows.push(lineRow(l)));
-    rows.push(totalRow("Total Operating Expenses", calc.opexMonth, calc.opexAnnual));
-    rows.push(totalRow("Net Operating Income (NOI)", calc.noiMonth, calc.noiAnnual));
+    rows.push(totalRow("Total Operating Expenses", calc.opex, calc.annual.opex));
+    rows.push(totalRow("Net Operating Income (NOI)", calc.noi, calc.annual.noi));
     rows.push(["OTHER EXPENSES"]);
     OTHER_LINES.forEach((l) => rows.push(lineRow(l)));
-    rows.push(totalRow("Total Other Expenses", calc.otherMonth, calc.otherAnnual));
-    rows.push(totalRow("Net Profit", calc.netMonth, calc.netAnnual));
+    rows.push(totalRow("Total Other Expenses", calc.other, calc.annual.other));
+    rows.push(totalRow("Net Profit", calc.net, calc.annual.net));
 
-    downloadCsv(
-      "co-living-income-statement.csv",
-      buildCsv(TOOL_NAME, rows),
-    );
+    if (hasAnyBaseline(state)) {
+      rows.push([]);
+      rows.push(["BASELINE MONTH (one typical month)"]);
+      PNL_ALL_LINES.forEach((l) => {
+        const raw = state[baselineKey(l.id)];
+        if (raw !== undefined && raw.trim() !== "") {
+          rows.push([l.label, parseFloat(raw) || 0]);
+        }
+      });
+    }
+
+    downloadCsv("co-living-income-statement.csv", buildCsv(TOOL_NAME, rows));
   }
-
-  const netClass = (n: number) =>
-    n < 0 ? "text-terracotta" : "text-near-black";
 
   return (
     <ResourceToolShell
       title={TOOL_NAME}
       onExportCsv={exportCsv}
-      onReset={reset}
+      onReset={resetAll}
       actionsRight={
         <span className="inline-flex items-center gap-2 font-sans text-sm">
           <span className="text-charcoal/60">Net profit</span>
-          <span className={`font-semibold ${calc.netAnnual < 0 ? "text-terracotta" : "text-near-black"}`}>
-            {money(calc.netAnnual)}
+          <span
+            className={`font-semibold ${calc.annual.net < 0 ? "text-terracotta" : "text-near-black"}`}
+          >
+            {money(calc.annual.net)}
           </span>
         </span>
       }
     >
-      {/* The 12-month grid is wide; print this route in landscape so the full
-          year fits the sheet. Scoped to this page's print only. */}
+      {/* The printed document is always the twelve-month grid, whichever screen
+          you happen to be on — so print it landscape. Scoped to this route. */}
       <style>{`@media print { @page { size: A4 landscape; } }`}</style>
 
-      {/* Summary tiles */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        {[
-          { label: "Annual revenue", value: calc.revAnnual, tone: "text-white" },
-          { label: "Operating expenses", value: calc.opexAnnual, tone: "text-white" },
-          { label: "NOI", value: calc.noiAnnual, tone: calc.noiAnnual < 0 ? "text-terracotta" : "text-white" },
-          { label: "Net profit", value: calc.netAnnual, tone: calc.netAnnual < 0 ? "text-terracotta" : "text-primary-green" },
-        ].map((t) => (
-          <div key={t.label} className="bg-near-black rounded-lg p-4">
-            <p className="font-sans text-[11px] font-semibold tracking-[0.12em] uppercase text-warm-gold mb-1">
-              {t.label}
-            </p>
-            <p className={`font-display text-xl sm:text-2xl font-semibold ${t.tone}`}>
-              {money(t.value)}
-            </p>
-          </div>
-        ))}
+      <div ref={topRef} />
+
+      <TallyHeader
+        calc={calc}
+        month={month}
+        view={view}
+        onJump={goToMonth}
+        onToggleView={() => setView((v) => (v === "flow" ? "year" : "flow"))}
+      />
+
+      <div className="no-print">
+        {view === "year" ? (
+          <>
+            <div className="mb-4">
+              <h2 className="font-display text-2xl sm:text-3xl font-semibold text-near-black">
+                Your year
+              </h2>
+              <p className="font-sans text-sm text-charcoal/60 mt-1">
+                Every line, every month. Edit any cell here, or click a month
+                heading to open its screen. Washed cells are carried from your
+                baseline rather than entered.
+              </p>
+            </div>
+            <YearGrid
+              state={state}
+              calc={calc}
+              onChange={setCell}
+              onJumpToMonth={goToMonth}
+            />
+          </>
+        ) : onBaseline ? (
+          <BaselineScreen
+            state={state}
+            onChange={setBaseline}
+            onStart={() => setOnBaseline(false)}
+            onSkip={() => setOnBaseline(false)}
+          />
+        ) : (
+          <MonthScreen
+            state={state}
+            month={month}
+            onChange={(lineId, value) => setCell(lineId, month, value)}
+            onClear={(lineId) => clearCell(lineId, month)}
+            onBack={() => {
+              if (month === 0) setOnBaseline(true);
+              else setMonth(month - 1);
+            }}
+            onNext={() => {
+              if (month === MONTHS.length - 1) setView("year");
+              else setMonth(month + 1);
+            }}
+          />
+        )}
       </div>
 
-      {/* Grid. Line-item column is frozen (sticky left); the twelve months and
-          Annual column scroll horizontally. border-separate is required for
-          sticky table cells to hold in Chrome. */}
-      <div className="overflow-x-auto border border-light-gray rounded-lg bg-white">
-        <table className="min-w-[900px] w-full border-separate border-spacing-0 text-sm">
-          <thead>
-            <tr className="bg-off-white">
-              <th className="sticky left-0 z-20 bg-off-white text-left font-sans text-xs font-semibold text-charcoal/70 px-3 py-2.5 min-w-[13rem] border-b border-r border-light-gray">
-                Line
-              </th>
-              {MONTHS.map((mo) => (
-                <th
-                  key={mo}
-                  className="font-sans text-xs font-semibold text-charcoal/70 px-2 py-2.5 text-right min-w-[4.5rem] border-b border-light-gray"
-                >
-                  {mo}
-                </th>
-              ))}
-              <th className="font-sans text-xs font-semibold text-near-black px-3 py-2.5 text-right min-w-[6rem] border-b border-light-gray bg-warm-gold/10">
-                Annual
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <SectionRows
-              title="Revenue"
-              lines={REVENUE_LINES}
-              state={state}
-              setCell={setCell}
-              lineAnnual={calc.lineAnnual}
-            />
-            <TotalRow label="Total Revenue" month={calc.revMonth} annual={calc.revAnnual} />
-
-            <SectionRows
-              title="Operating Expenses"
-              lines={OPEX_LINES}
-              state={state}
-              setCell={setCell}
-              lineAnnual={calc.lineAnnual}
-            />
-            <TotalRow label="Total Operating Expenses" month={calc.opexMonth} annual={calc.opexAnnual} />
-            <TotalRow label="Net Operating Income (NOI)" month={calc.noiMonth} annual={calc.noiAnnual} emphasis />
-
-            <SectionRows
-              title="Other Expenses"
-              lines={OTHER_LINES}
-              state={state}
-              setCell={setCell}
-              lineAnnual={calc.lineAnnual}
-            />
-            <TotalRow label="Total Other Expenses" month={calc.otherMonth} annual={calc.otherAnnual} />
-            <TotalRow label="Net Profit" month={calc.netMonth} annual={calc.netAnnual} emphasis strong className={netClass(calc.netAnnual)} />
-          </tbody>
-        </table>
+      {/* A printout is a document, not a screenshot of wherever you paused. */}
+      <div className="print-only">
+        <YearGrid state={state} calc={calc} readOnly />
       </div>
 
-      <p className="font-sans text-xs text-charcoal/55 mt-4">
-        Scroll sideways to reach every month. {PNL_ALL_LINES.length} lines, a
-        full year. Totals and net profit update as you type.
+      <p className="no-print font-sans text-xs text-charcoal/55 mt-4">
+        {view === "year"
+          ? "Totals and net profit update as you type."
+          : onBaseline
+            ? "The baseline is optional. Anything you enter here fills in every month you don't override."
+            : `${MONTH_NAMES[month]} is one of twelve screens. Switch to Year view any time for the full grid.`}
       </p>
     </ResourceToolShell>
-  );
-}
-
-function SectionRows({
-  title,
-  lines,
-  state,
-  setCell,
-  lineAnnual,
-}: {
-  title: string;
-  lines: PnlLine[];
-  state: State;
-  setCell: (lineId: string, m: number, value: string) => void;
-  lineAnnual: (id: string) => number;
-}) {
-  return (
-    <>
-      <tr>
-        <td className="sticky left-0 z-10 bg-cream/60 font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/70 px-3 py-1.5 border-y border-r border-light-gray whitespace-nowrap">
-          {title}
-        </td>
-        <td
-          colSpan={13}
-          className="bg-cream/60 border-y border-light-gray"
-        />
-      </tr>
-      {lines.map((l) => (
-        <tr key={l.id} className="hover:bg-off-white/60">
-          <td className="sticky left-0 z-10 bg-white px-3 py-1.5 border-b border-r border-light-gray/70">
-            <span className="font-sans text-sm text-near-black">{l.label}</span>
-            {l.hint && (
-              <span className="block font-sans text-[11px] text-charcoal/45 leading-tight">
-                {l.hint}
-              </span>
-            )}
-          </td>
-          {MONTHS.map((_, m) => (
-            <td key={m} className="px-1 py-1 border-b border-light-gray/70">
-              <input
-                type="number"
-                inputMode="decimal"
-                value={state[`${l.id}_${m}`] ?? ""}
-                onChange={(e) => setCell(l.id, m, e.target.value)}
-                placeholder="0"
-                aria-label={`${l.label} ${MONTHS[m]}`}
-                className="w-full text-right bg-transparent px-1.5 py-1 text-sm text-near-black rounded focus:outline-none focus:bg-primary-green/5 focus:ring-1 focus:ring-primary-green/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </td>
-          ))}
-          <td className="px-3 py-1.5 text-right font-sans text-sm text-charcoal/80 border-b border-light-gray/70 bg-warm-gold/5">
-            {lineAnnual(l.id).toLocaleString("en-US", { maximumFractionDigits: 0 })}
-          </td>
-        </tr>
-      ))}
-    </>
-  );
-}
-
-function TotalRow({
-  label,
-  month,
-  annual,
-  emphasis,
-  strong,
-  className,
-}: {
-  label: string;
-  month: number[];
-  annual: number;
-  emphasis?: boolean;
-  strong?: boolean;
-  className?: string;
-}) {
-  return (
-    <tr className={emphasis ? "bg-near-black/[0.04]" : "bg-off-white/70"}>
-      <td
-        className={[
-          "sticky left-0 z-10 px-3 py-2 border-b border-r border-light-gray font-sans text-sm",
-          emphasis ? "bg-[#efece5]" : "bg-off-white",
-          strong ? "font-bold" : "font-semibold",
-          className ?? "text-near-black",
-        ].join(" ")}
-      >
-        {label}
-      </td>
-      {month.map((v, m) => (
-        <td
-          key={m}
-          className={[
-            "px-2 py-2 text-right border-b border-light-gray font-sans text-sm tabular-nums",
-            strong ? "font-bold" : "font-medium",
-            v < 0 ? "text-terracotta" : "text-charcoal/80",
-          ].join(" ")}
-        >
-          {compact(v)}
-        </td>
-      ))}
-      <td
-        className={[
-          "px-3 py-2 text-right border-b border-light-gray font-sans text-sm tabular-nums bg-warm-gold/10",
-          strong ? "font-bold" : "font-semibold",
-          annual < 0 ? "text-terracotta" : "text-near-black",
-        ].join(" ")}
-      >
-        {compact(annual)}
-      </td>
-    </tr>
   );
 }
