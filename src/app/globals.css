@@ -82,6 +82,170 @@ body {
   animation-play-state: paused;
 }
 
+/* ── Resource tools: placeholders that are examples, not defaults ────────────
+   The print block below deliberately renders placeholders in a readable grey,
+   because the budget worksheets keep their default estimates there — clearing
+   the field IS the reset, so the placeholder is real content.
+
+   In a TRACKER a placeholder is an example ("Shop, receipt, what prompted it"),
+   and printing it grey next to fields the operator actually filled in produces
+   a maintenance record with invented notes on it. Indistinguishable from data,
+   on the document a resale buyer or an ASE inspector reads.
+
+   So trackers opt out by name. Same block also drops the date-picker glyph and
+   the textarea resize grabber, neither of which means anything on paper.
+
+   The `.resource-tool` prefix on the placeholder rule is load-bearing, not
+   decoration. `.resource-tool ::placeholder` below is also (0,1,1) and also
+   !important, so an unprefixed `.placeholders-are-examples ::placeholder` ties
+   it and loses on source order — silently, and only visible in a rendered PDF.
+   Prefixing takes it to (0,2,1) and settles it on specificity instead. */
+@media print {
+  .resource-tool .placeholders-are-examples ::placeholder {
+    color: transparent !important;
+  }
+  .placeholders-are-examples textarea {
+    resize: none !important;
+  }
+  .placeholders-are-examples input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
+}
+
+/* ── Resource tools: collapsed entries still print ───────────────────────────
+   Trackers collapse their entries into accordions so a long log stays
+   scannable. A printed log must not inherit that: the sheet you file or hand
+   to a contractor has to be every entry with every field, not whichever ones
+   happened to be open on screen.
+
+   So a collapsed body is hidden with THIS class rather than by being left out
+   of the render — the rule is screen-only, so print gets the full record back.
+   Used by the Contractor Rolodex, DataTableTool's card variant, and the
+   Vehicle Maintenance Tracker. */
+@media screen {
+  .collapsed-on-screen {
+    display: none;
+  }
+}
+
+/* ── Resource tools: narrow-screen tables ────────────────────────────────────
+   A table with more columns than there is room for used to get an
+   `overflow-x-auto` wrapper. That does stop the PAGE scrolling sideways, but
+   the reader still has to drag the table to reach the columns that matter, and
+   on a touch screen that gesture fights the page scroll. `.stack-table` is the
+   alternative: when the space runs out the table stops being a grid and
+   becomes one card per row, each cell printing its own column name.
+
+   CONTAINER query, not a media query, and that distinction is the whole point.
+   A resource tool renders inside `lg:col-span-3` of a five-column layout, so
+   its column is ~397px on a 1440px desktop — NARROWER than the same tool on a
+   768px tablet, where it runs full width. A viewport breakpoint gets that
+   exactly backwards and leaves the widest tables scrolling on the biggest
+   screens. `.stack-table-wrap` is the container; the query asks how much room
+   the table actually has.
+
+   Contract for a table opting in:
+     · `stack-table-wrap` on the wrapper, `stack-table` on the <table>
+     · every <td> carries a `data-label` matching its column heading
+     · a cell whose label would be noise (a row's own name, an actions cell)
+       takes `data-label=""` and renders without one
+
+   Screen-only on purpose: on paper the real table is the better artifact, and
+   the print stylesheet already forces tables to the page width. */
+.stack-table-wrap {
+  container-type: inline-size;
+}
+
+@media screen {
+  @container (max-width: 47.999rem) {
+    .stack-table,
+    .stack-table tbody,
+    .stack-table tr,
+    .stack-table td {
+      display: block;
+      width: auto;
+    }
+    /* Visually gone, still announced — the column names live on in
+       `data-label` for sighted readers, and a screen reader keeps the real
+       header row. */
+    .stack-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .stack-table tr {
+      border: 1px solid var(--color-light-gray);
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      margin-bottom: 0.5rem;
+      background: #fff;
+    }
+    .stack-table tr:last-child {
+      margin-bottom: 0;
+    }
+    .stack-table td {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      text-align: right;
+      padding: 0.4rem 0;
+      border: 0;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--color-light-gray) 70%, transparent);
+      white-space: normal;
+      min-width: 0;
+    }
+    .stack-table td:last-child {
+      border-bottom: 0;
+    }
+    .stack-table td::before {
+      content: attr(data-label);
+      flex: 0 0 auto;
+      max-width: 55%;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
+    }
+    /* Editable stacked tables (the trackers): a `w-full` control inside a flex
+       cell resolves 100% against the whole line and pushes past the label, so
+       let the control take whatever the label leaves instead. */
+    .stack-table td > input,
+    .stack-table td > select,
+    .stack-table td > textarea {
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+      text-align: right;
+    }
+    /* The row's own name, and action cells: a label there is just repetition.
+       Block rather than flex, because these cells carry their own internal
+       stack — a candidate's nickname with its notes and veto flags underneath —
+       and a flex parent would lay those out side by side instead. */
+    .stack-table td[data-label=""] {
+      display: block;
+      text-align: left;
+    }
+    .stack-table td[data-label=""]::before {
+      content: none;
+    }
+    /* The wrapper only existed to catch the overflow this rule just removed. */
+    .stack-table-wrap {
+      overflow-x: visible;
+    }
+  }
+}
+
 /* ── Resource tools: print / Save-as-PDF ─────────────────────────────────────
    Goal: a printout is a clean, branded, ink-light document of just the tool —
    no site nav, hero, footer, or dark UI chrome bleeding in. */

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { ChevronDown, Trash2 } from "lucide-react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import {
   useResourceTool,
@@ -100,6 +101,11 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
     [logs, selected],
   );
 
+  const collapsedLogs = useMemo(
+    () => new Set(state.collapsed ?? []),
+    [state.collapsed],
+  );
+
   const spend = totalCost(visible);
   const perMonth = costPerMonth(visible);
   const lastService = visible.find((l) => l.date)?.date ?? null;
@@ -151,7 +157,27 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
   }
 
   function deleteLog(id: string) {
-    setState((p) => ({ ...p, logs: p.logs.filter((l) => l._id !== id) }));
+    setState((p) => ({
+      ...p,
+      logs: p.logs.filter((l) => l._id !== id),
+      collapsed: (p.collapsed ?? []).filter((c) => c !== id),
+    }));
+  }
+
+  function toggleLog(id: string) {
+    setState((p) => {
+      const next = new Set(p.collapsed ?? []);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return { ...p, collapsed: [...next] };
+    });
+  }
+
+  function setAllLogsCollapsed(collapse: boolean) {
+    setState((p) => ({
+      ...p,
+      collapsed: collapse ? p.logs.map((l) => l._id) : [],
+    }));
   }
 
   // ---- CSV ----------------------------------------------------------------
@@ -222,6 +248,7 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
             .filter((n) => !known.has(n))
             .map((name) => ({ _id: newId(), name }));
           return {
+            ...p,
             vehicles: [...p.vehicles, ...addedVehicles],
             logs: [...p.logs.filter(isLogFilled), ...imported],
           };
@@ -327,6 +354,11 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
         </form>
       </div>
 
+      {/* The vehicle filter is a screen affordance. Print is the full service
+          history for every vehicle, which is the artifact a resale buyer or an
+          ASE inspector actually asks for. */}
+      <style>{`@media screen { .vmt-filtered { display: none; } }`}</style>
+
       {/* Log */}
       <div className="no-print flex flex-wrap items-center gap-3 mb-3">
         <button
@@ -343,6 +375,19 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
         >
           Import CSV
         </button>
+        {state.logs.length > 1 && (
+          <button
+            type="button"
+            onClick={() =>
+              setAllLogsCollapsed(collapsedLogs.size < state.logs.length)
+            }
+            className="inline-flex items-center font-sans text-sm font-medium text-primary-green hover:text-primary-green-dark px-2 py-2 rounded-md transition-colors"
+          >
+            {collapsedLogs.size < state.logs.length
+              ? "Collapse all"
+              : "Expand all"}
+          </button>
+        )}
         <input
           ref={fileRef}
           type="file"
@@ -367,28 +412,95 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto border border-light-gray rounded-lg bg-white mb-6">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="bg-off-white">
-                <Th w="10rem">Vehicle</Th>
-                <Th w="9rem">Date</Th>
-                <Th w="7rem">Odometer</Th>
-                <Th w="13rem">Service</Th>
-                <Th w="6rem">Cost</Th>
-                <Th w="14rem">Notes</Th>
-                <th className="no-print w-10 border-b border-light-gray" />
-              </tr>
-            </thead>
-            <tbody>
-              {(selected
-                ? state.logs.filter(
-                    (l) => l.vehicle === selected || !isLogFilled(l),
-                  )
-                : state.logs
-              ).map((l) => (
-                <tr key={l._id} className="hover:bg-off-white/50">
-                  <Td>
+        <div className="space-y-3 mb-6">
+          {/* One accordion per service, superseding the six-column table this
+              used to be. The table needed ~59rem and a stacked fallback below
+              40rem; an accordion is the same idea at every width, and it is the
+              idiom the other trackers now use.
+
+              Every log is rendered, including ones the vehicle filter hides and
+              ones that are collapsed. Both are hidden by screen-only rules, so
+              a printed log is the whole service history — which is what the
+              `selected` doc has always claimed and the old table quietly broke
+              by filtering in the render. */}
+          {state.logs.map((l) => {
+            const open = !collapsedLogs.has(l._id);
+            const filtered =
+              Boolean(selected) && isLogFilled(l) && l.vehicle !== selected;
+            const bodyId = `vmt-${l._id}`;
+            const headline = l.service.trim() || "New service";
+            const meta = [
+              formatLogDate(l.date),
+              l.odometer.trim() ? `${l.odometer.trim()} mi` : "",
+              l.cost.trim() ? `$${l.cost.trim()}` : "",
+            ]
+              .filter(Boolean)
+              .join(" · ");
+
+            return (
+              <div
+                key={l._id}
+                className={`placeholders-are-examples bg-white border rounded-lg break-inside-avoid ${
+                  filtered ? "vmt-filtered" : ""
+                } ${open ? "border-primary-green/40" : "border-light-gray"}`}
+              >
+                <div className="flex items-start gap-2 p-3 sm:p-4">
+                  <button
+                    type="button"
+                    onClick={() => toggleLog(l._id)}
+                    aria-expanded={open}
+                    aria-controls={bodyId}
+                    className="flex-1 min-w-0 text-left rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-green"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="font-display text-base font-semibold text-near-black leading-snug wrap-break-word min-w-0">
+                        {headline}
+                      </span>
+                      {l.vehicle.trim() && (
+                        <span className="shrink-0 inline-flex items-center rounded-full bg-primary-green/10 text-primary-green px-2.5 py-0.5 font-sans text-[10px] font-semibold tracking-[0.08em] uppercase whitespace-nowrap">
+                          {l.vehicle.trim()}
+                        </span>
+                      )}
+                    </div>
+                    {meta && (
+                      <p className="no-print mt-1 font-sans text-xs text-charcoal/60 wrap-break-word">
+                        {meta}
+                      </p>
+                    )}
+                  </button>
+
+                  <div className="no-print flex items-center gap-0.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => deleteLog(l._id)}
+                      aria-label={`Delete ${headline}`}
+                      className="min-w-11 min-h-11 flex items-center justify-center rounded-md text-charcoal/40 hover:text-terracotta hover:bg-terracotta/5 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggleLog(l._id)}
+                      aria-expanded={open}
+                      aria-controls={bodyId}
+                      aria-label={`${open ? "Collapse" : "Expand"} ${headline}`}
+                      className="min-w-11 min-h-11 flex items-center justify-center rounded-md text-charcoal/50 hover:text-near-black hover:bg-off-white transition-colors"
+                    >
+                      <ChevronDown
+                        aria-hidden
+                        className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  id={bodyId}
+                  className={`px-3 sm:px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3 ${
+                    open ? "" : "collapsed-on-screen"
+                  }`}
+                >
+                  <LogField label="Vehicle">
                     <select
                       value={l.vehicle}
                       onChange={(e) => setLog(l._id, { vehicle: e.target.value })}
@@ -402,8 +514,8 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
                         </option>
                       ))}
                     </select>
-                  </Td>
-                  <Td>
+                  </LogField>
+                  <LogField label="Date">
                     <input
                       type="date"
                       value={l.date}
@@ -411,21 +523,19 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
                       aria-label="Date"
                       className={cellClass}
                     />
-                  </Td>
-                  <Td>
+                  </LogField>
+                  <LogField label="Odometer">
                     <input
                       type="number"
                       inputMode="numeric"
                       value={l.odometer}
-                      onChange={(e) =>
-                        setLog(l._id, { odometer: e.target.value })
-                      }
+                      onChange={(e) => setLog(l._id, { odometer: e.target.value })}
                       aria-label="Odometer"
                       placeholder="0"
                       className={cellClass}
                     />
-                  </Td>
-                  <Td>
+                  </LogField>
+                  <LogField label="Service">
                     <input
                       type="text"
                       list="vmt-services"
@@ -435,8 +545,8 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
                       placeholder="Oil and filter change"
                       className={cellClass}
                     />
-                  </Td>
-                  <Td>
+                  </LogField>
+                  <LogField label="Cost">
                     <input
                       type="number"
                       inputMode="decimal"
@@ -446,8 +556,8 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
                       placeholder="0"
                       className={cellClass}
                     />
-                  </Td>
-                  <Td>
+                  </LogField>
+                  <LogField label="Notes" wide>
                     <input
                       type="text"
                       value={l.notes}
@@ -456,21 +566,11 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
                       placeholder="Shop, receipt, what prompted it"
                       className={cellClass}
                     />
-                  </Td>
-                  <td className="no-print px-1 py-1 border-b border-light-gray/70 text-center align-middle">
-                    <button
-                      type="button"
-                      onClick={() => deleteLog(l._id)}
-                      aria-label="Delete entry"
-                      className="text-charcoal/35 hover:text-terracotta text-lg leading-none px-1.5"
-                    >
-                      ×
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </LogField>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -569,23 +669,35 @@ export default function VehicleMaintenanceTracker({ canSync = false }: {
 const cellClass =
   "w-full border border-transparent hover:border-light-gray focus:border-primary-green bg-transparent px-2 py-1.5 text-sm text-near-black rounded focus:outline-none placeholder:text-charcoal/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-function Th({ children, w }: { children: React.ReactNode; w: string }) {
+/** One labelled control inside an expanded service card. */
+function LogField({
+  label,
+  wide,
+  children,
+}: {
+  label: string;
+  wide?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <th
-      style={{ minWidth: w }}
-      className="text-left font-sans text-xs font-semibold text-charcoal/70 px-3 py-2.5 border-b border-light-gray whitespace-nowrap"
-    >
-      {children}
-    </th>
+    <div className={wide ? "sm:col-span-2 lg:col-span-3" : ""}>
+      <label className="block font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/55 mb-1">
+        {label}
+      </label>
+      <div className="border border-light-gray rounded-md bg-white">
+        {children}
+      </div>
+    </div>
   );
 }
 
-function Td({ children }: { children: React.ReactNode }) {
-  return (
-    <td className="px-1.5 py-1 border-b border-light-gray/70 align-top">
-      {children}
-    </td>
-  );
+/** yyyy-mm-dd read back short, for the collapsed summary line. */
+function formatLogDate(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!m) return value.trim();
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (Number.isNaN(d.getTime())) return value.trim();
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
 function Tile({

@@ -159,9 +159,13 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
         )}
       </div>
 
+      {/* min-w-0 on both columns: a grid item defaults to min-width:auto, so
+          below lg the single column refused to shrink under the min-content
+          width of the stat tiles and the disclaimer, and pushed the whole page
+          19px sideways at 768. */}
       <div className="grid lg:grid-cols-[1fr_1.6fr] gap-6">
         {/* Inputs */}
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <InputSection title="The car">
             <Field label="Purchase price" prefix="$" value={state.price} onChange={(v) => set("price", v)} hint="What you paid, all-in." />
             <Field
@@ -214,7 +218,7 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
         </div>
 
         {/* Results */}
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           {/* Bars */}
           <div className="bg-white border border-light-gray rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
@@ -269,8 +273,11 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
                 The five year hold picture
               </p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full font-sans text-sm">
+            <div className="overflow-x-auto stack-table-wrap">
+              {/* Eight columns of money is a spreadsheet, not a phone screen —
+                  below 40rem each year becomes its own card. See .stack-table
+                  in globals.css. */}
+              <table className="w-full font-sans text-sm stack-table">
                 <thead>
                   <tr className="border-b border-light-gray text-xs text-charcoal/70">
                     <th className="text-left px-4 py-2 font-semibold">Year</th>
@@ -290,7 +297,10 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
                     const crossover = r.firstHoldYear === row.year && failYears > 0;
                     return (
                       <tr key={row.year} className={crossover ? "bg-warm-gold/15" : ""}>
-                        <td className="px-4 py-2.5 font-semibold text-near-black whitespace-nowrap">
+                        <td
+                          data-label=""
+                          className="px-4 py-2.5 font-semibold text-near-black whitespace-nowrap"
+                        >
                           {row.year}
                           {crossover && (
                             <span className="ml-1.5 font-sans text-[10px] font-semibold tracking-[0.08em] uppercase text-charcoal/60">
@@ -298,15 +308,15 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
                             </span>
                           )}
                         </td>
-                        <Num v={row.valueEnd} show={hasInputs} />
-                        <Num v={-row.depreciationThisYear} show={hasInputs} />
-                        <Num v={row.trueNetThisYear} show={hasInputs} />
-                        <Num v={row.cumulativeCashNet} show={hasInputs} />
-                        <Num v={row.totalPosition} show={hasInputs} strong />
+                        <Num label="Est. value" v={row.valueEnd} show={hasInputs} />
+                        <Num label="Dep. that year" v={-row.depreciationThisYear} show={hasInputs} />
+                        <Num label="True net that year" v={row.trueNetThisYear} show={hasInputs} />
+                        <Num label="Cum. cash net" v={row.cumulativeCashNet} show={hasInputs} />
+                        <Num label="Total position" v={row.totalPosition} show={hasInputs} strong />
                         {state.loanBalance.trim() !== "" && (
-                          <Num v={row.equityAfterLoan ?? 0} show={hasInputs && row.equityAfterLoan !== null} />
+                          <Num label="Equity after loan" v={row.equityAfterLoan ?? 0} show={hasInputs && row.equityAfterLoan !== null} />
                         )}
-                        <td className="px-4 py-2.5 text-right">
+                        <td data-label="Verdict" className="px-4 py-2.5 text-right">
                           {hasInputs ? (
                             <span
                               className={[
@@ -414,9 +424,21 @@ function Field({
   );
 }
 
-function Num({ v, show, strong }: { v: number; show: boolean; strong?: boolean }) {
+function Num({
+  v,
+  show,
+  strong,
+  label,
+}: {
+  v: number;
+  show: boolean;
+  strong?: boolean;
+  /** Column heading, echoed beside the value in the stacked phone layout. */
+  label: string;
+}) {
   return (
     <td
+      data-label={label}
       className={[
         "px-4 py-2.5 text-right tabular-nums whitespace-nowrap",
         strong ? "font-bold" : "font-medium",

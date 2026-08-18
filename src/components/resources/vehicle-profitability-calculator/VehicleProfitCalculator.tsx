@@ -544,17 +544,21 @@ export default function VehicleProfitCalculator({ canSync = false }: {
                 </span>
               </label>
             </div>
+            {/* No min-width: a label column plus three year columns fits a
+                375px phone once the gutters stop being desktop-sized. Stacking
+                this one would turn eleven lines into eleven cards, which reads
+                worse than the compact grid it already is. */}
             <div className="overflow-x-auto">
-              <table className="w-full min-w-88 border-collapse">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-light-gray">
-                    <th className="text-left font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/60 px-3 py-2">
+                    <th className="text-left font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/60 px-2 sm:px-3 py-2">
                       Per year
                     </th>
                     {f.years.map((y) => (
                       <th
                         key={y.year}
-                        className="text-right font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/60 px-3 py-2"
+                        className="text-right font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-charcoal/60 px-2 sm:px-3 py-2"
                       >
                         Yr {y.year}
                       </th>
@@ -764,7 +768,7 @@ function ForecastRow({
     <tr className={`border-b border-light-gray/70 last:border-0 ${strong ? "bg-warm-gold/10" : ""}`}>
       <th
         scope="row"
-        className={`text-left font-sans text-[12px] font-normal px-3 py-2 ${
+        className={`text-left font-sans text-[12px] font-normal px-2 sm:px-3 py-2 ${
           strong ? "font-semibold text-near-black" : "text-charcoal/80"
         }`}
       >
@@ -774,7 +778,7 @@ function ForecastRow({
         <td
           key={i}
           className={[
-            "text-right font-sans text-[12px] tabular-nums px-3 py-2 whitespace-nowrap",
+            "text-right font-sans text-[12px] tabular-nums px-2 sm:px-3 py-2 whitespace-nowrap",
             strong ? "font-bold" : "font-medium",
             v < 0 ? "text-terracotta" : "text-near-black",
           ].join(" ")}

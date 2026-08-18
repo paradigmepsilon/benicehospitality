@@ -3,8 +3,7 @@ import { getResourceTool } from "@/lib/resources/registry";
 import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
-import DataTableTool from "@/components/resources/DataTableTool";
-import { CONTRACTOR_COLUMNS } from "@/lib/resources/contractor-rolodex/config";
+import ContractorRolodexTool from "@/components/resources/contractor-rolodex/ContractorRolodexTool";
 
 const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("contractor-rolodex")!;
@@ -28,14 +27,7 @@ export default async function Page() {
   return (
     <ResourceToolLayout tool={tool} access={access}>
       <ResourceGate slug={tool.slug} toolName={tool.name} access={access}>
-        <DataTableTool
-          slug={tool.slug}
-          title={tool.name}
-          columns={CONTRACTOR_COLUMNS}
-          csvFilename="contractor-rolodex.csv"
-          addLabel="Add contractor"
-          canSync={canSync}
-        />
+        <ContractorRolodexTool canSync={canSync} />
       </ResourceGate>
     </ResourceToolLayout>
   );

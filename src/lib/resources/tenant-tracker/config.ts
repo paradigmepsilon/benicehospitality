@@ -1,4 +1,7 @@
-import { type DataColumn } from "@/components/resources/DataTableTool";
+import {
+  type DataColumn,
+  type SummarySpec,
+} from "@/components/resources/DataTableTool";
 
 // Tenant Tracker & Rent Collection Log columns. One row per tenant: who is in
 // each room, their lease window, what they pay, the deposit held, and where this
@@ -33,3 +36,18 @@ export const TENANT_COLUMNS: DataColumn[] = [
   },
   { key: "notes", label: "Notes", type: "text", width: "12rem", wide: true },
 ];
+
+/**
+ * What a collapsed tenant says about itself. The badge is THIS MONTH'S rent
+ * rather than the lease status, because "who has not paid me" is the question
+ * this log gets opened for; the lease status is one line down in the meta.
+ */
+export const TENANT_SUMMARY: SummarySpec = {
+  title: "tenant",
+  fallbackTitle: "New tenant",
+  badge: "rentStatus",
+  badgeTone: { Paid: "good", Partial: "warn", Due: "neutral", Late: "bad" },
+  // Balance is the computed Rate-minus-Paid column, so a folded card still
+  // shows what is outstanding without opening it.
+  meta: ["room", "status", "balance"],
+};

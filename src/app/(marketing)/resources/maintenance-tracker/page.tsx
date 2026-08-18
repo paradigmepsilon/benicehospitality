@@ -4,7 +4,10 @@ import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import DataTableTool from "@/components/resources/DataTableTool";
-import { MAINTENANCE_COLUMNS } from "@/lib/resources/maintenance-tracker/config";
+import {
+  MAINTENANCE_COLUMNS,
+  MAINTENANCE_SUMMARY,
+} from "@/lib/resources/maintenance-tracker/config";
 
 const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("maintenance-tracker")!;
@@ -37,6 +40,7 @@ export default async function Page() {
           canSync={canSync}
           variant="cards"
           entryNoun="issue"
+          summary={MAINTENANCE_SUMMARY}
         />
       </ResourceGate>
     </ResourceToolLayout>

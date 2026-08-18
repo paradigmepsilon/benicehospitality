@@ -220,8 +220,11 @@ export default function MarketUnderwritingScorecard({ canSync = false }: {
             on this list, gets scored, and earns its rank.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto stack-table-wrap">
+            {/* Seven columns needs ~640px, and at 375 that overflowed the page
+                itself, not just the wrapper. Below 40rem each candidate becomes
+                its own card. See .stack-table in globals.css. */}
+            <table className="w-full text-left stack-table">
               <thead>
                 <tr className="border-b border-light-gray">
                   <Th>#</Th>
@@ -263,16 +266,16 @@ export default function MarketUnderwritingScorecard({ canSync = false }: {
                           </span>
                         )}
                       </Td>
-                      <Td className="font-sans text-sm tabular-nums text-charcoal/80 whitespace-nowrap">
+                      <Td label="Price" className="font-sans text-sm tabular-nums text-charcoal/80 whitespace-nowrap">
                         {money(c.price) || " "}
                       </Td>
-                      <Td className="font-sans text-sm tabular-nums text-charcoal/60 whitespace-nowrap">
+                      <Td label="Scored" className="font-sans text-sm tabular-nums text-charcoal/60 whitespace-nowrap">
                         {scoredCount(c)}/{FACTORS.length}
                       </Td>
-                      <Td className="font-sans text-sm font-bold tabular-nums text-near-black whitespace-nowrap">
+                      <Td label="Total" className="font-sans text-sm font-bold tabular-nums text-near-black whitespace-nowrap">
                         {total}/{MAX_TOTAL}
                       </Td>
-                      <Td>
+                      <Td label="Band">
                         {full ? (
                           <span
                             className={`inline-block font-sans text-[11px] font-semibold px-2 py-0.5 rounded-full ${BAND_STYLE[bandFor(total)]}`}
@@ -577,9 +580,18 @@ function Th({ children }: { children: React.ReactNode }) {
 function Td({
   children,
   className = "",
+  label = "",
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Column heading, echoed beside the value in the stacked phone layout.
+      Left empty for the rank, the candidate name, and the Remove button —
+      cells that already say what they are. */
+  label?: string;
 }) {
-  return <td className={`px-3 py-2.5 align-top ${className}`}>{children}</td>;
+  return (
+    <td data-label={label} className={`px-3 py-2.5 align-top ${className}`}>
+      {children}
+    </td>
+  );
 }

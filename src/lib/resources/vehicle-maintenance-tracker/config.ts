@@ -28,6 +28,13 @@ export interface LogEntry {
 export interface MaintenanceState {
   vehicles: Vehicle[];
   logs: LogEntry[];
+  /**
+   * Ids of service entries the operator has folded shut. Collapsed rather than
+   * open ids on purpose: state saved before the accordion has no key at all,
+   * and a newly logged service is not in the list — both read as "open", which
+   * is the default. Nothing is hidden that the operator did not hide.
+   */
+  collapsed?: string[];
 }
 
 /** Preset service types; the field also accepts anything custom. */

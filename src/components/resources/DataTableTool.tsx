@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import { ChevronDown, Trash2 } from "lucide-react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import {
   useResourceTool,
@@ -33,7 +34,43 @@ export interface DataColumn {
   compute?: ComputeSpec;
 }
 
+/**
+ * How one entry summarises itself when its card is collapsed. Data, not
+ * functions, for the same reason ComputeSpec is: these configs are written in
+ * Server Components and passed as props into this Client Component.
+ */
+export interface SummarySpec {
+  /** Column key whose value becomes the collapsed headline. */
+  title: string;
+  /** Shown when the title column is still empty, e.g. "Untitled issue". */
+  fallbackTitle: string;
+  /** Column key rendered as a tinted pill beside the headline. */
+  badge?: string;
+  /** Pill colour per value. Anything unlisted gets the neutral tone. */
+  badgeTone?: Record<string, BadgeTone>;
+  /** Column keys joined into the muted subtitle. Empty values are dropped. */
+  meta?: string[];
+}
+
+export type BadgeTone = "good" | "warn" | "bad" | "neutral";
+
+const BADGE_CLASS: Record<BadgeTone, string> = {
+  good: "bg-primary-green/10 text-primary-green",
+  warn: "bg-warm-gold/20 text-warm-gold-dark",
+  bad: "bg-terracotta/10 text-terracotta",
+  neutral: "bg-light-gray text-charcoal/70",
+};
+
 export type DataRow = { _id: string } & Record<string, string>;
+
+/** A date input's yyyy-mm-dd, read back short. Anything else passes through. */
+function formatMaybeDate(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!m) return value.trim();
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  if (Number.isNaN(d.getTime())) return value.trim();
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
 
 function toNum(v: string | undefined): number {
   const n = parseFloat(v ?? "");
@@ -67,6 +104,13 @@ function computeValue(row: Record<string, string>, spec: ComputeSpec): string {
 
 interface State {
   rows: DataRow[];
+  /**
+   * Ids of entries the member has folded shut. Collapsed rather than open ids
+   * on purpose: state saved before this feature has no key at all, and a row
+   * added later is not in the list — both of which read as "open", which is the
+   * default we want. Nothing is ever hidden that the member did not hide.
+   */
+  collapsed?: string[];
 }
 
 function newId(): string {
@@ -97,6 +141,7 @@ export default function DataTableTool({
   canSync = false,
   variant = "table",
   entryNoun = "entry",
+  summary,
 }: {
   slug: string;
   title: string;
@@ -112,6 +157,12 @@ export default function DataTableTool({
   variant?: "table" | "cards";
   /** Word used in the per-card header, e.g. "issue" → "Issue 1". */
   entryNoun?: string;
+  /**
+   * Opts the card variant into accordions: each entry collapses to a one-line
+   * summary built from its own values. Omit it and cards render exactly as
+   * before, always open.
+   */
+  summary?: SummarySpec;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const { state, setState, reset } = useResourceTool<State>(
@@ -122,6 +173,34 @@ export default function DataTableTool({
 
   const rows = state.rows.length ? state.rows : [blankRow(columns)];
 
+  /** Accordion is opt-in, and only ever in the card variant. */
+  const accordion = Boolean(summary) && variant === "cards";
+  const collapsedIds = useMemo(
+    () => new Set(state.collapsed ?? []),
+    [state.collapsed],
+  );
+
+  const editableColumns = useMemo(
+    () => columns.filter((c) => !c.compute),
+    [columns],
+  );
+
+  function toggleRow(id: string) {
+    setState((p) => {
+      const next = new Set(p.collapsed ?? []);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return { ...p, collapsed: [...next] };
+    });
+  }
+
+  function setAllCollapsed(collapse: boolean) {
+    setState((p) => ({
+      ...p,
+      collapsed: collapse ? p.rows.map((r) => r._id) : [],
+    }));
+  }
+
   const valueOf = useMemo(
     () => (row: DataRow, col: DataColumn) =>
       col.compute ? computeValue(row, col.compute) : (row[col.key] ?? ""),
@@ -129,16 +208,22 @@ export default function DataTableTool({
   );
 
   function addRow() {
-    setState((p) => ({ rows: [...p.rows, blankRow(columns)] }));
+    // A new entry is never in `collapsed`, so it opens ready to type into.
+    setState((p) => ({ ...p, rows: [...p.rows, blankRow(columns)] }));
   }
   function deleteRow(id: string) {
     setState((p) => {
       const next = p.rows.filter((r) => r._id !== id);
-      return { rows: next.length ? next : [blankRow(columns)] };
+      return {
+        ...p,
+        rows: next.length ? next : [blankRow(columns)],
+        collapsed: (p.collapsed ?? []).filter((c) => c !== id),
+      };
     });
   }
   function setCell(id: string, key: string, value: string) {
     setState((p) => ({
+      ...p,
       rows: p.rows.map((r) => (r._id === id ? { ...r, [key]: value } : r)),
     }));
   }
@@ -226,7 +311,7 @@ export default function DataTableTool({
           const existing = p.rows.filter((r) =>
             columns.some((c) => !c.compute && (r[c.key] ?? "").trim()),
           );
-          return { rows: [...existing, ...imported] };
+          return { ...p, rows: [...existing, ...imported] };
         });
       }
     };
@@ -278,6 +363,15 @@ export default function DataTableTool({
           onChange={onImportFile}
           className="hidden"
         />
+        {accordion && rows.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setAllCollapsed(collapsedIds.size < rows.length)}
+            className="inline-flex items-center font-sans text-sm font-medium text-primary-green hover:text-primary-green-dark px-2 py-2 rounded-md transition-colors"
+          >
+            {collapsedIds.size < rows.length ? "Collapse all" : "Expand all"}
+          </button>
+        )}
         {canSync && (
           <span className="font-sans text-xs text-charcoal/50">
             Saved to your account
@@ -286,39 +380,131 @@ export default function DataTableTool({
       </div>
 
       {variant === "cards" ? (
-        <div className="space-y-4">
-          {rows.map((row, idx) => (
-            <div
-              key={row._id}
-              className="bg-white border border-light-gray rounded-lg p-4 sm:p-5 break-inside-avoid"
-            >
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <p className="font-display text-sm font-semibold text-near-black capitalize">
-                  {entryNoun} {idx + 1}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => deleteRow(row._id)}
-                  aria-label="Delete entry"
-                  className="no-print font-sans text-xs text-charcoal/45 hover:text-terracotta"
-                >
-                  Remove
-                </button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
-                {columns.map((c) => (
-                  <div key={c.key} className={c.wide ? "sm:col-span-2" : ""}>
-                    <label className="block font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/55 mb-1">
-                      {c.label}
-                    </label>
-                    <div className="border border-light-gray rounded-md bg-white">
-                      {fieldControl(row, c, true)}
-                    </div>
+        <div className="space-y-3">
+          {rows.map((row, idx) => {
+            const open = !accordion || !collapsedIds.has(row._id);
+            const bodyId = `dt-${row._id}`;
+            const filled = editableColumns.filter((c) =>
+              (row[c.key] ?? "").trim(),
+            ).length;
+
+            const headline = summary
+              ? (row[summary.title] ?? "").trim() || summary.fallbackTitle
+              : `${entryNoun} ${idx + 1}`;
+            const badgeValue = summary?.badge
+              ? (row[summary.badge] ?? "").trim()
+              : "";
+            const metaLine = (summary?.meta ?? [])
+              .map((k) => {
+                const col = columns.find((cc) => cc.key === k);
+                const raw = col?.compute
+                  ? valueOf(row, col)
+                  : (row[k] ?? "").trim();
+                return col?.type === "date" ? formatMaybeDate(raw) : raw;
+              })
+              .filter(Boolean)
+              .join(" · ");
+
+            return (
+              <div
+                key={row._id}
+                className={`placeholders-are-examples bg-white border rounded-lg break-inside-avoid ${
+                  open && accordion
+                    ? "border-primary-green/40"
+                    : "border-light-gray"
+                }`}
+              >
+                <div className="flex items-start gap-2 p-3 sm:p-4">
+                  {accordion ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleRow(row._id)}
+                      aria-expanded={open}
+                      aria-controls={bodyId}
+                      className="flex-1 min-w-0 text-left rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-green"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="font-display text-base font-semibold text-near-black leading-snug wrap-break-word min-w-0">
+                          {headline}
+                        </span>
+                        <span className="flex items-center gap-2 shrink-0">
+                          {badgeValue && (
+                            <span
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-sans text-[10px] font-semibold tracking-[0.08em] uppercase whitespace-nowrap ${
+                                BADGE_CLASS[
+                                  summary?.badgeTone?.[badgeValue] ?? "neutral"
+                                ]
+                              }`}
+                            >
+                              {badgeValue}
+                            </span>
+                          )}
+                          <span className="font-sans text-[11px] text-charcoal/50 tabular-nums whitespace-nowrap">
+                            {filled}/{editableColumns.length}
+                          </span>
+                        </span>
+                      </div>
+                      {metaLine && (
+                        <p className="no-print mt-1 font-sans text-xs text-charcoal/60 wrap-break-word">
+                          {metaLine}
+                        </p>
+                      )}
+                    </button>
+                  ) : (
+                    <p className="flex-1 min-w-0 font-display text-sm font-semibold text-near-black capitalize">
+                      {entryNoun} {idx + 1}
+                    </p>
+                  )}
+
+                  <div className="no-print flex items-center gap-0.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => deleteRow(row._id)}
+                      aria-label={`Delete ${headline}`}
+                      className="min-w-11 min-h-11 flex items-center justify-center rounded-md text-charcoal/40 hover:text-terracotta hover:bg-terracotta/5 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" aria-hidden />
+                    </button>
+                    {accordion && (
+                      <button
+                        type="button"
+                        onClick={() => toggleRow(row._id)}
+                        aria-expanded={open}
+                        aria-controls={bodyId}
+                        aria-label={`${open ? "Collapse" : "Expand"} ${headline}`}
+                        className="min-w-11 min-h-11 flex items-center justify-center rounded-md text-charcoal/50 hover:text-near-black hover:bg-off-white transition-colors"
+                      >
+                        <ChevronDown
+                          aria-hidden
+                          className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                    )}
                   </div>
-                ))}
+                </div>
+
+                {/* Always rendered. A collapsed body is hidden by a screen-only
+                    rule, so a printed log is every entry in full. */}
+                <div
+                  id={bodyId}
+                  className={`px-3 sm:px-4 pb-4 ${accordion && !open ? "collapsed-on-screen" : ""}`}
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
+                    {columns.map((c) => (
+                      <div key={c.key} className={c.wide ? "sm:col-span-2" : ""}>
+                        <label className="block font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/55 mb-1">
+                          {c.label}
+                        </label>
+                        <div className="border border-light-gray rounded-md bg-white">
+                          {fieldControl(row, c, true)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="overflow-x-auto border border-light-gray rounded-lg bg-white">

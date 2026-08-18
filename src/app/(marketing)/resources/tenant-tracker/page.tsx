@@ -4,7 +4,10 @@ import { getResourceAccess } from "@/lib/resources/access";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import DataTableTool from "@/components/resources/DataTableTool";
-import { TENANT_COLUMNS } from "@/lib/resources/tenant-tracker/config";
+import {
+  TENANT_COLUMNS,
+  TENANT_SUMMARY,
+} from "@/lib/resources/tenant-tracker/config";
 
 const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("tenant-tracker")!;
@@ -36,6 +39,7 @@ export default async function Page() {
           canSync={access.canSync}
           variant="cards"
           entryNoun="tenant"
+          summary={TENANT_SUMMARY}
         />
       </ResourceGate>
     </ResourceToolLayout>

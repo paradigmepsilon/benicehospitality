@@ -271,16 +271,18 @@ export default function EarningsPlanOptimizer({ canSync = false }: {
                 Same car, three plans
               </p>
             </div>
+            {/* Label column plus three plan columns: it fits 375px on phone
+                gutters, so this stays a real table rather than three cards. */}
             <div className="overflow-x-auto">
               <table className="w-full font-sans text-sm">
                 <thead>
                   <tr className="border-b border-light-gray">
-                    <th className="text-left px-4 py-2 font-semibold text-charcoal/70 text-xs" />
+                    <th className="text-left px-2.5 sm:px-4 py-2 font-semibold text-charcoal/70 text-xs" />
                     {rows.map((r) => (
                       <th
                         key={r.plan.id}
                         className={[
-                          "text-right px-4 py-2 font-semibold text-xs whitespace-nowrap",
+                          "text-right px-2.5 sm:px-4 py-2 font-semibold text-xs whitespace-nowrap",
                           rec?.planId === r.plan.id ? "text-primary-green" : "text-charcoal/70",
                         ].join(" ")}
                       >
@@ -507,14 +509,14 @@ function CompareRow({
 }) {
   return (
     <tr className={strong ? "bg-warm-gold/10" : ""}>
-      <td className={`px-4 py-2.5 text-sm ${strong ? "font-semibold text-near-black" : "text-charcoal/80"}`}>
+      <td className={`px-2.5 sm:px-4 py-2.5 text-sm ${strong ? "font-semibold text-near-black" : "text-charcoal/80"}`}>
         {label}
       </td>
       {cells.map((c, i) => (
         <td
           key={i}
           className={[
-            "px-4 py-2.5 text-right tabular-nums whitespace-nowrap",
+            "px-2.5 sm:px-4 py-2.5 text-right tabular-nums whitespace-nowrap",
             strong ? "font-bold" : "font-medium",
             danger ? "text-terracotta" : "text-near-black",
           ].join(" ")}

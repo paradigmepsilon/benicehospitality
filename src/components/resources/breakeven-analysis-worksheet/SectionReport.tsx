@@ -338,17 +338,19 @@ export default function SectionReport({
       </p>
 
       {/* ----------------------------------------------------- 3-year table */}
+      {/* No min-width: Line plus three year columns fits a 375px phone on
+          phone-sized gutters. */}
       <div className="overflow-x-auto mt-5">
-        <table className="w-full min-w-104 font-sans text-sm tabular-nums">
+        <table className="w-full font-sans text-sm tabular-nums">
           <thead>
             <tr className="border-b border-light-gray">
-              <th className="text-left font-semibold text-charcoal/60 py-2 pr-3 font-sans text-xs uppercase tracking-wide">
+              <th className="text-left font-semibold text-charcoal/60 py-2 pr-2 sm:pr-3 font-sans text-xs uppercase tracking-wide">
                 Line
               </th>
               {y.map((r) => (
                 <th
                   key={r.year}
-                  className="text-right font-semibold text-charcoal/60 py-2 pl-3 font-sans text-xs uppercase tracking-wide whitespace-nowrap"
+                  className="text-right font-semibold text-charcoal/60 py-2 pl-2 sm:pl-3 font-sans text-xs uppercase tracking-wide whitespace-nowrap"
                 >
                   Year {r.year}
                 </th>
@@ -360,7 +362,7 @@ export default function SectionReport({
               <tr key={row.label} className="border-b border-light-gray/60">
                 <td
                   className={[
-                    "py-1.5 pr-3 leading-snug",
+                    "py-1.5 pr-2 sm:pr-3 leading-snug",
                     row.strong ? "font-semibold text-near-black" : "text-charcoal/75",
                   ].join(" ")}
                 >
@@ -370,7 +372,7 @@ export default function SectionReport({
                   <td
                     key={i}
                     className={[
-                      "py-1.5 pl-3 text-right whitespace-nowrap",
+                      "py-1.5 pl-2 sm:pl-3 text-right whitespace-nowrap",
                       row.strong ? "font-semibold" : "",
                       v < 0 ? "text-terracotta" : "text-near-black",
                     ].join(" ")}

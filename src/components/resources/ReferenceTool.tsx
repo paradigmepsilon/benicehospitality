@@ -70,8 +70,13 @@ function SectionBody({ s }: { s: RefSection }) {
       )}
 
       {s.table && (
-              <div className="overflow-x-auto border border-light-gray rounded-lg bg-white">
-                <table className="w-full border-collapse text-sm">
+              /* Comparison tables here run to five columns (the Turo plan
+                 matrix, the risk register). At 375 that needed ~486px against
+                 325px of room, so below 40rem each row becomes its own card
+                 with the column names inline. See .stack-table in globals.css.
+                 Column one is the row's own name and labels itself. */
+              <div className="overflow-x-auto stack-table-wrap border border-light-gray rounded-lg bg-white">
+                <table className="w-full border-collapse text-sm stack-table">
                   <thead>
                     <tr className="bg-off-white">
                       {s.table.head.map((h, i) => (
@@ -94,6 +99,7 @@ function SectionBody({ s }: { s: RefSection }) {
                         {r.map((c, ci) => (
                           <td
                             key={ci}
+                            data-label={ci === 0 ? "" : (s.table!.head[ci] ?? "")}
                             className={`px-3 py-2.5 border-b border-light-gray/70 align-top text-near-black ${
                               ci === 0 ? "font-medium" : ""
                             } ${
