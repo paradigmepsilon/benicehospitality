@@ -5,6 +5,9 @@ import { ChevronDown, Minus, Plus, Trash2 } from "lucide-react";
 import {
   INVENTORY_CATEGORIES,
   STATUS_LABEL,
+  formatCurrency,
+  hasPrice,
+  lineTotal,
   stockStatus,
   unitsToReorder,
   type InventoryItem,
@@ -18,7 +21,10 @@ export const STATUS_TONE: Record<StockStatus, { pill: string; dot: string }> = {
     pill: "bg-warm-gold/20 text-warm-gold-dark",
     dot: "bg-warm-gold",
   },
-  ok: { pill: "bg-primary-green/10 text-primary-green", dot: "bg-primary-green" },
+  ok: {
+    pill: "bg-primary-green/10 text-primary-green",
+    dot: "bg-primary-green",
+  },
   unset: { pill: "bg-light-gray text-charcoal/60", dot: "bg-charcoal/30" },
 };
 
@@ -56,10 +62,14 @@ export default function ItemRow({
     onChange("current", String(next));
   }
 
+  const priced = hasPrice(item);
+  const subtotal = lineTotal(item);
+
   const meta = [
     item.location,
     item.par ? `Par ${item.par}` : "",
     item.supplier,
+    priced ? `${formatCurrency(subtotal)} on hand` : "",
   ].filter(Boolean);
 
   return (
@@ -218,6 +228,36 @@ export default function ItemRow({
               />
             </div>
             <div>
+              <label className={detailLabelClass}>Price per unit</label>
+              <div className="relative">
+                <span
+                  aria-hidden
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 font-sans text-sm text-charcoal/45"
+                >
+                  $
+                </span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  step="0.01"
+                  value={item.pricePerUnit}
+                  onChange={(e) => onChange("pricePerUnit", e.target.value)}
+                  placeholder="0.00"
+                  className={`${detailFieldClass} pl-6`}
+                />
+              </div>
+            </div>
+            <div>
+              <label className={detailLabelClass}>Subtotal</label>
+              <p
+                className={`${detailFieldClass} flex items-center bg-off-white/70 text-near-black font-semibold tabular-nums`}
+                title="Price per unit times quantity on hand"
+              >
+                {priced ? formatCurrency(subtotal) : "—"}
+              </p>
+            </div>
+            <div>
               <label className={detailLabelClass}>Supplier / brand</label>
               <input
                 type="text"
@@ -265,6 +305,7 @@ export default function ItemRow({
           item.category,
           item.location,
           item.par ? `Par ${item.par}` : "",
+          priced ? `${formatCurrency(subtotal)} on hand` : "",
           item.supplier,
           item.lastRestocked ? `Restocked ${item.lastRestocked}` : "",
           item.notes,

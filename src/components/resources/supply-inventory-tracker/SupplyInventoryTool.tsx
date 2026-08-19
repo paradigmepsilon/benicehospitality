@@ -16,7 +16,9 @@ import {
   CSV_COLUMNS,
   INVENTORY_CATEGORIES,
   INVENTORY_UNITS,
+  formatCurrency,
   isFilled,
+  lineTotal,
   stockStatus,
   suggestProduct,
   suggestionsForInventory,
@@ -54,6 +56,7 @@ function blankItem(): InventoryItem {
     par: "",
     unit: "",
     current: "",
+    pricePerUnit: "",
     lastRestocked: "",
     supplier: "",
     notes: "",
@@ -77,6 +80,7 @@ const EMPTY_DRAFT = {
   unit: "",
   par: "",
   current: "",
+  pricePerUnit: "",
 };
 
 /**
@@ -112,8 +116,16 @@ export default function SupplyInventoryTool({
   const [categoryFilter, setCategoryFilter] = useState("");
   const [query, setQuery] = useState("");
 
-  // Legacy state from the table version could hold an all-blank seed row.
-  const items = useMemo(() => state.rows.filter(isFilled), [state.rows]);
+  // Legacy state from the table version could hold an all-blank seed row, or
+  // rows saved before pricePerUnit existed (undefined, not ""), so normalize
+  // on the way in rather than guarding every read site downstream.
+  const items = useMemo(
+    () =>
+      state.rows
+        .filter(isFilled)
+        .map((r) => ({ ...r, pricePerUnit: r.pricePerUnit ?? "" })),
+    [state.rows],
+  );
 
   const counts = useMemo(() => {
     let out = 0;
@@ -127,6 +139,16 @@ export default function SupplyInventoryTool({
     }
     return { out, low, ok, total: items.length, attention: out + low };
   }, [items]);
+
+  /** Dollar value of everything on hand: sum of price per unit × quantity. */
+  const grandTotal = useMemo(
+    () => items.reduce((sum, i) => sum + lineTotal(i), 0),
+    [items],
+  );
+  const anyPriced = useMemo(
+    () => items.some((i) => lineTotal(i) > 0 || i.pricePerUnit.trim() !== ""),
+    [items],
+  );
 
   const attentionItems = useMemo(
     () =>
@@ -170,7 +192,12 @@ export default function SupplyInventoryTool({
     const q = query.trim().toLowerCase();
     return (item: InventoryItem, groupName: string) => {
       if (categoryFilter && groupName !== categoryFilter) return false;
-      if (q && !`${item.item} ${item.supplier} ${item.location}`.toLowerCase().includes(q))
+      if (
+        q &&
+        !`${item.item} ${item.supplier} ${item.location}`
+          .toLowerCase()
+          .includes(q)
+      )
         return false;
       const s: StockStatus = stockStatus(item);
       if (filter === "attention") return s === "out" || s === "low";
@@ -206,11 +233,19 @@ export default function SupplyInventoryTool({
       unit: draft.unit.trim(),
       par: draft.par.trim(),
       current: draft.current.trim(),
+      pricePerUnit: draft.pricePerUnit.trim(),
     };
     setState((p) => ({ rows: [...p.rows.filter(isFilled), created] }));
     // Keep category, location, and unit: the next supply is usually from the
-    // same closet. Only the item-specific fields reset.
-    setDraft((d) => ({ ...d, item: "", par: "", current: "" }));
+    // same closet. Only the item-specific fields reset, price included since
+    // it rarely repeats item to item.
+    setDraft((d) => ({
+      ...d,
+      item: "",
+      par: "",
+      current: "",
+      pricePerUnit: "",
+    }));
   }
 
   function updateItem(
@@ -245,6 +280,7 @@ export default function SupplyInventoryTool({
     const body = items.map((i) =>
       CSV_COLUMNS.map((c) => {
         if (c.key === "reorder") return String(unitsToReorder(i));
+        if (c.key === "subtotal") return lineTotal(i).toFixed(2);
         if (c.key === "restock") {
           const s = stockStatus(i);
           if (s === "unset") return "";
@@ -328,31 +364,46 @@ export default function SupplyInventoryTool({
           printed sheet is never silently missing whatever the filter hid. */}
       <style>{`@media screen { .sit-hidden { display: none; } }`}</style>
 
-      {/* Summary bar */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <SummaryTile
-          value={counts.total}
-          label="Items tracked"
-          tone="bg-white border-light-gray text-near-black"
-        />
-        <SummaryTile
-          value={counts.attention}
-          label="Need restocking"
-          tone={
-            counts.attention
-              ? "bg-warm-gold/10 border-warm-gold/50 text-warm-gold-dark"
-              : "bg-white border-light-gray text-charcoal/60"
-          }
-        />
-        <SummaryTile
-          value={counts.out}
-          label="Out of stock"
-          tone={
-            counts.out
-              ? "bg-terracotta/10 border-terracotta/40 text-terracotta"
-              : "bg-white border-light-gray text-charcoal/60"
-          }
-        />
+      {/* Summary bar. The value tile only joins once a price is on the sheet,
+          so a property that never prices its supplies isn't shown a
+          permanent "$0" tile. `@container` has to sit on a wrapper, not the
+          grid itself — a container query can't size an element against its
+          own box. */}
+      <div className="@container mb-6">
+        <div
+          className={`grid grid-cols-2 gap-3 ${anyPriced ? "@sm:grid-cols-4" : "@sm:grid-cols-3"}`}
+        >
+          <SummaryTile
+            value={counts.total}
+            label="Items tracked"
+            tone="bg-white border-light-gray text-near-black"
+          />
+          <SummaryTile
+            value={counts.attention}
+            label="Need restocking"
+            tone={
+              counts.attention
+                ? "bg-warm-gold/10 border-warm-gold/50 text-warm-gold-dark"
+                : "bg-white border-light-gray text-charcoal/60"
+            }
+          />
+          <SummaryTile
+            value={counts.out}
+            label="Out of stock"
+            tone={
+              counts.out
+                ? "bg-terracotta/10 border-terracotta/40 text-terracotta"
+                : "bg-white border-light-gray text-charcoal/60"
+            }
+          />
+          {anyPriced && (
+            <SummaryTile
+              value={formatCurrency(grandTotal)}
+              label="Inventory value"
+              tone="bg-primary-green/10 border-primary-green/40 text-primary-green-dark"
+            />
+          )}
+        </div>
       </div>
 
       {/* Restock panel — the shopping list, with matched picks */}
@@ -389,7 +440,11 @@ export default function SupplyInventoryTool({
                       {i.item}
                     </p>
                     <p className="font-sans text-xs text-charcoal/60 leading-tight truncate mt-0.5">
-                      {[i.category, i.location, `${i.current || 0} of ${i.par} on hand`]
+                      {[
+                        i.category,
+                        i.location,
+                        `${i.current || 0} of ${i.par} on hand`,
+                      ]
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
@@ -432,8 +487,15 @@ export default function SupplyInventoryTool({
         </section>
       )}
 
-      {/* Quick add */}
-      <section className="no-print bg-white border border-light-gray rounded-lg p-4 mb-6">
+      {/* Quick add.
+          `@container` and `@lg:` rather than a viewport breakpoint, for the
+          same reason `.stack-table` uses one: this tool renders inside
+          `lg:col-span-3`, so its column is narrower on a 1440px desktop than
+          the full-width tool on a 768px tablet. The old twelve-column row put
+          all six fields plus the button on one line and squeezed Par, On hand
+          and Unit down to a few dozen pixels. Two rows of six columns instead:
+          what the item is, then where it lives and how many. */}
+      <section className="@container no-print bg-white border border-light-gray rounded-lg p-4 mb-6">
         <h3 className="font-sans text-[11px] font-semibold tracking-[0.16em] uppercase text-charcoal/60 mb-3">
           Add a supply
         </h3>
@@ -442,9 +504,9 @@ export default function SupplyInventoryTool({
             e.preventDefault();
             addFromDraft();
           }}
-          className="grid grid-cols-2 lg:grid-cols-12 gap-2.5 items-end"
+          className="grid grid-cols-2 @lg:grid-cols-12 gap-x-3 gap-y-3 items-end"
         >
-          <div className="col-span-2 lg:col-span-3">
+          <div className="col-span-2 @lg:col-span-5">
             <label className={quickLabelClass} htmlFor="sit-add-item">
               Item
             </label>
@@ -453,12 +515,14 @@ export default function SupplyInventoryTool({
               type="text"
               list="sit-items"
               value={draft.item}
-              onChange={(e) => setDraft((d) => ({ ...d, item: e.target.value }))}
+              onChange={(e) =>
+                setDraft((d) => ({ ...d, item: e.target.value }))
+              }
               placeholder="Toilet paper"
               className={quickFieldClass}
             />
           </div>
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-1 @lg:col-span-3">
             <label className={quickLabelClass} htmlFor="sit-add-category">
               Category
             </label>
@@ -478,7 +542,7 @@ export default function SupplyInventoryTool({
               ))}
             </select>
           </div>
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-1 @lg:col-span-4">
             <label className={quickLabelClass} htmlFor="sit-add-location">
               Location
             </label>
@@ -493,7 +557,7 @@ export default function SupplyInventoryTool({
               className={quickFieldClass}
             />
           </div>
-          <div className="col-span-1 lg:col-span-1">
+          <div className="col-span-1 @lg:col-span-3">
             <label className={quickLabelClass} htmlFor="sit-add-par">
               Par
             </label>
@@ -507,7 +571,7 @@ export default function SupplyInventoryTool({
               className={quickFieldClass}
             />
           </div>
-          <div className="col-span-1 lg:col-span-1">
+          <div className="col-span-1 @lg:col-span-3">
             <label className={quickLabelClass} htmlFor="sit-add-current">
               On hand
             </label>
@@ -523,7 +587,7 @@ export default function SupplyInventoryTool({
               className={quickFieldClass}
             />
           </div>
-          <div className="col-span-1 lg:col-span-1">
+          <div className="col-span-1 @lg:col-span-3">
             <label className={quickLabelClass} htmlFor="sit-add-unit">
               Unit
             </label>
@@ -532,16 +596,44 @@ export default function SupplyInventoryTool({
               type="text"
               list="sit-units"
               value={draft.unit}
-              onChange={(e) => setDraft((d) => ({ ...d, unit: e.target.value }))}
+              onChange={(e) =>
+                setDraft((d) => ({ ...d, unit: e.target.value }))
+              }
               placeholder="Rolls"
               className={quickFieldClass}
             />
           </div>
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-1 @lg:col-span-3">
+            <label className={quickLabelClass} htmlFor="sit-add-price">
+              Price per unit
+            </label>
+            <div className="relative">
+              <span
+                aria-hidden
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 font-sans text-sm text-charcoal/45"
+              >
+                $
+              </span>
+              <input
+                id="sit-add-price"
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                value={draft.pricePerUnit}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, pricePerUnit: e.target.value }))
+                }
+                placeholder="0.00"
+                className={`${quickFieldClass} pl-6`}
+              />
+            </div>
+          </div>
+          <div className="col-span-2 @lg:col-span-12 @lg:flex @lg:justify-end">
             <button
               type="submit"
               disabled={!draft.item.trim()}
-              className="w-full inline-flex items-center justify-center gap-1.5 bg-primary-green hover:bg-primary-green-dark disabled:bg-light-gray disabled:text-charcoal/45 text-white font-medium text-sm px-4 py-2.5 rounded-md transition-colors min-h-11"
+              className="w-full @lg:w-auto @lg:min-w-44 inline-flex items-center justify-center gap-1.5 bg-primary-green hover:bg-primary-green-dark disabled:bg-light-gray disabled:text-charcoal/45 text-white font-medium text-sm px-4 py-2.5 rounded-md transition-colors min-h-11"
             >
               <Plus className="w-4 h-4 shrink-0" aria-hidden />
               Add item
@@ -550,7 +642,9 @@ export default function SupplyInventoryTool({
         </form>
         <p className="font-sans text-[11px] text-charcoal/55 mt-2.5">
           Par level is what you want on hand. Category, location, and unit stay
-          filled in so you can add a whole closet in a row.
+          filled in so you can add a whole closet in a row. Price per unit is
+          optional. Add it and this item&apos;s value on hand rolls into the
+          inventory total above.
         </p>
       </section>
 
@@ -620,7 +714,9 @@ export default function SupplyInventoryTool({
         <div className="space-y-5">
           {groups.map((g) => {
             const shown = new Set(
-              g.items.filter((i) => matchesFilters(i, g.name)).map((i) => i._id),
+              g.items
+                .filter((i) => matchesFilters(i, g.name))
+                .map((i) => i._id),
             );
             const groupAttention = g.items.filter((i) => {
               const s = stockStatus(i);
@@ -721,7 +817,7 @@ function SummaryTile({
   label,
   tone,
 }: {
-  value: number;
+  value: number | string;
   label: string;
   tone: string;
 }) {

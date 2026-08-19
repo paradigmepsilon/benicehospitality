@@ -20,6 +20,8 @@ export interface InventoryItem {
   unit: string;
   /** Quantity counted on hand. Numeric string, or "" when unset. */
   current: string;
+  /** Cost per unit, in dollars. Numeric string, or "" when unset. */
+  pricePerUnit: string;
   lastRestocked: string;
   supplier: string;
   notes: string;
@@ -183,6 +185,34 @@ export function unitsToReorder(item: InventoryItem): number {
   return Math.max(0, par - current);
 }
 
+/** Does this item have a usable price? Blank or non-numeric doesn't count. */
+export function hasPrice(item: Pick<InventoryItem, "pricePerUnit">): boolean {
+  return !Number.isNaN(toNum(item.pricePerUnit));
+}
+
+/**
+ * Dollar value of this item on hand: price per unit times quantity counted.
+ * A missing price is treated as $0, same as a blank cell in a spreadsheet —
+ * it does not throw off items that do have a price when summed for the grand
+ * total.
+ */
+export function lineTotal(
+  item: Pick<InventoryItem, "pricePerUnit" | "current">,
+): number {
+  const price = toNum(item.pricePerUnit);
+  if (Number.isNaN(price)) return 0;
+  const qty = toNum(item.current);
+  return price * (Number.isNaN(qty) ? 0 : qty);
+}
+
+export function formatCurrency(n: number): string {
+  return n.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: n % 1 === 0 ? 0 : 2,
+  });
+}
+
 /** Every editable field on an item, in the order they appear in a CSV. */
 export const EDITABLE_FIELDS: (keyof Omit<InventoryItem, "_id">)[] = [
   "category",
@@ -191,6 +221,7 @@ export const EDITABLE_FIELDS: (keyof Omit<InventoryItem, "_id">)[] = [
   "par",
   "unit",
   "current",
+  "pricePerUnit",
   "lastRestocked",
   "supplier",
   "notes",
@@ -202,7 +233,7 @@ export const EDITABLE_FIELDS: (keyof Omit<InventoryItem, "_id">)[] = [
  * The two computed columns are written on export and ignored on import.
  */
 export const CSV_COLUMNS: {
-  key: keyof Omit<InventoryItem, "_id"> | "reorder" | "restock";
+  key: keyof Omit<InventoryItem, "_id"> | "reorder" | "restock" | "subtotal";
   label: string;
   aliases?: string[];
   computed?: boolean;
@@ -212,11 +243,25 @@ export const CSV_COLUMNS: {
   { key: "item", label: "Item Name", aliases: ["Item"] },
   { key: "par", label: "Par Level", aliases: ["Par"] },
   { key: "unit", label: "Type", aliases: ["Unit", "Unit of Measure"] },
-  { key: "current", label: "Current Quantity", aliases: ["Current", "On Hand"] },
+  {
+    key: "current",
+    label: "Current Quantity",
+    aliases: ["Current", "On Hand"],
+  },
+  {
+    key: "pricePerUnit",
+    label: "Price Per Unit",
+    aliases: ["Price", "Unit Price", "Price Per", "Price/Unit"],
+  },
+  { key: "subtotal", label: "Subtotal", computed: true },
   { key: "reorder", label: "Units to Reorder", computed: true },
   { key: "restock", label: "Restock Needed?", computed: true },
   { key: "lastRestocked", label: "Last Restocked" },
-  { key: "supplier", label: "Supplier / Brand", aliases: ["Supplier", "Brand"] },
+  {
+    key: "supplier",
+    label: "Supplier / Brand",
+    aliases: ["Supplier", "Brand"],
+  },
   { key: "notes", label: "Notes" },
 ];
 
