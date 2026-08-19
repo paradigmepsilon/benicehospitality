@@ -16,24 +16,24 @@ import {
   MESSAGE_TEMPLATES,
   GUEST_FAQS,
 } from "@/lib/resources/guest-message-templates/config";
+import TemplateScreen from "./TemplateScreen";
 
 const SLUG = "guest-message-templates";
 const TOOL_NAME = getResourceTool(SLUG)!.name;
 const ANCHOR_PREFIX = "gmt";
+const FAQ_TAB_ID = "faqs";
 
-// Only two groups and no per-item state (this is pure reference content, no
-// checkable/fillable fields), so the tabs are hardcoded here rather than
-// invented as a generic {id,label,items}[] shape in config.ts with one real
-// consumer.
+// One flat strip: the six templates in guest-journey order, then the FAQs. A
+// nested Templates/FAQs strip would stack two navigations in a column that is
+// only ~660px wide on desktop, and the pill numerals already carry the order.
 const TABS: TabDef[] = [
+  ...MESSAGE_TEMPLATES.map((t) => ({
+    id: t.id,
+    label: t.title,
+    shortLabel: t.shortLabel,
+  })),
   {
-    id: "templates",
-    label: "Message Templates",
-    shortLabel: "Templates",
-    badge: String(MESSAGE_TEMPLATES.length),
-  },
-  {
-    id: "faqs",
+    id: FAQ_TAB_ID,
     label: "Guest FAQs",
     shortLabel: "FAQs",
     badge: String(GUEST_FAQS.length),
@@ -43,9 +43,20 @@ const TABS: TabDef[] = [
 export default function GuestTemplatesTool() {
   const [activeSection, setActiveSection] = useState<string>(TABS[0].id);
 
+  // Which wording each template is showing, keyed by template id. Chrome, not
+  // saved state: this tool is persistence: "none" and has no useResourceTool
+  // loop, so there is nothing to write to and nothing to falsely mark as used.
+  const [versionByTemplate, setVersionByTemplate] = useState<
+    Record<string, number>
+  >({});
+
   function goTo(id: string) {
     setActiveSection(id);
     scrollToPanel(panelAnchor(ANCHOR_PREFIX, id));
+  }
+
+  function newVersion(id: string, count: number) {
+    setVersionByTemplate((v) => ({ ...v, [id]: ((v[id] ?? 0) + 1) % count }));
   }
 
   return (
@@ -55,43 +66,31 @@ export default function GuestTemplatesTool() {
         activeId={activeSection}
         onSelect={goTo}
         ariaLabel="Guest correspondence sections"
-        gridClassName="grid-cols-2"
+        gridClassName="grid-cols-4 sm:grid-cols-7"
       />
 
-      {/* Both panels stay mounted (for Print/Save-as-PDF), only the active
-          one visible on screen. */}
-      <TabPanel
-        anchorId={panelAnchor(ANCHOR_PREFIX, "templates")}
-        current={activeSection === "templates"}
-      >
-        <div className="space-y-5">
-          {MESSAGE_TEMPLATES.map((t) => (
-            <div
-              key={t.id}
-              className="bg-white border border-light-gray rounded-lg p-5 sm:p-6"
-            >
-              <div className="flex items-start justify-between gap-3 mb-1">
-                <h3 className="font-display text-lg font-semibold text-near-black">
-                  {t.title}
-                </h3>
-                <div className="no-print shrink-0">
-                  <CopyButton text={t.body} label="Copy message" />
-                </div>
-              </div>
-              <p className="font-sans text-xs text-charcoal/55 mb-3">{t.purpose}</p>
-              <div className="bg-off-white border border-light-gray/70 rounded-md p-4">
-                <p className="font-sans text-sm text-near-black leading-relaxed whitespace-pre-wrap">
-                  {t.body}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </TabPanel>
+      {/* Every panel stays mounted and only toggles `hidden`, so Print and
+          Save-as-PDF still emit all six templates plus all twenty FAQs no
+          matter which tab is open. Do not switch to conditional rendering. */}
+      {MESSAGE_TEMPLATES.map((t, i) => (
+        <TabPanel
+          key={t.id}
+          anchorId={panelAnchor(ANCHOR_PREFIX, t.id)}
+          current={activeSection === t.id}
+        >
+          <TemplateScreen
+            template={t}
+            index={i}
+            total={MESSAGE_TEMPLATES.length}
+            versionIndex={versionByTemplate[t.id] ?? 0}
+            onNewVersion={() => newVersion(t.id, t.variants.length)}
+          />
+        </TabPanel>
+      ))}
 
       <TabPanel
-        anchorId={panelAnchor(ANCHOR_PREFIX, "faqs")}
-        current={activeSection === "faqs"}
+        anchorId={panelAnchor(ANCHOR_PREFIX, FAQ_TAB_ID)}
+        current={activeSection === FAQ_TAB_ID}
       >
         <h2 className="font-display text-2xl font-semibold text-near-black mb-1">
           20 answers to questions guests always ask
