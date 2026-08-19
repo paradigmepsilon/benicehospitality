@@ -72,7 +72,6 @@ section("Persistence flags");
   for (const slug of [
     "co-living-profit-calculator",
     "contractor-rolodex",
-    "course-outline-checklist",
     "maintenance-tracker",
     "market-demand-worksheet",
     "nicelisting-ai",
@@ -89,9 +88,7 @@ section("Persistence flags");
   }
   for (const slug of [
     "guest-message-templates",
-    "inquiry-script-bank",
     "legal-toolkit",
-    "rental-type-comparison-chart",
     "room-rental-agreement",
     "social-posting-calendar",
     "target-audience-matrix",

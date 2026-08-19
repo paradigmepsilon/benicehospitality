@@ -394,9 +394,10 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
       "Warm, professional message templates for every moment of the guest journey, plus 20 ready answers to the questions tenants always ask.",
     bullets: [
       "Templates: inquiry, booking, mid-stay, issues, review request",
+      "Three wordings per template, from brief to detailed",
+      "A recommended send time on every message",
       "20 FAQ answers written in a host's voice",
       "Copy any message to your clipboard in one click",
-      "House-tested wording that de-escalates and delights",
     ],
     category: "property",
     archetype: "reference",
@@ -410,82 +411,15 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
       "The right words at check-in, mid-stay, and when something goes wrong turn a fine stay into a five-star one. Copy-and-send templates and FAQ answers, ready to make your own.",
     howItWorks: [
       "Find the moment in the guest journey you are handling.",
-      "Copy the template and drop in the guest's details.",
-      "Send it, and keep the FAQ answers handy for the rest.",
+      "Check the recommended send time, then pick the wording that sounds like you.",
+      "Copy it, drop in the guest's details, and send.",
     ],
     whatYouGet: [
       "A template for every stage of the guest journey",
+      "Three interchangeable wordings per template",
+      "A recommended send time and why it works",
       "20 host-voice answers to common tenant questions",
-      "One-click copy for every message",
       "A clean print view to keep by the desk",
-    ],
-  },
-
-  "course-outline-checklist": {
-    slug: "course-outline-checklist",
-    name: "Course Outline & Progress Checklist",
-    blurb:
-      "The whole Room Rental Riches path on one page, from research to your first tenant. Check off each milestone and watch your launch progress climb.",
-    bullets: [
-      "Every phase of The Be Nice Way in order",
-      "Milestone checkboxes with a live progress score",
-      "A running list of exactly what is left to do",
-      "Autosaves in your browser, export to CSV or print",
-    ],
-    category: "property",
-    archetype: "checklist",
-    access: "free-email",
-    persistence: "blob",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Progress Checklist",
-    headline: "Turn the book into\na built business.",
-    subhead:
-      "It is easy to finish a book with a pile of notes and no business. This checklist holds you to the work, phase by phase, so you finish with a co-living operation instead.",
-    howItWorks: [
-      "Check off the milestones you have already completed.",
-      "Watch your launch progress climb as you go.",
-      "See exactly which steps still stand between you and tenants.",
-    ],
-    whatYouGet: [
-      "The full path from research to first tenant",
-      "A live progress score you can pick up any time",
-      "The exact next steps still standing in your way",
-      "CSV export and a clean print view",
-    ],
-  },
-
-  "rental-type-comparison-chart": {
-    slug: "rental-type-comparison-chart",
-    name: "Rental Type Comparison Chart",
-    blurb:
-      "Short-term, mid-term, and long-term rentals side by side on income, hours, regulation, and startup cost, plus a 5-question quiz to find your fit.",
-    bullets: [
-      "A clean side-by-side of STR, MTR, and LTR",
-      "Honest pros, cons, and real income examples",
-      "A 5-question decision quiz to score your best model",
-      "Why mid-term room rentals hit the sweet spot",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Comparison Chart",
-    headline: "Which rental model\nactually fits you?",
-    subhead:
-      "Before you furnish a thing, see the three rental models on the numbers: what each earns, what each demands of your week, and which one matches your time, capital, and market.",
-    howItWorks: [
-      "Compare the three models across the metrics that matter.",
-      "Read the deep dive and real income example for each.",
-      "Answer five questions to score the model that fits you.",
-    ],
-    whatYouGet: [
-      "A side-by-side of income, hours, regulation, and cost",
-      "Real worked income examples for each model",
-      "A quick quiz that points you to your best fit",
-      "A clean print view to keep with your research",
     ],
   },
 
@@ -656,40 +590,6 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
       "A written caption for every day, ready to copy",
       "Three interchangeable angles per day, shuffleable",
       "CSV export for your scheduler and a clean print view",
-    ],
-  },
-
-  "inquiry-script-bank": {
-    slug: "inquiry-script-bank",
-    name: "Inbound Inquiry Script Bank",
-    blurb:
-      "Confident, copy-and-send replies for every inquiry you get, from 'is this still available?' to 'that's more than I expected to pay,' so you turn messages into move-ins.",
-    bullets: [
-      "Scripts for eight common inquiry types",
-      "Two versions each: friendly-detailed and short-direct",
-      "Objection and ghost-prevention follow-ups included",
-      "Copy any reply to your clipboard in one click",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Script Bank",
-    headline: "Reply fast, book\nthe tour.",
-    subhead:
-      "Under-one-hour replies win the booking, but only if you are not writing from scratch each time. Here are proven, warm replies for every inquiry, ready to copy, personalize, and send.",
-    howItWorks: [
-      "Find the inquiry type you just received.",
-      "Copy the version that fits your voice and moment.",
-      "Drop in your details and send within the hour.",
-    ],
-    whatYouGet: [
-      "Two ready replies for each common inquiry",
-      "Objection handlers and follow-ups that re-engage",
-      "Wording that always points to the next step",
-      "Copy-to-clipboard and a clean print view",
     ],
   },
 

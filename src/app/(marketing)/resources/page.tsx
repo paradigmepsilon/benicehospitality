@@ -143,18 +143,6 @@ const PROPERTY_RESOURCES: Resource[] = [
     ],
     access: "labs-pass",
   },
-  {
-    name: "Room Rental Riches curriculum",
-    body: "12 modules plus a bonus pack. The full Host-to-Operator method, with downloadable templates, SOPs, and the operator toolkit inside every lesson.",
-    bullets: [
-      "12 modules plus a bonus pack, self-paced",
-      "Downloadable SOPs, templates, and operator toolkit in every lesson",
-      "3 commitment tiers from self-paced to Della-coached",
-      "The full Host-to-Operator method end-to-end",
-    ],
-    access: "course",
-    href: "/courses/room-rental-riches",
-  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -314,7 +302,7 @@ const TABS: ResourceTab[] = [
     label: "Co-living Properties",
     sectionLabel: "For co-living operators",
     headline: "Co-living, MTR, and STR.",
-    body: "Tools that diagnose specific operator problems, plus the full Room Rental Riches curriculum for the people who want the whole method. Run any diagnostic on your portfolio in minutes.",
+    body: "Tools that diagnose specific operator problems, from viability scoring to profit modeling to the day-to-day trackers. Run any diagnostic on your portfolio in minutes.",
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
       alt: "Co-living and short-term rental property interior",

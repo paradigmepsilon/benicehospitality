@@ -19,8 +19,8 @@ import {
 // Generic, config-driven checklist: sections of checkable items with a live
 // completion score, a "what is still left" recap, CSV export and print. Driven
 // by a `sections` prop the same way DataTableTool is driven by `columns`. Every
-// consumer's sections render as tabs — both current consumers (photo-shot-list,
-// course-outline-checklist) want that, so it isn't behind a flag.
+// consumer's sections render as tabs — the current consumer (photo-shot-list)
+// wants that, so it isn't behind a flag.
 
 export interface CheckItem {
   id: string;
