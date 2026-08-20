@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import SectionLabel from "@/components/ui/SectionLabel";
 import ResourceCard, { type Resource } from "./ResourceCard";
+import BookPromoBand from "@/components/sections/books/BookPromoBand";
+import { type FeaturedBook } from "@/lib/featured-books";
 import { SavedToolsProvider } from "@/components/resources/SavedToolsProvider";
 
 export type ResourceTabId = "property" | "hotel" | "auto";
@@ -21,6 +23,13 @@ export interface ResourceTab {
   body: string;
   image: ResourceTabImage;
   resources: Resource[];
+  /**
+   * First-party books promoted at the top of this tab's panel, matched to the
+   * tab's audience in page.tsx. Deliberately NOT part of `resources`: the books
+   * are paid products, not free tools, so they sit above the grid and stay out
+   * of the search, sort, and the tab count badge.
+   */
+  books?: FeaturedBook[];
 }
 
 type SortOption = "default" | "az" | "za";
@@ -231,6 +240,19 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
               />
             </div>
           </div>
+
+          {/* The paid companion to this tab's free tools, above the grid. Sits
+              outside the filter pipeline on purpose — see ResourceTab.books —
+              so it stays put while the reader searches and sorts. */}
+          {activeTab.books && activeTab.books.length > 0 && (
+            <BookPromoBand
+              books={activeTab.books}
+              eyebrow="The companion manual"
+              headline="The tools are free. The system is $32."
+              source="resources-promo"
+              variant="inline"
+            />
+          )}
 
           {filtered.length === 0 ? (
             <div className="bg-cream border border-warm-gold/30 rounded-lg p-8 md:p-12 text-center">

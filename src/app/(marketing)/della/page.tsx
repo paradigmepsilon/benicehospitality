@@ -7,6 +7,8 @@ import AnimatedSection, {
 } from "@/components/ui/AnimatedSection";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
+import BookPromoBand from "@/components/sections/books/BookPromoBand";
+import { publishedBooksBy } from "@/lib/featured-books";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
 export const metadata: Metadata = {
@@ -408,6 +410,18 @@ export default function DellaPage() {
           </AnimatedDiv>
         </div>
       </AnimatedSection>
+
+      {/* DELLA'S BOOK. Filtered by author, so this section only ever carries
+          her titles; Alex's Car Rental Riches Blueprint belongs on his page.
+          Positioned as the $32 rung between the free library and the $500
+          course. */}
+      <BookPromoBand
+        books={publishedBooksBy("Della Henry")}
+        eyebrow="Della’s book"
+        headline="Read the whole system for $32."
+        body="Not ready for the course or a call? The Blueprint is Della’s full operating manual in book form. Start there, then upgrade when you want someone in it with you."
+        source="della-promo"
+      />
 
       {/* DELLA'S JOURNEY */}
       <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">

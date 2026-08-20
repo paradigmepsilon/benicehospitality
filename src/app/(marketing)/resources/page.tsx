@@ -7,6 +7,7 @@ import { type Resource } from "./_components/ResourceCard";
 import ResourceCatalog, {
   type ResourceTab,
 } from "./_components/ResourceCatalog";
+import { publishedBooks, type FeaturedBook } from "@/lib/featured-books";
 import { liveResourceTools } from "@/lib/resources/registry";
 import {
   SCORECARD_QUESTION_COUNT,
@@ -197,6 +198,18 @@ const FLEET_TOOL_CARDS: Resource[] = liveResourceTools("fleet").map((t) => ({
 // August 2026; the course still has its own waitlist surface under /education.
 const AUTO_RESOURCES: Resource[] = FLEET_TOOL_CARDS;
 
+// Which tab each book audience surfaces in. Co-living books land in the
+// property tab; when The Car Rental Riches Blueprint flips to available in
+// src/lib/featured-books.ts it lands in the Autos tab with no change here.
+const BOOK_AUDIENCE_TAB: Record<FeaturedBook["audience"], ResourceTab["id"]> = {
+  property: "property",
+  fleet: "auto",
+};
+
+function booksForTab(id: ResourceTab["id"]): FeaturedBook[] {
+  return publishedBooks().filter((b) => BOOK_AUDIENCE_TAB[b.audience] === id);
+}
+
 const TABS: ResourceTab[] = [
   {
     id: "property",
@@ -209,6 +222,7 @@ const TABS: ResourceTab[] = [
       alt: "Co-living and short-term rental property interior",
     },
     resources: PROPERTY_RESOURCES,
+    books: booksForTab("property"),
   },
   {
     id: "hotel",
@@ -233,6 +247,7 @@ const TABS: ResourceTab[] = [
       alt: "Auto operator vehicle in a peer-to-peer rental fleet setting",
     },
     resources: AUTO_RESOURCES,
+    books: booksForTab("auto"),
   },
 ];
 

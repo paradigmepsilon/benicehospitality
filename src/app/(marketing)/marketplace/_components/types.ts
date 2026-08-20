@@ -1,3 +1,5 @@
+import { type FeaturedBook } from "@/lib/featured-books";
+
 export type AffiliateNetwork =
   | "amazon"
   | "lowes"
@@ -37,6 +39,13 @@ export interface MarketplaceTab {
   body: string;
   image: { src: string; alt: string };
   products: Product[];
+  /**
+   * First-party books promoted at the top of this tab's panel, matched to the
+   * tab's audience in page.tsx. Deliberately NOT part of `products`: books are
+   * ours, not affiliate listings, so they sit above the grid and stay out of
+   * the search, sort, network filter, and the tab count badge.
+   */
+  books?: FeaturedBook[];
 }
 
 export const NETWORK_LABEL: Record<AffiliateNetwork, string> = {

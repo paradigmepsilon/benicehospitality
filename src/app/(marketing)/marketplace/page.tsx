@@ -8,6 +8,7 @@ import {
   listPublishedProducts,
   type MarketplaceTabId as DbTabId,
 } from "@/lib/marketplace";
+import { publishedBooks, type FeaturedBook } from "@/lib/featured-books";
 import MarketplaceCatalog from "./_components/MarketplaceCatalog";
 import type {
   MarketplaceTab,
@@ -96,6 +97,18 @@ function tabIdMatches(
   return uiId === dbId;
 }
 
+// Which tab each book audience surfaces in. Co-living books land in the
+// property tab; when The Car Rental Riches Blueprint flips to available in
+// src/lib/featured-books.ts it lands in the Autos tab with no change here.
+const BOOK_AUDIENCE_TAB: Record<FeaturedBook["audience"], MarketplaceTabId> = {
+  property: "property",
+  fleet: "auto",
+};
+
+function booksForTab(id: MarketplaceTabId): FeaturedBook[] {
+  return publishedBooks().filter((b) => BOOK_AUDIENCE_TAB[b.audience] === id);
+}
+
 export default async function MarketplacePage() {
   const dbProducts = await listPublishedProducts();
 
@@ -123,6 +136,7 @@ export default async function MarketplacePage() {
       body: meta.body,
       image: meta.image,
       products,
+      books: booksForTab(meta.id),
     };
   });
 

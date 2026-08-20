@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import SectionLabel from "@/components/ui/SectionLabel";
+import BookPromoBand from "@/components/sections/books/BookPromoBand";
 import ProductCard from "./ProductCard";
 import {
   NETWORK_LABEL,
@@ -298,6 +299,19 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
               />
             </div>
           </div>
+
+          {/* Our own books for this audience, above the affiliate grid. Sits
+              outside the filter pipeline on purpose — see MarketplaceTab.books
+              — so it stays put while the reader searches and sorts the gear. */}
+          {activeTab.books && activeTab.books.length > 0 && (
+            <BookPromoBand
+              books={activeTab.books}
+              eyebrow="Straight from us"
+              headline="The one thing here we wrote ourselves."
+              source="marketplace-promo"
+              variant="inline"
+            />
+          )}
 
           {visible.length === 0 ? (
             <div className="bg-cream border border-warm-gold/30 rounded-lg p-8 md:p-12 text-center">
