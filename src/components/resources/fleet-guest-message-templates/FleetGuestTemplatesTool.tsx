@@ -1,21 +1,30 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState } from "react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
-import CopyButton from "@/components/resources/CopyButton";
+import {
+  SectionTabStrip,
+  TabPanel,
+  TabPager,
+  scrollToPanel,
+  panelAnchor,
+  type TabDef,
+} from "@/components/resources/SectionTabs";
 import { useResourceTool } from "@/components/resources/useResourceTool";
 import { getResourceTool } from "@/lib/resources/registry";
 import {
   FLEET_TEMPLATES,
   DEFAULT_FIELDS,
-  applyFields,
-  blanksRemaining,
+  DEFAULT_FORMAT,
   type FleetTemplateFields,
+  type FormatId,
 } from "@/lib/resources/fleet-guest-message-templates/config";
 import { CALC_DISCLAIMER } from "@/lib/resources/vehicle-profitability-calculator/config";
+import FleetTemplateScreen from "./FleetTemplateScreen";
 
 const SLUG = "fleet-guest-message-templates";
 const TOOL_NAME = getResourceTool(SLUG)!.name;
+const ANCHOR_PREFIX = "fgt";
 
 const FIELD_DEFS: {
   key: keyof FleetTemplateFields;
@@ -33,6 +42,14 @@ const FIELD_DEFS: {
   },
 ];
 
+// One tab per message, in trip order. The pill numerals carry the sequence, so
+// the strip needs no second row of chrome.
+const TABS: TabDef[] = FLEET_TEMPLATES.map((t) => ({
+  id: t.id,
+  label: t.title,
+  shortLabel: t.shortLabel,
+}));
+
 export default function FleetGuestTemplatesTool({
   canSync = false,
 }: {
@@ -49,21 +66,30 @@ export default function FleetGuestTemplatesTool({
     { sync: canSync },
   );
 
-  const filledCount = FIELD_DEFS.filter((f) => state[f.key].trim()).length;
+  const [activeSection, setActiveSection] = useState<string>(TABS[0].id);
 
-  // Substituted bodies, recomputed live as the member types.
-  const rendered = useMemo(
-    () =>
-      FLEET_TEMPLATES.map((t) => {
-        const body = applyFields(t.body, state);
-        return { ...t, renderedBody: body, blanks: blanksRemaining(body) };
-      }),
-    [state],
-  );
+  // Which format each message is showing, keyed by template id. Chrome, not
+  // saved state: the three personalization fields are the member's work, a
+  // preference for shorter wording on message four is not, and persisting it
+  // would mark the tool used the first time someone tapped Brief.
+  const [formatByTemplate, setFormatByTemplate] = useState<
+    Record<string, FormatId>
+  >({});
+
+  function goTo(id: string) {
+    setActiveSection(id);
+    scrollToPanel(panelAnchor(ANCHOR_PREFIX, id));
+  }
+
+  function setFormat(templateId: string, format: FormatId) {
+    setFormatByTemplate((prev) => ({ ...prev, [templateId]: format }));
+  }
 
   function setField(key: keyof FleetTemplateFields, value: string) {
     setState((prev) => ({ ...prev, [key]: value }));
   }
+
+  const filledCount = FIELD_DEFS.filter((f) => state[f.key].trim()).length;
 
   return (
     <ResourceToolShell
@@ -76,15 +102,15 @@ export default function FleetGuestTemplatesTool({
         </span>
       }
     >
-      {/* Personalization panel: one pass fills all ten templates */}
-      <div className="bg-near-black rounded-lg p-5 sm:p-6 mb-8 text-white">
+      {/* Personalization panel: one pass fills all ten messages, every format */}
+      <div className="bg-near-black rounded-lg p-5 sm:p-6 mb-6 text-white">
         <p className="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-warm-gold mb-1">
           Personalize once
         </p>
         <p className="font-sans text-sm text-white/70 mb-4">
-          Type the trip details once and every template below updates as you
-          type. Anything still in [brackets] is yours to fill by hand before
-          sending.
+          Type the trip details once and every message updates as you type,
+          whichever format you pick. Anything still in [brackets] is yours to
+          fill by hand before sending.
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
           {FIELD_DEFS.map((f) => (
@@ -104,53 +130,36 @@ export default function FleetGuestTemplatesTool({
         </div>
       </div>
 
-      {/* The ten lifecycle templates */}
-      <div className="space-y-5">
-        {rendered.map((t) => (
-          <div
-            key={t.id}
-            className="bg-white border border-light-gray rounded-lg p-5 sm:p-6"
-          >
-            <div className="flex items-start justify-between gap-3 mb-1">
-              <h3 className="font-display text-lg font-semibold text-near-black">
-                {t.title}
-              </h3>
-              <div className="no-print shrink-0">
-                <CopyButton text={t.renderedBody} label="Copy message" />
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <p className="font-sans text-xs text-charcoal/55">{t.purpose}</p>
-              <span
-                className={[
-                  "font-sans text-[11px] font-semibold px-2 py-0.5 rounded-full",
-                  t.blanks === 0
-                    ? "bg-primary-green/10 text-primary-green"
-                    : "bg-warm-gold/15 text-charcoal/70",
-                ].join(" ")}
-              >
-                {t.blanks === 0
-                  ? "Ready to send"
-                  : `${t.blanks} blank${t.blanks === 1 ? "" : "s"} to fill`}
-              </span>
-            </div>
-            <div className="bg-off-white border border-light-gray/70 rounded-md p-4">
-              <p className="font-sans text-sm text-near-black leading-relaxed whitespace-pre-wrap">
-                {t.renderedBody}
-              </p>
-            </div>
-            {t.hostNote && (
-              <div className="mt-3 bg-warm-gold/10 border border-warm-gold/30 rounded-md p-3.5">
-                <p className="font-sans text-xs font-semibold uppercase tracking-wide text-charcoal/70 mb-1">
-                  Host note (don&rsquo;t send)
-                </p>
-                <p className="font-sans text-sm text-charcoal/85 leading-relaxed">
-                  {t.hostNote}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+      <SectionTabStrip
+        tabs={TABS}
+        activeId={activeSection}
+        onSelect={goTo}
+        ariaLabel="Trip lifecycle messages"
+        gridClassName="grid-cols-2 sm:grid-cols-5"
+      />
+
+      {/* Every panel stays mounted and only toggles `hidden`, so Print and
+          Save-as-PDF still emit all ten messages no matter which tab is open.
+          Do not switch to conditional rendering. */}
+      {FLEET_TEMPLATES.map((t, i) => (
+        <TabPanel
+          key={t.id}
+          anchorId={panelAnchor(ANCHOR_PREFIX, t.id)}
+          current={activeSection === t.id}
+        >
+          <FleetTemplateScreen
+            template={t}
+            index={i}
+            total={FLEET_TEMPLATES.length}
+            fields={state}
+            format={formatByTemplate[t.id] ?? DEFAULT_FORMAT}
+            onFormatChange={(f) => setFormat(t.id, f)}
+          />
+        </TabPanel>
+      ))}
+
+      <div className="mt-6">
+        <TabPager tabs={TABS} activeId={activeSection} onSelect={goTo} />
       </div>
 
       <p className="mt-8 text-center font-sans text-xs text-charcoal/50">

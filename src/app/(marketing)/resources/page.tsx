@@ -191,40 +191,18 @@ const FLEET_TOOL_CARDS: Resource[] = liveResourceTools("fleet").map((t) => ({
   savableSlug: t.slug,
 }));
 
-const AUTO_RESOURCES: Resource[] = [
-  ...FLEET_TOOL_CARDS,
-  {
-    name: "Fleet Utilization Report",
-    body: "Per-vehicle utilization, day-of-week patterns, fleet-mix optimization. Built for Turo hosts and small fleet operators running 3 or more vehicles.",
-    bullets: [
-      "Per-vehicle utilization across the trailing 12 months",
-      "Day-of-week and seasonal demand patterns",
-      "Fleet-mix recommendations: which cars to add or retire",
-      "Built for operators running 3 or more vehicles",
-    ],
-    access: "labs-pass",
-  },
-  {
-    name: "Car Rental Riches curriculum",
-    body: "The Host-to-Operator method retuned for Turo and rental-fleet operators. Same 3 commitment tiers, same operator-grade depth.",
-    bullets: [
-      "The Host-to-Operator method retuned for Turo",
-      "3 commitment tiers, same operator-grade depth",
-      "Fleet-mix templates and SOPs included",
-      "Drops in 2026",
-    ],
-    access: "course",
-    status: "soon",
-    waitlist: { courseSlug: "car-rental-riches", tier: "interest" },
-  },
-];
+// The tab is now the registry block and nothing else, same as the co-living
+// tab below the pinned viability calculator. The Fleet Utilization Report
+// (Labs Pass) and the Car Rental Riches curriculum card were retired in
+// August 2026; the course still has its own waitlist surface under /education.
+const AUTO_RESOURCES: Resource[] = FLEET_TOOL_CARDS;
 
 const TABS: ResourceTab[] = [
   {
     id: "property",
     label: "Co-living Properties",
     sectionLabel: "For co-living operators",
-    headline: "Co-living, MTR, and STR.",
+    headline: "Co-living and Mid Term Rental.",
     body: "Tools that diagnose specific operator problems, from viability scoring to profit modeling to the day-to-day trackers. Run any diagnostic on your portfolio in minutes.",
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",

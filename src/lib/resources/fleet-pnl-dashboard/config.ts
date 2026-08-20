@@ -49,6 +49,14 @@ export interface FleetState {
   attestThreeMonths: boolean;
   /** Self-attestation: one full damage responsibility held in cash per car. */
   attestCashReserve: boolean;
+  /**
+   * Ids of car cards the member has folded shut. Collapsed rather than open
+   * ids, matching DataTableTool and the Vehicle Maintenance Tracker: state
+   * saved before this feature has no key at all, and a car added later is not
+   * in the list. Both read as "open", which is the default we want. Nothing is
+   * ever hidden that the member did not hide.
+   */
+  collapsed?: string[];
 }
 
 /** Defaults matching the course spreadsheet's assumption rows. */

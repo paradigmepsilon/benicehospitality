@@ -2,7 +2,15 @@
 // Riches handout H01 (verified 2026-08-15): every item a Turo listing needs
 // before it publishes, and again once a month after. Six sections: the
 // eligibility gate, vehicle prep, photography, listing copy, the 2026 pricing
-// levers, and settings/calendar. Completion is a readiness percentage over the
+// levers, and settings/calendar.
+//
+// The Listing Copy section used to carry a ten-item Vehicle description group.
+// Turo removed the free-form vehicle description and guidelines sections from
+// listings on July 28, 2026 and now surfaces features and rules itself, so the
+// group was deleted rather than reworded. What a host still writes is the
+// listing title, the host profile, and the FAQs / parking / guest instructions
+// that live in Trip details AFTER a booking. If Turo restores free-text copy,
+// restore the group here and in the handout together. Completion is a readiness percentage over the
 // required items; items marked `optional` are excluded from the score.
 //
 // Every Turo platform figure here traces to the CRR fact base
@@ -102,7 +110,8 @@ export const CHECKLIST_SECTIONS: ChecklistSection[] = [
   {
     id: "copy",
     label: "Listing Copy",
-    blurb: "The title, the description, and the host profile behind them.",
+    blurb:
+      "The title and the host profile behind it. Turo removed the free-form vehicle description and guidelines sections from listings on July 28, 2026, so the title and your profile are the only copy you still control.",
     items: [
       { id: "t1", group: "Listing title", label: "Contains make and model" },
       { id: "t2", group: "Listing title", label: "Includes one key benefit or feature" },
@@ -117,44 +126,6 @@ export const CHECKLIST_SECTIONS: ChecklistSection[] = [
         id: "t6",
         group: "Listing title",
         label: "Reads differently from the similar listings in your market (go check them)",
-      },
-      {
-        id: "d1",
-        group: "Vehicle description",
-        label: "Opening paragraph that tells a renter why this car, plainly",
-      },
-      {
-        id: "d2",
-        group: "Vehicle description",
-        label: "Features that matter to the trip, not a spec sheet dump",
-      },
-      {
-        id: "d3",
-        group: "Vehicle description",
-        label: "What the driving experience is actually like",
-      },
-      { id: "d4", group: "Vehicle description", label: "Extras and amenities included" },
-      {
-        id: "d5",
-        group: "Vehicle description",
-        label: "Ideal trip types (airport runs, road trips, work weeks)",
-      },
-      {
-        id: "d6",
-        group: "Vehicle description",
-        label: "Local context: destinations this car suits",
-      },
-      {
-        id: "d7",
-        group: "Vehicle description",
-        label: "Clear guest expectations and rules",
-      },
-      { id: "d8", group: "Vehicle description", label: "Delivery options and details" },
-      { id: "d9", group: "Vehicle description", label: "A line about you as the host" },
-      {
-        id: "d10",
-        group: "Vehicle description",
-        label: "Simple closing invitation to book",
       },
       { id: "h1", group: "Host profile", label: "Professional profile photo" },
       {

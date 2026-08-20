@@ -207,10 +207,15 @@ export default function TurnoverProtocolTool({ canSync = false }: {
 
       {/* Plan picker: sets the incidental invoice deadline */}
       <div className="bg-white border border-light-gray rounded-lg p-4 mb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="font-sans text-xs font-semibold tracking-[0.12em] uppercase text-charcoal/70 mr-1">
-            Your earnings plan
-          </p>
+        <p className="font-sans text-xs font-semibold tracking-[0.12em] uppercase text-charcoal/70 mb-2">
+          Your earnings plan
+        </p>
+        {/* A 3-column grid, not flex-wrap: the three labels are long enough to
+            wrap to a second and third row on anything narrower than a wide
+            desktop, and a plan picker that reflows is harder to read at a
+            glance in a driveway. Equal thirds keep it one line at every width;
+            the label sits above rather than inline for the same reason. */}
+        <div className="grid grid-cols-3 gap-2">
           {EARNINGS_PLANS.map((p) => {
             const selected = p.id === planId;
             return (
@@ -220,7 +225,7 @@ export default function TurnoverProtocolTool({ canSync = false }: {
                 onClick={() => setPlan(p.id)}
                 aria-pressed={selected}
                 className={[
-                  "font-sans text-sm font-medium px-3 py-2 min-h-11 rounded-md border cursor-pointer transition-colors",
+                  "font-sans text-xs sm:text-sm font-medium text-center px-2 sm:px-3 py-2 min-h-11 rounded-md border cursor-pointer transition-colors text-balance leading-snug",
                   selected
                     ? "bg-near-black text-white border-near-black"
                     : "bg-white text-near-black border-light-gray hover:border-primary-green",

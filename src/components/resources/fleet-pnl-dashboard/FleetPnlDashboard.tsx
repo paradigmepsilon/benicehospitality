@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { ChevronDown } from "lucide-react";
 import ResourceToolShell from "@/components/resources/ResourceToolShell";
 import {
   useResourceTool,
@@ -64,13 +65,36 @@ export default function FleetPnlDashboard({ canSync = false }: {
   const cars = state.cars;
   const fleet = useMemo(() => computeFleet(cars), [cars]);
 
+  // Which cards are folded shut. Persisted with the rest of the state so a
+  // ten-car fleet stays folded the way the member left it, on every device.
+  const collapsedIds = useMemo(
+    () => new Set(state.collapsed ?? []),
+    [state.collapsed],
+  );
+  const allCollapsed = cars.length > 0 && collapsedIds.size >= cars.length;
+
   function setCar(id: string, patch: Partial<CarInput>) {
     setState((p) => ({
       ...p,
       cars: p.cars.map((c) => (c._id === id ? { ...c, ...patch } : c)),
     }));
   }
+  function toggleCar(id: string) {
+    setState((p) => {
+      const next = new Set(p.collapsed ?? []);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return { ...p, collapsed: [...next] };
+    });
+  }
+  function setAllCollapsed(collapse: boolean) {
+    setState((p) => ({
+      ...p,
+      collapsed: collapse ? p.cars.map((c) => c._id) : [],
+    }));
+  }
   function addCar() {
+    // A new car is never in `collapsed`, so it opens ready to type into.
     setState((p) =>
       p.cars.length >= MAX_CARS ? p : { ...p, cars: [...p.cars, blankCar()] },
     );
@@ -78,7 +102,11 @@ export default function FleetPnlDashboard({ canSync = false }: {
   function removeCar(id: string) {
     setState((p) => {
       const next = p.cars.filter((c) => c._id !== id);
-      return { ...p, cars: next.length ? next : [blankCar()] };
+      return {
+        ...p,
+        cars: next.length ? next : [blankCar()],
+        collapsed: (p.collapsed ?? []).filter((c) => c !== id),
+      };
     });
   }
 
@@ -291,6 +319,15 @@ export default function FleetPnlDashboard({ canSync = false }: {
         >
           + Add car
         </button>
+        {cars.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setAllCollapsed(!allCollapsed)}
+            className="inline-flex items-center font-sans text-sm font-medium text-primary-green hover:text-primary-green-dark px-2 py-2 rounded-md transition-colors"
+          >
+            {allCollapsed ? "Expand all" : "Collapse all"}
+          </button>
+        )}
         {cars.length >= MAX_CARS && (
           <span className="font-sans text-xs text-charcoal/55">
             This dashboard tracks up to {MAX_CARS} cars.
@@ -298,12 +335,17 @@ export default function FleetPnlDashboard({ canSync = false }: {
         )}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-4 mb-6">
+      {/* items-start, not the default stretch: a folded card must shrink to its
+          own height instead of matching an expanded neighbour's, or collapsing
+          buys nothing but an empty white box. */}
+      <div className="grid lg:grid-cols-2 items-start gap-4 mb-6">
         {cars.map((car, idx) => (
           <CarCard
             key={car._id}
             car={car}
             index={idx}
+            open={!collapsedIds.has(car._id)}
+            onToggleOpen={() => toggleCar(car._id)}
             onChange={(patch) => setCar(car._id, patch)}
             onRemove={() => removeCar(car._id)}
           />
@@ -351,83 +393,134 @@ export default function FleetPnlDashboard({ canSync = false }: {
 function CarCard({
   car,
   index,
+  open,
+  onToggleOpen,
   onChange,
   onRemove,
 }: {
   car: CarInput;
   index: number;
+  /** False when the member has folded this card shut. */
+  open: boolean;
+  onToggleOpen: () => void;
   onChange: (patch: Partial<CarInput>) => void;
   onRemove: () => void;
 }) {
   const r = computeCar(car);
   const filled = isCarFilled(car);
+  const bodyId = `fpd-${car._id}`;
+  const label = car.nickname.trim() || `Car ${index + 1}`;
 
   return (
     <div className="bg-white border border-light-gray rounded-lg p-4 sm:p-5 break-inside-avoid">
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-2 mb-3">
         <input
           type="text"
           value={car.nickname}
           onChange={(e) => onChange({ nickname: e.target.value })}
           placeholder={`Car ${index + 1} nickname, e.g. 2019 Corolla`}
           aria-label={`Car ${index + 1} nickname`}
-          className="flex-1 font-display text-base font-semibold text-near-black bg-transparent border-b border-transparent hover:border-light-gray focus:border-primary-green focus:outline-none py-1 placeholder:font-sans placeholder:text-sm placeholder:font-normal placeholder:text-charcoal/40"
+          className="flex-1 min-w-0 font-display text-base font-semibold text-near-black bg-transparent border-b border-transparent hover:border-light-gray focus:border-primary-green focus:outline-none py-1 placeholder:font-sans placeholder:text-sm placeholder:font-normal placeholder:text-charcoal/40"
         />
         <button
           type="button"
           onClick={onRemove}
-          aria-label={`Remove car ${index + 1}`}
+          aria-label={`Remove ${label}`}
           className="no-print font-sans text-xs text-charcoal/45 hover:text-terracotta shrink-0"
         >
           Remove
         </button>
+        <button
+          type="button"
+          onClick={onToggleOpen}
+          aria-expanded={open}
+          aria-controls={bodyId}
+          aria-label={`${open ? "Collapse" : "Expand"} ${label}`}
+          className="no-print min-w-11 min-h-11 shrink-0 flex items-center justify-center rounded-md text-charcoal/50 hover:text-near-black hover:bg-off-white transition-colors"
+        >
+          <ChevronDown
+            aria-hidden
+            className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 mb-3">
-        <CarField label="Purchase price" prefix="$" value={car.price} onChange={(v) => onChange({ price: v })} />
-        <CarField label="Cash invested" prefix="$" value={car.cashInvested} onChange={(v) => onChange({ cashInvested: v })} />
-        <CarField label="Loan payment / mo" prefix="$" value={car.loanMonthly} onChange={(v) => onChange({ loanMonthly: v })} />
-        <CarField label="Average daily rate" prefix="$" value={car.adr} onChange={(v) => onChange({ adr: v })} />
-        <CarField label="Utilization" suffix="%" value={car.utilizationPct} onChange={(v) => onChange({ utilizationPct: v })} />
-        <div>
-          <label className="block font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/55 mb-1">
-            Earnings plan
-          </label>
-          <select
-            value={car.planId}
-            onChange={(e) =>
-              onChange({ planId: e.target.value as CarInput["planId"] })
-            }
-            aria-label="Earnings plan"
-            className="w-full border border-light-gray rounded-md bg-white px-2 py-1.5 font-sans text-sm text-near-black focus:border-primary-green focus:outline-none"
-          >
-            {EARNINGS_PLANS.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+      {/* The folded readout. Screen-only: print gets the full card below, so
+          repeating true net on paper would just be the same figure twice. */}
+      {!open && (
+        <div className="no-print rounded-md bg-off-white border border-light-gray/70 px-3 py-2.5">
+          {filled ? (
+            <div className="grid grid-cols-2 gap-x-3">
+              <MiniStat
+                label="True net / mo"
+                value={money(r.trueNetMonthly)}
+                negative={r.trueNetMonthly < 0}
+                strong
+              />
+              <MiniStat
+                label="ROI on cash"
+                value={r.roi === null ? "-" : pct(r.roi)}
+                negative={r.roi !== null && r.roi < 0}
+                strong
+              />
+            </div>
+          ) : (
+            <p className="font-sans text-xs text-charcoal/50">
+              Nothing entered yet. Expand to fill this car in.
+            </p>
+          )}
         </div>
-        <CarField label="Cleaning + ops / mo" prefix="$" value={car.cleaningOpsMonthly} onChange={(v) => onChange({ cleaningOpsMonthly: v })} />
-        <CarField label="Insurance + parking / mo" prefix="$" value={car.insParkingMonthly} onChange={(v) => onChange({ insParkingMonthly: v })} />
-        <CarField label="Maintenance" suffix="% of gross" value={car.maintenancePct} onChange={(v) => onChange({ maintenancePct: v })} />
-        <CarField label="Depreciation" suffix="% / yr" value={car.depreciationPct} onChange={(v) => onChange({ depreciationPct: v })} />
-      </div>
-
-      {filled ? (
-        <div className="rounded-md bg-off-white border border-light-gray/70 px-3 py-2.5 grid grid-cols-3 gap-x-3 gap-y-2">
-          <MiniStat label="Gross / mo" value={money(r.grossMonthly)} />
-          <MiniStat label="Host share" value={money(r.hostShareMonthly)} />
-          <MiniStat label="Cash net" value={money(r.cashNetMonthly)} negative={r.cashNetMonthly < 0} />
-          <MiniStat label="True net / mo" value={money(r.trueNetMonthly)} negative={r.trueNetMonthly < 0} strong />
-          <MiniStat label="Annual true net" value={money(r.trueNetAnnual)} negative={r.trueNetAnnual < 0} />
-          <MiniStat label="ROI on cash" value={r.roi === null ? "-" : pct(r.roi)} negative={r.roi !== null && r.roi < 0} strong />
-        </div>
-      ) : (
-        <p className="font-sans text-xs text-charcoal/50 px-1">
-          Enter a nickname, price, or daily rate and this card starts computing.
-        </p>
       )}
+
+      {/* Always rendered. A collapsed body is hidden by a screen-only rule, so
+          a printed dashboard is every car with every field. */}
+      <div id={bodyId} className={open ? "" : "collapsed-on-screen"}>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 mb-3">
+          <CarField label="Purchase price" prefix="$" value={car.price} onChange={(v) => onChange({ price: v })} />
+          <CarField label="Cash invested" prefix="$" value={car.cashInvested} onChange={(v) => onChange({ cashInvested: v })} />
+          <CarField label="Loan payment / mo" prefix="$" value={car.loanMonthly} onChange={(v) => onChange({ loanMonthly: v })} />
+          <CarField label="Average daily rate" prefix="$" value={car.adr} onChange={(v) => onChange({ adr: v })} />
+          <CarField label="Utilization" suffix="%" value={car.utilizationPct} onChange={(v) => onChange({ utilizationPct: v })} />
+          <div>
+            <label className="block font-sans text-[11px] font-semibold uppercase tracking-wide text-charcoal/55 mb-1">
+              Earnings plan
+            </label>
+            <select
+              value={car.planId}
+              onChange={(e) =>
+                onChange({ planId: e.target.value as CarInput["planId"] })
+              }
+              aria-label="Earnings plan"
+              className="w-full border border-light-gray rounded-md bg-white px-2 py-1.5 font-sans text-sm text-near-black focus:border-primary-green focus:outline-none"
+            >
+              {EARNINGS_PLANS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <CarField label="Cleaning + ops / mo" prefix="$" value={car.cleaningOpsMonthly} onChange={(v) => onChange({ cleaningOpsMonthly: v })} />
+          <CarField label="Insurance + parking / mo" prefix="$" value={car.insParkingMonthly} onChange={(v) => onChange({ insParkingMonthly: v })} />
+          <CarField label="Maintenance" suffix="% of gross" value={car.maintenancePct} onChange={(v) => onChange({ maintenancePct: v })} />
+          <CarField label="Depreciation" suffix="% / yr" value={car.depreciationPct} onChange={(v) => onChange({ depreciationPct: v })} />
+        </div>
+
+        {filled ? (
+          <div className="rounded-md bg-off-white border border-light-gray/70 px-3 py-2.5 grid grid-cols-3 gap-x-3 gap-y-2">
+            <MiniStat label="Gross / mo" value={money(r.grossMonthly)} />
+            <MiniStat label="Host share" value={money(r.hostShareMonthly)} />
+            <MiniStat label="Cash net" value={money(r.cashNetMonthly)} negative={r.cashNetMonthly < 0} />
+            <MiniStat label="True net / mo" value={money(r.trueNetMonthly)} negative={r.trueNetMonthly < 0} strong />
+            <MiniStat label="Annual true net" value={money(r.trueNetAnnual)} negative={r.trueNetAnnual < 0} />
+            <MiniStat label="ROI on cash" value={r.roi === null ? "-" : pct(r.roi)} negative={r.roi !== null && r.roi < 0} strong />
+          </div>
+        ) : (
+          <p className="font-sans text-xs text-charcoal/50 px-1">
+            Enter a nickname, price, or daily rate and this card starts computing.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

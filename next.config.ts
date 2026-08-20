@@ -154,6 +154,34 @@ const nextConfig: NextConfig = {
         destination: "/resources/breakeven-analysis-worksheet/:path*",
         permanent: true,
       },
+      // Four fleet tools retired in August 2026 with no replacement: the
+      // Claims-Day Playbook, the Risk & Coverage Guide, the Market
+      // Underwriting Scorecard, and the Fleet Business Plan Builder. Never in
+      // the sitemap (sitemap.ts only walks the property lane), but they were
+      // linked from /resources for a week and a member could have bookmarked
+      // one, so the slugs land on the resource index rather than 404ing.
+      // Saved-shelf rows pointing at them are already filtered on read by
+      // saved.ts.
+      {
+        source: "/resources/claims-day-playbook",
+        destination: "/resources",
+        permanent: true,
+      },
+      {
+        source: "/resources/risk-coverage-guide",
+        destination: "/resources",
+        permanent: true,
+      },
+      {
+        source: "/resources/market-underwriting-scorecard",
+        destination: "/resources",
+        permanent: true,
+      },
+      {
+        source: "/resources/fleet-business-plan-builder",
+        destination: "/resources",
+        permanent: true,
+      },
     ];
   },
 };
