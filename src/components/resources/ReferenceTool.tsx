@@ -21,9 +21,8 @@ import {
 // `content.tabbed` opts a config into tabs: sections WITHOUT a `heading` (an
 // opening intro or disclaimer callout) are pinned above the tab strip and
 // always visible; sections WITH a `heading` become the tabs. Omitting the flag
-// (legal-toolkit's case — one real document list, not several) renders every
-// section in a flat stack exactly as before, so existing non-tabbed content is
-// byte-for-byte unaffected.
+// renders every section in a flat stack exactly as before, so existing
+// non-tabbed content is byte-for-byte unaffected.
 
 export interface RefItem {
   title?: string;

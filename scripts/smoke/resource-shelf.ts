@@ -74,11 +74,9 @@ section("Persistence flags");
     "contractor-rolodex",
     "maintenance-tracker",
     "market-demand-worksheet",
-    "nicelisting-ai",
     "photo-shot-list",
     "room-rental-setup-checklist",
     "supply-inventory-tracker",
-    "tenant-tracker",
   ]) {
     ok(
       `${slug} waits for a real edit`,
@@ -88,11 +86,8 @@ section("Persistence flags");
   }
   for (const slug of [
     "guest-message-templates",
-    "legal-toolkit",
-    "room-rental-agreement",
     "social-posting-calendar",
     "target-audience-matrix",
-    "upsell-playbook",
   ]) {
     ok(
       `${slug} shelves on open`,

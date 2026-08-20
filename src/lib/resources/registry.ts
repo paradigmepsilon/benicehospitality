@@ -103,37 +103,82 @@ const HERO_DEFAULT =
   "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg";
 
 export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
-  "room-rental-setup-checklist": {
-    slug: "room-rental-setup-checklist",
-    name: "Room Rental Setup Checklist",
+  // ───────────────────────────────────────────────────────────────────────────
+  // CO-LIVING (Room Rental Riches). Insertion order IS the running order on
+  // /resources and every co-living section, because liveResourceTools() walks
+  // Object.values(). These eleven are sequenced by where an operator hits them:
+  // validate the market and the tenant, underwrite the money, set the property
+  // up, fill the rooms, then run it. The /resources index pins the Co-living
+  // Viability Calculator ahead of all of them as step one; it is a scorecard
+  // route, not a registry tool. A new tool belongs at its stage, NOT appended
+  // to the end of the block.
+  // ───────────────────────────────────────────────────────────────────────────
+  "market-demand-worksheet": {
+    slug: "market-demand-worksheet",
+    name: "Market Demand Worksheet",
     blurb:
-      "Every item a co-living property needs before you list it, grouped by room. Check your way to a launch-ready readiness score.",
+      "Evaluate whether a neighborhood can actually support a co-living property, across demographics, housing, demand signals, lifestyle, and competition.",
     bullets: [
-      "8 sections from deep-clean to pre-listing photos",
-      "Live readiness percentage as you check items off",
-      "A running list of exactly what is left to do",
-      "Autosaves in your browser, export to CSV or print",
+      "Guided indicators across 5 research dimensions",
+      "Why each one matters, plus where to pull the data",
+      "Capture your findings and write a go / no-go summary",
+      "Autosaves in your browser; export to CSV or print",
     ],
     category: "property",
-    archetype: "checklist",
+    archetype: "worksheet",
     access: "free-email",
     persistence: "blob",
+    hasExample: true,
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Setup Checklist",
-    headline: "Is your room rental\nlaunch-ready?",
+    eyebrow: "Market Demand",
+    headline: "Will this market actually support co-living?",
     subhead:
-      "Work through every room and system a co-living property needs before the first photo goes up. Nothing fancy, just the list Della uses so nothing gets missed.",
+      "Before you sign a lease, pressure-test the neighborhood. Work through the demographic, housing, demand, lifestyle, and competition signals that decide whether room-by-room rental works here.",
     howItWorks: [
-      "Check off what is already done, section by section.",
-      "Watch your readiness score climb as gaps close.",
-      "Export the remaining items and knock them out.",
+      "Pick a market, then work through each research dimension.",
+      "Record your findings next to each guiding question.",
+      "Write a demand-analysis summary to make the call.",
     ],
     whatYouGet: [
-      "A room-by-room readiness score",
-      "The exact items still standing between you and launch",
-      "A checklist you can revisit as you finish setup",
+      "A structured read on real market demand",
+      "The exact indicators and data sources to check",
+      "A written go / no-go summary you can keep",
       "CSV export and a clean print view",
+    ],
+  },
+
+  "target-audience-matrix": {
+    slug: "target-audience-matrix",
+    name: "Target Audience Identification Matrix",
+    blurb:
+      "The co-living tenant segments, what each one needs, where to reach them, and how to speak to them. A messaging reference you can copy from.",
+    bullets: [
+      "Six tenant segments with needs, channels, and messaging",
+      "A budget-and-amenities view by audience type",
+      "Copy any row or table straight into your marketing",
+      "How-to guidance for using the matrix in campaigns",
+    ],
+    category: "property",
+    archetype: "reference",
+    access: "free-email",
+    persistence: "none",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Audience Matrix",
+    headline: "Know exactly who you are marketing to.",
+    subhead:
+      "Generic listings attract no one. This matrix breaks co-living demand into real tenant segments, what each values, where they look, and the message that lands, so every listing and ad speaks to someone specific.",
+    howItWorks: [
+      "Identify the two or three segments that best match your property and market.",
+      "Tailor each listing and ad using that segment's messaging, preferred channels, and pain points.",
+      "Address their needs in your amenities and copy, then revisit the matrix as you learn what actually converts.",
+    ],
+    whatYouGet: [
+      "Six ready-to-use tenant personas",
+      "The channel and message that works for each",
+      "Budget and amenity expectations by segment",
+      "Copy-to-clipboard and a clean print view",
     ],
   },
 
@@ -216,37 +261,37 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     ],
   },
 
-  "maintenance-tracker": {
-    slug: "maintenance-tracker",
-    name: "Maintenance Tracker",
+  "room-rental-setup-checklist": {
+    slug: "room-rental-setup-checklist",
+    name: "Room Rental Setup Checklist",
     blurb:
-      "Log every maintenance issue, what it cost, and how long it took. Spot recurring problems before they become expensive ones.",
+      "Every item a co-living property needs before you list it, grouped by room. Check your way to a launch-ready readiness score.",
     bullets: [
-      "One row per issue: cause, priority, action, cost, resolution time",
-      "Flag reoccurring problems and preventative fixes",
-      "Add, edit, and delete rows; import or export CSV",
-      "Saves to your account when you are logged in",
+      "8 sections from deep-clean to pre-listing photos",
+      "Live readiness percentage as you check items off",
+      "A running list of exactly what is left to do",
+      "Autosaves in your browser, export to CSV or print",
     ],
     category: "property",
-    archetype: "tracker",
+    archetype: "checklist",
     access: "free-email",
     persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Maintenance Tracker",
-    headline: "Stop losing track of repairs.",
+    eyebrow: "Setup Checklist",
+    headline: "Is your room rental\nlaunch-ready?",
     subhead:
-      "A maintenance log that pays for itself: track every issue, what it cost, and how fast it was fixed, so you can catch recurring problems and forecast your repair budget.",
+      "Work through every room and system a co-living property needs before the first photo goes up. Nothing fancy, just the list Della uses so nothing gets missed.",
     howItWorks: [
-      "Log each issue as it comes in, with cause and priority.",
-      "Record the fix, who did it, cost, and resolution time.",
-      "Review reoccurrence and cost trends to get ahead of them.",
+      "Check off what is already done, section by section.",
+      "Watch your readiness score climb as gaps close.",
+      "Export the remaining items and knock them out.",
     ],
     whatYouGet: [
-      "A running maintenance history for your property",
-      "Cost and response-time visibility",
-      "A pattern view of what keeps breaking",
-      "CSV import/export and a clean print view",
+      "A room-by-room readiness score",
+      "The exact items still standing between you and launch",
+      "A checklist you can revisit as you finish setup",
+      "CSV export and a clean print view",
     ],
   },
 
@@ -318,51 +363,50 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     ],
   },
 
-  "market-demand-worksheet": {
-    slug: "market-demand-worksheet",
-    name: "Market Demand Worksheet",
+  "photo-shot-list": {
+    slug: "photo-shot-list",
+    name: "Photo Shot List",
     blurb:
-      "Evaluate whether a neighborhood can actually support a co-living property, across demographics, housing, demand signals, lifestyle, and competition.",
+      "The exact shots a co-living listing needs, room by room, so your photos fill rooms instead of just filling space. Check them off on the shoot.",
     bullets: [
-      "Guided indicators across 5 research dimensions",
-      "Why each one matters, plus where to pull the data",
-      "Capture your findings and write a go / no-go summary",
-      "Autosaves in your browser; export to CSV or print",
+      "Every must-have shot, grouped by room and space",
+      "The hero-image and sequencing guidance that converts",
+      "Check items off live during the shoot",
+      "Autosaves in your browser, export to CSV or print",
     ],
     category: "property",
-    archetype: "worksheet",
+    archetype: "checklist",
     access: "free-email",
     persistence: "blob",
-    hasExample: true,
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Market Demand",
-    headline: "Will this market actually support co-living?",
+    eyebrow: "Photo Shot List",
+    headline: "Shoot a listing that\nfills the room.",
     subhead:
-      "Before you sign a lease, pressure-test the neighborhood. Work through the demographic, housing, demand, lifestyle, and competition signals that decide whether room-by-room rental works here.",
+      "Your lead photo sets your click-through rate, and the rest either build trust or lose it. Here is the shot-by-shot list so you leave the shoot with every image the listing needs.",
     howItWorks: [
-      "Pick a market, then work through each research dimension.",
-      "Record your findings next to each guiding question.",
-      "Write a demand-analysis summary to make the call.",
+      "Walk the property with the list open on your phone.",
+      "Capture each shot and check it off as you go.",
+      "Leave with a complete, sequenced set ready to upload.",
     ],
     whatYouGet: [
-      "A structured read on real market demand",
-      "The exact indicators and data sources to check",
-      "A written go / no-go summary you can keep",
+      "A room-by-room list of every shot to capture",
+      "Guidance on the hero image and photo order",
+      "A live count of what you still need to shoot",
       "CSV export and a clean print view",
     ],
   },
 
-  "target-audience-matrix": {
-    slug: "target-audience-matrix",
-    name: "Target Audience Identification Matrix",
+  "social-posting-calendar": {
+    slug: "social-posting-calendar",
+    name: "30-Day Social Posting Calendar",
     blurb:
-      "The co-living tenant segments, what each one needs, where to reach them, and how to speak to them. A messaging reference you can copy from.",
+      "Thirty days of ready-to-post content that attracts room renters: the platform, the format, the shot list, and a written caption for every single day.",
     bullets: [
-      "Six tenant segments with needs, channels, and messaging",
-      "A budget-and-amenities view by audience type",
-      "Copy any row or table straight into your marketing",
-      "How-to guidance for using the matrix in campaigns",
+      "A full production brief for all 30 days",
+      "Platform, format, best posting time, and shot list",
+      "A written, copy-ready caption for every day",
+      "Shuffle it so your month is not everyone else's",
     ],
     category: "property",
     archetype: "reference",
@@ -370,20 +414,20 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     persistence: "none",
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Audience Matrix",
-    headline: "Know exactly who you are marketing to.",
+    eyebrow: "Posting Calendar",
+    headline: "Thirty days of posts,\nalready planned.",
     subhead:
-      "Generic listings attract no one. This matrix breaks co-living demand into real tenant segments, what each values, where they look, and the message that lands, so every listing and ad speaks to someone specific.",
+      "Consistency is what fills rooms, and consistency is a plan, not a personality trait. Here is a month of posts already written: where each one goes, what to shoot, when to post it, and the exact caption to use.",
     howItWorks: [
-      "Identify the two or three segments that best match your property and market.",
-      "Tailor each listing and ad using that segment's messaging, preferred channels, and pain points.",
-      "Address their needs in your amenities and copy, then revisit the matrix as you learn what actually converts.",
+      "Set up your four channels once, in 30 minutes.",
+      "Batch a week of shots and captions in one sitting.",
+      "Shuffle any day you want a different angle on.",
     ],
     whatYouGet: [
-      "Six ready-to-use tenant personas",
-      "The channel and message that works for each",
-      "Budget and amenity expectations by segment",
-      "Copy-to-clipboard and a clean print view",
+      "30 daily briefs: platform, format, timing, shot list",
+      "A written caption for every day, ready to copy",
+      "Three interchangeable angles per day, shuffleable",
+      "CSV export for your scheduler and a clean print view",
     ],
   },
 
@@ -423,50 +467,16 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     ],
   },
 
-  "photo-shot-list": {
-    slug: "photo-shot-list",
-    name: "Photo Shot List",
+  "maintenance-tracker": {
+    slug: "maintenance-tracker",
+    name: "Maintenance Tracker",
     blurb:
-      "The exact shots a co-living listing needs, room by room, so your photos fill rooms instead of just filling space. Check them off on the shoot.",
+      "Log every maintenance issue, what it cost, and how long it took. Spot recurring problems before they become expensive ones.",
     bullets: [
-      "Every must-have shot, grouped by room and space",
-      "The hero-image and sequencing guidance that converts",
-      "Check items off live during the shoot",
-      "Autosaves in your browser, export to CSV or print",
-    ],
-    category: "property",
-    archetype: "checklist",
-    access: "free-email",
-    persistence: "blob",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Photo Shot List",
-    headline: "Shoot a listing that\nfills the room.",
-    subhead:
-      "Your lead photo sets your click-through rate, and the rest either build trust or lose it. Here is the shot-by-shot list so you leave the shoot with every image the listing needs.",
-    howItWorks: [
-      "Walk the property with the list open on your phone.",
-      "Capture each shot and check it off as you go.",
-      "Leave with a complete, sequenced set ready to upload.",
-    ],
-    whatYouGet: [
-      "A room-by-room list of every shot to capture",
-      "Guidance on the hero image and photo order",
-      "A live count of what you still need to shoot",
-      "CSV export and a clean print view",
-    ],
-  },
-
-  "tenant-tracker": {
-    slug: "tenant-tracker",
-    name: "Tenant Tracker & Rent Collection Log",
-    blurb:
-      "One row per tenant for room, dates, rate, deposit, and status, plus a rent log so a late payment is a same-day conversation, not a month-end surprise.",
-    bullets: [
-      "Track who is in each room and their lease dates",
-      "Log rate, deposit, rent due, and payment status",
-      "A running count of active tenants and open items",
-      "Autosaves in your browser, CSV import and export",
+      "One row per issue: cause, priority, action, cost, resolution time",
+      "Flag reoccurring problems and preventative fixes",
+      "Add, edit, and delete rows; import or export CSV",
+      "Saves to your account when you are logged in",
     ],
     category: "property",
     archetype: "tracker",
@@ -474,192 +484,23 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     persistence: "blob",
     status: "live",
     heroImage: HERO_DEFAULT,
-    eyebrow: "Tenant Tracker",
-    headline: "Know every room,\nrent, and date.",
+    eyebrow: "Maintenance Tracker",
+    headline: "Stop losing track of repairs.",
     subhead:
-      "Cash-flow problems are usually visibility problems. Keep one clean record of who is in each room, what they pay, and when, so nothing slips through the cracks when two rooms turn over in a week.",
+      "A maintenance log that pays for itself: track every issue, what it cost, and how fast it was fixed, so you can catch recurring problems and forecast your repair budget.",
     howItWorks: [
-      "Add a row the day someone books a room.",
-      "Fill in their dates, rate, deposit, and status.",
-      "Update the rent log so late payments surface early.",
+      "Log each issue as it comes in, with cause and priority.",
+      "Record the fix, who did it, cost, and resolution time.",
+      "Review reoccurrence and cost trends to get ahead of them.",
     ],
     whatYouGet: [
-      "A living record of every room and tenant",
-      "A rent log that flags late payments the same day",
-      "CSV import and export to move data anywhere",
-      "A clean print view for your monthly review",
+      "A running maintenance history for your property",
+      "Cost and response-time visibility",
+      "A pattern view of what keeps breaking",
+      "CSV import/export and a clean print view",
     ],
   },
 
-  "room-rental-agreement": {
-    slug: "room-rental-agreement",
-    name: "Room Rental Agreement & House Rules Guide",
-    blurb:
-      "What belongs in a solid room rental agreement and co-living house rules, clause by clause, so you can build or review yours with confidence.",
-    bullets: [
-      "The essential clauses every room rental agreement needs",
-      "Co-living house rules that keep a shared home calm",
-      "Plain-English notes on what each section protects",
-      "Attorney-review reminders baked in throughout",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Agreement Guide",
-    headline: "Put it in writing,\nthe right way.",
-    subhead:
-      "A good agreement prevents most disputes before they start. Here is what a room rental agreement and a co-living house-rules document should cover, section by section, in plain English.",
-    howItWorks: [
-      "Read what each clause does and why it matters.",
-      "Draft or review your own agreement against the list.",
-      "Have a local attorney confirm it for your state.",
-    ],
-    whatYouGet: [
-      "The clause-by-clause anatomy of a room rental agreement",
-      "House-rules sections tuned for a shared home",
-      "Plain-English notes on what each part protects",
-      "A clean print view to take to your attorney",
-    ],
-  },
-
-  "legal-toolkit": {
-    slug: "legal-toolkit",
-    name: "The Legal Toolkit Overview",
-    blurb:
-      "The eight attorney-informed documents every co-living operator should have, what each one does, and when you reach for it. Frameworks to adapt, not legal advice.",
-    bullets: [
-      "All eight documents in the co-living legal stack",
-      "What each protects and when you use it",
-      "The key clauses to make sure yours includes",
-      "Clear guidance on getting local legal review",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Legal Toolkit",
-    headline: "The paperwork that\nprotects everything.",
-    subhead:
-      "Co-living runs on a handful of documents most new operators do not know they need until something goes wrong. Here is the full stack, what each does, and the clauses that matter, so you can build yours with a local attorney.",
-    howItWorks: [
-      "See the eight documents that make up the stack.",
-      "Learn what each protects and when it comes into play.",
-      "Adapt the frameworks with a licensed local attorney.",
-    ],
-    whatYouGet: [
-      "The complete co-living document checklist",
-      "The purpose and key clauses of each one",
-      "A clear reminder of where legal review is essential",
-      "A clean print view to review with counsel",
-    ],
-  },
-
-  "social-posting-calendar": {
-    slug: "social-posting-calendar",
-    name: "30-Day Social Posting Calendar",
-    blurb:
-      "Thirty days of ready-to-post content that attracts room renters: the platform, the format, the shot list, and a written caption for every single day.",
-    bullets: [
-      "A full production brief for all 30 days",
-      "Platform, format, best posting time, and shot list",
-      "A written, copy-ready caption for every day",
-      "Shuffle it so your month is not everyone else's",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Posting Calendar",
-    headline: "Thirty days of posts,\nalready planned.",
-    subhead:
-      "Consistency is what fills rooms, and consistency is a plan, not a personality trait. Here is a month of posts already written: where each one goes, what to shoot, when to post it, and the exact caption to use.",
-    howItWorks: [
-      "Set up your four channels once, in 30 minutes.",
-      "Batch a week of shots and captions in one sitting.",
-      "Shuffle any day you want a different angle on.",
-    ],
-    whatYouGet: [
-      "30 daily briefs: platform, format, timing, shot list",
-      "A written caption for every day, ready to copy",
-      "Three interchangeable angles per day, shuffleable",
-      "CSV export for your scheduler and a clean print view",
-    ],
-  },
-
-  "nicelisting-ai": {
-    slug: "nicelisting-ai",
-    name: "NiceListing Builder",
-    blurb:
-      "Answer a few questions about your room and audience and get a platform-ready listing title and a four-part description, built on the framework that fills rooms.",
-    bullets: [
-      "A title in the Feature + Location + Benefit formula",
-      "A four-part description that sells the experience",
-      "Tuned to the tenant and platform you choose",
-      "Copy the finished listing straight to your clipboard",
-    ],
-    category: "property",
-    archetype: "worksheet",
-    access: "free-email",
-    persistence: "blob",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Listing Builder",
-    headline: "A listing that reads\nlike it was written for them.",
-    subhead:
-      "Writing listing copy from a blank page is painful. Feed the builder your property details, your ideal tenant, and your amenities, and it assembles a title and description in the structure that converts.",
-    howItWorks: [
-      "Enter your room details, audience, and top amenities.",
-      "The builder assembles a title and four-part description.",
-      "Copy it, personalize the voice, and post it.",
-    ],
-    whatYouGet: [
-      "A platform-ready listing title",
-      "A four-part description built to convert",
-      "Copy tuned to your tenant and platform",
-      "One-click copy of the finished listing",
-    ],
-  },
-
-  "upsell-playbook": {
-    slug: "upsell-playbook",
-    name: "Revenue Maximization & Upsell Playbook",
-    blurb:
-      "How to earn more from the rooms you already have: the upsell menu with real margins, loyalty and referral engines, rent-raise timing, and the readiness test for property two.",
-    bullets: [
-      "An upsell menu with typical prices and your margin",
-      "Loyalty and referral systems that compound",
-      "When and how much to raise rent, professionally",
-      "The five-point checklist before you scale",
-    ],
-    category: "property",
-    archetype: "reference",
-    access: "free-email",
-    persistence: "none",
-    status: "live",
-    heroImage: HERO_DEFAULT,
-    eyebrow: "Revenue Playbook",
-    headline: "Earn more without\nadding a single room.",
-    subhead:
-      "You do not need more rooms to earn more. You need smarter monetization of the rooms you have. Here is the playbook: upsells, loyalty, referrals, rent optimization, and the path to property two.",
-    howItWorks: [
-      "Add two or three upsells and read the demand.",
-      "Turn tenants into renewals and referrals.",
-      "Use the readiness checklist before you scale.",
-    ],
-    whatYouGet: [
-      "An upsell menu with prices and realistic margins",
-      "Loyalty, referral, and rent-optimization playbooks",
-      "The five-box readiness test for your next property",
-      "A clean print view to plan your quarter",
-    ],
-  },
 
   // ───────────────────────────────────────────────────────────────────────────
   // FLEET (Car Rental Riches). Turo plan figures in these tools trace to the

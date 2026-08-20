@@ -292,8 +292,7 @@ export const COST_LINES: CostLine[] = [
     label: "Lease drafting and legal review",
     scope: "property",
     oneTime: { defaultCost: 500 },
-    sourceNote: "Attorney review of a room-rental agreement. BNHG's template lowers this.",
-    internalHref: "/resources/room-rental-agreement",
+    sourceNote: "Attorney review of a room-rental agreement. Starting from a template lowers this.",
   },
 
   // ---------------------------------------------------------------- marketing
