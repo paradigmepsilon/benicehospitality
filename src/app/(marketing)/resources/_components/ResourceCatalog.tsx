@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import SectionLabel from "@/components/ui/SectionLabel";
 import ResourceCard, { type Resource } from "./ResourceCard";
@@ -23,8 +23,6 @@ export interface ResourceTab {
   resources: Resource[];
 }
 
-const PAGE_SIZE = 9;
-
 type SortOption = "default" | "az" | "za";
 
 interface ResourceCatalogProps {
@@ -37,7 +35,6 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortOption>("default");
   const [hideSoon, setHideSoon] = useState(false);
-  const [page, setPage] = useState(1);
 
   const activeTab = tabs.find((t) => t.id === active) ?? tabs[0];
 
@@ -58,18 +55,6 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
     }
     return list;
   }, [activeTab, query, sort, hideSoon]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const safePage = Math.min(page, totalPages);
-  const visible = filtered.slice(
-    (safePage - 1) * PAGE_SIZE,
-    safePage * PAGE_SIZE,
-  );
-
-  // Reset to page 1 when filters or tab change.
-  useEffect(() => {
-    setPage(1);
-  }, [active, query, sort, hideSoon]);
 
   if (!activeTab) return null;
 
@@ -233,10 +218,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
                 {activeTab.body}
               </p>
               <p className="font-sans text-xs text-charcoal/60 italic">
-                Showing {visible.length} of {filtered.length}
-                {filtered.length !== activeTab.resources.length && (
-                  <> (filtered from {activeTab.resources.length})</>
-                )}
+                Showing {filtered.length} of {activeTab.resources.length}
               </p>
             </div>
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
@@ -250,7 +232,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
             </div>
           </div>
 
-          {visible.length === 0 ? (
+          {filtered.length === 0 ? (
             <div className="bg-cream border border-warm-gold/30 rounded-lg p-8 md:p-12 text-center">
               <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-3">
                 No matches
@@ -272,134 +254,15 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
               )}
             </div>
           ) : (
-            <>
-              <div className={gridCols}>
-                {visible.map((r) => (
-                  <ResourceCard key={r.name} r={r} variant="light" />
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <Pagination
-                  page={safePage}
-                  totalPages={totalPages}
-                  onChange={setPage}
-                />
-              )}
-            </>
+            <div className={gridCols}>
+              {filtered.map((r) => (
+                <ResourceCard key={r.name} r={r} variant="light" />
+              ))}
+            </div>
           )}
         </div>
       </div>
     </section>
     </SavedToolsProvider>
   );
-}
-
-function Pagination({
-  page,
-  totalPages,
-  onChange,
-}: {
-  page: number;
-  totalPages: number;
-  onChange: (n: number) => void;
-}) {
-  const pages = pageList(page, totalPages);
-
-  const go = (n: number) => {
-    if (n < 1 || n > totalPages || n === page) return;
-    onChange(n);
-  };
-
-  return (
-    <nav
-      aria-label="Resource pages"
-      className="mt-10 md:mt-12 flex items-center justify-center gap-1.5"
-    >
-      <button
-        type="button"
-        onClick={() => go(page - 1)}
-        disabled={page === 1}
-        aria-label="Previous page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-warm-gold/40 bg-white text-charcoal hover:border-warm-gold hover:text-deep-teal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <svg
-          className="w-4 h-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden
-        >
-          <path d="M12 5l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {pages.map((p, i) =>
-        p === "…" ? (
-          <span
-            key={`gap-${i}`}
-            aria-hidden
-            className="px-1.5 font-sans text-sm text-charcoal/50"
-          >
-            …
-          </span>
-        ) : (
-          <button
-            key={p}
-            type="button"
-            onClick={() => go(p)}
-            aria-current={p === page ? "page" : undefined}
-            aria-label={`Page ${p}`}
-            className={[
-              "inline-flex items-center justify-center w-9 h-9 rounded-md font-sans text-sm font-semibold transition-colors",
-              p === page
-                ? "bg-warm-gold text-near-black border border-warm-gold"
-                : "bg-white text-charcoal border border-warm-gold/40 hover:border-warm-gold hover:text-deep-teal",
-            ].join(" ")}
-          >
-            {p}
-          </button>
-        ),
-      )}
-
-      <button
-        type="button"
-        onClick={() => go(page + 1)}
-        disabled={page === totalPages}
-        aria-label="Next page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-warm-gold/40 bg-white text-charcoal hover:border-warm-gold hover:text-deep-teal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <svg
-          className="w-4 h-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden
-        >
-          <path d="M8 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-    </nav>
-  );
-}
-
-// Compact 1 … 4 5 6 … N pager. Always shows first, last, current, and
-// neighbors; collapses everything else into a single ellipsis on each side.
-function pageList(current: number, total: number): (number | "…")[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-  const set = new Set<number>([1, total, current - 1, current, current + 1]);
-  const sorted = [...set]
-    .filter((n) => n >= 1 && n <= total)
-    .sort((a, b) => a - b);
-  const out: (number | "…")[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (n - prev > 1) out.push("…");
-    out.push(n);
-    prev = n;
-  }
-  return out;
 }
