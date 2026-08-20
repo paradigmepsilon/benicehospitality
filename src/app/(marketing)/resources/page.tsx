@@ -225,18 +225,6 @@ const TABS: ResourceTab[] = [
     books: booksForTab("property"),
   },
   {
-    id: "hotel",
-    label: "Boutique Stays",
-    sectionLabel: "For boutique stays",
-    headline: "Boutique hotels, inns, and design-forward stays.",
-    body: "Free audits and diagnostics focused on the AI-search visibility, OTA-recovery, and revenue-integrity problems specific to boutique stays: independent hotels, inns, and the design-forward short-term rentals guests book on purpose. Each one is delivered as a written report; share your URL, we do the research.",
-    image: {
-      src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
-      alt: "Boutique stay exterior in warm light",
-    },
-    resources: HOTEL_RESOURCES,
-  },
-  {
     id: "auto",
     label: "Autos",
     sectionLabel: "For auto operators",
@@ -248,6 +236,18 @@ const TABS: ResourceTab[] = [
     },
     resources: AUTO_RESOURCES,
     books: booksForTab("auto"),
+  },
+  {
+    id: "hotel",
+    label: "Boutique Stays",
+    sectionLabel: "For boutique stays",
+    headline: "Boutique hotels, inns, and design-forward stays.",
+    body: "Free audits and diagnostics focused on the AI-search visibility, OTA-recovery, and revenue-integrity problems specific to boutique stays: independent hotels, inns, and the design-forward short-term rentals guests book on purpose. Each one is delivered as a written report; share your URL, we do the research.",
+    image: {
+      src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
+      alt: "Boutique stay exterior in warm light",
+    },
+    resources: HOTEL_RESOURCES,
   },
 ];
 

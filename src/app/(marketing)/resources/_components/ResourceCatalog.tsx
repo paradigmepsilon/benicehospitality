@@ -27,12 +27,10 @@ export interface ResourceTab {
    * First-party books promoted at the top of this tab's panel, matched to the
    * tab's audience in page.tsx. Deliberately NOT part of `resources`: the books
    * are paid products, not free tools, so they sit above the grid and stay out
-   * of the search, sort, and the tab count badge.
+   * of the search and the tab count badge.
    */
   books?: FeaturedBook[];
 }
-
-type SortOption = "default" | "az" | "za";
 
 interface ResourceCatalogProps {
   tabs: ResourceTab[];
@@ -42,37 +40,24 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
   const defaultId = tabs[0]?.id;
   const [active, setActive] = useState<ResourceTabId | undefined>(defaultId);
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortOption>("default");
-  const [hideSoon, setHideSoon] = useState(false);
 
   const activeTab = tabs.find((t) => t.id === active) ?? tabs[0];
 
   const filtered = useMemo(() => {
     if (!activeTab) return [];
     const q = query.trim().toLowerCase();
-    let list = activeTab.resources.filter((r) => {
-      if (hideSoon && r.status === "soon") return false;
+    return activeTab.resources.filter((r) => {
       if (!q) return true;
       return (
         r.name.toLowerCase().includes(q) || r.body.toLowerCase().includes(q)
       );
     });
-    if (sort === "az") {
-      list = [...list].sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sort === "za") {
-      list = [...list].sort((a, b) => b.name.localeCompare(a.name));
-    }
-    return list;
-  }, [activeTab, query, sort, hideSoon]);
+  }, [activeTab, query]);
 
   if (!activeTab) return null;
 
-  const hasActiveFilters = query.trim().length > 0 || hideSoon || sort !== "default";
-  const clearAll = () => {
-    setQuery("");
-    setSort("default");
-    setHideSoon(false);
-  };
+  const hasActiveFilters = query.trim().length > 0;
+  const clearAll = () => setQuery("");
 
   const gridCols =
     activeTab.resources.length <= 3
@@ -160,54 +145,6 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
                 className="w-full bg-white border border-warm-gold/40 rounded-md pl-9 pr-3 py-2.5 font-sans text-sm text-charcoal placeholder:text-charcoal/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors"
               />
             </div>
-
-            {/* Status toggle */}
-            <button
-              type="button"
-              onClick={() => setHideSoon((v) => !v)}
-              aria-pressed={hideSoon}
-              className={[
-                "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-sans text-xs font-semibold tracking-[0.16em] uppercase transition-colors whitespace-nowrap",
-                hideSoon
-                  ? "bg-deep-teal text-white border border-deep-teal hover:bg-deep-teal/90"
-                  : "bg-white text-charcoal border border-warm-gold/40 hover:border-warm-gold hover:text-deep-teal",
-              ].join(" ")}
-            >
-              <span
-                aria-hidden
-                className={[
-                  "inline-block w-2 h-2 rounded-full",
-                  hideSoon ? "bg-warm-gold" : "bg-charcoal/40",
-                ].join(" ")}
-              />
-              {hideSoon ? "Hiding coming soon" : "Hide coming soon"}
-            </button>
-
-            {/* Sort */}
-            <div className="flex items-center gap-2 shrink-0">
-              <label
-                htmlFor="resource-sort"
-                className="font-sans text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase text-charcoal/60"
-              >
-                Sort
-              </label>
-              <select
-                id="resource-sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
-                className="bg-white border border-warm-gold/40 rounded-md pl-3 pr-8 py-2.5 font-sans text-sm text-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors appearance-none bg-no-repeat"
-                style={{
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='none' stroke='%23807868' stroke-width='2'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
-                  backgroundPosition: "right 0.65rem center",
-                  backgroundSize: "0.75rem",
-                }}
-              >
-                <option value="default">Default</option>
-                <option value="az">A to Z</option>
-                <option value="za">Z to A</option>
-              </select>
-            </div>
           </div>
         </div>
 
@@ -243,7 +180,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
 
           {/* The paid companion to this tab's free tools, above the grid. Sits
               outside the filter pipeline on purpose — see ResourceTab.books —
-              so it stays put while the reader searches and sorts. */}
+              so it stays put while the reader searches. */}
           {activeTab.books && activeTab.books.length > 0 && (
             <BookPromoBand
               books={activeTab.books}
@@ -260,10 +197,10 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
                 No matches
               </p>
               <p className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
-                Nothing in this tab matches your filters.
+                Nothing in this tab matches your search.
               </p>
               <p className="font-sans text-base text-charcoal/80 leading-relaxed max-w-xl mx-auto mb-6">
-                Try a different search term, switch tabs, or clear the filters.
+                Try a different search term or switch tabs.
               </p>
               {hasActiveFilters && (
                 <button
@@ -271,7 +208,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
                   onClick={clearAll}
                   className="inline-flex items-center justify-center rounded-lg font-sans text-sm font-semibold tracking-wide px-6 py-2.5 bg-warm-gold text-near-black hover:bg-warm-gold-dark transition-colors"
                 >
-                  Clear filters
+                  Clear search
                 </button>
               )}
             </div>
