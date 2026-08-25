@@ -104,6 +104,10 @@ export default async function CourseDetailPage({
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
+  // Review gate: until the admin marks the course ready (is_published flips
+  // true), the course does not exist for non-admin viewers — enrolled or not.
+  if (!course.isPublished && !ctx.realIsAdmin) notFound();
+
   // If the user just came back from a successful Stripe checkout, reconcile
   // before deciding what to render. This makes the post-purchase experience
   // feel instant instead of "your enrollment is processing, refresh in 30s".

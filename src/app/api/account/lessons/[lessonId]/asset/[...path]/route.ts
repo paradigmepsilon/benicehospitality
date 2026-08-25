@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sql } from "@/lib/db";
 import { getCurrentSession } from "@/lib/community-auth";
 import {
   getLessonById,
@@ -52,6 +53,17 @@ export async function GET(
 
   const isAdmin = session.user.role === "admin";
   if (!isAdmin) {
+    // Review gate: assets of unapproved lessons, or of courses the admin
+    // hasn't marked ready, are admin-only.
+    if (!lesson.isPublished) {
+      return NextResponse.json({ error: "Lesson not available" }, { status: 403 });
+    }
+    const courseRows = (await sql`
+      SELECT is_published FROM courses WHERE id = ${lesson.courseId} LIMIT 1
+    `) as Array<{ is_published: boolean }>;
+    if (!courseRows[0]?.is_published) {
+      return NextResponse.json({ error: "Course not available" }, { status: 403 });
+    }
     const enrollment = await getActiveEnrollment(session.user.id, lesson.courseId);
     if (!enrollment) {
       return NextResponse.json({ error: "Not enrolled" }, { status: 403 });

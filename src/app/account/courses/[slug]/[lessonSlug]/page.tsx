@@ -47,6 +47,9 @@ export default async function LessonPage({ params }: PageProps) {
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
+  // Review gate: unready courses are invisible to non-admins.
+  if (!course.isPublished && !ctx.realIsAdmin) notFound();
+
   // Enrollment gate. Admin god view bypasses entirely; tier preview uses the
   // previewed tier across every course, so no DB enrollment row is required.
   // Real members must have an active enrollment.
@@ -63,6 +66,12 @@ export default async function LessonPage({ params }: PageProps) {
 
   const lesson = await getLessonByCourseAndSlug(course.id, lessonSlug);
   if (!lesson) notFound();
+
+  // Unapproved (unpublished) lessons are reachable only by admins — direct
+  // URLs included.
+  if (!lesson.isPublished && !ctx.realIsAdmin) {
+    redirect(`/account/courses/${slug}`);
+  }
 
   const tierAllowed =
     ctx.effectiveIsAdmin ||

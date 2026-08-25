@@ -1067,6 +1067,43 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_course_lessons_module ON course_lessons(module_id, position)`;
   console.log("  ✓ course_lessons extended (module_id, body_kind, video_url, bundle_main_filename, min_tier, max_tier, is_published)");
 
+  // Admin review workflow: lessons and modules carry an approval state; a
+  // course carries a "ready" flag. Approving a lesson/module publishes it;
+  // the course only becomes publicly visible when the admin marks it ready
+  // (allowed once every lesson and every non-empty module is approved).
+  await sql`ALTER TABLE course_lessons ADD COLUMN IF NOT EXISTS review_status TEXT NOT NULL DEFAULT 'draft'`;
+  await sql`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'course_lessons_review_status_check'
+      ) THEN
+        ALTER TABLE course_lessons ADD CONSTRAINT course_lessons_review_status_check
+          CHECK (review_status IN ('draft','approved'));
+      END IF;
+    END $$
+  `;
+  await sql`ALTER TABLE course_lessons ADD COLUMN IF NOT EXISTS approved_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE course_lessons ADD COLUMN IF NOT EXISTS approved_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`;
+  await sql`ALTER TABLE course_modules ADD COLUMN IF NOT EXISTS review_status TEXT NOT NULL DEFAULT 'draft'`;
+  await sql`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'course_modules_review_status_check'
+      ) THEN
+        ALTER TABLE course_modules ADD CONSTRAINT course_modules_review_status_check
+          CHECK (review_status IN ('draft','approved'));
+      END IF;
+    END $$
+  `;
+  await sql`ALTER TABLE course_modules ADD COLUMN IF NOT EXISTS approved_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE course_modules ADD COLUMN IF NOT EXISTS approved_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`;
+  await sql`ALTER TABLE courses ADD COLUMN IF NOT EXISTS is_ready BOOLEAN NOT NULL DEFAULT false`;
+  await sql`ALTER TABLE courses ADD COLUMN IF NOT EXISTS ready_at TIMESTAMPTZ`;
+  await sql`ALTER TABLE courses ADD COLUMN IF NOT EXISTS ready_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`;
+  console.log("  ✓ review workflow columns added (course_lessons/course_modules.review_status, courses.is_ready)");
+
   await sql`
     CREATE TABLE IF NOT EXISTS lesson_assets (
       id SERIAL PRIMARY KEY,

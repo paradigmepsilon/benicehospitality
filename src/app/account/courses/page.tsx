@@ -28,10 +28,15 @@ export default async function CoursesIndexPage() {
 
   // Tier-preview shows every published course at the previewed tier.
   // God view + real members fall back to real enrollment rows.
-  const enrollments =
+  const allEnrollments =
     ctx.effectiveTier !== null
       ? await synthesizeEnrollmentsForTier(ctx.effectiveTier)
       : await listEnrollmentsForUser(ctx.userId);
+  // Review gate: courses the admin hasn't marked ready don't show for
+  // non-admin members, even if an enrollment row exists.
+  const enrollments = ctx.realIsAdmin
+    ? allEnrollments
+    : allEnrollments.filter((e) => e.course.isPublished);
 
   return (
     <div className="max-w-5xl">

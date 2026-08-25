@@ -4,15 +4,17 @@ const TAB_LABELS: Record<string, string> = {
   basics: "Basics",
   curriculum: "Curriculum",
   tiers: "Tiers",
+  review: "Review",
 };
 
 const TAB_HREFS: Record<string, (id: number) => string> = {
   basics: (id) => `/admin/courses/${id}/edit`,
   curriculum: (id) => `/admin/courses/${id}/curriculum`,
   tiers: (id) => `/admin/courses/${id}/tiers`,
+  review: (id) => `/admin/courses/${id}/review`,
 };
 
-const TAB_ORDER = ["basics", "curriculum", "tiers"] as const;
+const TAB_ORDER = ["basics", "curriculum", "tiers", "review"] as const;
 export type CourseTab = (typeof TAB_ORDER)[number];
 
 export default function CourseTabs({

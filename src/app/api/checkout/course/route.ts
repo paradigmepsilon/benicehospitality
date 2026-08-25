@@ -54,10 +54,18 @@ export async function POST(request: Request) {
     );
   }
 
-  // Look up the course slug for the success/cancel URLs.
+  // Look up the course slug for the success/cancel URLs, and gate checkout on
+  // the review workflow: a course the admin hasn't marked ready is neither
+  // visible nor purchasable, even via a hand-crafted request.
   const courseRows = (await sql`
-    SELECT slug FROM courses WHERE id = ${tier.courseId} LIMIT 1
-  `) as Array<{ slug: string }>;
+    SELECT slug, is_published, is_purchasable FROM courses WHERE id = ${tier.courseId} LIMIT 1
+  `) as Array<{ slug: string; is_published: boolean; is_purchasable: boolean }>;
+  if (!courseRows[0]?.is_published || !courseRows[0]?.is_purchasable) {
+    return NextResponse.json(
+      { error: "This course is not available for purchase yet." },
+      { status: 409 },
+    );
+  }
   if (courseRows.length === 0) {
     return NextResponse.json({ error: "Course missing." }, { status: 404 });
   }

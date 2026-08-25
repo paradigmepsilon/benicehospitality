@@ -70,3 +70,24 @@ export async function getSession(): Promise<AdminSession | null> {
     role: session.user.role,
   };
 }
+
+/**
+ * Like requireAuth, but returns the acting admin's user id on success so
+ * callers can stamp audit columns (approved_by_user_id, ready_by_user_id).
+ */
+export async function requireAdminUser(
+  request: Request,
+): Promise<{ error: NextResponse; userId?: never } | { error?: never; userId: number }> {
+  const sessionId = readSessionCookie(request);
+  if (!sessionId) {
+    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  }
+  const session = await getSessionWithUser(sessionId);
+  if (!session) {
+    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  }
+  if (session.user.role !== "admin") {
+    return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
+  }
+  return { userId: session.user.id };
+}

@@ -280,6 +280,9 @@ async function main() {
   let lessonId: number;
   if (existingLesson.length > 0) {
     lessonId = existingLesson[0].id;
+    // Re-importing replaces the lesson's content, so any prior approval no
+    // longer applies: reset to draft and unpublish until re-approved in the
+    // admin review tab.
     await sql`
       UPDATE course_lessons SET
         module_id = ${moduleId},
@@ -290,15 +293,20 @@ async function main() {
         position = ${args.position ?? 0},
         min_tier = ${args.minTier},
         max_tier = ${args.maxTier},
+        is_published = false,
+        review_status = 'draft',
+        approved_at = NULL,
+        approved_by_user_id = NULL,
         updated_at = NOW()
       WHERE id = ${lessonId}
     `;
-    console.log(`  · Updated lesson #${lessonId} ${args.lessonSlug}`);
+    console.log(`  · Updated lesson #${lessonId} ${args.lessonSlug} (reset to draft; needs admin approval)`);
   } else {
     const inserted = (await sql`
       INSERT INTO course_lessons (
         course_id, module_id, slug, title, summary, body, position,
-        body_kind, bundle_main_filename, min_tier, max_tier
+        body_kind, bundle_main_filename, min_tier, max_tier,
+        is_published, review_status
       ) VALUES (
         ${courseId}, ${moduleId}, ${args.lessonSlug},
         ${args.title ?? args.lessonSlug},
@@ -308,12 +316,14 @@ async function main() {
         ${bodyKind},
         ${mainHtml ? mainHtml.relativePath : null},
         ${args.minTier},
-        ${args.maxTier}
+        ${args.maxTier},
+        false,
+        'draft'
       )
       RETURNING id
     `) as Array<{ id: number }>;
     lessonId = inserted[0].id;
-    console.log(`  ✓ Created lesson #${lessonId} ${args.lessonSlug}`);
+    console.log(`  ✓ Created lesson #${lessonId} ${args.lessonSlug} (draft; needs admin approval)`);
   }
 
   // For video lessons, point video_url at the asset-server path for the mp4.
