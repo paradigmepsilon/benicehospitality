@@ -43,6 +43,8 @@ TABLE_CSS = """
 .cmp-table td:first-child { font-family: var(--font-mono); font-size: clamp(11px, 1.05vw, 14px); letter-spacing: 0.1em; text-transform: uppercase; color: var(--bnhg-ink-muted); }
 .cmp-table th:last-child, .cmp-table td:last-child { background: var(--bnhg-primary-soft); color: var(--bnhg-primary-dark); font-weight: 600; }
 .cmp-table th:last-child { color: var(--bnhg-primary-dark); }
+.cmp-table.plain th:last-child, .cmp-table.plain td:last-child { background: none; color: var(--bnhg-ink-secondary); font-weight: 400; }
+.cmp-table.plain th:last-child { color: var(--bnhg-ink-muted); }
 .table-verdict { margin-top: 3vh; font-family: var(--font-display); font-style: italic; font-size: clamp(15px, 1.7vw, 22px); color: var(--bnhg-primary-dark); border-left: 3px solid var(--bnhg-primary); padding-left: 18px; }
 .slide .table-verdict { opacity: 0; transform: translateY(var(--reveal-distance)); }
 """
@@ -222,6 +224,7 @@ def r_checklist(s, ctx):
 
 def r_table(s, ctx):
     t = s["table"]
+    plain = " plain" if s.get("plain") else ""
     head = "".join(f"<th>{esc(h)}</th>" for h in t["headers"])
     rows = "".join("<tr>" + "".join(f"<td>{esc(c)}</td>" for c in row) + "</tr>" for row in t["rows"])
     verdict = ""
@@ -232,7 +235,7 @@ def r_table(s, ctx):
   {mark()}
   {header(s)}
   <div class="cmp-wrap">
-    <table class="cmp-table"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table>
+    <table class="cmp-table{plain}"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table>
     {verdict}
   </div>
   {ctx.num()}
