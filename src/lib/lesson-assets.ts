@@ -85,18 +85,31 @@ export async function getAssetByLessonAndPath(
 // Metadata-only lookup. Use this when the asset's bytes are too large to pull
 // in a single query (Neon HTTP driver caps responses at 64MB). For huge
 // assets (video MP4s), fetch the data in chunks via getAssetBytesByRange.
+//
+// `contentTag` is a cheap cache validator: size plus an md5 over the first
+// 128KB of the base64 column. Re-importing a lesson upserts `data` in place
+// and leaves `created_at` alone, so there is no timestamp to key an ETag off;
+// hashing the whole column per request would be far too expensive on an 8MB
+// video. Two different clips essentially never share both a byte length and a
+// 128KB prefix, so this changes whenever the asset is replaced.
 export async function getAssetMetaByLessonAndPath(
   lessonId: number,
   relativePath: string,
-): Promise<LessonAsset | null> {
+): Promise<(LessonAsset & { contentTag: string }) | null> {
   const rows = (await sql`
     SELECT id, lesson_id, filename, relative_path, content_type,
-           size_bytes, role, position, created_at
+           size_bytes, role, position, created_at,
+           md5(substring(data from 1 for 131072)) AS head_md5
     FROM lesson_assets
     WHERE lesson_id = ${lessonId} AND relative_path = ${relativePath}
     LIMIT 1
-  `) as AssetRow[];
-  return rows[0] ? rowToAsset(rows[0]) : null;
+  `) as Array<AssetRow & { head_md5: string | null }>;
+  if (!rows[0]) return null;
+  const { head_md5, ...rest } = rows[0];
+  return {
+    ...rowToAsset(rest),
+    contentTag: `${rest.size_bytes}-${head_md5 ?? "0"}`,
+  };
 }
 
 // Pull a precise byte range [byteStart, byteEndInclusive] from an asset's

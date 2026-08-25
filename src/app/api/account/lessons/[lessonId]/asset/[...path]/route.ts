@@ -86,6 +86,20 @@ export async function GET(
     return NextResponse.json({ error: "Asset not found" }, { status: 404 });
   }
 
+  // Re-importing a lesson replaces an asset's bytes at the same URL, so the
+  // response must carry a validator the browser can check. Without one, the
+  // old `max-age=300` served stale audio and video for five minutes after
+  // every import and a plain refresh would not clear it. Revalidate every
+  // time and let the 304 keep it cheap.
+  const etag = `"${meta.contentTag}"`;
+  const cacheHeaders = {
+    ETag: etag,
+    "Cache-Control": "private, max-age=0, must-revalidate",
+  };
+  if (request.headers.get("if-none-match") === etag) {
+    return new Response(null, { status: 304, headers: cacheHeaders });
+  }
+
   const isHtml =
     meta.role === "main_html" || meta.contentType === "text/html";
 
@@ -102,7 +116,7 @@ export async function GET(
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "Content-Length": String(bytes.length),
-        "Cache-Control": "private, max-age=300",
+        ...cacheHeaders,
       },
     });
   }
@@ -145,7 +159,7 @@ export async function GET(
             "Content-Length": String(chunk.length),
             "Content-Range": `bytes ${start}-${cappedEnd}/${totalSize}`,
             "Accept-Ranges": "bytes",
-            "Cache-Control": "private, max-age=300",
+            ...cacheHeaders,
           },
         });
       }
@@ -188,7 +202,7 @@ export async function GET(
       "Content-Type": meta.contentType,
       "Content-Length": String(totalSize),
       "Accept-Ranges": "bytes",
-      "Cache-Control": "private, max-age=300",
+      ...cacheHeaders,
     },
   });
 }
