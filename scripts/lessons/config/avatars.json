@@ -18,6 +18,12 @@
       "primary": "ac61ab42480e40ab816dc2104d41425e",
       "tone_note": "Operator-to-operator. 'Responsible adult in the room' for legal, tax, insurance, regulatory content.",
       "scene_description": "Della at podcast desk, green blazer, LIVE neon visible behind her"
+    },
+    "5": {
+      "primary": "27cbf90e1db948349c6e9de9f4a80ad6",
+      "tone_note": "Marketing module. Approachable and practical for brand, content, and conversion (lessons 5.1 to 5.3).",
+      "scene_description": "Della in a light blue shirt and patterned headband at a wood table, bright glass-walled interior",
+      "orientation": "landscape (2752x1536) - 16:9 1080p renders come back full-frame, no crop/blur composite needed"
     }
   }
 }
