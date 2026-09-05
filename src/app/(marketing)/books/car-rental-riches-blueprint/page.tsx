@@ -10,20 +10,24 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { CRR_BLUEPRINT } from "@/lib/crr-blueprint";
+import { CRR_FREE_EBOOK } from "@/lib/crr-free-ebook";
 import BuyCrrBlueprintButton from "./_components/BuyCrrBlueprintButton";
 
 /**
- * The Car Rental Riches Blueprint: sales page.
+ * The Inside Lane: sales page. (Route slug kept as car-rental-riches-blueprint
+ * so the checkout, webhook, and download rails stay untouched; the book was
+ * retitled 2026-09-04 from the Turo-only "Car Rental Riches Blueprint".)
  *
  * Mirror of the RRR Blueprint page (books/room-rental-riches-blueprint), with
- * Alex's voice: an honest operator's manual for starting a Turo business in
- * the 2026 earnings-plan era. Receipts over hype, no earnings promises, and
- * the only dollar figure from Turo appears labeled as Turo's own published
- * gross average before costs.
+ * Alex's voice: an operator's blueprint for an independent car rental and
+ * fleet business, one car to fifty, with Turo taught as one channel. Receipts
+ * over hype, no earnings promises, and the only dollar figure from Turo
+ * appears labeled as Turo's own published gross average before costs.
  *
- * The cover asset (CRR_BLUEPRINT.coverImage) does not exist yet, so the hero
- * renders a typographic cover in the same slot. Swap it for a real <Image>
- * once /images/crr_blueprint_cover.webp lands.
+ * The cover (CRR_BLUEPRINT.coverImage) is rendered by
+ * scripts/build-crr-covers.ts; re-run `npm run crr-covers:build` to refresh
+ * it. The free ebook band near the bottom is the page's "not ready?" exit:
+ * it feeds the same list the calculator does.
  *
  * Deliberately NO testimonials: the book is new and no real reader quotes
  * exist, and fabricating them would be an FTC problem.
@@ -32,16 +36,16 @@ import BuyCrrBlueprintButton from "./_components/BuyCrrBlueprintButton";
 const PRICE = `$${CRR_BLUEPRINT.priceUsd}`;
 
 export const metadata: Metadata = {
-  title: "The Car Rental Riches Blueprint",
+  title: "The Inside Lane",
   description:
-    "An honest operator's manual for starting a Turo business in the 2026 earnings-plan era. Written by Alex Henry, operator of a real Atlanta-area rental fleet. 11 chapters, PDF + ePub, $32.",
+    "What Turo, the rental giants, and the gurus won't tell you about building a car rental business, from one car to fifty. Written by Alex Henry, operator of a real Atlanta-area rental fleet. 17 chapters, PDF + ePub, $32.",
   alternates: {
     canonical: `https://benicehospitality.com${CRR_BLUEPRINT.path}`,
   },
   openGraph: {
-    title: "The Car Rental Riches Blueprint | Alex Henry",
+    title: "The Inside Lane | Alex Henry",
     description:
-      "Not another side-hustle book. The underwriting method, listing playbook, and operating system Alex Henry uses across his own rental fleet, written for the way Turo actually works in 2026.",
+      "Not another side-hustle book. How the rental giants really make money, what the marketplace won't tell you, and the underwriting and operating system Alex Henry uses across his own fleet, one car to fifty.",
     url: `https://benicehospitality.com${CRR_BLUEPRINT.path}`,
     type: "book",
     images: [
@@ -49,7 +53,7 @@ export const metadata: Metadata = {
         url: `https://benicehospitality.com${CRR_BLUEPRINT.coverImage}`,
         width: 1400,
         height: 2100,
-        alt: "Cover of The Car Rental Riches Blueprint by Alex Henry",
+        alt: "Cover of The Inside Lane by Alex Henry",
       },
     ],
   },
@@ -59,71 +63,33 @@ export const metadata: Metadata = {
 // rendered with the checkmark treatment below (so no literal checkmark in the
 // string).
 const PROMISES = [
-  "Underwrite a specific car before you buy it, not after.",
-  "Read an earnings plan and know exactly what each trade-off costs you.",
-  "Run each car in about two hours a week with real SOPs.",
-  "Build toward bookings you own, not just marketplace listings.",
+  "See how the rental giants actually make money, and copy the parts that work at your size.",
+  "Underwrite a specific car three ways before you buy it: marketplace, weekly, direct.",
+  "Build the insurance, claims, and fraud floor that decides which channels you can run.",
+  "Win the channels the giants ignore: gig drivers, body shops, local search, direct booking.",
 ];
 
-// The eleven chapters. `benefit` leads each card with the result the chapter
-// gets you; the chapter title is kept underneath, since the delivery email
-// points people to chapters by number.
+// The seventeen chapters, in five parts. `benefit` leads each card with the
+// result the chapter gets you; the chapter title is kept underneath, since the
+// delivery email points people to chapters by number.
 const CHAPTERS = [
-  {
-    n: "01",
-    benefit: "Decide whether this business fits your life, with honest math.",
-    title: "The $874 Question",
-  },
-  {
-    n: "02",
-    benefit: "Understand the 2026 earnings plans and why older advice now costs money.",
-    title: "What Changed in 2026",
-  },
-  {
-    n: "03",
-    benefit: "Score a specific car before you buy it, with a fully worked P&L.",
-    title: "The Underwriting Method",
-  },
-  {
-    n: "04",
-    benefit: "Buy, lease, or list the car you have, and finance it sensibly.",
-    title: "Getting the Car",
-  },
-  {
-    n: "05",
-    benefit: "Photos, copy, and the 2026 pricing levers that actually matter.",
-    title: "The Listing That Books Itself",
-  },
-  {
-    n: "06",
-    benefit: "Read the protection trade-offs and document every trip like a professional.",
-    title: "Protection Is Not Insurance",
-  },
-  {
-    n: "07",
-    benefit: "SOPs, automation, and guest experience that keep the week small.",
-    title: "Operations in Two Hours a Week Per Car",
-  },
-  {
-    n: "08",
-    benefit: "Real P&L, depreciation, and what a 1099-K means for you.",
-    title: "The Money Chapter",
-  },
-  {
-    n: "09",
-    benefit: "Know when the numbers say add a car, and how to do it.",
-    title: "Car #2 and Beyond",
-  },
-  {
-    n: "10",
-    benefit: "Start building direct bookings you own, off the marketplace.",
-    title: "Beyond the Marketplace",
-  },
-  {
-    n: "11",
-    benefit: "A week-by-week plan from decision to first booking.",
-    title: "Your 90-Day Launch Plan",
-  },
+  { n: "01", benefit: "Turn every earnings number you've seen into gross or net, and know which.", title: "The Number That Hooks You" },
+  { n: "02", benefit: "Learn the rental majors' real economics: depreciation, holding windows, ancillaries.", title: "How the Giants Actually Make Money" },
+  { n: "03", benefit: "Understand the 2026 marketplace restructure and what a platform with no competitor does next.", title: "The Platform Story Nobody Tells Straight" },
+  { n: "04", benefit: "Place yourself on the ladder from one car to fifty, and see what changes at each rung.", title: "Which Operator Are You?" },
+  { n: "05", benefit: "Read six kinds of demand in your city, not one, and spot saturation before you buy.", title: "Read Your Market Like an Insider" },
+  { n: "06", benefit: "Buy on the flat part of the value curve, and know what the auction pitch leaves out.", title: "Buy Like a Fleet Manager, Not a Consumer" },
+  { n: "07", benefit: "Run one car's P&L as a marketplace listing, a weekly gig rental, and a direct rental.", title: "The Real P&L, Three Ways" },
+  { n: "08", benefit: "Choose cash, financing, or a fleet line without fooling yourself.", title: "Cash, Financing, and Fleet Lines" },
+  { n: "09", benefit: "Keep the books that insurers, banks, and buyers read, and handle taxes without mythology.", title: "The Books, the Silent Partner, and Taxes" },
+  { n: "10", benefit: "Map every coverage layer, from the platform plan to commercial fleet insurance.", title: "Insurance Is the Business" },
+  { n: "11", benefit: "Win claims with the metadata protocol, and stop identity fraud before the keys move.", title: "Claims, Fraud, and Theft: The Playbook" },
+  { n: "12", benefit: "Price from your floor, work the lead-time game, and build the direct rate card.", title: "The Storefront and the Lead-Time Game" },
+  { n: "13", benefit: "Run turnovers, maintenance, software, and renters on written systems.", title: "Systems From Car One" },
+  { n: "14", benefit: "Rent to gig drivers, body shops, contractors, and local search, where prices aren't public.", title: "The Channels the Giants Don't Want You In" },
+  { n: "15", benefit: "Build the legal and insurance floor, then the booking stack, before your first direct rental.", title: "The Direct-Booking Floor and Stack" },
+  { n: "16", benefit: "Grow from car two to a fleet with a plan, a disposal schedule, and a manager.", title: "From Five Cars to Fifty" },
+  { n: "17", benefit: "A week-by-week plan from decision to first rental, with tripwires written in advance.", title: "Your 90-Day Launch Plan" },
 ];
 
 const FAQS = [
@@ -133,11 +99,11 @@ const FAQS = [
   },
   {
     q: "Do I need a car already?",
-    a: "No. Chapter 3 teaches you to underwrite a car before you commit to it, and Chapter 4 covers buying, leasing, and listing a car you already own. If you already have the car, go straight to Chapter 3 and run the numbers before you list it.",
+    a: "No. Chapters 5 through 7 teach you to read your market and underwrite a specific car three ways before you commit to it, and Chapter 6 covers where operators actually buy. If you already have the car, go straight to Chapter 7 and run the numbers before you list it.",
   },
   {
     q: "How is this different from the course?",
-    a: "The Blueprint is the written system, start to finish, at your own pace. The Car Rental Riches course teaches the same body of work in more depth, with the full direct-booking build-out. Plenty of people read the book first and step up to the course when they want more.",
+    a: "The book is the written system, start to finish, at your own pace. The Car Rental Riches course teaches the same body of work in video, with the full tool suite, the gig-driver program, and the direct-booking build-out taught end to end. Plenty of people read the book first and step up to the course when they want more.",
   },
   {
     q: "What is the Nice Host Network account?",
@@ -148,8 +114,12 @@ const FAQS = [
     a: "The method travels. Underwriting, listing, protection decisions, and the operating rhythms work in any market. The examples come from the Atlanta area because that is where the fleet actually runs, so do your own homework on your market and your local rules.",
   },
   {
-    q: "Is this affiliated with Turo?",
-    a: "No. The Car Rental Riches Blueprint is an independent educational product and is not affiliated with, endorsed by, or sponsored by Turo Inc.",
+    q: "Is this only about Turo?",
+    a: "No. Turo gets three chapters, taught precisely for the way it works in 2026, because it is where most operators start. The rest of the book is the business around it: how the rental majors make money, commercial insurance, weekly rentals to gig drivers, insurance replacement, direct booking, and scaling to a fleet.",
+  },
+  {
+    q: "Is this affiliated with Turo, Hertz, Enterprise, or Avis?",
+    a: "No. The Inside Lane is an independent educational product and is not affiliated with, endorsed by, or sponsored by Turo Inc., Enterprise Holdings, Hertz Global Holdings, Avis Budget Group, or any other company named in it.",
   },
   {
     q: "Who is this NOT for?",
@@ -170,25 +140,15 @@ export default function CrrBlueprintPage() {
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
           <div className="mx-auto w-full max-w-[18rem] lg:mx-0 lg:max-w-none">
             <div className="relative">
-              {/* Typographic cover: the real cover asset is not produced yet,
-                  so this styled stand-in holds the slot with the same aspect
-                  ratio and shadow treatment as the RRR page's <Image>. */}
-              <div className="flex aspect-[2/3] w-full flex-col justify-between rounded-sm bg-gradient-to-b from-deep-teal to-near-black p-7 shadow-[0_30px_70px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.3em] text-warm-gold">
-                  Car Rental Riches
-                </p>
-                <div>
-                  <p className="font-display text-3xl font-semibold leading-tight text-white">
-                    The Car Rental Riches Blueprint
-                  </p>
-                  <p className="mt-4 font-sans text-sm leading-snug text-white/75">
-                    {CRR_BLUEPRINT.subtitle}
-                  </p>
-                </div>
-                <p className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                  {CRR_BLUEPRINT.author}
-                </p>
-              </div>
+              <Image
+                src={CRR_BLUEPRINT.coverImage}
+                alt={`Cover of ${CRR_BLUEPRINT.name} by ${CRR_BLUEPRINT.author}`}
+                width={1400}
+                height={2100}
+                priority
+                quality={90}
+                className="w-full rounded-sm shadow-[0_30px_70px_rgba(0,0,0,0.6)] ring-1 ring-white/10"
+              />
               <span className="absolute -right-3 -top-3 rotate-3 rounded bg-warm-gold px-3 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-near-black shadow-lg">
                 PDF + ePub
               </span>
@@ -197,24 +157,26 @@ export default function CrrBlueprintPage() {
 
           <div>
             <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold md:text-sm">
-              Car Rental Riches · The Blueprint
+              Car Rental Riches · The Book
             </p>
             <h1 className="mb-6 font-display text-3xl font-semibold leading-[1.05] tracking-tight text-white md:text-4xl lg:text-5xl">
-              An Honest Operator&rsquo;s Manual for Starting a Turo Business in
-              the 2026 Earnings-Plan Era.
+              What Turo, the Rental Giants, and the Gurus Won&rsquo;t Tell You
+              About Building a Car Rental Business.
             </h1>
             <p className="mb-8 max-w-2xl font-sans text-lg leading-snug text-white/85">
               I run a real rental fleet in the Atlanta area. This book is the
-              system I actually use: how to underwrite a car before you buy it,
-              list it so it books, protect it properly, and run it in about two
-              hours a week, written for the way Turo works now, not the way it
-              worked in 2021.
+              system I actually use, from one car to fifty: how the big chains
+              really make money, what the marketplace won&rsquo;t tell you, how
+              to underwrite a car three ways before you buy it, and how to win
+              the channels the giants ignore. Every chapter carries a box
+              marked &ldquo;What they don&rsquo;t tell you,&rdquo; and every
+              claim in it is sourced.
             </p>
 
             {/* concrete, verifiable specs, the stuff a buyer scans for */}
             <div className="mb-8 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-white/70">
               {[
-                "11 chapters",
+                "17 chapters in 5 parts",
                 "PDF + ePub",
                 "Instant download",
                 "90-day launch plan included",
@@ -233,7 +195,7 @@ export default function CrrBlueprintPage() {
             </div>
 
             <BuyCrrBlueprintButton
-              label={`Get the Blueprint for ${PRICE}`}
+              label={`Get the book for ${PRICE}`}
               source="hero"
             />
 
@@ -298,8 +260,10 @@ export default function CrrBlueprintPage() {
           </svg>
           <blockquote className="font-display text-2xl font-medium leading-snug text-white md:text-3xl lg:text-4xl">
             Turo publishes its own average: $10,489 a year per vehicle, gross,
-            before any costs. This book is about the word gross, and about
-            running the numbers like an operator before you spend a dollar.
+            before any costs. The rental giants report that roughly a third of
+            every dollar goes to depreciation. This book is about the words the
+            ads leave out, and about running the numbers like an operator before
+            you spend a dollar.
           </blockquote>
           <p className="mt-8 font-sans text-sm font-semibold uppercase tracking-[0.2em] text-warm-gold">
             Alex Henry · author
@@ -333,7 +297,7 @@ export default function CrrBlueprintPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-                The advice I found was written for a Turo that no longer exists.
+                The advice I found was written for a business that no longer exists.
               </h2>
             </AnimatedItem>
 
@@ -347,19 +311,22 @@ export default function CrrBlueprintPage() {
               <AnimatedItem>
                 <p>
                   Most of what I read before that first listing was already out
-                  of date.
+                  of date, and none of it explained the business I was actually
+                  entering: the one the rental chains run.
                 </p>
               </AnimatedItem>
               <AnimatedItem>
                 <p>
-                  Then 2026 arrived: earnings plans, a variable host share, and
-                  a market with one less competitor. The math changed again.
+                  Then 2026 arrived: earnings plans, a variable host share, two
+                  marketplaces gone, and banks tightening on independents. The
+                  math changed again.
                 </p>
               </AnimatedItem>
               <AnimatedItem>
                 <p>
                   I learned the current version the way operators do: by running
-                  cars, reading my own statements, and fixing what broke.
+                  cars, renting by the week to drivers, reading my own
+                  statements and the majors&rsquo; filings, and fixing what broke.
                 </p>
               </AnimatedItem>
               <AnimatedItem>
@@ -396,7 +363,7 @@ export default function CrrBlueprintPage() {
             </AnimatedItem>
             <AnimatedItem>
               <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-                Eleven chapters, decision to launch.
+                Seventeen chapters, one car to fifty.
               </h2>
             </AnimatedItem>
             <AnimatedItem>
@@ -410,7 +377,7 @@ export default function CrrBlueprintPage() {
 
           <AnimatedDiv stagger className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {CHAPTERS.map((ch, i) => {
-              // Chapter 11 is the launch plan and the odd card out in a 2-up
+              // Chapter 17 is the launch plan and the odd card out in a 2-up
               // grid. Span it full width so the wide card reads as a
               // deliberate finale rather than a stretched box.
               const isFinale = i === CHAPTERS.length - 1;
@@ -451,7 +418,7 @@ export default function CrrBlueprintPage() {
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="mx-auto mt-8 max-w-2xl font-display text-4xl font-semibold leading-[1.15] tracking-tight text-deep-teal md:text-5xl">
-              The operator&rsquo;s manual, both formats, and a seat in the
+              The operator&rsquo;s blueprint, both formats, and a seat in the
               network.
             </h2>
           </AnimatedItem>
@@ -463,7 +430,7 @@ export default function CrrBlueprintPage() {
             {[
               {
                 t: "The full PDF",
-                b: "The designed edition, with the worked P&L and the 2026 tables laid out to be used.",
+                b: "The designed edition, with the three-way P&L, the 2026 tables, and the insider sidebars laid out to be used.",
               },
               {
                 t: "The ePub",
@@ -508,7 +475,7 @@ export default function CrrBlueprintPage() {
           <AnimatedItem>
             <div className="mt-8 flex justify-center">
               <BuyCrrBlueprintButton
-                label={`Get the Blueprint for ${PRICE}`}
+                label={`Get the book for ${PRICE}`}
                 source="footer"
               />
             </div>
@@ -523,7 +490,46 @@ export default function CrrBlueprintPage() {
         </div>
       </AnimatedSection>
 
-      <SectionDivider fromColor={C.white} toColor={C.cream} flip />
+      <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
+
+      {/* NOT READY? The free ebook. Same list as the calculator; the guide is
+          the twelve-chapter short version of Parts I to III of this book. */}
+      <section className="bg-near-black px-6 py-14 md:px-12 md:py-16 lg:px-20">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,10rem)_minmax(0,1fr)]">
+          <div className="mx-auto w-full max-w-[10rem] lg:mx-0">
+            <Image
+              src={CRR_FREE_EBOOK.coverImage}
+              alt={`Cover of ${CRR_FREE_EBOOK.name} by ${CRR_FREE_EBOOK.author}`}
+              width={1400}
+              height={2100}
+              quality={85}
+              className="w-full rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.6)] ring-1 ring-white/10"
+            />
+          </div>
+          <div>
+            <p className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold">
+              Not ready to buy? Start free.
+            </p>
+            <h2 className="mb-4 font-display text-3xl font-semibold leading-tight text-white md:text-4xl">
+              {CRR_FREE_EBOOK.name}: {CRR_FREE_EBOOK.subtitle.toLowerCase()}.
+            </h2>
+            <p className="mb-6 max-w-2xl font-sans text-base leading-relaxed text-white/70">
+              The short version of Parts I to III of this book. Twelve
+              four-minute chapters, one insider fact and one action each, free
+              by email. If it stops you from buying one wrong car, it has done
+              its job.
+            </p>
+            <Link
+              href={CRR_FREE_EBOOK.path}
+              className="inline-flex items-center justify-center rounded-full bg-warm-gold px-8 py-3.5 font-sans text-sm font-semibold text-near-black transition-colors duration-200 hover:bg-gold-light"
+            >
+              Get the free guide
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
 
       {/* FAQ */}
       <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
@@ -557,10 +563,11 @@ export default function CrrBlueprintPage() {
               Educational content only, not legal, tax, financial, or insurance
               advice. Dollar figures in these pages are illustrative, not a
               guarantee of what you will earn, and the Turo average cited above
-              is Turo&rsquo;s own published gross figure before costs. The Car
-              Rental Riches Blueprint is an independent educational product, not
-              affiliated with Turo Inc. Consult a licensed attorney and tax
-              professional in your area before making decisions.{" "}
+              is Turo&rsquo;s own published gross figure before costs. The Inside
+              Lane is an independent educational product, not affiliated with
+              Turo Inc. or any rental company named in it. Consult a licensed
+              attorney, insurance professional, and tax professional in your
+              area before making decisions.{" "}
               <Link
                 href="/courses/car-rental-riches"
                 className="text-deep-teal underline underline-offset-2"

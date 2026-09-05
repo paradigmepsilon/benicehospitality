@@ -86,6 +86,13 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
+        // Short link for the free Car Rental Riches ebook (emails, social,
+        // the paid book's back matter). Not permanent for the same reason.
+        source: "/before-you-buy-the-car",
+        destination: "/books/before-you-buy-the-car",
+        permanent: false,
+      },
+      {
         // The middle course tier was renamed Cohort -> Masterclass. Only the
         // label and the route changed: the stored tier value in course_tiers,
         // the WaitlistTier enum, and every /account and /admin path still use

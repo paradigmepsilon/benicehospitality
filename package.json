@@ -23,7 +23,9 @@
     "affiliate:prices": "tsx scripts/refresh-affiliate-prices.ts",
     "smoke:shelf": "node --env-file=.env.local --import tsx scripts/smoke/resource-shelf.ts",
     "crr-book:build": "tsx scripts/build-crr-book.ts",
-    "crr-book:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts"
+    "crr-book:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts",
+    "crr-covers:build": "tsx scripts/build-crr-covers.ts",
+    "crr-free-ebook:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts --free"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",

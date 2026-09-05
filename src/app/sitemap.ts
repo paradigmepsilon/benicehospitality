@@ -32,6 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/book`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/audit/request`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/resources/co-living-viability-calculator`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // Free Car Rental Riches ebook landing page (lead magnet; indexable on
+    // purpose, it targets the "how to start a car rental business" cluster).
+    { url: `${baseUrl}/books/before-you-buy-the-car`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const resourceToolPages: MetadataRoute.Sitemap = liveResourceTools().map(

@@ -1,6 +1,7 @@
 /**
- * Build "The Car Rental Riches Blueprint" (PDF + ePub) from the manuscript
- * markdown chapters.
+ * Build "The Inside Lane" (Alex's car rental business book, formerly titled
+ * "The Car Rental Riches Blueprint") as PDF + ePub from the manuscript
+ * markdown chapters. Also builds the free ebook via env overrides (below).
  *
  * Run:
  *   npm run crr-book:build
@@ -11,7 +12,8 @@
  *          filename, so chapter_00_front_matter.md sorts first and
  *          chapter_99_back_matter.md sorts last if present.
  * Output:  CRR_BOOK_OUT or the default build folder below.
- *          car-rental-riches-blueprint.pdf / .epub (plus epub-src staging).
+ *          <slug>.pdf / <slug>.epub (plus epub-src staging); slug defaults
+ *          to car-rental-riches-blueprint (CRR_BOOK_SLUG overrides).
  *
  * Guards:
  *   - Refuses to build if any "[ALEX INPUT" / "[VERIFY" / "[PRODUCTION GATE" draft markers remain,
@@ -20,8 +22,16 @@
  *   - Always hard-fails on U+2014 / U+2013 characters (banned in this book),
  *     even with --allow-drafts.
  *
+ * Cover: if <out>/cover.png exists (rendered by scripts/build-crr-covers.ts,
+ * `npm run crr-covers:build`), it becomes the PDF's first page and the ePub's
+ * cover image. CRR_BOOK_COVER overrides the path. Without it, the typographic
+ * title page stands alone, as before.
+ *
  * No network, no database, no Stripe. PDF is rendered with the repo's
- * Playwright chromium; the ePub is zipped with the macOS system `zip`.
+ * Playwright chromium; the ePub is zipped with the macOS system `zip`; the
+ * cover page is joined onto the PDF with the macOS Automator `join` tool
+ * (already the platform assumption `zip` makes). If that tool is missing the
+ * build still succeeds, without the cover page, and says so.
  */
 
 import {
@@ -44,13 +54,32 @@ const DEFAULT_OUT = "/Users/alexhenry/Projects/Car Rental Riches/04_Book/build";
 const SRC = process.env.CRR_BOOK_SRC || DEFAULT_SRC;
 const OUT = process.env.CRR_BOOK_OUT || DEFAULT_OUT;
 const ALLOW_DRAFTS = process.argv.includes("--allow-drafts");
+const COVER = process.env.CRR_BOOK_COVER || path.join(OUT, "cover.png");
+const PDF_JOIN =
+  "/System/Library/Automator/Combine PDF Pages.action/Contents/MacOS/join";
 
-const TITLE = "The Car Rental Riches Blueprint";
-const SUBTITLE = "Start a Profitable Turo Business in the 2026 Earnings-Plan Era";
+// Title, subtitle, output slug, and ePub identity can be overridden so the
+// same pipeline builds the free ebook ("Before You Buy the Car") from its own
+// manuscript folder:
+//   CRR_BOOK_SRC=".../04_Book/free_ebook" CRR_BOOK_SLUG=before-you-buy-the-car \
+//   CRR_BOOK_TITLE="Before You Buy the Car" CRR_BOOK_SUBTITLE="..." \
+//   npm run crr-book:build -- --allow-drafts
+const TITLE = process.env.CRR_BOOK_TITLE || "The Inside Lane";
+const SUBTITLE =
+  process.env.CRR_BOOK_SUBTITLE ||
+  "What Turo, the Rental Giants, and the Gurus Won't Tell You About Building a Car Rental Business, From One Car to Fifty";
 const AUTHOR = "Alex Henry";
 const PUBLISHER = "Be Nice Hospitality Group";
-// Stable identifier so re-builds keep the same book identity in readers.
-const EPUB_UUID = "urn:uuid:7c9e4b2a-51d3-4f8e-9a06-c3d2b1a0e5f4";
+// Output basename. The paid book keeps the legacy slug so the download rails
+// and blob keys in src/lib/crr-blueprint.ts stay valid.
+const SLUG = process.env.CRR_BOOK_SLUG || "car-rental-riches-blueprint";
+// Stable identifier so re-builds keep the same book identity in readers. The
+// free ebook gets its own identity so readers never treat it as an update to
+// the paid book.
+const EPUB_UUID =
+  SLUG === "car-rental-riches-blueprint"
+    ? "urn:uuid:7c9e4b2a-51d3-4f8e-9a06-c3d2b1a0e5f4"
+    : `urn:uuid:5b1d0e9c-2f47-4a63-8e1b-${SLUG.replace(/[^a-z0-9]/g, "").padEnd(12, "0").slice(0, 12)}`;
 
 const DASH_RE = /[–—]/; // en dash, em dash: banned in this book
 
@@ -386,6 +415,58 @@ async function buildPdf(html: string, pdfPath: string, draftMode: boolean): Prom
   }
 }
 
+/**
+ * The cover as a one-page, full-bleed PDF, then joined in front of the body.
+ * Rendering it inside the main document would put it inside the page margins
+ * and under the page-number footer; a separate render keeps it edge to edge.
+ * Returns false (and leaves the body PDF untouched) when the join tool is
+ * unavailable, so a non-macOS build still produces a sellable file.
+ */
+async function prependCover(pdfPath: string, coverPath: string): Promise<boolean> {
+  if (!existsSync(PDF_JOIN)) {
+    console.warn(`Cover skipped: PDF join tool not found at ${PDF_JOIN}`);
+    return false;
+  }
+  const coverPdf = path.join(OUT, "cover-page.pdf");
+  const bodyPdf = path.join(OUT, "body-only.pdf");
+  const b64 = readFileSync(coverPath).toString("base64");
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@page { size: 6in 9in; margin: 0; }
+html, body { margin: 0; padding: 0; }
+img { display: block; width: 6in; height: 9in; object-fit: cover; }
+</style></head><body><img src="data:image/png;base64,${b64}" alt="" /></body></html>`;
+
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "load" });
+    await page.pdf({
+      path: coverPdf,
+      width: "6in",
+      height: "9in",
+      printBackground: true,
+      preferCSSPageSize: true,
+      margin: { top: "0", bottom: "0", left: "0", right: "0" },
+    });
+  } finally {
+    await browser.close();
+  }
+
+  rmSync(bodyPdf, { force: true });
+  execFileSync("mv", [pdfPath, bodyPdf]);
+  try {
+    execFileSync(PDF_JOIN, ["-o", pdfPath, coverPdf, bodyPdf], { stdio: "pipe" });
+  } catch (err) {
+    // Put the body back so the build still yields a complete book.
+    execFileSync("mv", [bodyPdf, pdfPath]);
+    console.warn(`Cover skipped: join failed (${err instanceof Error ? err.message : err})`);
+    return false;
+  }
+  rmSync(bodyPdf, { force: true });
+  rmSync(coverPdf, { force: true });
+  return true;
+}
+
 /** Count pages by scanning the PDF's page objects; 0 if the scan finds none. */
 function pdfPageCount(pdfPath: string): number {
   const s = readFileSync(pdfPath).toString("latin1");
@@ -450,6 +531,31 @@ function buildEpub(chapters: Chapter[], epubPath: string, draftMode: boolean): v
   // ePub CSS: book CSS minus the print-only @page rules.
   writeFileSync(path.join(staging, "OEBPS", "css", "book.css"), BOOK_CSS);
 
+  // Cover image (optional): readers show it in the library and as page one.
+  const hasCover = existsSync(COVER);
+  if (hasCover) {
+    mkdirSync(path.join(staging, "OEBPS", "images"), { recursive: true });
+    writeFileSync(
+      path.join(staging, "OEBPS", "images", "cover.png"),
+      readFileSync(COVER),
+    );
+    writeFileSync(
+      path.join(staging, "OEBPS", "text", "cover.xhtml"),
+      `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<head>
+<title>Cover</title>
+<style type="text/css">body{margin:0;padding:0;text-align:center;} img{max-width:100%;max-height:100%;}</style>
+</head>
+<body epub:type="cover">
+<section epub:type="cover"><img src="../images/cover.png" alt="${esc(TITLE)}" /></section>
+</body>
+</html>
+`,
+    );
+  }
+
   // Title page
   const titleBody = `<section class="title-page" epub:type="titlepage">
 <h1 class="tp-title">${esc(TITLE)}</h1>
@@ -488,6 +594,7 @@ ${ch.bodyHtml}
 
   // nav.xhtml
   const navItems = [
+    ...(hasCover ? [`<li><a href="text/cover.xhtml">Cover</a></li>`] : []),
     `<li><a href="text/titlepage.xhtml">${esc(TITLE)}</a></li>`,
     ...(draftMode ? [`<li><a href="text/draft-notice.xhtml">Draft Notice</a></li>`] : []),
     ...items.map((it) => `<li><a href="${it.href}">${esc(it.navLabel)}</a></li>`),
@@ -518,6 +625,12 @@ ${ch.bodyHtml}
   const manifestItems = [
     `<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>`,
     `<item id="css" href="css/book.css" media-type="text/css"/>`,
+    ...(hasCover
+      ? [
+          `<item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image"/>`,
+          `<item id="cover" href="text/cover.xhtml" media-type="application/xhtml+xml"/>`,
+        ]
+      : []),
     `<item id="titlepage" href="text/titlepage.xhtml" media-type="application/xhtml+xml"/>`,
     ...(draftMode
       ? [`<item id="draftnotice" href="text/draft-notice.xhtml" media-type="application/xhtml+xml"/>`]
@@ -527,6 +640,7 @@ ${ch.bodyHtml}
     ),
   ].join("\n    ");
   const spineItems = [
+    ...(hasCover ? [`<itemref idref="cover" linear="no"/>`] : []),
     `<itemref idref="titlepage"/>`,
     ...(draftMode ? [`<itemref idref="draftnotice"/>`] : []),
     ...items.map((it) => `<itemref idref="${it.id}"/>`),
@@ -542,6 +656,7 @@ ${ch.bodyHtml}
     <dc:publisher>${esc(PUBLISHER)}</dc:publisher>
     <dc:language>en</dc:language>
     <meta property="dcterms:modified">${modified}</meta>
+    ${hasCover ? `<meta name="cover" content="cover-image"/>` : ""}
   </metadata>
   <manifest>
     ${manifestItems}
@@ -568,8 +683,8 @@ async function main() {
   const draftMode = ALLOW_DRAFTS && chapters.some((c) => c.draftMarkers > 0);
 
   mkdirSync(OUT, { recursive: true });
-  const pdfPath = path.join(OUT, "car-rental-riches-blueprint.pdf");
-  const epubPath = path.join(OUT, "car-rental-riches-blueprint.epub");
+  const pdfPath = path.join(OUT, `${SLUG}.pdf`);
+  const epubPath = path.join(OUT, `${SLUG}.epub`);
 
   console.log(`Chapters (${chapters.length}):`);
   for (const ch of chapters) {
@@ -578,6 +693,7 @@ async function main() {
 
   const html = buildCombinedHtml(chapters, draftMode);
   await buildPdf(html, pdfPath, draftMode);
+  const coverAdded = existsSync(COVER) ? await prependCover(pdfPath, COVER) : false;
   buildEpub(chapters, epubPath, draftMode);
 
   const words = chapters.reduce((n, c) => n + c.words, 0);
@@ -588,6 +704,7 @@ async function main() {
   console.log("");
   console.log(`Word count:  ${words.toLocaleString()}`);
   console.log(`Page count:  ${pages}`);
+  console.log(`Cover:       ${coverAdded ? COVER : "none (render one with npm run crr-covers:build)"}`);
   console.log(`PDF:   ${pdfPath}  (${mb(pdfPath)} MB)`);
   console.log(`ePub:  ${epubPath}  (${mb(epubPath)} MB)`);
   if (draftMode) console.log(`\nDRAFT build: watermarked, not for sale.`);

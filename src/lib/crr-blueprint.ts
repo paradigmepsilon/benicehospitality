@@ -1,5 +1,10 @@
 /**
- * The Car Rental Riches Blueprint: Alex's book, sold at $32.
+ * The Inside Lane: Alex's car rental business book, sold at $32.
+ *
+ * Retitled 2026-09-04 from "The Car Rental Riches Blueprint" (Turo-only) to
+ * "The Inside Lane" (independent operator, one car to fifty). The product tag,
+ * route, env var names, and blob keys deliberately keep the legacy
+ * "car-rental-riches-blueprint" slug so nothing downstream breaks.
  *
  * Mirror of src/lib/blueprint.ts (Room Rental Riches: The Blueprint), riding
  * the same shared payment rails:
@@ -43,11 +48,12 @@ export const CRR_BLUEPRINT_PRODUCT_TAG = "car-rental-riches-blueprint";
  *  price exists for this book, so there is no strike-through. */
 export const CRR_BLUEPRINT = {
   productTag: CRR_BLUEPRINT_PRODUCT_TAG,
-  name: "The Car Rental Riches Blueprint",
+  name: "The Inside Lane",
   subtitle:
-    "Start a profitable Turo business in the 2026 earnings-plan era.",
+    "What Turo, the rental giants, and the gurus won't tell you about building a car rental business, from one car to fifty.",
   author: "Alex Henry",
   priceUsd: 32,
+  priceListUsd: 47,
   /** Public route the book lives at. */
   path: "/books/car-rental-riches-blueprint",
   /** Cover asset is not produced yet; the sales page falls back to a

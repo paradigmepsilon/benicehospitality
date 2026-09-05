@@ -5,14 +5,14 @@
  *
  * Display data derives from the canonical product constants:
  *   - Room Rental Riches: The Blueprint  -> src/lib/blueprint.ts (BLUEPRINT)
- *   - The Car Rental Riches Blueprint    -> src/lib/crr-blueprint.ts (CRR_BLUEPRINT)
+ *   - The Inside Lane (Alex's book)      -> src/lib/crr-blueprint.ts (CRR_BLUEPRINT)
  *
  * Each book keeps ONE purchase funnel: its /books/... sales page, which owns
  * the Buy button, the Stripe checkout route, and the disclaimers. Promo bands
  * link INTO that page (with a ?src= tag for analytics) rather than starting
  * checkout directly, so pricing context and legal copy are never skipped.
  *
- * ROLLOUT SWITCH: `available`. The Car Rental Riches Blueprint is written into
+ * ROLLOUT SWITCH: `available`. The Inside Lane is written into
  * the catalog now but held back with `available: false`. When the book is
  * finished, flip it to true and it appears on every surface that renders
  * publishedBooks() (resources + marketplace today). Before flipping, make sure:
@@ -69,10 +69,11 @@ export const FEATURED_BOOKS: FeaturedBook[] = [
     author: CRR_BLUEPRINT.author,
     audience: "fleet",
     priceUsd: CRR_BLUEPRINT.priceUsd,
+    priceListUsd: CRR_BLUEPRINT.priceListUsd,
     path: CRR_BLUEPRINT.path,
     coverImage: CRR_BLUEPRINT.coverImage,
-    hook: "How to start and underwrite a profitable Turo business in the 2026 earnings-plan era, from the operator running Be Nice Autos in the Atlanta metro.",
-    specs: ["PDF + ePub", "Instant download"],
+    hook: "How the rental giants really make money, what the marketplace won't tell you, and the underwriting method for a car rental business from one car to fifty, from the operator running Be Nice Autos in the Atlanta metro.",
+    specs: ["17 chapters", "5 parts", "PDF + ePub", "Instant download"],
     // Held back until the book is finished. See the rollout checklist above.
     available: false,
   },

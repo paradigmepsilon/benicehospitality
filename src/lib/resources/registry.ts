@@ -520,14 +520,14 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     slug: "vehicle-profitability-calculator",
     name: "Vehicle Profitability Calculator",
     blurb:
-      "Underwrite any car like a deal before you buy it: real 2026 earnings-plan math, weekly and monthly discount modeling, every operating cost, depreciation, a three-year forecast, and a PROCEED / CAUTION / PASS verdict.",
+      "Underwrite any car three ways before you buy it: as a marketplace listing with real 2026 earnings-plan math, as a weekly rental to a gig driver, and as a direct daily rental, with every operating cost, depreciation, a three-year forecast, and a PROCEED / CAUTION / PASS verdict on each.",
     bullets: [
-      "True net after Turo's share, costs, and depreciation",
+      "The same car as a marketplace listing, a weekly gig rental, and a direct rental, side by side",
+      "True net after the platform's share or your processing, costs, and depreciation",
       "The three 2026 earnings plans with damage responsibility",
       "Weekly, monthly, and 90-day discounts priced against turnovers saved",
       "A three-year forecast with payback, equity, and total return",
-      "A PROCEED / CAUTION / PASS verdict on true-net ROI",
-      "The daily rate this car needs to actually work",
+      "The rate this car needs to actually work, on the channel you pick",
     ],
     category: "fleet",
     archetype: "calculator",
@@ -538,11 +538,11 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     eyebrow: "Vehicle Underwriting",
     headline: "Would this car\nactually make money?",
     subhead:
-      "The income screenshots quote gross. Your bank account gets net, after Turo's share, cleaning, maintenance, financing, and the depreciation nobody screenshots. Run the whole waterfall and get a verdict before you spend a dollar.",
+      "The income screenshots quote gross. Your bank account gets net, after the platform's share, cleaning, maintenance, insurance, financing, and the depreciation nobody screenshots. Run the whole waterfall three ways, marketplace, weekly, and direct, and get a verdict before you spend a dollar.",
     howItWorks: [
-      "Enter the car, your market rate, and your real costs.",
-      "Split your booked days by trip length, then set your discounts.",
-      "Read the verdict, then the three-year forecast underneath it.",
+      "Enter the car, then the rate and costs for each channel it could work on.",
+      "On the marketplace, split your booked days by trip length and set your discounts.",
+      "Read the verdict, the three-way comparison, and the three-year forecast.",
     ],
     whatYouGet: [
       "The full gross-to-true-net monthly waterfall",
