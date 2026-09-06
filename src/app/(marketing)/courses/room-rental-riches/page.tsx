@@ -229,7 +229,7 @@ export default function RRRPage() {
                 badgeClass: "bg-warm-gold/20 text-warm-gold",
                 title: "Masterclass",
                 blurb:
-                  "A two-day, small-group workshop where six operators apply the system to their own business with Della and Alex, plus a private 60-minute follow-up.",
+                  "A two-day, small-group workshop where six operators apply the system to their own business with Della, plus a private 60-minute follow-up.",
                 image:
                   "/images/Website Images/course-masterclass-cohort-v2.png",
                 imageAlt:

@@ -271,7 +271,7 @@ export const MASTERCLASS_WEEKS: readonly MasterclassWeek[] = [
     week: "04",
     modules: "Module 5",
     title: "Property pitch role-plays",
-    live: "Landlord and owner pitch role-plays with Della and Alex playing the hard version. The objection-handler library gets drilled, not just read. Your email pitch is reviewed line by line.",
+    live: "Landlord and owner pitch role-plays with Della playing the hard version. The objection-handler library gets drilled, not just read. Your email pitch is reviewed line by line.",
     between: "Send five real pitches. Bring the replies, including the rejections, to week five.",
   },
   {

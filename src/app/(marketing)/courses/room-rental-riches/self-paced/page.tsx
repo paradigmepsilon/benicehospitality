@@ -102,7 +102,7 @@ const FAQS = [
   },
   {
     q: "How is this different from the Masterclass?",
-    a: "The course teaches you the complete Room Rental Riches Operating Manual at your own pace. The Masterclass is a two-day, small-group workshop where operators with at least one room rental property work directly with Della and Alex to apply those systems through live collaboration, Individual Business Reviews (Hot Seats), personalized action plans, and a private follow-up strategy session.",
+    a: "The course teaches you the complete Room Rental Riches Operating Manual at your own pace. The Masterclass is a two-day, small-group workshop where operators with at least one room rental property work directly with Della to apply those systems through live collaboration, Individual Business Reviews (Hot Seats), personalized action plans, and a private follow-up strategy session.",
   },
   {
     q: "Will this work outside the Southeast?",
@@ -589,8 +589,8 @@ export default function SelfPacedPage() {
                 </h3>
                 <p className="font-sans text-base leading-relaxed text-charcoal/80">
                   Once you have at least one room rental property operating, join
-                  our two-day, small-group workshop. Work directly with Della and
-                  Alex, participate in Individual Business Reviews (Hot Seats),
+                  our two-day, small-group workshop. Work directly with Della,
+                  participate in Individual Business Reviews (Hot Seats),
                   collaborate with five other operators, and leave with a
                   personalized action plan and a private 60-minute follow-up
                   session.

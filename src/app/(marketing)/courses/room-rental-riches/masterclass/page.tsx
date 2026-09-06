@@ -40,14 +40,14 @@ const TIER = { name: "Masterclass", slug: "cohort" as const };
 export const metadata: Metadata = {
   title: `Room Rental Riches: Masterclass (${PRICE})`,
   description:
-    "A two-day, small-group workshop where six room rental operators work directly with Della and Alex Henry to apply the Room Rental Riches Operating Manual to their own business. Includes a 60-minute private follow-up. Hosted quarterly.",
+    "A two-day, small-group workshop where six room rental operators work directly with Della Henry to apply the Room Rental Riches Operating Manual to their own business. Includes a 60-minute private follow-up. Hosted quarterly.",
   alternates: {
     canonical: `https://benicehospitality.com${RRR_PATHS.masterclass}`,
   },
   openGraph: {
     title: "Room Rental Riches: Masterclass | Della Henry",
     description:
-      "Two days, six operators, your actual business on the table. Apply the Room Rental Riches Operating Manual alongside Della and Alex Henry.",
+      "Two days, six operators, your actual business on the table. Apply the Room Rental Riches Operating Manual alongside Della Henry.",
     url: `https://benicehospitality.com${RRR_PATHS.masterclass}`,
     type: "website",
     images: [
@@ -224,7 +224,7 @@ export default function MasterclassPage() {
             <p className="mb-5 max-w-2xl font-sans text-lg leading-snug text-white/85">
               The Room Rental Riches Masterclass is a two-day, small-group
               workshop where six room rental operators work directly with Della
-              and Alex Henry to apply the Room Rental Riches Operating Manual to
+              Henry to apply the Room Rental Riches Operating Manual to
               their own business.
             </p>
             <p className="mb-8 max-w-2xl font-sans text-lg leading-snug text-white/85">
@@ -285,8 +285,8 @@ export default function MasterclassPage() {
                 </p>
                 <p>
                   For two days, you&apos;ll work alongside five other room rental
-                  operators while Della and Alex help you think through your
-                  business, improve your systems, answer questions, and workshop
+                  operators while Della helps you think through your
+                  business, improves your systems, answers questions, and workshops
                   real operational challenges. Every conversation centers around
                   implementation.
                 </p>
@@ -648,7 +648,7 @@ export default function MasterclassPage() {
 
           <AnimatedItem>
             <p className="mt-8 font-sans text-base leading-relaxed text-charcoal/80 md:text-lg">
-              This allows Della and Alex to prepare before the workshop so every
+              This allows Della to prepare before the workshop so every
               operator receives thoughtful, relevant feedback throughout the two
               days.
             </p>
