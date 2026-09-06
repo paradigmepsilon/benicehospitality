@@ -51,6 +51,14 @@ import {
 import { createPasswordResetToken } from "@/lib/community-auth";
 import { provisionWorkspaceForPurchase } from "@/lib/claim-proof-workspace";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { enrollInNurture, stopNurture } from "@/lib/nurture/engine";
+import {
+  OPERATOR_BUNDLE,
+  OPERATOR_BUNDLE_PRODUCT_TAG,
+  getOperatorBundleFromAddress,
+  operatorBundleWelcomeEmail,
+} from "@/lib/operator-bundle";
+import { CRR_SEQUENCE_KEYS } from "@/lib/nurture/types";
 import { personId } from "@/lib/posthog-identity";
 import { findUserById } from "@/lib/community-auth";
 
@@ -110,6 +118,8 @@ export async function POST(request: Request) {
             await fulfillCrrBlueprint(session);
           } else if (session.metadata?.product === CRR_FOUNDING_PRODUCT_TAG) {
             await fulfillCrrPresale(session);
+          } else if (session.metadata?.product === OPERATOR_BUNDLE_PRODUCT_TAG) {
+            await fulfillOperatorBundle(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -249,6 +259,15 @@ async function fulfillBlueprint(
       err,
     );
   }
+
+  // 3. Nurture: the welcome series has done its job; the reader series
+  // starts tomorrow. Both calls are best-effort.
+  await stopNurture(email, "purchased:blueprint", ["rrr_welcome"]);
+  await enrollInNurture({
+    email,
+    sequenceKey: "rrr_book",
+    context: { firstName: name?.split(/\s+/)[0] || undefined },
+  });
 }
 
 /**
@@ -332,6 +351,9 @@ async function fulfillCrrBlueprint(
       err,
     );
   }
+
+  // 3. Nurture: the book buyer has climbed the ladder; stop the pitch series.
+  await stopNurture(email, "purchased:crr-blueprint", CRR_SEQUENCE_KEYS);
 }
 
 /**
@@ -447,6 +469,9 @@ async function fulfillCrrPresale(
     );
   }
 
+  // 4. Nurture: a buyer is done with the pre-purchase series.
+  await stopNurture(email, "purchased:crr-founding", CRR_SEQUENCE_KEYS);
+
   try {
     const posthog = getPostHogClient();
     posthog.capture({
@@ -461,6 +486,100 @@ async function fulfillCrrPresale(
     await posthog.flush();
   } catch (err) {
     console.error(`[webhooks/stripe] PostHog capture for CRR founding threw:`, err);
+  }
+}
+
+/**
+ * Sharing Economy Operator Bundle ($497): RRR + CRR self-paced in one buy.
+ * Same shape as fulfillCrrPresale, granting BOTH enrollments. Every step is
+ * isolated and best-effort; the handler never sees a throw.
+ */
+async function fulfillOperatorBundle(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const email =
+    session.customer_details?.email || session.customer_email || null;
+  const name = session.customer_details?.name || undefined;
+  if (!email) {
+    console.error(
+      `[webhooks/stripe] bundle session ${session.id} has no email, cannot fulfill`,
+    );
+    return;
+  }
+
+  let userId: number | null = null;
+  let setPasswordUrl: string | undefined;
+  try {
+    const buyer = await provisionBuyerAccount(email, name);
+    userId = buyer.userId;
+    if (buyer.isNew) {
+      const { rawToken } = await createPasswordResetToken(buyer.userId);
+      setPasswordUrl = `${getBaseUrl()}/login/reset/${encodeURIComponent(rawToken)}`;
+    }
+  } catch (err) {
+    console.error(`[webhooks/stripe] bundle account provisioning failed for ${email}:`, err);
+  }
+
+  if (userId !== null) {
+    for (const slug of OPERATOR_BUNDLE.courseSlugs) {
+      try {
+        const rows = (await sql`
+          SELECT id FROM courses WHERE slug = ${slug} LIMIT 1
+        `) as Array<{ id: number }>;
+        if (rows.length === 0) {
+          console.error(`[webhooks/stripe] bundle: course row missing (${slug}) for ${email}`);
+          continue;
+        }
+        await grantEnrollment({
+          userId,
+          courseId: rows[0].id,
+          tier: "self-paced",
+          grantedByUserId: null,
+          notes: `operator-bundle ${session.id}`,
+        });
+      } catch (err) {
+        console.error(`[webhooks/stripe] bundle enrollment on ${slug} failed for ${email}:`, err);
+      }
+    }
+  }
+
+  try {
+    const base = getBaseUrl();
+    const { subject, html } = operatorBundleWelcomeEmail({
+      name,
+      rrrUrl: `${base}/account/courses/room-rental-riches`,
+      crrUrl: `${base}/account/courses/${CRR_COURSE_SLUG}`,
+      setPasswordUrl,
+    });
+    const result = await getResend().emails.send({
+      from: getOperatorBundleFromAddress(),
+      to: email,
+      subject,
+      html,
+    });
+    if (result.error) {
+      console.error(`[webhooks/stripe] bundle welcome to ${email} failed: ${result.error.name}: ${result.error.message}`);
+    }
+  } catch (err) {
+    console.error(`[webhooks/stripe] bundle welcome threw for ${email}:`, err);
+  }
+
+  await stopNurture(email, "purchased:operator-bundle");
+
+  try {
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: personId(email),
+      event: "operator_bundle_purchased",
+      properties: {
+        stripe_session_id: session.id,
+        amount_cents: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+      },
+    });
+    await posthog.flush();
+  } catch (err) {
+    console.error("[webhooks/stripe] PostHog capture for bundle threw:", err);
   }
 }
 

@@ -20,6 +20,8 @@ import {
   RRR_PATHS,
 } from "@/lib/room-rental-riches";
 import { BLUEPRINT } from "@/lib/blueprint";
+import { isOperatorBundleOpen } from "@/lib/operator-bundle";
+import OperatorBundleBand from "@/components/sections/courses/OperatorBundleBand";
 
 export const metadata: Metadata = {
   title: "Room Rental Riches",
@@ -38,6 +40,7 @@ export const metadata: Metadata = {
 };
 
 export default function RRRPage() {
+  const bundleOpen = isOperatorBundleOpen();
   return (
     <>
       <CourseHero
@@ -521,6 +524,8 @@ export default function RRRPage() {
           </div>
         </div>
       </AnimatedSection>
+
+      {bundleOpen ? <OperatorBundleBand source="rrr-page" /> : null}
 
       <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />
     </>

@@ -38,7 +38,7 @@ export const CRR = {
    * it appears in the welcome email and on the sales page. Keeping it a
    * placeholder string (not a Date) so an unset value reads honestly in copy.
    */
-  doorsOpenPromise: "Modules 1-3 go live within 30 days of the founding launch",
+  doorsOpenPromise: "Modules 1 to 3 go live first, then the rest drips in weekly",
 } as const;
 
 /**
@@ -49,6 +49,15 @@ export const CRR = {
  */
 export function getCrrPresalePriceId(): string | null {
   return process.env.CAR_RENTAL_RICHES_PRESALE_PRICE_ID || null;
+}
+
+/**
+ * The founding presale is open only once Alex has produced Module 1 and set
+ * the Stripe Price (decision 2026-09-05). Until then every surface shows the
+ * founding price but takes waitlist signups instead of money.
+ */
+export function isCrrPresaleOpen(): boolean {
+  return !!getCrrPresalePriceId();
 }
 
 /** From address for the founding welcome email. Alex signs this one. */
@@ -103,9 +112,9 @@ export function crrFoundingWelcomeEmail(args: {
       <h1 style="font-size:23px;color:#1A4D4F;margin:0 0 18px;line-height:1.3;">You're in. Founding Member, locked.</h1>
       <p style="font-size:15px;line-height:1.55;margin:0 0 16px;">${hi}</p>
       <p style="font-size:15px;line-height:1.55;margin:0 0 16px;">
-        Thanks for backing this early. Here's the deal, plainly: ${CRR.doorsOpenPromise},
-        and the rest of the course drips in weekly as each module clears my
-        quality bar. You get lifetime access, every future update included, and
+        Thanks for backing this early. Here's the deal, plainly: ${CRR.doorsOpenPromise}
+        as each module clears my quality bar. You get lifetime access, every
+        future update included, and
         I'll send you a short build update each week so you can watch it come
         together.
       </p>

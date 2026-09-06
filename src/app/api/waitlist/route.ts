@@ -8,6 +8,7 @@ import {
   waitlistStudentThankYouEmail,
   waitlistAdminNotificationEmail,
 } from "@/lib/email-templates";
+import { enrollInNurture } from "@/lib/nurture/engine";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.benicehospitality.com";
@@ -96,6 +97,15 @@ export async function POST(request: Request) {
     }
 
     const signupId = result[0].id as number;
+
+    // Nurture: CRR signups get Alex's waitlist series while the presale is
+    // closed; RRR signups get Della's welcome series.
+    await enrollInNurture({
+      email,
+      sequenceKey:
+        courseSlug === "car-rental-riches" ? "crr_waitlist" : "rrr_welcome",
+      context: { firstName: name.split(/\s+/)[0] || undefined },
+    });
 
     // Upsert into pipeline_contacts so the admin CRM sees the lead too.
     try {

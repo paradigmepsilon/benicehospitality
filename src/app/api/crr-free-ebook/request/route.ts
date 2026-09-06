@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { newsletterLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { enrollInNurture } from "@/lib/nurture/engine";
 import {
   CRR_FREE_EBOOK,
   crrFreeEbookDeliveryEmail,
@@ -78,6 +79,16 @@ export async function POST(request: Request) {
 
     // Owned list first (durable), then delivery (best-effort but reported).
     await recordCrrFreeEbookLead(normalized);
+    // Sequence D (crr_ebook) picks up after the delivery email below. Segment
+    // signals ride on the enrollment so the copy can branch.
+    await enrollInNurture({
+      email: normalized,
+      sequenceKey: "crr_ebook",
+      context: {
+        metro: metroClean || undefined,
+        carsToday: cars ?? undefined,
+      },
+    });
 
     const { subject, html } = crrFreeEbookDeliveryEmail({
       pdfUrl: crrFreeEbookDownloadLink("pdf", makeCrrFreeEbookToken("pdf")),

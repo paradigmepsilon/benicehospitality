@@ -16,6 +16,7 @@
 
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
+import { enrollInNurture } from "@/lib/nurture/engine";
 import { getResourceTool } from "@/lib/resources/registry";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { internalResourceLeadEmail } from "@/lib/email-templates";
@@ -132,6 +133,14 @@ export async function recordResourceToolLead(input: {
     // internal problem, not theirs.
     console.error("[resources/leads] resource_leads insert failed:", err);
   }
+
+  // Fleet tools feed Alex's calculator series; property tools feed Della's
+  // welcome series. Best-effort, never blocks the unlock.
+  await enrollInNurture({
+    email,
+    sequenceKey: tool.category === "fleet" ? "crr_calculator" : "rrr_welcome",
+    context: { firstName: name.split(/\s+/)[0] || undefined },
+  });
 
   if (process.env.RESEND_API_KEY) {
     try {

@@ -3,6 +3,7 @@ import { sql } from "@/lib/db";
 import { newsletterLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { enrollInNurture } from "@/lib/nurture/engine";
 
 export async function POST(request: Request) {
   try {
@@ -45,6 +46,15 @@ export async function POST(request: Request) {
       VALUES (${email.toLowerCase().trim()}, ${source || "insights"})
       ON CONFLICT (email) DO NOTHING
     `;
+
+    // The CRR ebook route enrolls its own sequence; every other source is a
+    // co-living or general reader and gets Della's welcome series.
+    if (source !== "crr-free-ebook") {
+      await enrollInNurture({
+        email: email.toLowerCase().trim(),
+        sequenceKey: "rrr_welcome",
+      });
+    }
 
     const posthog = getPostHogClient();
     posthog.capture({

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sql } from "@/lib/db";
 import { logOutreachEvent, type OutreachEventType } from "@/lib/outreach/events";
+import { stopNurture } from "@/lib/nurture/engine";
 
 /**
  * Resend uses Svix-format webhook signatures. The signature header carries
@@ -85,6 +86,25 @@ export async function POST(request: Request) {
   const messageId = event.data?.email_id;
   if (!messageId) {
     return NextResponse.json({ ok: true, ignored: "no_email_id" });
+  }
+
+  // Course nurture suppression runs for EVERY recipient, outreach or not: a
+  // bounce or complaint on any BNHG email stops the drip to that address.
+  if (event.type === "email.bounced" || event.type === "email.complained") {
+    const to = event.data?.to;
+    const recipients = (Array.isArray(to) ? to : to ? [to] : []).map((e) =>
+      e.toLowerCase().trim(),
+    );
+    for (const recipient of recipients) {
+      await stopNurture(recipient, `resend:${event.type}`);
+      if (event.type === "email.complained") {
+        await sql`
+          INSERT INTO unsubscribes (email, source, reason)
+          VALUES (${recipient}, 'complaint', 'spam_complaint')
+          ON CONFLICT (email) DO NOTHING
+        `;
+      }
+    }
   }
 
   // Find the target by Resend message id

@@ -12,6 +12,9 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
+import { CRR, isCrrPresaleOpen } from "@/lib/car-rental-riches";
+import { isOperatorBundleOpen } from "@/lib/operator-bundle";
+import OperatorBundleBand from "@/components/sections/courses/OperatorBundleBand";
 
 export const metadata: Metadata = {
   title: "Car Rental Riches",
@@ -144,7 +147,9 @@ export default async function CRRPage({
   searchParams: Promise<{ purchase?: string }>;
 }) {
   const { purchase } = await searchParams;
-  const justPurchased = purchase === "success";
+  const justPurchased = purchase === "success" || purchase === "bundle-success";
+  const presaleOpen = isCrrPresaleOpen();
+  const bundleOpen = isOperatorBundleOpen();
   return (
     <>
       {justPurchased && (
@@ -177,7 +182,9 @@ export default async function CRRPage({
         eyebrow={
           justPurchased
             ? "Founding Member · Welcome aboard"
-            : "Founding launch · $197 (retail $297)"
+            : presaleOpen
+              ? `Founding launch · $${CRR.foundingPriceUsd} (retail $${CRR.retailPriceUsd})`
+              : `Founding price $${CRR.foundingPriceUsd} · presale opens with Module 1`
         }
         headline={
           <>
@@ -186,7 +193,11 @@ export default async function CRRPage({
             Riches.
           </>
         }
-        body="Turo rewrote its rules in 2026, and most advice you'll find is now stale. This is the operator's course: real underwriting math, claims defense, and the direct-booking system, from a real Atlanta fleet. Founding Members lock in $197."
+        body={
+          presaleOpen
+            ? `Turo rewrote its rules in 2026, and most advice you'll find is now stale. This is the operator's course: real underwriting math, claims defense, and the direct-booking system, from a real Atlanta fleet. Founding Members lock in $${CRR.foundingPriceUsd}.`
+            : `Turo rewrote its rules in 2026, and most advice you'll find is now stale. This is the operator's course: real underwriting math, claims defense, and the direct-booking system, from a real Atlanta fleet. The waitlist locks the $${CRR.foundingPriceUsd} founding price for when the presale opens.`
+        }
         primaryCta={{ label: "See the curriculum", href: "#curriculum" }}
         secondaryCta={{
           label: "Login",
@@ -425,29 +436,42 @@ export default async function CRRPage({
             </AnimatedItem>
           </div>
 
-          <CarRentalRichesTierPreview />
+          <CarRentalRichesTierPreview presaleOpen={presaleOpen} />
 
           <div className="text-center mt-10 max-w-2xl mx-auto">
             <p className="font-sans text-sm text-charcoal/70 italic">
-              Founding Members lock in $197 (retail $297), get Modules 1-3
-              within 30 days of launch with the rest dripping weekly, lifetime
-              access with every future update, and a 30-day unconditional
-              money-back guarantee.
+              Founding Members lock in ${CRR.foundingPriceUsd} (retail $
+              {CRR.retailPriceUsd}), get every module the day it ships,
+              lifetime access with every future update, and a 30-day
+              unconditional money-back guarantee.
+              {presaleOpen
+                ? ""
+                : " The presale opens when Module 1 is produced; the waitlist hears first."}
             </p>
           </div>
 
           <div className="flex flex-col items-center gap-4 mt-10">
-            <AnimatedItem>
-              <CrrFoundingBuyButton source="page-footer" />
-            </AnimatedItem>
-            <AnimatedItem>
-              <p className="font-sans text-sm text-charcoal/60">
-                Not ready?{" "}
-                <CarRentalRichesWaitlistTrigger variant="ghost" size="sm">
-                  Join the waitlist instead
+            {presaleOpen ? (
+              <>
+                <AnimatedItem>
+                  <CrrFoundingBuyButton source="page-footer" />
+                </AnimatedItem>
+                <AnimatedItem>
+                  <p className="font-sans text-sm text-charcoal/60">
+                    Not ready?{" "}
+                    <CarRentalRichesWaitlistTrigger variant="ghost" size="sm">
+                      Join the waitlist instead
+                    </CarRentalRichesWaitlistTrigger>
+                  </p>
+                </AnimatedItem>
+              </>
+            ) : (
+              <AnimatedItem>
+                <CarRentalRichesWaitlistTrigger variant="primary" size="lg">
+                  Join the waitlist, lock ${CRR.foundingPriceUsd}
                 </CarRentalRichesWaitlistTrigger>
-              </p>
-            </AnimatedItem>
+              </AnimatedItem>
+            )}
           </div>
 
           <div className="text-center mt-8 max-w-2xl mx-auto">
@@ -460,6 +484,8 @@ export default async function CRRPage({
           </div>
         </div>
       </AnimatedSection>
+
+      {bundleOpen ? <OperatorBundleBand source="crr-page" /> : null}
 
       <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />
     </>

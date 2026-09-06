@@ -81,7 +81,12 @@ const COMPARISON: Array<{
   },
 ];
 
-export default function CarRentalRichesTierPreview() {
+export default function CarRentalRichesTierPreview({
+  presaleOpen,
+}: {
+  /** Server-computed: the founding Stripe Price is set. Off means waitlist. */
+  presaleOpen: boolean;
+}) {
   return (
     <>
       {/* Mobile: stacked tier cards. */}
@@ -103,7 +108,7 @@ export default function CarRentalRichesTierPreview() {
               >
                 {t.featured && (
                   <p className="font-sans text-[10px] font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
-                    Founding open now
+                    {presaleOpen ? "Founding open now" : "Founding price, presale opens with Module 1"}
                   </p>
                 )}
                 <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
@@ -169,7 +174,7 @@ export default function CarRentalRichesTierPreview() {
                   t.featured ? "bg-warm-gold/5" : "bg-cream/40",
                 ].join(" ")}
               >
-                {t.buyable ? (
+                {t.buyable && presaleOpen ? (
                   <CrrFoundingBuyButton
                     source="tiers-mobile"
                     fullWidth
@@ -181,7 +186,9 @@ export default function CarRentalRichesTierPreview() {
                     size="md"
                     fullWidth
                   >
-                    Join the waitlist
+                    {t.buyable
+                      ? `Join the waitlist, lock $${CRR.foundingPriceUsd}`
+                      : "Join the waitlist"}
                   </CarRentalRichesWaitlistTrigger>
                 )}
               </div>
@@ -215,7 +222,7 @@ export default function CarRentalRichesTierPreview() {
                 >
                   {t.featured && (
                     <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-2">
-                      Founding open now
+                      {presaleOpen ? "Founding open now" : "Founding price, presale opens with Module 1"}
                     </p>
                   )}
                   <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight">
@@ -309,7 +316,7 @@ export default function CarRentalRichesTierPreview() {
                     t.featured ? "bg-warm-gold/5" : "",
                   ].join(" ")}
                 >
-                  {t.buyable ? (
+                  {t.buyable && presaleOpen ? (
                     <CrrFoundingBuyButton
                       source="tiers-desktop"
                       fullWidth
@@ -321,8 +328,10 @@ export default function CarRentalRichesTierPreview() {
                       size="md"
                       fullWidth
                     >
-                      Join the waitlist
-                    </CarRentalRichesWaitlistTrigger>
+                    {t.buyable
+                      ? `Join the waitlist, lock $${CRR.foundingPriceUsd}`
+                      : "Join the waitlist"}
+                  </CarRentalRichesWaitlistTrigger>
                   )}
                 </div>
               ))}
