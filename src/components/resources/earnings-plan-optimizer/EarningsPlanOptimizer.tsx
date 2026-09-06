@@ -129,7 +129,7 @@ export default function EarningsPlanOptimizer({ canSync = false }: {
             </>
           ) : (
             <p className="font-sans text-sm leading-relaxed">
-              Enter your gross and the car's value to get a recommendation. The
+              Enter your gross and the car&rsquo;s value to get a recommendation. The
               short version of the method: higher plans favor lower-value cars
               run with a strong photo protocol; lower plans favor high-value
               cars and hosts who cannot absorb a surprise bill.

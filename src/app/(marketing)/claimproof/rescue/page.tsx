@@ -223,7 +223,7 @@ export default function RescueChecklistPage() {
               This checklist handles the first 24 hours. The{" "}
               <strong className="text-white">full Claim Proof system</strong>{" "}
               handles what comes after: the appraisal that comes in under the
-              shop's estimate, the supplement request, the follow-up that goes
+              shop&rsquo;s estimate, the supplement request, the follow-up that goes
               quiet, and the fleet SOPs.{" "}
               <Link
                 href="/claimproof"

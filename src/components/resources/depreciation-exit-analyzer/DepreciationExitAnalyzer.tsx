@@ -212,7 +212,7 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
               percentage of whatever value remains. The model holds cash net
               flat while that decline shrinks, which flatters the later years;
               in reality rates soften as a car ages. Re-run it annually with
-              the car's real trailing numbers.
+              the car&rsquo;s real trailing numbers.
             </p>
           </div>
         </div>
@@ -358,7 +358,7 @@ export default function DepreciationExitAnalyzer({ canSync = false }: {
             <div className="bg-cream border border-terracotta/40 rounded-lg p-4">
               <p className="font-sans text-sm text-near-black">
                 <span className="font-semibold">Loan check:</span> from year{" "}
-                {r.underwaterFromYear}, the car's estimated value drops below
+                {r.underwaterFromYear}, the car&rsquo;s estimated value drops below
                 the loan balance you entered. If the payoff really tracks that
                 high, selling means writing a check. Watch the payoff against
                 this curve, not against the payment.
