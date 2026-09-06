@@ -18,6 +18,7 @@
 - Every hook is best-effort: wrap in try/catch, log with a `[nurture]` prefix, never change the route's response.
 - Display prices come from `RRR_PRICES`, `BLUEPRINT`, `CRR`, `CRR_BLUEPRINT`, and the new `OPERATOR_BUNDLE` constants. Never retype a dollar amount.
 - `tsc --noEmit`, `npm run lint`, and `npm test` must be clean before each commit. Commits stay on branch `crr/inside-lane-2026-09`; no push, no merge, no deploy without Alex.
+  - **Outcome (2026-09-06):** plan executed and the branch was merged to local `main`, then deleted. `main` is 6 commits ahead of `origin/main`: still not pushed and not deployed. Live status: `Projects/Car Rental Riches/PRODUCT_STATUS.md`.
 
 ---
 

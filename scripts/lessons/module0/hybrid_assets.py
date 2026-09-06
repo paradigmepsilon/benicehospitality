@@ -22,6 +22,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import ELEVEN_MODEL, VOICE_ID, VOICE_SETTINGS, env_key  # noqa: E402
 
+import os
+# Per-course voice override (Della is the default in build.py). Car Rental Riches sets
+# ELEVEN_VOICE_ID to Alex's ElevenLabs clone.
+VOICE_ID = os.environ.get("ELEVEN_VOICE_ID", VOICE_ID)
+
 
 def tts(lesson_dir: Path):
     wp = lesson_dir / "work_player"

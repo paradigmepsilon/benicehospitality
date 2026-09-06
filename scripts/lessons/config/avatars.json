@@ -1,12 +1,10 @@
 {
   "_comment": "Per-module avatar IDs and the locked voice clone ID. Read by Claude Code at the start of every lesson build. When a new module needs a new avatar, generate one in HeyGen and add it here BEFORE invoking the lesson build.",
-
   "voice": {
     "id": "13baf65f739742068cb912c60784c680",
     "name": "Be Nice Hospitality",
     "engine": "starfish"
   },
-
   "modules": {
     "1": {
       "primary": "3b4169a21ffe4ab0a1b3336c67d8add9",
@@ -24,6 +22,85 @@
       "tone_note": "Marketing module. Approachable and practical for brand, content, and conversion (lessons 5.1 to 5.3).",
       "scene_description": "Della in a light blue shirt and patterned headband at a wood table, bright glass-walled interior",
       "orientation": "landscape (2752x1536) - 16:9 1080p renders come back full-frame, no crop/blur composite needed"
+    },
+    "6": {
+      "primary": "f058ef69254342699f6bcb27a2c4797b",
+      "tone_note": "Bonus revenue module. Operator sending students off: upsells, loyalty, and the honest go/no-go before property two (lessons 6.1 to 6.3).",
+      "scene_description": "Della in her living room",
+      "orientation": "landscape (2752x1536) - 16:9 1080p renders come back full-frame, no crop/blur composite needed"
+    }
+  },
+  "car_rental_riches": {
+    "_comment": "Car Rental Riches (instructor Alex Henry). Hybrid player: HeyGen avatar intro + Alex's cloned voice for the VO. Same BNHG design tokens and SVGs as RRR.",
+    "voices": {
+      "avatar_default": {
+        "id": "ebc34fa1ce2348fd98324ac05cf7f53b",
+        "name": "Alex's Voice",
+        "note": "Default voice on the Module 1 photo avatar. Not starfish-compatible, so it cannot drive create_speech TTS."
+      },
+      "tts_starfish": {
+        "id": "e49e4f63428d4da68d5efd0d0143c7e8",
+        "name": "Be Nice Hospitality (male)",
+        "note": "Starfish-compatible private clone; usable for create_speech segment VO. Alex to confirm which clone is the course voice before the first TTS run."
+      },
+      "elevenlabs": {
+        "id": "c3EeAYYvate8k0VKaxQL",
+        "name": "Alex_H",
+        "model": "eleven_v3",
+        "note": "Alex's pick 2026-09-06 for all CRR narration and avatar audio (ELEVEN_VOICE_ID). HeyGen-side link: a4e58726170e48e6b16cb3d2a4dc2007."
+      }
+    },
+    "modules": {
+      "1": {
+        "primary": "6878c138e86e4fcd9e86401239fba4e1",
+        "name": "Alex Henry in blue shirt",
+        "avatar_type": "photo_avatar",
+        "tone_note": "Welcome and orientation module. Operator-to-operator, receipts over hype.",
+        "scene_description": "Alex on a grey sofa in a blue overshirt over a white tee, cream wall, dried grasses and a lamp behind him",
+        "orientation": "landscape (2752x1536) - 16:9 1080p renders come back full-frame, no crop/blur composite needed",
+        "supported_api_engines": [
+          "avatar_v",
+          "avatar_iv",
+          "avatar_iii"
+        ]
+      }
+    },
+    "looks": {
+      "blue_shirt_a": {
+        "id": "6878c138e86e4fcd9e86401239fba4e1",
+        "name": "Alex Henry in blue shirt",
+        "scene": "grey sofa, cream wall"
+      },
+      "blue_shirt_b": {
+        "id": "9d966388dbde4830ad7c416e1ca51081",
+        "name": "Alex Henry in blue shirt",
+        "scene": "grey sofa, window light, sideboard"
+      },
+      "podcast_host": {
+        "id": "f93e31fa2df2430a89df2e6dac8f7a98",
+        "name": "Alex Henry the Podcast Host",
+        "scene": "olive overshirt, boom mic, navy acoustic panels"
+      },
+      "studio": {
+        "id": "354b3bf75a484e4b87f8152192abe91a",
+        "name": "Alex Henry in his studio",
+        "scene": "navy shirt, mic arm, studio monitors, blue backlight"
+      }
+    },
+    "module_looks": {
+      "_note": "Assumption 2026-09-06 (Alex only named the Module 1 look). All landscape 2752x1536, full-frame renders. Re-render any intro if Alex wants a different look.",
+      "1": "blue_shirt_a",
+      "2": "blue_shirt_b",
+      "3": "studio",
+      "4": "blue_shirt_a",
+      "5": "podcast_host",
+      "6": "blue_shirt_b",
+      "7": "podcast_host",
+      "8": "blue_shirt_a",
+      "9": "studio",
+      "10": "blue_shirt_b",
+      "11": "podcast_host",
+      "12": "studio"
     }
   }
 }

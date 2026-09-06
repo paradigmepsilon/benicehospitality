@@ -30,6 +30,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_hybrid import EXTRA_CSS, PLAYER_JS, SVG_DIR, TEMPLATE, check_svg, duration, norm  # noqa: E402
 
 TABLE_CSS = """
+/* ---- optional intro note (course affiliation line) ---- */
+.intro-note { margin-top: 2.2vh; font-family: var(--font-mono); font-size: clamp(11px, 0.75vw, 14px); letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.72); }
+
 /* ---- comparison table layout ---- */
 .slide-table { padding: 6vh 6.5vw 5vh; display: flex; flex-direction: column; height: 100%; }
 .slide-table .header { margin-bottom: 3.4vh; }
@@ -99,13 +102,14 @@ def header(s) -> str:
 
 
 def r_video_intro(s, ctx):
+    note = f'<div class="intro-note">{esc(s["note"])}</div>' if s.get("note") else ""
     return f"""
 <section class="slide slide-video-intro{' active' if ctx.n == 0 else ''}" data-layout="video-intro">
   <video class="slide-media" src="video/{s['video']}" preload="auto" playsinline></video>
   <img class="full-lockup" src="BNHG_full_lockup.svg" alt="Be Nice Hospitality Group">
   <div class="intro-overlay" data-reveal-at="0.40">
     <div class="intro-eyebrow">{esc(s['eyebrow'])}</div>
-    <h1 class="intro-title">{esc(s['title'])}</h1>
+    <h1 class="intro-title">{esc(s['title'])}</h1>{note}
   </div>
   {ctx.num()}
 </section>"""
@@ -307,7 +311,7 @@ def build(lesson_dir: Path):
     tpl = TEMPLATE.read_text()
     head, _script = tpl.split("<script>", 1)
     head = (head
-            .replace("{{HTML_TITLE}}", f"Room Rental Riches · Lesson {mod}.{les} · {spec['title']}")
+            .replace("{{HTML_TITLE}}", f"{spec.get('course', 'Room Rental Riches')} · Lesson {mod}.{les} · {spec['title']}")
             .replace("{{MODULE_TAG}}", spec["module_tag"])
             .replace("{{LESSON_TITLE}}", f"Lesson {mod}.{les} · {spec['title']}")
             .replace("</style>", EXTRA_CSS + TABLE_CSS + "\n</style>")
