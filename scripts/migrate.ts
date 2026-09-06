@@ -2022,6 +2022,46 @@ async function migrate() {
   `;
   console.log("  ✓ viability_scorecards.dashboard_hidden_at column ready");
 
+  // Course nurture engine (src/lib/nurture). Sequences live in code; these two
+  // tables hold who is enrolled in which sequence and what has been sent.
+  // A send row per (enrollment, step) is the idempotency guard: a cron tick
+  // that races or retries cannot email the same step twice.
+  await sql`
+    CREATE TABLE IF NOT EXISTS course_nurture_enrollments (
+      id SERIAL PRIMARY KEY,
+      email TEXT NOT NULL,
+      sequence_key TEXT NOT NULL,
+      next_step INT NOT NULL DEFAULT 0,
+      next_send_at TIMESTAMPTZ NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','completed','stopped')),
+      stop_reason TEXT,
+      context JSONB NOT NULL DEFAULT '{}'::jsonb,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (email, sequence_key)
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS course_nurture_due_idx
+      ON course_nurture_enrollments(status, next_send_at)
+  `;
+  console.log("  ✓ course_nurture_enrollments table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS course_nurture_sends (
+      id SERIAL PRIMARY KEY,
+      enrollment_id INT NOT NULL REFERENCES course_nurture_enrollments(id) ON DELETE CASCADE,
+      step INT NOT NULL,
+      email TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      resend_message_id TEXT,
+      error TEXT,
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (enrollment_id, step)
+    )
+  `;
+  console.log("  ✓ course_nurture_sends table created");
+
   console.log("Migrations complete!");
 }
 
