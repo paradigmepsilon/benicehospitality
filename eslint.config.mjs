@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Nested sub-projects with their own toolchains and build output. Both
+    // are excluded from tsconfig.json for the same reason; the-hosts-edge is
+    // gitignored entirely, and its .next/ output is not source.
+    "the-hosts-edge/**",
+    "nice-courses/**",
+    "**/.next/**",
   ]),
 ]);
 
