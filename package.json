@@ -25,7 +25,8 @@
     "crr-book:build": "tsx scripts/build-crr-book.ts",
     "crr-book:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts",
     "crr-covers:build": "tsx scripts/build-crr-covers.ts",
-    "crr-free-ebook:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts --free"
+    "crr-free-ebook:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts --free",
+    "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
