@@ -82,7 +82,6 @@ const SCORECARDS_PREVIEW = 3;
 
 const LANE_TABS: { id: LaneId; label: string }[] = [
   { id: "coliving", label: "Co-living" },
-  { id: "boutique", label: "Boutique Stays" },
   { id: "fleet", label: "Autos" },
 ];
 

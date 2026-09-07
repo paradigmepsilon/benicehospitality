@@ -67,14 +67,26 @@ const nextConfig: NextConfig = {
   /**
    * IA migration redirects.
    *
-   * Catalog page renamed from /courses to /education. Nested course detail
-   * routes (/courses/room-rental-riches/*) are unaffected.
+   * Catalog page renamed from /courses to /education, then /education was
+   * retired in favor of /training as the training hub. Both old paths land on
+   * /training directly rather than chaining through the retired stub. Nested
+   * course detail routes (/courses/room-rental-riches/*) are unaffected.
    */
   async redirects() {
     return [
       {
+        source: "/education",
+        destination: "/training",
+        permanent: true,
+      },
+      // Moved here from Task 1 by controller ruling: /training only exists as
+      // of this task, so this is the first point at which either redirect has
+      // a live target. Replaces the prior "/courses" -> "/education" entry
+      // rather than adding a second one, so the catalog rename no longer
+      // chains through the retired /education stub.
+      {
         source: "/courses",
-        destination: "/education",
+        destination: "/training",
         permanent: true,
       },
       {

@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { sql } from "@/lib/db";
-import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 import { COURSES } from "@/lib/courses";
 import { liveResourceTools } from "@/lib/resources/registry";
 
@@ -21,6 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/management`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/management/fleet`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
     { url: `${baseUrl}/management/co-living`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    // Training hub, new in the same repositioning. Replaces the /education
+    // stub (noindex, never listed here) and the /courses redirect target.
+    { url: `${baseUrl}/training`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/della`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/alex`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/marketplace`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
@@ -51,13 +53,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const resourcePages: MetadataRoute.Sitemap = TIER_ZERO_RESOURCES.map((r) => ({
-    url: `${baseUrl}/resources/${r.slug}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
-
   const posts = await sql`
     SELECT slug, updated_at, created_at FROM blog_posts
     WHERE published = true AND (published_at IS NULL OR published_at <= NOW())
@@ -74,7 +69,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...resourceToolPages,
     ...coursePages,
-    ...resourcePages,
     ...blogPages,
   ];
 }

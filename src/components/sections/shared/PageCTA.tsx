@@ -35,7 +35,7 @@ const AUDIENCE_PRESETS: Record<PageCTAAudience, AudiencePreset> = {
     headline: "Run your operation like a real business.",
     subtext:
       "Pick a course or join the Nice Host Network. You'll be in a room with operators doing the same work.",
-    primary: { href: "/education", label: "See the Courses" },
+    primary: { href: "/training", label: "See the Courses" },
     secondary: { href: "/community", label: "Join the Network" },
   },
   owner: {

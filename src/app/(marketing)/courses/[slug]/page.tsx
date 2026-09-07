@@ -244,7 +244,7 @@ function WaitlistCoursePage({ course }: { course: Course }) {
           <p className="font-sans text-sm text-charcoal/60">
             Or{" "}
             <Link
-              href="/education"
+              href="/training"
               className="text-primary-green hover:text-primary-green-dark underline underline-offset-2 font-medium"
             >
               browse the full catalog

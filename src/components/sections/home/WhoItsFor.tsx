@@ -34,19 +34,6 @@ const OPERATORS: Operator[] = [
     },
   },
   {
-    lane: "boutique",
-    eyebrow: "Boutique Stays",
-    heading: "If you run independent boutique stays",
-    body:
-      "Independent boutique hotels, inns, and the design-forward short-term and vacation stays guests book on purpose. The OTAs are eating into your revenue, your tech stack is held together by a vendor who half-quit, and the last agency you hired left you with slides and an invoice. Signal works the way you'd actually want a partner to work. Outcome-tied, transparent, willing to be measured.",
-    ctaLabel: "Explore Boutique Stays",
-    ctaHref: "/boutique-stays",
-    image: {
-      src: "/images/Website Images/image3.png",
-      alt: "Boutique stay exterior at dusk",
-    },
-  },
-  {
     lane: "fleet",
     eyebrow: "Autos",
     heading: "If you run a rental fleet",

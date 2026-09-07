@@ -34,7 +34,7 @@ interface FooterColumn {
 const EDUCATION_COLUMN: FooterColumn = {
   heading: "Education",
   links: [
-    { label: "Catalog", href: "/education" },
+    { label: "Catalog", href: "/training" },
     { label: "Community", href: "/community" },
     { label: "Insights", href: "/insights" },
     { label: "Resources", href: "/resources" },

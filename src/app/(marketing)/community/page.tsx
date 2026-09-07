@@ -67,7 +67,7 @@ export default function CommunityPage() {
             long-term rentals, Turo fleets, and boutique stays.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button href="/education" variant="primary" size="lg">
+            <Button href="/training" variant="primary" size="lg">
               Get In Through a Course
             </Button>
             <Button href="/login" variant="secondary" size="lg">

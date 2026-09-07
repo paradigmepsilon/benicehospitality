@@ -57,7 +57,7 @@ const BAND_META: Record<
     ctaHeadline: "Start with the playbook.",
     ctaBody:
       "Della's Room Rental Riches course walks through co-living setup end to end. The Module 2 lessons on legal and zoning are the most directly relevant to a low score.",
-    ctaHref: "/education",
+    ctaHref: "/training",
     ctaLabel: "See the Course",
   },
 };

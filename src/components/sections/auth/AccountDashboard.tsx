@@ -54,7 +54,7 @@ interface AccountDashboardProps {
 
 // Lane order for the grouped shelf. Fixed rather than derived so the sections
 // don't reshuffle as the member saves things.
-const LANE_ORDER: LaneId[] = ["coliving", "boutique", "fleet"];
+const LANE_ORDER: LaneId[] = ["coliving", "fleet"];
 
 const TIER_LABEL: Record<EnrollmentSummary["tier"], string> = {
   "self-paced": "Self-paced",

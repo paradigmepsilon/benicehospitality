@@ -1,13 +1,40 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { ResourceToolMeta } from "@/lib/resources/registry";
+import type { LaneId } from "@/lib/lanes";
+import { laneForTool, type ResourceToolMeta } from "@/lib/resources/registry";
 import type { ResourceAccess } from "@/lib/resources/access";
 import SaveToolButton from "@/components/resources/SaveToolButton";
 import SaveProgressButton from "@/components/resources/SaveProgressButton";
 import { ToolSaveProvider } from "@/components/resources/ToolSaveContext";
+import Button from "@/components/ui/Button";
+import { RRR_PATHS } from "@/lib/room-rental-riches";
+import { CRR } from "@/lib/car-rental-riches";
+import { MANAGEMENT_OFFERS } from "@/lib/management/constants";
 
 const SITE_URL = "https://benicehospitality.com";
+
+/**
+ * "Next step" footer content per lane. Course link and management link both
+ * derive from the same constants every other page reads (RRR_PATHS, CRR,
+ * MANAGEMENT_OFFERS), so a route or copy change in one of those files updates
+ * this footer automatically instead of needing a matching edit here.
+ */
+const LANE_NEXT_STEP: Record<
+  LaneId,
+  { courseName: string; courseHref: string; managementHref: string }
+> = {
+  coliving: {
+    courseName: "Room Rental Riches",
+    courseHref: RRR_PATHS.hub,
+    managementHref: `/management/${MANAGEMENT_OFFERS.rooms.slug}`,
+  },
+  fleet: {
+    courseName: CRR.name,
+    courseHref: CRR.path,
+    managementHref: `/management/${MANAGEMENT_OFFERS.car.slug}`,
+  },
+};
 
 // Shared page chrome for every gated resource tool: dark hero, three-step
 // "how it works", and a two-column tool region (gated tool + "what you'll get"
@@ -26,6 +53,7 @@ export default function ResourceToolLayout({
   access: ResourceAccess;
   children: ReactNode;
 }) {
+  const nextStep = LANE_NEXT_STEP[laneForTool(tool)];
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -182,6 +210,32 @@ export default function ResourceToolLayout({
           </aside>
         </div>
         </ToolSaveProvider>
+      </section>
+
+      {/* Next step: this tool is one piece of the curriculum for its asset
+          class, and BNHG runs that same asset class for owners who would
+          rather not. Shared here once instead of on every tool page. */}
+      <section className="py-14 sm:py-16 px-6 bg-white border-t border-light-gray">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="font-sans text-xs font-semibold tracking-[0.18em] uppercase text-warm-gold mb-3">
+            Next step
+          </p>
+          <h2 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
+            This tool is one piece. The course is the whole system.
+          </h2>
+          <p className="font-sans text-base text-charcoal/80 leading-relaxed mb-8 max-w-xl mx-auto">
+            {nextStep.courseName} walks through this and everything around
+            it, step by step. Or skip straight to done for you.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button href={nextStep.courseHref} variant="primary" size="md">
+              See {nextStep.courseName}
+            </Button>
+            <Button href={nextStep.managementHref} variant="secondary" size="md">
+              Or let us run it
+            </Button>
+          </div>
+        </div>
       </section>
     </>
   );

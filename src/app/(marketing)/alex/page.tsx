@@ -117,11 +117,15 @@ const FAQS = [
 
 export default function AlexPage() {
   return (
-    // The page carries the boutique lane because that is BNHG's house gold, and
-    // this is a founder page rather than a vertical page. The fleet work leads
-    // the *content*; the Car Rental Riches card inside is the one block scoped
-    // to the fleet lane, since it belongs to a different vertical.
-    <LaneSection lane="boutique">
+    // The boutique lane (BNHG's house gold, used here because this is a
+    // founder page rather than a vertical page) was retired with the
+    // resources registry regroup. Every class below already falls back to
+    // var(--color-warm-gold)/var(--color-cream) when no lane wrapper sets
+    // --lane-accent/--lane-wash, so this plain div renders identically. The
+    // fleet work leads the *content*; the Car Rental Riches card inside is
+    // the one block still scoped to the fleet lane, since it belongs to a
+    // different vertical.
+    <div className="relative">
       {/* HERO */}
       <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
@@ -736,6 +740,6 @@ export default function AlexPage() {
           </div>
         </div>
       </section>
-    </LaneSection>
+    </div>
   );
 }

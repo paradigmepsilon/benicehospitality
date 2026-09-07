@@ -21,7 +21,7 @@
  * in sync — the whole point is that they match what ships on Instagram.
  */
 
-export type LaneId = "coliving" | "boutique" | "fleet";
+export type LaneId = "coliving" | "fleet";
 
 export interface LaneTokens {
   id: LaneId;
@@ -32,10 +32,10 @@ export interface LaneTokens {
   /**
    * The lane's mark color on light surfaces — eyebrows, keylines, dots.
    *
-   * Matches `carousel` for co-living and fleet. Boutique is the exception: its
-   * carousel charcoal reads as plain body ink at 11px, so on web it resolves to
-   * warm gold instead. Boutique IS the house brand, so gold is the honest
-   * answer, and it keeps all three lanes actually distinguishable.
+   * Matches `carousel` for both lanes today. The boutique lane (BNHG's house
+   * gold, resolved instead of its carousel charcoal) was retired with the
+   * resources registry regroup; pages that carried it now rely on their own
+   * var(--color-warm-gold) fallback for the same accent.
    */
   accent: string;
   /** Lightened variant, legible on near-black. AA against #1a1a1a. */
@@ -57,20 +57,6 @@ export const LANES: Record<LaneId, LaneTokens> = {
     // 7% of #bc3229 over cream lands on the same value.
     wash: "#f6eae5",
     carousel: "#bc3229",
-  },
-  boutique: {
-    id: "boutique",
-    name: "Boutique Stays",
-    company: "BNHG",
-    // Warm gold, not the carousel charcoal. See the `accent` doc above. This is
-    // a deepened gold rather than the site's #b08d57: at eyebrow size that value
-    // is only 2.91:1 on cream, under the 4.5:1 AA floor. This lands at 4.55:1
-    // and still reads unmistakably gold.
-    accent: "#8a6d3f",
-    // On near-black the standard gold is already 5.56:1, so it stands as-is.
-    accentOnDark: "#b08d57",
-    wash: "#eeece7",
-    carousel: "#474846",
   },
   fleet: {
     id: "fleet",

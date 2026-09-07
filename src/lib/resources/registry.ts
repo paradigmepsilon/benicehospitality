@@ -17,12 +17,13 @@ export type ResourceArchetype =
 export type ResourceAccess = "free-email";
 
 /**
- * Audience lane a tool belongs to, matching src/lib/lanes.ts. Every Phase 1
- * tool is "property" (co-living); the fleet and boutique lanes are declared so
- * their door pages can query for tools before any exist — liveResourceTools()
- * returns [] and those sections render their empty state.
+ * Audience lane a tool belongs to, matching src/lib/lanes.ts. Every tool is
+ * either "property" (co-living) or "fleet". The boutique lane was retired
+ * with the resources registry regroup: it never had a live tool, so this and
+ * RESOURCE_CATEGORY_TO_LANE dropped it in the same change that dropped
+ * "boutique" from LaneId and LANES in lanes.ts.
  */
-export type ResourceCategory = "property" | "fleet" | "boutique";
+export type ResourceCategory = "property" | "fleet";
 
 /**
  * The registry's `category` predates src/lib/lanes.ts and says "property"
@@ -35,7 +36,6 @@ export type ResourceCategory = "property" | "fleet" | "boutique";
  */
 export const RESOURCE_CATEGORY_TO_LANE: Record<ResourceCategory, LaneId> = {
   property: "coliving",
-  boutique: "boutique",
   fleet: "fleet",
 };
 

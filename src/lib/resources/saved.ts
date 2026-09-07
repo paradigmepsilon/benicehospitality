@@ -87,8 +87,8 @@ export async function listSavedResourceTools(
 }
 
 /**
- * Same data, pre-bucketed for the /account/resources tabs. Always returns all
- * three lane keys so every tab renders (empty ones show their empty state).
+ * Same data, pre-bucketed for the /account/resources tabs. Always returns
+ * both lane keys so every tab renders (empty ones show their empty state).
  */
 export async function listSavedResourceToolsByLane(
   userId: number,
@@ -96,7 +96,6 @@ export async function listSavedResourceToolsByLane(
   const all = await listSavedResourceTools(userId);
   const byLane: Record<LaneId, SavedResourceTool[]> = {
     coliving: [],
-    boutique: [],
     fleet: [],
   };
   for (const tool of all) byLane[tool.lane].push(tool);

@@ -26,7 +26,6 @@ export const dynamic = "force-dynamic";
 
 const EMPTY_BY_LANE: Record<LaneId, SavedToolCard[]> = {
   coliving: [],
-  boutique: [],
   fleet: [],
 };
 
@@ -61,7 +60,6 @@ export default async function ResourcesIndexPage({
         ? Promise.resolve(EMPTY_BY_LANE)
         : listSavedResourceToolsByLane(ctx.userId).then((byLane) => ({
             coliving: byLane.coliving.map(toCard),
-            boutique: byLane.boutique.map(toCard),
             fleet: byLane.fleet.map(toCard),
           })),
       listResourcesForTier(effective),

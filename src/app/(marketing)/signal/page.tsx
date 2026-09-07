@@ -7,7 +7,6 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import PageCTA from "@/components/sections/shared/PageCTA";
 import SectionDivider from "@/components/ui/SectionDivider";
-import LaneSection from "@/components/ui/LaneSection";
 import OfferingHero from "@/components/sections/shared/OfferingHero";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
@@ -174,10 +173,13 @@ const HERO_IMAGE = "/images/Website%20Images/signal%20header.png";
 
 export default function SignalPage() {
   return (
-    // Signal is the boutique-stays door. Boutique resolves to gold rather than
-    // its carousel charcoal, so this reads as the house palette deepened a
-    // notch, not a third color. See src/lib/lanes.ts.
-    <LaneSection lane="boutique">
+    // The boutique lane (BNHG's house gold) was retired with the resources
+    // registry regroup; every class below already falls back to
+    // var(--color-warm-gold)/var(--color-cream) when no lane wrapper sets
+    // --lane-accent/--lane-wash, so this plain div renders identically. See
+    // src/lib/lanes.ts. Signal itself is slated for removal later in this
+    // plan.
+    <div className="relative">
       <OfferingHero
         eyebrow="Signal by Be Nice Hospitality"
         headline="AI services built for"
@@ -492,6 +494,6 @@ export default function SignalPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.nearBlack} />
 
       <PageCTA audience="owner" />
-    </LaneSection>
+    </div>
   );
 }

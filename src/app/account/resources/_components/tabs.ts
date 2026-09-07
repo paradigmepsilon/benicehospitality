@@ -13,6 +13,6 @@ import type { LaneId } from "@/lib/lanes";
 export type TabId = LaneId | "courses";
 
 export function parseTab(raw: string | undefined): TabId {
-  if (raw === "boutique" || raw === "fleet" || raw === "courses") return raw;
+  if (raw === "fleet" || raw === "courses") return raw;
   return "coliving";
 }

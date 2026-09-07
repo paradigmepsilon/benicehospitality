@@ -7,14 +7,17 @@ import AnimatedSection, {
   AnimatedItem,
 } from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
-import { TIER_ZERO_RESOURCES } from "@/lib/tier-zero-resources";
 
 const INTERESTS = ["Co-living Properties", "Boutique Stays", "Autos"];
 
+// The nine boutique lead magnets that used to back this lookup (and the
+// dynamic /resources/[slug] route that served them) were retired with the
+// resources registry regroup. Every real tool now lives at its own static
+// /resources/<slug> route, so there is no name to look up: this just turns
+// the raw slug into a readable phrase for the prefill message.
 function slugToResourceName(slug: string | null): string | null {
   if (!slug) return null;
-  const match = TIER_ZERO_RESOURCES.find((r) => r.slug === slug);
-  return match ? match.name : null;
+  return slug.replace(/-/g, " ");
 }
 
 interface FormState {
