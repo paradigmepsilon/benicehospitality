@@ -45,5 +45,122 @@ test("both offers exist and name no operating company", () => {
 
 test("fee model stays null until env is configured", () => {
   delete process.env.MANAGEMENT_FEE_CAR_PCT;
+  delete process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD;
+  delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
   assert.equal(getManagementFeeModel("car"), null);
+});
+
+test("fee model returns parsed FeeModel when all env vars are set (car)", () => {
+  const saved = {
+    pct: process.env.MANAGEMENT_FEE_CAR_PCT,
+    onboarding: process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD,
+    term: process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS,
+  };
+  try {
+    process.env.MANAGEMENT_FEE_CAR_PCT = "15.5";
+    process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = "250";
+    process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = "6";
+    const model = getManagementFeeModel("car");
+    assert.deepEqual(model, {
+      grossPct: 15.5,
+      onboardingUsd: 250,
+      minimumTermMonths: 6,
+    });
+  } finally {
+    if (saved.pct !== undefined) process.env.MANAGEMENT_FEE_CAR_PCT = saved.pct;
+    else delete process.env.MANAGEMENT_FEE_CAR_PCT;
+    if (saved.onboarding !== undefined) process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = saved.onboarding;
+    else delete process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD;
+    if (saved.term !== undefined) process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = saved.term;
+    else delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
+  }
+});
+
+test("fee model returns null when one of three env vars is missing", () => {
+  const saved = {
+    pct: process.env.MANAGEMENT_FEE_CAR_PCT,
+    onboarding: process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD,
+    term: process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS,
+  };
+  try {
+    process.env.MANAGEMENT_FEE_CAR_PCT = "15.5";
+    process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = "250";
+    delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
+    assert.equal(getManagementFeeModel("car"), null);
+  } finally {
+    if (saved.pct !== undefined) process.env.MANAGEMENT_FEE_CAR_PCT = saved.pct;
+    else delete process.env.MANAGEMENT_FEE_CAR_PCT;
+    if (saved.onboarding !== undefined) process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = saved.onboarding;
+    else delete process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD;
+    if (saved.term !== undefined) process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = saved.term;
+    else delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
+  }
+});
+
+test("fee model returns null when env value is non-numeric", () => {
+  const saved = {
+    pct: process.env.MANAGEMENT_FEE_CAR_PCT,
+    onboarding: process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD,
+    term: process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS,
+  };
+  try {
+    process.env.MANAGEMENT_FEE_CAR_PCT = "abc";
+    process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = "250";
+    process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = "6";
+    assert.equal(getManagementFeeModel("car"), null);
+  } finally {
+    if (saved.pct !== undefined) process.env.MANAGEMENT_FEE_CAR_PCT = saved.pct;
+    else delete process.env.MANAGEMENT_FEE_CAR_PCT;
+    if (saved.onboarding !== undefined) process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = saved.onboarding;
+    else delete process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD;
+    if (saved.term !== undefined) process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = saved.term;
+    else delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
+  }
+});
+
+test("fee model returns null when env value parses to Infinity", () => {
+  const saved = {
+    pct: process.env.MANAGEMENT_FEE_CAR_PCT,
+    onboarding: process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD,
+    term: process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS,
+  };
+  try {
+    process.env.MANAGEMENT_FEE_CAR_PCT = "Infinity";
+    process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = "250";
+    process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = "6";
+    assert.equal(getManagementFeeModel("car"), null);
+  } finally {
+    if (saved.pct !== undefined) process.env.MANAGEMENT_FEE_CAR_PCT = saved.pct;
+    else delete process.env.MANAGEMENT_FEE_CAR_PCT;
+    if (saved.onboarding !== undefined) process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD = saved.onboarding;
+    else delete process.env.MANAGEMENT_FEE_CAR_ONBOARDING_USD;
+    if (saved.term !== undefined) process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS = saved.term;
+    else delete process.env.MANAGEMENT_FEE_CAR_MIN_TERM_MONTHS;
+  }
+});
+
+test("fee model works for rooms asset (ROOMS suffix)", () => {
+  const saved = {
+    pct: process.env.MANAGEMENT_FEE_ROOMS_PCT,
+    onboarding: process.env.MANAGEMENT_FEE_ROOMS_ONBOARDING_USD,
+    term: process.env.MANAGEMENT_FEE_ROOMS_MIN_TERM_MONTHS,
+  };
+  try {
+    process.env.MANAGEMENT_FEE_ROOMS_PCT = "20";
+    process.env.MANAGEMENT_FEE_ROOMS_ONBOARDING_USD = "500";
+    process.env.MANAGEMENT_FEE_ROOMS_MIN_TERM_MONTHS = "12";
+    const model = getManagementFeeModel("rooms");
+    assert.deepEqual(model, {
+      grossPct: 20,
+      onboardingUsd: 500,
+      minimumTermMonths: 12,
+    });
+  } finally {
+    if (saved.pct !== undefined) process.env.MANAGEMENT_FEE_ROOMS_PCT = saved.pct;
+    else delete process.env.MANAGEMENT_FEE_ROOMS_PCT;
+    if (saved.onboarding !== undefined) process.env.MANAGEMENT_FEE_ROOMS_ONBOARDING_USD = saved.onboarding;
+    else delete process.env.MANAGEMENT_FEE_ROOMS_ONBOARDING_USD;
+    if (saved.term !== undefined) process.env.MANAGEMENT_FEE_ROOMS_MIN_TERM_MONTHS = saved.term;
+    else delete process.env.MANAGEMENT_FEE_ROOMS_MIN_TERM_MONTHS;
+  }
 });

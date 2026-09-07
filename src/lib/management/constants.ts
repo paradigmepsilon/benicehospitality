@@ -85,7 +85,7 @@ export const MANAGEMENT_OFFERS: Record<ManagedAsset, ManagementOffer> = {
     operator: {
       name: "Della Henry",
       blurb:
-        "Della runs the co-living side day to day across five Southeast cities.",
+        "Della runs the co-living side day to day across the Southeast.",
     },
   },
 };
