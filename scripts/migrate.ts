@@ -2062,6 +2062,40 @@ async function migrate() {
   `;
   console.log("  ✓ course_nurture_sends table created");
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS management_applications (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT,
+      asset TEXT NOT NULL CHECK (asset IN ('car', 'rooms')),
+      asset_count INTEGER NOT NULL DEFAULT 1,
+      state VARCHAR(2) NOT NULL,
+      city TEXT,
+      current_status TEXT NOT NULL,
+      timeline TEXT NOT NULL,
+      wants TEXT,
+      heard_from TEXT,
+      status TEXT NOT NULL DEFAULT 'new'
+        CHECK (status IN ('new','contacted','call_booked','qualified','declined','signed')),
+      booking_id INTEGER REFERENCES bookings(id) ON DELETE SET NULL,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  // Admin list is "newest first, optionally filtered by status", so one
+  // composite index serves the default view and every filtered view.
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_management_applications_status
+    ON management_applications(status, created_at DESC)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_management_applications_email
+    ON management_applications(email)
+  `;
+  console.log("  ✓ management_applications table created");
+
   console.log("Migrations complete!");
 }
 

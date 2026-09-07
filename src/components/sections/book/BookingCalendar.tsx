@@ -137,6 +137,18 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
     if (f === "alex" || f === "della") setRequestedFounder(f);
     const s = params.get("source");
     if (s && VALID_BOOKING_SOURCES.has(s)) setClickSource(s);
+
+    const prefillName = params.get("name");
+    const prefillEmail = params.get("email");
+    if (prefillName || prefillEmail) {
+      setForm((prev) => ({
+        ...prev,
+        ...(prefillName ? { name: prefillName.slice(0, 120) } : {}),
+        ...(prefillEmail && prefillEmail.includes("@")
+          ? { email: prefillEmail.slice(0, 200) }
+          : {}),
+      }));
+    }
   }, []);
 
   // Read audit_token from URL once on mount and fetch the teaser to display the

@@ -39,6 +39,15 @@ export const BOOKING_SOURCES = {
   PAGECTA_DEFAULT: "pagecta_default",
   PAGECTA_OWNER: "pagecta_owner",
   LOGIN_INLINE: "login_inline",
+  // Management bin. BNHG is the contracting party on all of these.
+  MGMT_OVERVIEW_CTA: "mgmt_overview_cta",
+  MGMT_FLEET_HERO: "mgmt_fleet_hero",
+  MGMT_FLEET_FINAL_CTA: "mgmt_fleet_final_cta",
+  MGMT_COLIVING_HERO: "mgmt_coliving_hero",
+  MGMT_COLIVING_FINAL_CTA: "mgmt_coliving_final_cta",
+  MGMT_APPLY_CAR: "mgmt_apply_car",
+  MGMT_APPLY_ROOMS: "mgmt_apply_rooms",
+  HOME_OWNER_PORTAL: "home_owner_portal",
 } as const;
 
 export type BookingSource =
@@ -55,6 +64,8 @@ export interface BookingUrlOptions {
   auditToken?: string;
   utmSource?: string;
   utmMedium?: string;
+  prefillName?: string;
+  prefillEmail?: string;
 }
 
 export function bookingUrl(options: BookingUrlOptions = {}): string {
@@ -65,5 +76,7 @@ export function bookingUrl(options: BookingUrlOptions = {}): string {
   if (options.source) p.set("source", options.source);
   if (options.utmSource) p.set("utm_source", options.utmSource);
   if (options.utmMedium) p.set("utm_medium", options.utmMedium);
+  if (options.prefillName) p.set("name", options.prefillName);
+  if (options.prefillEmail) p.set("email", options.prefillEmail);
   return p.toString() ? `/book?${p.toString()}` : "/book";
 }
