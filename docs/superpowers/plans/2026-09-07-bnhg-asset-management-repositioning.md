@@ -324,7 +324,7 @@ export const MANAGEMENT_OFFERS: Record<ManagedAsset, ManagementOffer> = {
     operator: {
       name: "Della Henry",
       blurb:
-        "Della runs the co-living side day to day across five Southeast cities.",
+        "Della runs the co-living side day to day across the Southeast.",
     },
   },
 };
@@ -1082,7 +1082,9 @@ export async function POST(request: Request) {
         console.error("[management] nurture enroll failed:", err);
       }
       try {
-        const to = process.env.ADMIN_NOTIFICATION_EMAIL || "admin@benicehospitality.com";
+        // Same env var the bookings route already uses for admin notifications
+        // (src/app/api/bookings/route.ts:220). Do not introduce a second one.
+        const to = process.env.CONTACT_EMAIL || "admin@benicehospitality.com";
         const sent = await getResend().emails.send({
           from:
             process.env.MANAGEMENT_FROM_EMAIL ||
