@@ -622,6 +622,40 @@ export function internalResourceLeadEmail(p: InternalResourceLeadPayload) {
   });
 }
 
+export function internalManagementApplicationEmail(a: {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  asset: string;
+  assetCount: number;
+  state: string;
+  city: string;
+  currentStatus: string;
+  timeline: string;
+  wants: string;
+  heardFrom: string;
+}): string {
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:4px 12px 4px 0;color:#807868;">${label}</td><td style="padding:4px 0;color:#1a1a1a;">${value || "not given"}</td></tr>`;
+  return `
+    <h2 style="font-family:Georgia,serif;color:#1a1a1a;">New management application</h2>
+    <p style="color:#3d3d3d;">Application #${a.id}. ${a.asset === "car" ? "Fleet" : "Co-living"}, ${a.assetCount} asset(s), ${a.city ? a.city + ", " : ""}${a.state}.</p>
+    <table style="border-collapse:collapse;font-family:system-ui,sans-serif;font-size:14px;">
+      ${row("Name", a.name)}
+      ${row("Email", a.email)}
+      ${row("Phone", a.phone)}
+      ${row("Asset", a.asset)}
+      ${row("Count", String(a.assetCount))}
+      ${row("Location", [a.city, a.state].filter(Boolean).join(", "))}
+      ${row("Today", a.currentStatus)}
+      ${row("Timeline", a.timeline)}
+      ${row("Heard from", a.heardFrom)}
+    </table>
+    <p style="color:#3d3d3d;"><strong>What they want:</strong><br>${a.wants || "not given"}</p>
+  `;
+}
+
 export interface WaitlistStudentEmailPayload {
   name: string;
   tierName: string;

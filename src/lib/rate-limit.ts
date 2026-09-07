@@ -92,6 +92,9 @@ export const claimProofResendLimiter = createLimiter(3, 60 * 1000);
 // permission changes or SW updates.
 export const pushSubscribeLimiter = createLimiter(20, 60 * 1000);
 
+// Management application intake (fleet or co-living apply form).
+export const managementApplyLimiter = createLimiter(5, 15 * 60 * 1000);
+
 // Auth limiters. Login is kept tight to slow credential stuffing — each key
 // (typically email+IP) gets 5 attempts per 15 minutes. Password-reset request
 // is per-IP since the email is unauthenticated input. Reset consumption is

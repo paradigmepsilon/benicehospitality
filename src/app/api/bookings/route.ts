@@ -14,6 +14,7 @@ import {
 } from "@/lib/constants/call-types";
 import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { stopNurture } from "@/lib/nurture/engine";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -256,6 +257,13 @@ export async function POST(req: Request) {
       await posthog.flush();
     } catch (phErr) {
       console.error("[bookings] PostHog capture failed:", phErr);
+    }
+
+    // A booked call ends the management applicant sequence for that address.
+    try {
+      await stopNurture(email, "booked_call", ["mgmt_applicant"]);
+    } catch (err) {
+      console.error("[management] stop on booking failed:", err);
     }
 
     return NextResponse.json({ success: true, booking });
