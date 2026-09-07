@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sql } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { updateApplicationStatus } from "@/lib/management/applications";
 
@@ -48,9 +49,18 @@ export async function PATCH(
 
   const payload = body as { status?: unknown; notes?: unknown };
 
+  // Status is optional on this route. The admin page fetches once on mount
+  // and never polls, so the only status a tab knows is whatever was true at
+  // load time. A booking moves a row to call_booked with no admin action at
+  // all, so re-requiring status on every write would mean a plain notes edit
+  // in a tab left open across that transition silently writes the old
+  // status back over the new one. Treat "status omitted" as "leave status
+  // alone" instead.
+  const hasStatus = payload.status !== undefined;
+
   // Reject an unrecognized status here so a typo or stale client never
   // reaches Postgres and trips the table's CHECK constraint as a 500.
-  if (!isValidStatus(payload.status)) {
+  if (hasStatus && !isValidStatus(payload.status)) {
     return NextResponse.json(
       { error: `Status must be one of: ${VALID_STATUSES.join(", ")}` },
       { status: 400 },
@@ -62,7 +72,25 @@ export async function PATCH(
       ? payload.notes.trim().slice(0, 2000)
       : undefined;
 
-  await updateApplicationStatus(id, payload.status, notes);
+  if (!hasStatus) {
+    if (notes === undefined) {
+      return NextResponse.json(
+        { error: "No valid fields to update." },
+        { status: 400 },
+      );
+    }
+    // Notes-only write: touch nothing but notes, so a concurrent status
+    // change (admin-driven or the automatic call_booked transition) is
+    // never clobbered by a stale value from this tab.
+    await sql`
+      UPDATE management_applications
+      SET notes = ${notes}, updated_at = NOW()
+      WHERE id = ${id}
+    `;
+    return NextResponse.json({ success: true });
+  }
+
+  await updateApplicationStatus(id, payload.status as ApplicationStatus, notes);
 
   return NextResponse.json({ success: true });
 }

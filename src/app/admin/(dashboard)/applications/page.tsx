@@ -170,10 +170,15 @@ export default function ApplicationsAdminPage() {
 
     setUpdating(id);
     try {
+      // Send notes only, never this tab's last-known status. The page
+      // fetches once on mount and never polls, so re-sending status here
+      // could silently revert a change that happened elsewhere in the
+      // meantime (including the automatic new -> call_booked transition a
+      // booking triggers with no admin action).
       const res = await fetch(`/api/admin/applications/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: application.status, notes }),
+        body: JSON.stringify({ notes }),
       });
       if (res.ok) {
         setApplications((prev) =>
@@ -406,102 +411,104 @@ export default function ApplicationsAdminPage() {
             </div>
           ) : (
             <div className="bg-white border border-[#e8e4dd] rounded-lg overflow-hidden">
-              {filtered.map((a, i) => (
-                <div
-                  key={a.id}
-                  className={`flex flex-col lg:flex-row lg:items-center gap-3 px-4 py-3 ${
-                    i !== filtered.length - 1
-                      ? "border-b border-[#e8e4dd]"
-                      : ""
-                  } hover:bg-[#f8f6f1]/50 transition-colors`}
-                >
-                  {/* Identity */}
-                  <div className="flex-1 min-w-0 lg:w-48 lg:flex-none">
-                    <p className="text-sm font-medium text-[#1a1a1a] truncate">
-                      {a.name}
-                    </p>
-                    <p className="text-xs text-[#1a1a1a]/55 mt-0.5 truncate">
-                      <a
-                        href={`mailto:${a.email}`}
-                        className="hover:text-[#5b9a2f] transition-colors"
-                      >
-                        {a.email}
-                      </a>
-                      {" · "}
-                      {relativeTime(a.createdAt)}
-                    </p>
-                  </div>
-
-                  {/* Asset badge */}
-                  <span
-                    className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap self-start lg:self-center ${ASSET_BADGE[a.asset]}`}
+              <div className="overflow-x-auto">
+                {filtered.map((a, i) => (
+                  <div
+                    key={a.id}
+                    className={`flex flex-col lg:flex-row lg:items-center gap-3 px-4 py-3 lg:min-w-fit ${
+                      i !== filtered.length - 1
+                        ? "border-b border-[#e8e4dd]"
+                        : ""
+                    } hover:bg-[#f8f6f1]/50 transition-colors`}
                   >
-                    {ASSET_LABELS[a.asset]}
-                  </span>
+                    {/* Identity */}
+                    <div className="flex-1 min-w-0 lg:w-48 lg:flex-none">
+                      <p className="text-sm font-medium text-[#1a1a1a] truncate">
+                        {a.name}
+                      </p>
+                      <p className="text-xs text-[#1a1a1a]/55 mt-0.5 truncate">
+                        <a
+                          href={`mailto:${a.email}`}
+                          className="hover:text-[#5b9a2f] transition-colors"
+                        >
+                          {a.email}
+                        </a>
+                        {" · "}
+                        {relativeTime(a.createdAt)}
+                      </p>
+                    </div>
 
-                  {/* Count */}
-                  <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-14">
-                    x{a.assetCount}
-                  </span>
-
-                  {/* Location */}
-                  <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
-                    {formatLocation(a.city, a.state)}
-                  </span>
-
-                  {/* Timeline */}
-                  <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32">
-                    {TIMELINE_LABELS[a.timeline] ?? a.timeline}
-                  </span>
-
-                  {/* Status selector */}
-                  <div className="flex items-center gap-2 lg:w-40">
+                    {/* Asset badge */}
                     <span
-                      className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap ${STATUS_BADGE[a.status]}`}
+                      className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap self-start lg:self-center ${ASSET_BADGE[a.asset]}`}
                     >
-                      {STATUS_LABELS[a.status]}
+                      {ASSET_LABELS[a.asset]}
                     </span>
-                    <select
-                      value={a.status}
-                      onChange={(e) =>
-                        handleStatusChange(
-                          a.id,
-                          e.target.value as ApplicationStatus,
-                        )
-                      }
-                      disabled={updating === a.id}
-                      className="px-2 py-1 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
-                      aria-label={`Change status for ${a.email}`}
-                    >
-                      {STATUS_OPTIONS.map((status) => (
-                        <option key={status} value={status}>
-                          {STATUS_LABELS[status]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
 
-                  {/* Notes */}
-                  <input
-                    type="text"
-                    value={noteDrafts[a.id] ?? ""}
-                    onChange={(e) =>
-                      setNoteDrafts((prev) => ({
-                        ...prev,
-                        [a.id]: e.target.value,
-                      }))
-                    }
-                    onBlur={() => handleNotesSave(a.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") e.currentTarget.blur();
-                    }}
-                    disabled={updating === a.id}
-                    placeholder="Add a note..."
-                    aria-label={`Notes for ${a.email}`}
-                    className="flex-1 min-w-[10rem] px-2 py-1.5 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
-                  />
-                </div>
-              ))}
+                    {/* Count */}
+                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-14">
+                      x{a.assetCount}
+                    </span>
+
+                    {/* Location */}
+                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
+                      {formatLocation(a.city, a.state)}
+                    </span>
+
+                    {/* Timeline */}
+                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
+                      {TIMELINE_LABELS[a.timeline] ?? a.timeline}
+                    </span>
+
+                    {/* Status selector */}
+                    <div className="flex items-center gap-2 lg:w-40">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap ${STATUS_BADGE[a.status]}`}
+                      >
+                        {STATUS_LABELS[a.status]}
+                      </span>
+                      <select
+                        value={a.status}
+                        onChange={(e) =>
+                          handleStatusChange(
+                            a.id,
+                            e.target.value as ApplicationStatus,
+                          )
+                        }
+                        disabled={updating === a.id}
+                        className="px-2 py-1 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
+                        aria-label={`Change status for ${a.email}`}
+                      >
+                        {STATUS_OPTIONS.map((status) => (
+                          <option key={status} value={status}>
+                            {STATUS_LABELS[status]}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Notes */}
+                    <input
+                      type="text"
+                      value={noteDrafts[a.id] ?? ""}
+                      onChange={(e) =>
+                        setNoteDrafts((prev) => ({
+                          ...prev,
+                          [a.id]: e.target.value,
+                        }))
+                      }
+                      onBlur={() => handleNotesSave(a.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") e.currentTarget.blur();
+                      }}
+                      disabled={updating === a.id}
+                      placeholder="Add a note..."
+                      aria-label={`Notes for ${a.email}`}
+                      className="flex-1 min-w-[10rem] px-2 py-1.5 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </>
