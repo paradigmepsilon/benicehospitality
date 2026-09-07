@@ -266,6 +266,25 @@ export async function POST(req: Request) {
       console.error("[management] stop on booking failed:", err);
     }
 
+    // Link the booking back to an open management application from the same
+    // address, so the admin list shows who actually booked. Best effort: a
+    // booking must never fail because the application link did not resolve.
+    try {
+      await sql`
+        UPDATE management_applications
+        SET booking_id = ${booking.id}, status = 'call_booked', updated_at = NOW()
+        WHERE id = (
+          SELECT id FROM management_applications
+          WHERE lower(email) = ${email.toLowerCase().trim()}
+            AND status IN ('new', 'contacted')
+          ORDER BY created_at DESC
+          LIMIT 1
+        )
+      `;
+    } catch (err) {
+      console.error("[management] booking link failed:", err);
+    }
+
     return NextResponse.json({ success: true, booking });
   } catch (error) {
     console.error("Booking error:", error);
