@@ -50,7 +50,11 @@ export function validateApplication(raw: unknown): ApplicationResult {
     return { ok: false, error: "Please choose a car or rooms." };
   }
 
-  const state = str(r.state, 2).toUpperCase();
+  // No length cap here: truncating before validating would let a malformed
+  // code like "GAX" silently pass as "GA". isServiceAreaState only matches an
+  // exact 2-character code, so leaving the untruncated string in place makes
+  // a too-long value fail validation instead of being reinterpreted.
+  const state = (typeof r.state === "string" ? r.state.trim() : "").toUpperCase();
   if (!isServiceAreaState(state)) {
     return {
       ok: false,
