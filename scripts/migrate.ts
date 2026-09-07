@@ -566,6 +566,29 @@ async function migrate() {
   `;
   console.log("  ✓ bookings.call_type column + check constraint added");
 
+  // discovery_call_45 is CANONICAL_CALL_TYPE (src/lib/constants/call-types.ts)
+  // and the default for every new booking CTA, but the constraint above predates
+  // it and allowed only the two legacy types, so any booking using the canonical
+  // type failed the check with a 500. Widen it to accept all three.
+  // Idempotent: the constraint is only dropped and recreated when its current
+  // definition does not already include the canonical type.
+  await sql`
+    DO $$ BEGIN
+      IF EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'bookings_call_type_check'
+          AND pg_get_constraintdef(oid) NOT LIKE '%discovery_call_45%'
+      ) THEN
+        ALTER TABLE bookings DROP CONSTRAINT bookings_call_type_check;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'bookings_call_type_check') THEN
+        ALTER TABLE bookings ADD CONSTRAINT bookings_call_type_check
+          CHECK (call_type IN ('advisory_discovery_60','signal_discovery_40','discovery_call_45'));
+      END IF;
+    END $$;
+  `;
+  console.log("  ✓ bookings_call_type_check widened to allow discovery_call_45");
+
   // Operator-pasted HTML for audit landing pages. When set, the public audit
   // page renders this HTML instead of the structured AuditReport component.
   // Lets you bring in the output of the Claude-generated Tier 0 audit verbatim.
