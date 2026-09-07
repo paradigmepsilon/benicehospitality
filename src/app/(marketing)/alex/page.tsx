@@ -117,15 +117,28 @@ const FAQS = [
 
 export default function AlexPage() {
   return (
-    // The boutique lane (BNHG's house gold, used here because this is a
-    // founder page rather than a vertical page) was retired with the
-    // resources registry regroup. Every class below already falls back to
-    // var(--color-warm-gold)/var(--color-cream) when no lane wrapper sets
-    // --lane-accent/--lane-wash, so this plain div renders identically. The
-    // fleet work leads the *content*; the Car Rental Riches card inside is
-    // the one block still scoped to the fleet lane, since it belongs to a
-    // different vertical.
-    <div className="relative">
+    // The boutique LANE TYPE was retired with the resources registry
+    // regroup, but this page still needs the darker accent it carried: the
+    // sitewide --color-warm-gold (#B08D57) measures 2.91:1 on cream at
+    // eyebrow text size, under the 4.5:1 AA floor, while this deepened gold
+    // lands at 4.55:1. Falling back to the sitewide token here would be an
+    // accessibility regression, so the three custom properties the old
+    // <LaneSection lane="boutique"> wrapper used to provide are restored
+    // inline instead, sourced from the deleted LANES.boutique entry
+    // (git show 2f8fe99:src/lib/lanes.ts). This is a founder page rather
+    // than a vertical page, which is why it carries a gold accent at all;
+    // the Car Rental Riches card inside is the one block still scoped to
+    // the real "fleet" lane, since it belongs to a different vertical.
+    <div
+      className="relative"
+      style={
+        {
+          "--lane-accent": "#8a6d3f",
+          "--lane-wash": "#eeece7",
+          "--lane-accent-on-dark": "#b08d57",
+        } as React.CSSProperties
+      }
+    >
       {/* HERO */}
       <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
