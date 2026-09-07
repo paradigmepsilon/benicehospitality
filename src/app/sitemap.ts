@@ -12,25 +12,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: baseUrl, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/signal`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    // Door hubs and the founder pages behind them. /co-living matches /signal's
-    // weight: both are top-level audience doors. /della and /alex were never
-    // listed here at all despite being fully built, keyword-targeted pages.
-    { url: `${baseUrl}/co-living`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/fleet`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/boutique-stays`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    // Asset management repositioning: the estimator is the front door, and
+    // /management plus its two offer pages replaced the /co-living, /fleet,
+    // and /boutique-stays lane hubs (those now 308 into the offer pages; see
+    // next.config.ts). /della and /alex were never listed here at all despite
+    // being fully built, keyword-targeted pages.
+    { url: `${baseUrl}/estimate`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/management`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/management/fleet`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${baseUrl}/management/co-living`, lastModified: now, changeFrequency: "weekly", priority: 0.85 },
     { url: `${baseUrl}/della`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/alex`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/marketplace`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${baseUrl}/labs`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/labs/guestally`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/labs/build-log`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/resources`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/insights`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/book`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/audit/request`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/resources/co-living-viability-calculator`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     // Free Car Rental Riches ebook landing page (lead magnet; indexable on
     // purpose, it targets the "how to start a car rental business" cluster).

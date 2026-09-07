@@ -189,6 +189,23 @@ const nextConfig: NextConfig = {
         destination: "/resources",
         permanent: true,
       },
+      // Lane pages became management offers. The old pages sold a lane; these
+      // sell a service, so the mapping is by asset class, not by name.
+      {
+        source: "/co-living",
+        destination: "/management/co-living",
+        permanent: true,
+      },
+      {
+        source: "/fleet",
+        destination: "/management/fleet",
+        permanent: true,
+      },
+      {
+        source: "/boutique-stays",
+        destination: "/management",
+        permanent: true,
+      },
     ];
   },
 };
