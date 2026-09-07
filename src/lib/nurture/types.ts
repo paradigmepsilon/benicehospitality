@@ -11,7 +11,9 @@ export type NurtureSequenceKey =
   | "crr_ebook"
   | "crr_calculator"
   | "crr_waitlist"
-  | "mgmt_applicant";
+  | "mgmt_applicant"
+  | "estimate_car"
+  | "estimate_rooms";
 
 export const NURTURE_SEQUENCE_KEYS: readonly NurtureSequenceKey[] = [
   "rrr_welcome",
@@ -20,6 +22,8 @@ export const NURTURE_SEQUENCE_KEYS: readonly NurtureSequenceKey[] = [
   "crr_calculator",
   "crr_waitlist",
   "mgmt_applicant",
+  "estimate_car",
+  "estimate_rooms",
 ] as const;
 
 export const RRR_SEQUENCE_KEYS: readonly NurtureSequenceKey[] = [

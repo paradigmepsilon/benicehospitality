@@ -5,6 +5,8 @@ import { crrEbook } from "./sequences/crr-ebook";
 import { crrCalculator } from "./sequences/crr-calculator";
 import { crrWaitlist } from "./sequences/crr-waitlist";
 import { mgmtApplicant } from "./sequences/mgmt-applicant";
+import { estimateCar } from "./sequences/estimate-car";
+import { estimateRooms } from "./sequences/estimate-rooms";
 
 const SEQUENCES: Record<NurtureSequenceKey, NurtureSequence> = {
   rrr_welcome: rrrWelcome,
@@ -13,6 +15,8 @@ const SEQUENCES: Record<NurtureSequenceKey, NurtureSequence> = {
   crr_calculator: crrCalculator,
   crr_waitlist: crrWaitlist,
   mgmt_applicant: mgmtApplicant,
+  estimate_car: estimateCar,
+  estimate_rooms: estimateRooms,
 };
 
 export function getSequence(key: NurtureSequenceKey): NurtureSequence {

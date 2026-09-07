@@ -17,6 +17,7 @@
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { enrollInNurture } from "@/lib/nurture/engine";
+import type { NurtureSequenceKey } from "@/lib/nurture/types";
 import { getResourceTool } from "@/lib/resources/registry";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { internalResourceLeadEmail } from "@/lib/email-templates";
@@ -135,10 +136,20 @@ export async function recordResourceToolLead(input: {
   }
 
   // Fleet tools feed Alex's calculator series; property tools feed Della's
-  // welcome series. Best-effort, never blocks the unlock.
+  // welcome series. The two earnings estimators are the exception: each gets
+  // its own sequence so a car estimate and a rooms estimate enroll
+  // separately, keyed by slug rather than category. Best-effort, never
+  // blocks the unlock.
+  const ESTIMATOR_SEQUENCES: Record<string, NurtureSequenceKey> = {
+    "car-earnings-estimator": "estimate_car",
+    "room-earnings-estimator": "estimate_rooms",
+  };
+  const sequenceKey =
+    ESTIMATOR_SEQUENCES[input.slug] ??
+    (tool.category === "fleet" ? "crr_calculator" : "rrr_welcome");
   await enrollInNurture({
     email,
-    sequenceKey: tool.category === "fleet" ? "crr_calculator" : "rrr_welcome",
+    sequenceKey,
     context: { firstName: name.split(/\s+/)[0] || undefined },
   });
 

@@ -113,6 +113,39 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
   // route, not a registry tool. A new tool belongs at its stage, NOT appended
   // to the end of the block.
   // ───────────────────────────────────────────────────────────────────────────
+  "room-earnings-estimator": {
+    slug: "room-earnings-estimator",
+    name: "Room Earnings Estimator",
+    blurb:
+      "A fast first read on what your spare rooms could earn in your market, before you build out the full twelve-month P&L.",
+    bullets: [
+      "A monthly gross range for your metro, from bedroom count and furnished status",
+      "A net range too, once a management fee applies",
+      "A straight line to the full profit calculator if you want to go deeper",
+      "Two honest next steps: run it yourself, or apply for management",
+    ],
+    category: "property",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Room Earnings",
+    headline: "What could these rooms\nactually earn?",
+    subhead:
+      "Pick your market, tell us the bedroom count and whether the rooms are already furnished, and get an honest monthly range before you commit to anything.",
+    howItWorks: [
+      "Choose your metro, bedroom count, and furnished status.",
+      "Read the monthly gross range for your market.",
+      "Decide whether to run it yourself or hand it to BNHG.",
+    ],
+    whatYouGet: [
+      "A monthly gross range for your metro",
+      "A net range once management costs are counted",
+      "A clear next step either way",
+    ],
+  },
+
   "market-demand-worksheet": {
     slug: "market-demand-worksheet",
     name: "Market Demand Worksheet",
@@ -515,6 +548,39 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
   // 2026-08-15); when Turo changes terms, each tool's config.ts is the single
   // place its numbers live.
   // ───────────────────────────────────────────────────────────────────────────
+
+  "car-earnings-estimator": {
+    slug: "car-earnings-estimator",
+    name: "Car Earnings Estimator",
+    blurb:
+      "A fast first read on what your car could earn in your market, before you build out the full three-way profitability breakdown.",
+    bullets: [
+      "A monthly gross range for your metro, from days available and condition",
+      "A net range too, once a management fee applies",
+      "A straight line to the full profitability calculator if you want to go deeper",
+      "Two honest next steps: run it yourself, or apply for management",
+    ],
+    category: "fleet",
+    archetype: "calculator",
+    access: "free-email",
+    persistence: "blob",
+    status: "live",
+    heroImage: HERO_DEFAULT,
+    eyebrow: "Car Earnings",
+    headline: "What could this car\nactually earn?",
+    subhead:
+      "Pick your market, tell us how many days it is available and what kind of shape it is in, and get an honest monthly range before you commit to anything.",
+    howItWorks: [
+      "Choose your metro, days available, and condition.",
+      "Read the monthly gross range for your market.",
+      "Decide whether to run it yourself or hand it to BNHG.",
+    ],
+    whatYouGet: [
+      "A monthly gross range for your metro",
+      "A net range once management costs are counted",
+      "A clear next step either way",
+    ],
+  },
 
   "vehicle-profitability-calculator": {
     slug: "vehicle-profitability-calculator",
