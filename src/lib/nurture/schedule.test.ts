@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { advance, isSuppressed, nextSendAt, normalizeEmail } from "./schedule";
+import { allSequences, getSequence } from "./registry";
 
 test("nextSendAt adds whole hours", () => {
   const from = new Date("2026-09-05T12:00:00Z");
@@ -21,4 +22,44 @@ test("isSuppressed matches case-insensitively", () => {
 
 test("normalizeEmail lowercases and trims", () => {
   assert.equal(normalizeEmail("  Alex@Example.COM "), "alex@example.com");
+});
+
+test("mgmt_applicant is registered with three steps over seven days", () => {
+  const seq = getSequence("mgmt_applicant");
+  assert.equal(seq.steps.length, 3);
+  const total = seq.steps.reduce((sum, s) => sum + s.delayHours, 0);
+  assert.ok(total <= 7 * 24, `sequence runs ${total}h, longer than seven days`);
+});
+
+test("every sequence renders without throwing and carries an unsubscribe link", () => {
+  const ctx = {
+    email: "a@b.com",
+    firstName: "Sam",
+    baseUrl: "https://example.com",
+    unsubscribeUrl: "https://example.com/unsubscribe?t=x",
+  };
+  for (const seq of allSequences()) {
+    for (const [i, step] of seq.steps.entries()) {
+      const html = step.html(ctx);
+      assert.ok(html.length > 0, `${seq.key} step ${i} rendered empty`);
+      assert.ok(
+        html.includes(ctx.unsubscribeUrl),
+        `${seq.key} step ${i} is missing the unsubscribe link`,
+      );
+    }
+  }
+});
+
+test("no sequence copy contains an em dash or en dash", () => {
+  const ctx = {
+    email: "a@b.com",
+    baseUrl: "https://example.com",
+    unsubscribeUrl: "https://example.com/u",
+  };
+  for (const seq of allSequences()) {
+    for (const [i, step] of seq.steps.entries()) {
+      const blob = step.subject + step.preheader + step.html(ctx);
+      assert.ok(!/[–—]/.test(blob), `${seq.key} step ${i} has a dash`);
+    }
+  }
 });

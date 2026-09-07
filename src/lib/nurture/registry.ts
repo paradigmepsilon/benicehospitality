@@ -4,6 +4,7 @@ import { rrrBook } from "./sequences/rrr-book";
 import { crrEbook } from "./sequences/crr-ebook";
 import { crrCalculator } from "./sequences/crr-calculator";
 import { crrWaitlist } from "./sequences/crr-waitlist";
+import { mgmtApplicant } from "./sequences/mgmt-applicant";
 
 const SEQUENCES: Record<NurtureSequenceKey, NurtureSequence> = {
   rrr_welcome: rrrWelcome,
@@ -11,6 +12,7 @@ const SEQUENCES: Record<NurtureSequenceKey, NurtureSequence> = {
   crr_ebook: crrEbook,
   crr_calculator: crrCalculator,
   crr_waitlist: crrWaitlist,
+  mgmt_applicant: mgmtApplicant,
 };
 
 export function getSequence(key: NurtureSequenceKey): NurtureSequence {
