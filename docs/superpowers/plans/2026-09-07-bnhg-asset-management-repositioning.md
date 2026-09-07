@@ -130,17 +130,9 @@ git rm -r src/components/sections/signal src/components/sections/home-v2 "src/ap
 git rm src/components/sections/home/{AEOCallout,ServiceTiersPreview,HomeCTA,GuestallyIntro,PainPointsSection,TestimonialsSection,WhoWeServeSection}.tsx
 ```
 
-- [ ] **Step 4: Collapse the `/courses` two-hop chain**
+- [ ] **Step 4: (removed by controller ruling, 2026-09-07)**
 
-In `next.config.ts`, the first redirect currently sends `/courses` to `/education`, which then runtime-redirects again. The file's own comment at the redirects block says to point legacy slugs straight at the current destination. `/education` becomes `/training` in Task 9, so point `/courses` there now and leave a note:
-
-```ts
-// /courses and /education both resolve to the Training hub. Pointing /courses
-// straight at /training avoids the two-hop chain the old entry created.
-{ source: "/courses", destination: "/training", permanent: true },
-```
-
-Leave every other existing redirect untouched.
+This step originally pointed `/courses` at `/training`. `/training` does not exist until Task 10, so making the change here would 308 a live route to a 404 for nine tasks. Task 10 Step 2 now owns both the `/courses` and `/education` redirects. **Do not touch `next.config.ts` in this task.**
 
 - [ ] **Step 5: Verify the build still compiles**
 
@@ -642,12 +634,22 @@ In `src/components/sections/book/BookingCalendar.tsx`, extend the existing found
 
 ```ts
     const prefillName = params.get("name");
-    if (prefillName) setName(prefillName.slice(0, 120));
     const prefillEmail = params.get("email");
-    if (prefillEmail && prefillEmail.includes("@")) setEmail(prefillEmail.slice(0, 200));
+    if (prefillName || prefillEmail) {
+      setForm((prev) => ({
+        ...prev,
+        ...(prefillName ? { name: prefillName.slice(0, 120) } : {}),
+        ...(prefillEmail && prefillEmail.includes("@")
+          ? { email: prefillEmail.slice(0, 200) }
+          : {}),
+      }));
+    }
 ```
 
-Use whatever the component's existing name and email state setters are called. If they are not named `setName` and `setEmail`, match the real names; do not rename existing state.
+Verified against the real component: `BookingCalendar.tsx:101` holds one `form` object in
+`useState<FormState>` with `setForm`, and `FormState` (line 36) has `name` and `email` string
+fields. There are no separate `setName` / `setEmail` setters. Merge into the existing object with
+the functional updater above; do not add new state or rename what is there.
 
 - [ ] **Step 9: Verify**
 
@@ -1021,9 +1023,8 @@ export function internalManagementApplicationEmail(a: {
  * insert, then best-effort side effects that must never fail the submission.
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { Resend } from "resend";
-import { after } from "next/server";
 import { sql } from "@/lib/db";
 import { getClientIp, managementApplyLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
@@ -1417,10 +1418,12 @@ test("every seeded rate has a low below its high and a service-area state", () =
 });
 
 test("net subtracts the management fee from gross", () => {
+  // 30 days available means the availability factor is exactly 1, so this test
+  // isolates the fee arithmetic. Scaling is covered by the next test.
   const r = estimate({
     asset: "car",
     metro: "nowhere",
-    daysAvailable: 20,
+    daysAvailable: 30,
     condition: "good",
     rateOverride: { metro: "test", state: "GA", asset: "car", monthlyGrossLow: 1000, monthlyGrossHigh: 2000 },
     feePct: 0.2,
@@ -1752,6 +1755,10 @@ Delete the stub page and add the redirect:
 
 ```ts
 { source: "/education", destination: "/training", permanent: true },
+// Moved here from Task 1 by controller ruling: /training only exists as of this
+// task, so this is the first point at which either redirect has a live target.
+// Replace the existing "/courses" entry rather than adding a second one.
+{ source: "/courses", destination: "/training", permanent: true },
 ```
 
 Then fix the six surfaces that link to `/education`. Find them with:
