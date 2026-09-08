@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { bookingUrl, BOOKING_SOURCES } from "@/lib/booking-url";
 
-export type PageCTAAudience = "default" | "operator" | "owner";
+export type PageCTAAudience = "default" | "operator";
 
 interface PresetCTA {
   href: string;
@@ -37,20 +37,6 @@ const AUDIENCE_PRESETS: Record<PageCTAAudience, AudiencePreset> = {
       "Pick a course or join the Nice Host Network. You'll be in a room with operators doing the same work.",
     primary: { href: "/training", label: "See the Courses" },
     secondary: { href: "/community", label: "Join the Network" },
-  },
-  owner: {
-    sectionLabel: "For boutique stays",
-    headline: "Be the stay AI recommends.",
-    subtext:
-      "AI services with outcome guarantees, built for independent boutique stays: hotels, inns, and design-forward short-term and vacation rentals.",
-    primary: { href: "/signal", label: "Explore Signal" },
-    secondary: {
-      href: bookingUrl({
-        callType: "discovery_call_45",
-        source: BOOKING_SOURCES.PAGECTA_OWNER,
-      }),
-      label: "Book a Discovery Call",
-    },
   },
 };
 
@@ -87,45 +73,22 @@ export default function PageCTA({
         </AnimatedItem>
         <AnimatedItem>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {audience === "owner" ? (
-              <>
-                <Button
-                  href={preset.secondary.href}
-                  variant="primary"
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  {preset.secondary.label}
-                </Button>
-                <Button
-                  href={preset.primary.href}
-                  variant="secondary"
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  {preset.primary.label}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  href={preset.primary.href}
-                  variant="primary"
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  {preset.primary.label}
-                </Button>
-                <Button
-                  href={preset.secondary.href}
-                  variant="secondary"
-                  size="lg"
-                  className="w-full sm:w-auto"
-                >
-                  {preset.secondary.label}
-                </Button>
-              </>
-            )}
+            <Button
+              href={preset.primary.href}
+              variant="primary"
+              size="lg"
+              className="w-full sm:w-auto"
+            >
+              {preset.primary.label}
+            </Button>
+            <Button
+              href={preset.secondary.href}
+              variant="secondary"
+              size="lg"
+              className="w-full sm:w-auto"
+            >
+              {preset.secondary.label}
+            </Button>
           </div>
         </AnimatedItem>
       </div>

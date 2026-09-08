@@ -12,7 +12,6 @@ import type {
 
 const TAB_LABELS: Record<MarketplaceTabId, string> = {
   property: "Property",
-  hotel: "Hotel",
   auto: "Auto",
   "back-office": "Back Office",
 };
@@ -31,7 +30,7 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
   soon: "Coming soon",
 };
 
-const TAB_IDS: MarketplaceTabId[] = ["property", "hotel", "auto", "back-office"];
+const TAB_IDS: MarketplaceTabId[] = ["property", "auto", "back-office"];
 const NETWORKS: AffiliateNetwork[] = [
   "amazon",
   "lowes",
@@ -264,7 +263,6 @@ export default function MarketplaceAdmin({ initialProducts }: Props) {
   const countsByTab = useMemo(() => {
     const out: Record<MarketplaceTabId, number> = {
       property: 0,
-      hotel: 0,
       auto: 0,
       "back-office": 0,
     };

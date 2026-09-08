@@ -1,6 +1,6 @@
 import { sql } from "./db";
 
-export type MarketplaceTabId = "property" | "hotel" | "auto" | "back-office";
+export type MarketplaceTabId = "property" | "auto" | "back-office";
 export type AffiliateNetwork =
   | "amazon"
   | "lowes"
@@ -16,7 +16,6 @@ export type ProductBadge =
 
 export const VALID_TAB_IDS: MarketplaceTabId[] = [
   "property",
-  "hotel",
   "auto",
   "back-office",
 ];

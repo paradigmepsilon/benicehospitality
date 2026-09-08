@@ -61,7 +61,7 @@ export default function AboutPillars() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-base text-white/70 mt-4 leading-relaxed">
-              Every course, every advisory engagement, every Signal sprint, every Labs tool maps back to these. They are how we think and how we work.
+              Every course, every management engagement, and every tool we build maps back to these. They are how we think and how we work.
             </p>
           </AnimatedItem>
         </div>

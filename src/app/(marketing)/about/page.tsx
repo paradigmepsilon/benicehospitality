@@ -83,7 +83,7 @@ export default function AboutPage() {
           SECTION 1: HERO INTRO
           Dark hero with a curvy SectionDivider transitioning into the
           warmer Our Story section below. Matches the hero treatment
-          used on Signal, Insights, and the other primary surfaces.
+          used on Insights and the other primary surfaces.
           ───────────────────────────────────────────────────────────── */}
       <section className="bg-near-black pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">

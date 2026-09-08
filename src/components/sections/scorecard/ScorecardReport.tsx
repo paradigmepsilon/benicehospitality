@@ -43,9 +43,9 @@ const BAND_META: Record<
       "This property can work for co-living with some targeted upgrades. Below, the fix list is ordered by section weight so you can attack the highest-ROI items first.",
     ctaHeadline: "Want a deeper read?",
     ctaBody:
-      "Our free Tier 0 Comprehensive Audit goes deeper on revenue, reputation, and tech stack across your whole operation.",
-    ctaHref: "/audit/request",
-    ctaLabel: "Request a Tier 0 Audit",
+      "A short call with Della is the fastest way to sort which of these gaps are worth fixing before you launch and which you can live with.",
+    ctaHref: "/book",
+    ctaLabel: "Book a Strategy Call",
   },
   low: {
     label: "Low Viability",

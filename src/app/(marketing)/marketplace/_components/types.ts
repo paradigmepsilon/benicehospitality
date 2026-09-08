@@ -29,7 +29,7 @@ export interface Product {
   tags?: string[];
 }
 
-export type MarketplaceTabId = "property" | "hotel" | "auto" | "back-office";
+export type MarketplaceTabId = "property" | "auto" | "back-office";
 
 export interface MarketplaceTab {
   id: MarketplaceTabId;

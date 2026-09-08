@@ -19,12 +19,12 @@ import type {
 export const metadata: Metadata = {
   title: "The Marketplace",
   description:
-    "The gear, books, and software we actually use to run our co-living properties, boutique stays, and fleets. Curated by audience, vetted by us.",
+    "The gear, books, and software we actually use to run our co-living properties and fleets. Curated by audience, vetted by us.",
   alternates: { canonical: "https://benicehospitality.com/marketplace" },
   openGraph: {
     title: "The Marketplace | Be Nice Hospitality Group",
     description:
-      "Curated gear, books, and software for co-living operators, boutique stays, and fleet operators. The stuff we actually use.",
+      "Curated gear, books, and software for co-living operators and fleet operators. The stuff we actually use.",
     url: "https://benicehospitality.com/marketplace",
     type: "website",
   },
@@ -53,17 +53,6 @@ const TAB_META: TabMeta[] = [
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
       alt: "Co-living and short-term rental property interior",
-    },
-  },
-  {
-    id: "hotel",
-    label: "Boutique Stays",
-    sectionLabel: "Gear for boutique stays",
-    headline: "Front-of-house and back-of-house.",
-    body: "Amenity programs, front-desk tech, lobby touches, and operational tools sized for independent boutique stays, from 10 to 50 room hotels to design-forward inns. The stuff Signal members ask about most.",
-    image: {
-      src: "/images/Website Images/hf_20260312_051512_fbdd9c4e-fc8a-41fa-8575-219882dfe238.jpeg",
-      alt: "Boutique stay exterior in warm light",
     },
   },
   {

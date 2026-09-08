@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title:
     "Alex Henry | Fleet Management, Systems & AI at Be Nice Hospitality (Atlanta, GA)",
   description:
-    "Alex Henry, co-founder of Be Nice Hospitality. He runs the vehicle side of the company and the technology behind it: fleet operations for 3 to 30 vehicles, custom systems and integrations, and AI applied where it actually pays. Boutique stays served through Signal.",
+    "Alex Henry, co-founder of Be Nice Hospitality. He runs the vehicle side of the company and the technology behind it: fleet operations for 3 to 30 vehicles, custom systems and integrations, and AI applied where it actually pays.",
   keywords: [
     "fleet management consultant",
     "small rental fleet operations",
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     "AI enablement",
     "AI adoption",
     "hospitality automation",
-    "Signal by BNHG",
     "Alex Henry",
     "Be Nice Hospitality",
   ],
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Alex Henry. Fleet operations, real systems, and AI without the hype.",
     description:
-      "Della runs the co-living properties. Alex runs the vehicles and the technology: fleet operations for 3 to 30 cars, custom tools and integrations, and AI his clients can actually explain. Boutique stays served through Signal.",
+      "Della runs the co-living properties. Alex runs the vehicles and the technology: fleet operations for 3 to 30 cars, custom tools and integrations, and AI his clients can actually explain.",
     url: "https://benicehospitality.com/alex",
     type: "profile",
     images: [
@@ -111,7 +110,7 @@ const FAQS = [
   },
   {
     q: "Do you still work with boutique stays?",
-    a: "I do. Signal is the services arm I lead for independent boutique stays, from 10 to 50 room hotels and inns to the design-forward short-term rentals guests book on purpose. Quick Wins, 30-Day Sprints, retainers, and custom builds. Every engagement has a written success criterion before kickoff and a money-back guarantee on the productized work.",
+    a: "The fleet work is what I run day to day, but the systems and AI side of what I do was never built around vehicles specifically. If you run a boutique hotel, inn, or design-forward rental and your tools do not talk to each other, book a call and we will figure out if it is a fit.",
   },
 ];
 
@@ -175,7 +174,7 @@ export default function AlexPage() {
               >
                 Book a Discovery Call
               </Button>
-              <Button href="/fleet" variant="secondary" size="lg">
+              <Button href="/management/fleet" variant="secondary" size="lg">
                 See the Fleet Work
               </Button>
             </div>
@@ -302,9 +301,10 @@ export default function AlexPage() {
               <p className="font-sans text-lg text-charcoal/85 leading-snug">
                 The day job is fleet operations. What makes me useful at it is
                 the years I spent building software and running technical
-                programs before this. Boutique stays get the same treatment
-                through Signal, and that is where the method got tested against
-                a completely different kind of asset.
+                programs before this. That same background is not limited to
+                vehicles. It has been tested against boutique hotels and
+                short-term rentals too, which is where it proved out as a
+                method and not just a fleet trick.
               </p>
             </AnimatedItem>
           </div>
@@ -399,8 +399,15 @@ export default function AlexPage() {
                     AI your team can explain, which is what makes it stick
                   </p>
                 </div>
-                <Button href="/signal" variant="secondary" size="md">
-                  See Packaged Engagements
+                <Button
+                  href={bookingUrl({
+                    founder: "alex",
+                    source: BOOKING_SOURCES.ALEX_SYSTEMS_CARD,
+                  })}
+                  variant="secondary"
+                  size="md"
+                >
+                  Book a Systems Call
                 </Button>
               </div>
             </AnimatedItem>
@@ -545,12 +552,11 @@ export default function AlexPage() {
                     The operators in the middle deserve real tools.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    The fleets, co-living properties, and boutique stays I work
-                    with are too big for a notes app and too small for
-                    enterprise software. That gap is where most operators
-                    actually live, and most software companies walk right past
-                    them. Signal is how I serve the boutique stay side of it.
-                    BNHG is why any of it exists.
+                    The fleets and co-living properties I work with are too big
+                    for a notes app and too small for enterprise software.
+                    That gap is where most operators actually live, and most
+                    software companies walk right past them. BNHG is why any
+                    of it exists.
                   </p>
                 </div>
               </AnimatedItem>
@@ -674,14 +680,14 @@ export default function AlexPage() {
 
       {/* BOUTIQUE BAND. Deliberately compact. A fleet operator reading this page
           should never wonder whether they are hiring a hotel consultant. Its job
-          is to prove the method travels, point at Signal, then get out of the
-          way. */}
+          is to prove the systems and AI work travels past fleets, then get out
+          of the way. */}
       <section className="bg-cream py-12 md:py-14 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.35fr] gap-8 lg:gap-12 items-center">
           <div className="relative aspect-[16/9] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm">
             <Image
               src="/images/Website%20Images/alex%20in%20hotel%20lobby.png"
-              alt="Alex Henry in a boutique hotel lobby, the kind of independent stay Signal builds systems for"
+              alt="Alex Henry in a boutique hotel lobby, the kind of independent stay this systems work also extends to"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.85) contrast(1.05)" }}
@@ -691,26 +697,27 @@ export default function AlexPage() {
 
           <div>
             <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/50 mb-4">
-              Also served
+              Beyond fleets
             </p>
             <h2 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
               The same method runs boutique stays.
             </h2>
             <p className="font-sans text-base text-charcoal/80 leading-snug max-w-xl mb-5">
-              Signal is where this work is packaged for independent hotels,
-              inns, and design-forward short-term rentals. AI search visibility,
-              OTA reconciliation and revenue recovery, voice agents, and ops
-              automation. I mention it for 1 reason: it is proof this is a
-              method rather than an industry trick. What I build for a fleet is
-              not borrowed from a car playbook, and what I build for a hotel is
-              not borrowed from a hotel one. It comes from knowing how to read
-              an operation and find the work a machine should be doing.
+              The systems and AI work is not built around vehicles. It comes
+              from knowing how to read an operation and find the work a
+              machine should be doing, which is why the same approach has run
+              inside independent hotels, inns, and design-forward short-term
+              rentals. If that sounds like your operation, book a call and we
+              will see if it is a fit.
             </p>
             <Link
-              href="/signal"
+              href={bookingUrl({
+                founder: "alex",
+                source: BOOKING_SOURCES.ALEX_BOUTIQUE_BAND,
+              })}
               className="inline-flex items-center gap-2 font-sans font-semibold text-deep-teal hover:text-warm-gold transition-colors duration-200 underline underline-offset-4 decoration-warm-gold/40 hover:decoration-warm-gold"
             >
-              Explore Signal engagements
+              Book a Discovery Call
             </Link>
           </div>
         </div>
@@ -745,7 +752,7 @@ export default function AlexPage() {
               Book a Discovery Call
             </Button>
             <Link
-              href="/fleet"
+              href="/management/fleet"
               className="inline-flex items-center justify-center font-sans font-semibold text-white/85 hover:text-warm-gold transition-colors duration-200 text-lg underline underline-offset-4 decoration-warm-gold/40 hover:decoration-warm-gold"
             >
               Or see the fleet work

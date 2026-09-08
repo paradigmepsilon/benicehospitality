@@ -10,6 +10,8 @@
 export const BOOKING_SOURCES = {
   ALEX_HERO: "alex_hero",
   ALEX_DOORS_CARD: "alex_doors_card",
+  ALEX_SYSTEMS_CARD: "alex_systems_card",
+  ALEX_BOUTIQUE_BAND: "alex_boutique_band",
   ALEX_FINAL_CTA: "alex_final_cta",
   DELLA_HERO: "della_hero",
   DELLA_DOORS_CARD: "della_doors_card",

@@ -16,7 +16,6 @@ const NAV_ITEMS = [
   { label: "Daily Approval", href: "/admin/daily-approval/today", icon: "clock" },
   { label: "Outreach", href: "/admin/outreach", icon: "send" },
   { label: "Audits", href: "/admin/audits", icon: "chart" },
-  { label: "Audit Requests", href: "/admin/audit-requests", icon: "inbox" },
   { label: "Applications", href: "/admin/applications", icon: "inbox" },
   { label: "Schedule", href: "/admin/schedule", icon: "calendar" },
   { label: "Blog Posts", href: "/admin/posts", icon: "edit" },

@@ -274,7 +274,7 @@ export default function DellaPage() {
               <p className="font-sans text-base text-charcoal/70 leading-snug mt-5">
                 Want everything in one place instead?{" "}
                 <Link
-                  href="/co-living"
+                  href="/management/co-living"
                   className="text-primary-green font-medium border-b border-warm-gold hover:border-primary-green transition-colors"
                 >
                   The co-living hub

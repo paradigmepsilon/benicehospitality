@@ -100,7 +100,7 @@ export default function AdminAuditRequestsPage() {
         <div>
           <h1 className="font-display text-2xl font-semibold text-[#1a1a1a]">Audit Requests</h1>
           <p className="text-sm text-[#1a1a1a]/50 mt-1">
-            Inbound requests from the public /audit/request form.
+            Historical requests from the retired public audit-request form.
           </p>
         </div>
       </div>

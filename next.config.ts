@@ -218,6 +218,43 @@ const nextConfig: NextConfig = {
         destination: "/management",
         permanent: true,
       },
+      // Retired offers. Signal, the services tiers, and Labs were the boutique
+      // consulting era. Management is the closest live destination.
+      {
+        source: "/signal",
+        destination: "/management",
+        permanent: true,
+      },
+      {
+        source: "/signal/free-audit",
+        destination: "/management",
+        permanent: true,
+      },
+      {
+        source: "/services",
+        destination: "/management",
+        permanent: true,
+      },
+      {
+        source: "/labs",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/labs/guestally",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/labs/build-log",
+        destination: "/insights",
+        permanent: true,
+      },
+      {
+        source: "/audit/request",
+        destination: "/management",
+        permanent: true,
+      },
     ];
   },
 };

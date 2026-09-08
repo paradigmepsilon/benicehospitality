@@ -68,7 +68,7 @@ export default function Manifesto() {
 
           <AnimatedItem>
             <p>
-              That is what the Foundation and Flagship courses teach. That is what the Operator&apos;s Boardroom helps you implement at scale. That is what Signal sells productized to boutique and luxury stays. That is what BNHG Labs ships in software, starting with Guestally. And that is what the Nice Host Network reinforces every Tuesday and Thursday with people who are doing the same work in different rooms.
+              That is what the Foundation and Flagship courses teach. That is what the Operator&apos;s Boardroom helps you implement at scale. That is what our Management team runs directly, for fleet and co-living owners who want the operating system built and run for them. And that is what the Nice Host Network reinforces every Tuesday and Thursday with people who are doing the same work in different rooms.
             </p>
           </AnimatedItem>
 
