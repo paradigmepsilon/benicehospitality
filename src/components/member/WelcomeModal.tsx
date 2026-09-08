@@ -63,8 +63,8 @@ export default function WelcomeModal({ userName }: { userName: string }) {
         </h2>
         <p className="font-sans text-base text-charcoal leading-relaxed mb-3">
           Thanks for telling us a little about why you&rsquo;re here. This
-          is your home base — your courses, the Nice Host Network community,
-          and everything you unlock will live in here.
+          is your home base. Your courses, the Facebook community, and
+          everything you save will live in here.
         </p>
         <p className="font-sans text-sm text-charcoal/75 leading-relaxed mb-7">
           Nothing fancy to do next. Look around, follow what catches your

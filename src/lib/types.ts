@@ -18,7 +18,6 @@ export interface NavGroup {
 
 export interface UtilityNav {
   communityLogin: NavLink;
-  freeAudit: NavLink;
 }
 
 export interface PillarCard {

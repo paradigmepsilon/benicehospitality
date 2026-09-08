@@ -10,7 +10,7 @@ import { safeNext } from "@/lib/auth-redirect";
 export const metadata: Metadata = {
   title: "Create your account",
   description:
-    "Join the Nice Host Network, a free community for co-living property, boutique stay, and Autos fleet operators.",
+    "Create a free account for access to resources, courses, and the Facebook community for co-living property and rental fleet operators.",
   alternates: { canonical: "https://benicehospitality.com/signup" },
   robots: { index: false, follow: false },
 };
@@ -44,9 +44,9 @@ export default async function SignupPage({
             Create your account.
           </h1>
           <p className="font-sans text-base text-charcoal leading-relaxed">
-            Free to join. Get into the Nice Host Network community, see what
-            we&rsquo;re working on, and unlock paid courses when you&rsquo;re
-            ready.
+            Free to join. See what we&rsquo;re working on, save resources to
+            your dashboard, and enroll in a course when you&rsquo;re ready
+            for the Facebook community and the live sessions.
           </p>
         </div>
 

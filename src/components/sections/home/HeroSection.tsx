@@ -1,6 +1,20 @@
 import Image from "next/image";
+import Button from "@/components/ui/Button";
+import OwnerPortalLink from "@/components/sections/home/OwnerPortalLink";
+import { SERVICE_AREA_LABEL } from "@/lib/management/constants";
+import { isEstimatorEnabled } from "@/lib/estimate/flag";
 
 export default function HeroSection() {
+  const ownerPortalUrl = process.env.OWNER_PORTAL_URL;
+  // The estimator tool stays unreachable until the metro rate table has real
+  // data (see src/lib/estimate/flag.ts). Until then the one primary CTA
+  // falls back to the management overview rather than linking to an empty
+  // tool. Same pattern the estimator page itself uses.
+  const estimatorEnabled = isEstimatorEnabled();
+  const primaryCta = estimatorEnabled
+    ? { label: "See what your asset would earn", href: "/estimate" }
+    : { label: "See how management works", href: "/management" };
+
   return (
     <section
       className="relative isolate w-full bg-near-black pt-32 md:pt-28 pb-2 md:pb-4"
@@ -16,24 +30,31 @@ export default function HeroSection() {
           <div className="px-6 pb-8 md:px-12 lg:px-20 md:py-0 md:pointer-events-auto">
             <div className="max-w-xl">
               <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-cream/70 md:text-cream/90 mb-6">
-                Built by operators, for operators
+                Sharing economy asset management &middot; {SERVICE_AREA_LABEL}
               </p>
 
               <h1
                 id="hero-headline"
                 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold text-cream leading-[1.05] tracking-tight mb-6"
               >
-                Use OTAs for discovery.
+                Sharing economy asset management for the Southeast.
                 <br />
-                Run the rest like a business.
+                Learn to run it, or let us run it.
               </h1>
 
-              <p className="font-sans text-base md:text-lg text-cream/90 leading-relaxed">
-                We&rsquo;re operators who got tired of running our portfolios on
-                duct tape. So we built the systems, training, services, and
-                software we wished existed for our co-living properties, boutique
-                stays, and rental fleets.
+              <p className="font-sans text-base md:text-lg text-cream/90 leading-relaxed mb-8">
+                We&rsquo;re operators who got tired of running our portfolios
+                on duct tape. So we built the systems, training, and
+                management services we wished existed for co-living
+                properties and rental fleets.
               </p>
+
+              <div className="flex flex-col items-start gap-5">
+                <Button href={primaryCta.href} variant="primary" size="lg">
+                  {primaryCta.label}
+                </Button>
+                {ownerPortalUrl && <OwnerPortalLink href={ownerPortalUrl} />}
+              </div>
             </div>
           </div>
         </div>

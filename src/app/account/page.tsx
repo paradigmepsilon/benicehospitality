@@ -20,7 +20,7 @@ const DASHBOARD_SCORECARD_LIMIT = 4;
 export const metadata: Metadata = {
   title: "Your Account",
   description:
-    "Your courses, resources, and Nice Host Network access in one place.",
+    "Your courses, resources, and Facebook community access in one place.",
   alternates: { canonical: "https://benicehospitality.com/account" },
   robots: { index: false, follow: false },
 };
@@ -93,6 +93,7 @@ export default async function AccountPage() {
           band: s.band,
         }))}
         scorecardsTotal={scorecards.length}
+        facebookGroupUrl={process.env.FACEBOOK_GROUP_URL}
       />
     </>
   );

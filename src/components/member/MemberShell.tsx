@@ -16,7 +16,6 @@ const MODE_LABEL: Record<NonNullable<PreviewMode>, string> = {
 const NAV_ITEMS = [
   { label: "Overview", href: "/account", icon: "grid" },
   { label: "Courses", href: "/account/courses", icon: "book" },
-  { label: "Community", href: "/account/community", icon: "users" },
   { label: "Your resources", href: "/account/resources", icon: "edit" },
 ];
 

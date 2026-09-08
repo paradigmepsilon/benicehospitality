@@ -50,6 +50,11 @@ interface AccountDashboardProps {
   /** Newest first, already capped by the server. */
   scorecards: SavedScorecardSummary[];
   scorecardsTotal: number;
+  /** Set only when process.env.FACEBOOK_GROUP_URL exists. This component is
+   *  "use client" and cannot read server env vars itself, so the server page
+   *  resolves it and passes it down. The community card renders only when
+   *  this is set, never as a dead link. */
+  facebookGroupUrl?: string;
 }
 
 // Lane order for the grouped shelf. Fixed rather than derived so the sections
@@ -70,6 +75,7 @@ export default function AccountDashboard({
   savedToolsTotal,
   scorecards,
   scorecardsTotal,
+  facebookGroupUrl,
 }: AccountDashboardProps) {
   const session = initialUser;
   const displayName = session.name || session.email.split("@")[0];
@@ -84,8 +90,8 @@ export default function AccountDashboard({
           Welcome back, {displayName}.
         </h1>
         <p className="font-sans text-base text-charcoal/80 leading-relaxed mt-3 max-w-2xl">
-          Pick up where you left off. Your courses, resources, and the Nice
-          Host Network are all 1 click in.
+          Pick up where you left off. Your courses, resources, and the
+          Facebook community are all 1 click in.
         </p>
       </header>
 
@@ -95,6 +101,7 @@ export default function AccountDashboard({
         savedToolsTotal={savedToolsTotal}
         scorecards={scorecards}
         scorecardsTotal={scorecardsTotal}
+        facebookGroupUrl={facebookGroupUrl}
       />
     </div>
   );
@@ -106,12 +113,14 @@ function UserPanels({
   savedToolsTotal,
   scorecards,
   scorecardsTotal,
+  facebookGroupUrl,
 }: {
   enrollments: EnrollmentSummary[];
   savedTools: SavedToolSummary[];
   savedToolsTotal: number;
   scorecards: SavedScorecardSummary[];
   scorecardsTotal: number;
+  facebookGroupUrl?: string;
 }) {
   return (
     <>
@@ -135,7 +144,7 @@ function UserPanels({
         {enrollments.length === 0 ? (
           <EmptyState
             title="You're not enrolled yet."
-            body="Pick a tier of Room Rental Riches to get started, or sit in on a Nice Host Network session as a guest."
+            body="Pick a tier of Room Rental Riches to get started, or sit in on a live session as a guest."
             ctaLabel="See the courses"
             ctaHref="/account/courses/browse"
           />
@@ -266,32 +275,36 @@ function UserPanels({
         )}
       </section>
 
-      <section>
-        <div className="bg-primary-green text-white rounded-lg p-7 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3">
-              <Users className="w-5 h-5 text-warm-gold" aria-hidden />
-              <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
-                The Nice Host Network
+      {facebookGroupUrl && (
+        <section>
+          <div className="bg-primary-green text-white rounded-lg p-7 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <Users className="w-5 h-5 text-warm-gold" aria-hidden />
+                <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
+                  Facebook Community
+                </p>
+              </div>
+              <h3 className="font-display text-2xl md:text-3xl font-semibold leading-tight mb-3">
+                Tuesday workshop &middot; Thursday hot seats.
+              </h3>
+              <p className="font-sans text-base text-white/85 leading-relaxed">
+                2 live sessions a week, 47 weeks a year. Drop in,
+                bring a real situation, leave with the next move.
               </p>
             </div>
-            <h3 className="font-display text-2xl md:text-3xl font-semibold leading-tight mb-3">
-              Tuesday workshop · Thursday hot seats.
-            </h3>
-            <p className="font-sans text-base text-white/85 leading-relaxed">
-              2 live sessions a week, 47 weeks a year. Drop in,
-              bring a real situation, leave with the next move.
-            </p>
+            <a
+              href={facebookGroupUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-warm-gold text-near-black hover:bg-warm-gold-dark border-2 border-warm-gold hover:border-warm-gold-dark font-sans font-semibold tracking-wide rounded-lg px-7 py-3.5 transition-colors whitespace-nowrap"
+            >
+              Open the Facebook Group
+              <ArrowRight className="w-4 h-4" aria-hidden />
+            </a>
           </div>
-          <Link
-            href="/account/community"
-            className="inline-flex items-center gap-2 bg-warm-gold text-near-black hover:bg-warm-gold-dark border-2 border-warm-gold hover:border-warm-gold-dark font-sans font-semibold tracking-wide rounded-lg px-7 py-3.5 transition-colors whitespace-nowrap"
-          >
-            View the schedule
-            <ArrowRight className="w-4 h-4" aria-hidden />
-          </Link>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="mb-10">
         <div className="bg-white border border-light-gray rounded-lg p-6 md:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

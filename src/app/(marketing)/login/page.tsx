@@ -11,7 +11,7 @@ import { safeNext } from "@/lib/auth-redirect";
 export const metadata: Metadata = {
   title: "Login",
   description:
-    "Sign in to access your courses, the Nice Host Network, and the resources you've enrolled in.",
+    "Sign in to access your courses, the Facebook community, and the resources you've enrolled in.",
   alternates: { canonical: "https://benicehospitality.com/login" },
   robots: { index: false, follow: false },
 };
@@ -43,8 +43,8 @@ export default async function LoginPage({
             Welcome back.
           </h1>
           <p className="font-sans text-base text-charcoal leading-relaxed">
-            Sign in to your courses, the Nice Host Network, and any resources
-            you&rsquo;ve enrolled in.
+            Sign in to your courses, the Facebook community, and any
+            resources you&rsquo;ve enrolled in.
           </p>
         </div>
 

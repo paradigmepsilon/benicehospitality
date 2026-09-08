@@ -8,7 +8,6 @@ const ALEX_ID = `${SITE_URL}/#alex-henry`;
 const DELLA_ID = `${SITE_URL}/#della-henry`;
 const GUESTALLY_ID = "https://guestally.ai/#organization";
 
-const SIGNAL_ID = `${SITE_URL}/signal#service`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 
 const graph = {
@@ -30,7 +29,7 @@ const graph = {
       url: SITE_URL,
       logo: `${SITE_URL}/images/logo.png`,
       description:
-        "Training, services, and software for operators running co-living properties, boutique stays, and rental fleets. Direct booking strategy, operations, guest experience, AI services (Signal), and Guestally software.",
+        "Sharing economy asset management for the Southeast. BNHG teaches operators to run co-living properties and rental fleets, and manages those assets directly for owners who would rather hand it off. Training, resources, done-for-you management, and Guestally software.",
       telephone: "+1-404-541-9934",
       email: "admin@benicehospitality.com",
       address: {
@@ -40,10 +39,7 @@ const graph = {
         addressCountry: "US",
       },
       founder: [{ "@id": ALEX_ID }, { "@id": DELLA_ID }],
-      subOrganization: [
-        { "@id": GUESTALLY_ID },
-        { "@id": SIGNAL_ID },
-      ],
+      subOrganization: [{ "@id": GUESTALLY_ID }],
       sameAs: [
         "https://www.linkedin.com/company/be-nice-hospitality/",
         "https://www.instagram.com/benicehospitality",
@@ -123,7 +119,7 @@ export default function MarketingLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
       />
-      <Header />
+      <Header ownerPortalUrl={process.env.OWNER_PORTAL_URL} />
       <main id="main-content">{children}</main>
       <Footer />
     </>

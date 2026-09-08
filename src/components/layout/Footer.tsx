@@ -31,53 +31,69 @@ interface FooterColumn {
   links: Array<{ label: string; href: string; external?: boolean }>;
 }
 
-const EDUCATION_COLUMN: FooterColumn = {
-  heading: "Education",
+// Books link straight to their own sales pages rather than to /books, which
+// has no index route (only these three static children exist). Guestally and
+// the marketplace ("Recommended gear") are both external product surfaces,
+// grouped here alongside the books and tools rather than in a standalone
+// Affiliates column.
+const RESOURCES_COLUMN: FooterColumn = {
+  heading: "Resources",
   links: [
-    { label: "Catalog", href: "/training" },
-    { label: "Community", href: "/community" },
-    { label: "Insights", href: "/insights" },
-    { label: "Resources", href: "/resources" },
-  ],
-};
-
-const AFFILIATES_COLUMN: FooterColumn = {
-  heading: "Affiliates",
-  links: [
-    { label: "Guestally", href: "https://guestally.ai", external: true },
-    { label: "Be Nice Properties", href: "#", external: true },
-    { label: "Be Nice Autos", href: "#", external: true },
+    { label: "Tools", href: "/resources" },
     {
-      label: "The Retreat at Douglasville",
-      href: "https://www.theretreatatdouglasville.com",
-      external: true,
+      label: "Room Rental Riches: The Blueprint",
+      href: "/books/room-rental-riches-blueprint",
     },
+    { label: "The Inside Lane", href: "/books/car-rental-riches-blueprint" },
+    { label: "Before You Buy the Car", href: "/books/before-you-buy-the-car" },
+    { label: "Recommended gear", href: "/marketplace" },
+    { label: "Guestally", href: "https://guestally.ai", external: true },
   ],
 };
 
-const MARKETPLACE_COLUMN: FooterColumn = {
-  heading: "Marketplace",
+const TRAINING_COLUMN: FooterColumn = {
+  heading: "Training",
   links: [
-    { label: "Operator's Toolkit", href: "/marketplace" },
-    { label: "Co-living gear", href: "/marketplace?tab=property" },
-    { label: "Boutique gear", href: "/marketplace?tab=hotel" },
-    { label: "Fleet gear", href: "/marketplace?tab=auto" },
+    { label: "Room Rental Riches", href: "/courses/room-rental-riches" },
+    { label: "Car Rental Riches", href: "/courses/car-rental-riches" },
+    { label: "Masterclass", href: "/courses/room-rental-riches/masterclass" },
   ],
 };
-
-const COMPANY_LINKS = [
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Privacy", href: "/privacy" },
-];
-
-const COMPANY_LINKS_SECONDARY = [
-  { label: "Signal", href: "/signal" },
-  { label: "Labs", href: "/labs" },
-  { label: "Terms", href: "/terms" },
-];
 
 export default function Footer() {
+  const ownerPortalUrl = process.env.OWNER_PORTAL_URL;
+  const facebookGroupUrl = process.env.FACEBOOK_GROUP_URL;
+
+  // Owner Portal only renders once Alex sets the Unified Ops URL. Omitted
+  // entirely rather than shown as a dead link.
+  const managementColumn: FooterColumn = {
+    heading: "Management",
+    links: [
+      { label: "Fleet", href: "/management/fleet" },
+      { label: "Co-living", href: "/management/co-living" },
+      { label: "Apply", href: "/management/apply" },
+      ...(ownerPortalUrl
+        ? [{ label: "Owner Portal", href: ownerPortalUrl, external: true }]
+        : []),
+    ],
+  };
+
+  const companyLinks: FooterColumn["links"] = [
+    { label: "About", href: "/about" },
+    { label: "Insights", href: "/insights" },
+    { label: "Contact", href: "/contact" },
+  ];
+
+  // Same omit-don't-degrade rule as Owner Portal: no Facebook link until the
+  // group URL exists.
+  const companyLinksSecondary: FooterColumn["links"] = [
+    ...(facebookGroupUrl
+      ? [{ label: "Community on Facebook", href: facebookGroupUrl, external: true }]
+      : []),
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+  ];
+
   return (
     <footer
       className="bg-near-black text-white"
@@ -123,11 +139,14 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Education */}
-          <FooterLinkColumn column={EDUCATION_COLUMN} />
+          {/* Resources */}
+          <FooterLinkColumn column={RESOURCES_COLUMN} />
 
-          {/* Marketplace */}
-          <FooterLinkColumn column={MARKETPLACE_COLUMN} />
+          {/* Training */}
+          <FooterLinkColumn column={TRAINING_COLUMN} />
+
+          {/* Management */}
+          <FooterLinkColumn column={managementColumn} />
 
           {/* Get in Touch */}
           <div>
@@ -168,7 +187,7 @@ export default function Footer() {
                 compress. lg restores the 2-col split. */}
             <div className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-1 md:gap-y-0">
               <ul className="space-y-3">
-                {COMPANY_LINKS.map((link) => (
+                {companyLinks.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
@@ -180,22 +199,32 @@ export default function Footer() {
                 ))}
               </ul>
               <ul className="space-y-3">
-                {COMPANY_LINKS_SECONDARY.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="font-sans text-sm text-white/65 hover:text-white transition-colors duration-200"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {companyLinksSecondary.map((link) =>
+                  link.external ? (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-sans text-sm text-white/65 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ) : (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="font-sans text-sm text-white/65 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           </div>
-
-          {/* Affiliates */}
-          <FooterLinkColumn column={AFFILIATES_COLUMN} />
         </div>
 
         {/* Bottom bar */}

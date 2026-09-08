@@ -26,7 +26,15 @@ interface SessionUser {
   role: "admin" | "user";
 }
 
-export default function Header() {
+export default function Header({
+  ownerPortalUrl,
+}: {
+  /** Set only when process.env.OWNER_PORTAL_URL exists. Passed down from the
+   *  server-rendered layout, since this component is "use client" and cannot
+   *  read server env vars itself. Undefined hides the link entirely rather
+   *  than rendering a dead one. */
+  ownerPortalUrl?: string;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -353,13 +361,25 @@ export default function Header() {
                   </button>
                 </>
               ) : (
-                <Button
-                  href={UTILITY_NAV.communityLogin.href}
-                  variant="primary"
-                  size="sm"
-                >
-                  {UTILITY_NAV.communityLogin.label}
-                </Button>
+                <>
+                  {ownerPortalUrl && (
+                    <a
+                      href={ownerPortalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-sans text-sm font-medium text-charcoal/80 hover:text-charcoal transition-colors"
+                    >
+                      Owner Portal
+                    </a>
+                  )}
+                  <Button
+                    href={UTILITY_NAV.communityLogin.href}
+                    variant="primary"
+                    size="sm"
+                  >
+                    {UTILITY_NAV.communityLogin.label}
+                  </Button>
+                </>
               )}
             </div>
           </div>
@@ -471,14 +491,26 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <Button
-                href={UTILITY_NAV.communityLogin.href}
-                variant="primary"
-                size="lg"
-                fullWidth
-              >
-                {UTILITY_NAV.communityLogin.label}
-              </Button>
+              <>
+                <Button
+                  href={UTILITY_NAV.communityLogin.href}
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                >
+                  {UTILITY_NAV.communityLogin.label}
+                </Button>
+                {ownerPortalUrl && (
+                  <a
+                    href={ownerPortalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans text-sm text-charcoal/70 hover:text-charcoal py-3 text-center"
+                  >
+                    Owner Portal
+                  </a>
+                )}
+              </>
             )}
           </div>
         </div>

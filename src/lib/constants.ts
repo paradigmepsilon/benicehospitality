@@ -351,6 +351,15 @@ export const METRICS: MetricStat[] = [
   { value: "18", suffix: "hrs", label: "Staff hours saved monthly per property" },
 ];
 
+// The homepage proof band. Deliberately empty: these are consulting-era
+// numbers above (direct-booking lift, ancillary revenue, staff hours saved)
+// for a service BNHG no longer sells, so they never render on the asset
+// management homepage. This array holds real operating figures instead
+// (units managed, vehicles managed, cities, years operating) once Alex
+// supplies them. ProofBand.tsx returns null while it is empty. Do not seed
+// it with a placeholder or an estimated number.
+export const OPERATING_PROOF: MetricStat[] = [];
+
 export const TIER_ONE_SERVICES = [
   {
     name: "AEO Readiness Diagnostic",
