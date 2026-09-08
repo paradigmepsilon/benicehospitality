@@ -71,12 +71,15 @@ export default function EarningsEstimator({
    *  not simply `loggedIn` (admin preview must not write to the admin's row). */
   canSync?: boolean;
   /**
-   * getManagementFeeModel(asset)?.grossPct, resolved by the page (a Server
-   * Component) and passed down. That function reads server-only env vars, so
-   * it cannot be called from here: this is a client component, and Next only
-   * inlines NEXT_PUBLIC_-prefixed vars into client bundles. Undefined until
-   * Alex configures every fee env var, which is exactly when estimate()
-   * should stop returning a net figure.
+   * A decimal fraction (0 < feePct < 1), already converted from
+   * getManagementFeeModel(asset)?.grossPct by the page (a Server Component)
+   * via managementFeeAsDecimal, before being passed down. grossPct itself is
+   * a whole percent, the unit ManagementOffer.tsx renders directly, so do
+   * not pass it here unconverted, that is the bug managementFeeAsDecimal
+   * exists to prevent. getManagementFeeModel cannot be called from here: this
+   * is a client component, and Next only inlines NEXT_PUBLIC_-prefixed vars
+   * into client bundles. Undefined until Alex configures every fee env var,
+   * which is exactly when estimate() should stop returning a net figure.
    */
   feePct?: number;
 }) {

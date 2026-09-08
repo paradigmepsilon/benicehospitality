@@ -128,7 +128,16 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     archetype: "calculator",
     access: "free-email",
     persistence: "blob",
-    status: "live",
+    // "soon", not "live": isEstimatorEnabled() (src/lib/estimate/flag.ts)
+    // redirects this tool's page to /management while METRO_RATES
+    // (src/lib/estimate/rates.ts) is empty. liveResourceTools() filters on
+    // this status, so "live" here shipped a sitemap URL that 30Xs and a
+    // /resources card that enrolled a saver in a nurture sequence pointing
+    // at a redirecting page. getResourceTool() still resolves this by slug
+    // regardless of status, so /estimate's chooser is unaffected. Flip this
+    // back to "live" (see car-earnings-estimator below for its pair) once
+    // METRO_RATES has real data.
+    status: "soon",
     heroImage: HERO_DEFAULT,
     eyebrow: "Room Earnings",
     headline: "What could these rooms\nactually earn?",
@@ -564,7 +573,16 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     archetype: "calculator",
     access: "free-email",
     persistence: "blob",
-    status: "live",
+    // "soon", not "live": isEstimatorEnabled() (src/lib/estimate/flag.ts)
+    // redirects this tool's page to /management while METRO_RATES
+    // (src/lib/estimate/rates.ts) is empty. liveResourceTools() filters on
+    // this status, so "live" here shipped a sitemap URL that 30Xs and a
+    // /resources card that enrolled a saver in a nurture sequence pointing
+    // at a redirecting page. getResourceTool() still resolves this by slug
+    // regardless of status, so /estimate's chooser is unaffected. Flip this
+    // back to "live" (see room-earnings-estimator above for its pair) once
+    // METRO_RATES has real data.
+    status: "soon",
     heroImage: HERO_DEFAULT,
     eyebrow: "Car Earnings",
     headline: "What could this car\nactually earn?",

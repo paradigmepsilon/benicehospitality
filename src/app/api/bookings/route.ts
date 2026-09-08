@@ -189,7 +189,12 @@ export async function POST(req: Request) {
     const formattedTime = `${hour12}:${m} ${ampm} ET`;
     const durationLabel = callDurationLabel(callType);
 
-    // Create/update pipeline contact
+    // Create/update pipeline contact. hotel_name is '' rather than null for
+    // a non-hotel (e.g. management) booking, because bookings.hotel_name is
+    // NOT NULL and the client always sends a string. NULLIF here stops that
+    // empty string from ever overwriting a real hotel_name a repeat contact
+    // already had on file: an empty string is not NULL, so plain COALESCE
+    // let EXCLUDED.hotel_name = '' win and blank the existing value.
     try {
       const crmResult = await sql`
         INSERT INTO pipeline_contacts (name, email, phone, hotel_name, source)
@@ -197,7 +202,7 @@ export async function POST(req: Request) {
         ON CONFLICT (email) DO UPDATE SET
           name = EXCLUDED.name,
           phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),
-          hotel_name = COALESCE(EXCLUDED.hotel_name, pipeline_contacts.hotel_name),
+          hotel_name = COALESCE(NULLIF(EXCLUDED.hotel_name, ''), pipeline_contacts.hotel_name),
           updated_at = NOW()
         RETURNING id
       `;
@@ -225,25 +230,37 @@ export async function POST(req: Request) {
       console.error("Failed to send guest confirmation email:", emailError);
     }
 
-    // Send notification email to admin
+    // Send notification email to admin. isHotelBooking branches both the
+    // subject and the Hotel row: a management/general booking has no hotel
+    // name (the form field is blank, not omitted, because bookings.hotel_name
+    // is NOT NULL), and rendering it unconditionally produced "New Booking:
+    // Jane Doe at , Monday..." plus a blank Hotel row. Non-hotel bookings
+    // show click_source instead, in the same row position, since that is
+    // the useful context the route already has for them (no new lookup).
     try {
+      const subject = isHotelBooking
+        ? `New Booking: ${name} at ${hotelName}, ${formattedDate}`
+        : `New Booking: ${name}, ${formattedDate}`;
+      const contextRow = isHotelBooking
+        ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Hotel</td><td style="padding:8px;border-bottom:1px solid #eee;">${hotelName}</td></tr>`
+        : `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Source</td><td style="padding:8px;border-bottom:1px solid #eee;">${clickSource || "Not captured"}</td></tr>`;
       await getResend().emails.send({
         from: "BNHG Website <onboarding@resend.dev>",
         to: process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
         replyTo: email,
-        subject: `New Booking: ${name} at ${hotelName}, ${formattedDate}`,
+        subject,
         html: `
           <h2>New Discovery Call Booking</h2>
           <table style="border-collapse:collapse;width:100%;max-width:600px;">
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;">${name}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${email}</td></tr>
             ${phone ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${phone}</td></tr>` : ""}
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Hotel</td><td style="padding:8px;border-bottom:1px solid #eee;">${hotelName}</td></tr>
+            ${contextRow}
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${formattedDate}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Time</td><td style="padding:8px;border-bottom:1px solid #eee;">${formattedTime}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Type</td><td style="padding:8px;border-bottom:1px solid #eee;">Discovery call (45 min, blocks 60 min)</td></tr>
             ${requestedFounder ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Requested founder</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-weight:600;">${FOUNDER_LABELS[requestedFounder]}</td></tr>` : ""}
-            ${clickSource ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Click source</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-family:monospace;">${clickSource}</td></tr>` : ""}
+            ${clickSource && isHotelBooking ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Click source</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-family:monospace;">${clickSource}</td></tr>` : ""}
             ${message ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Message</td><td style="padding:8px;border-bottom:1px solid #eee;">${message}</td></tr>` : ""}
           </table>
         `,

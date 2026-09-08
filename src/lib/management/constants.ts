@@ -115,3 +115,21 @@ export function getManagementFeeModel(asset: ManagedAsset): FeeModel | null {
   if (Object.values(parsed).some((n) => !Number.isFinite(n))) return null;
   return parsed;
 }
+
+/**
+ * FeeModel.grossPct is a whole percent (Alex sets MANAGEMENT_FEE_CAR_PCT=20
+ * to mean 20%), and that is the correct unit for owner-facing copy:
+ * ManagementOffer.tsx renders `${fees.grossPct}% of gross` directly,
+ * unconverted. src/lib/estimate/model.ts's estimate() wants the opposite
+ * unit, a decimal fraction, guarded by `fee > 0 && fee < 1`. This is the one
+ * blessed conversion between the two: every estimator call site (the car and
+ * room earnings-estimator pages) must run grossPct through this before
+ * passing it to estimate() as feePct. Do not pass grossPct to estimate()
+ * unconverted, and do not convert getManagementFeeModel's own return value,
+ * that would break the offer pages instead. See
+ * src/lib/management/constants.test.ts for the test that pins both
+ * consumers to one env value.
+ */
+export function managementFeeAsDecimal(grossPct: number): number {
+  return grossPct / 100;
+}

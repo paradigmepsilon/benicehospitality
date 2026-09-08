@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getResourceTool } from "@/lib/resources/registry";
 import { getResourceAccess } from "@/lib/resources/access";
 import { isEstimatorEnabled } from "@/lib/estimate/flag";
-import { getManagementFeeModel } from "@/lib/management/constants";
+import { getManagementFeeModel, managementFeeAsDecimal } from "@/lib/management/constants";
 import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import EarningsEstimator from "@/components/resources/earnings-estimator/EarningsEstimator";
@@ -30,6 +30,11 @@ export default async function Page() {
 
   const access = await getResourceAccess(tool);
   const feeModel = getManagementFeeModel("car");
+  // feeModel.grossPct is a whole percent; estimate() wants a decimal
+  // fraction (see managementFeeAsDecimal's doc comment). Convert here, at
+  // the seam, so getManagementFeeModel keeps returning the owner-facing unit
+  // and estimate()'s 0 < fee < 1 guard stays untouched.
+  const feePct = feeModel ? managementFeeAsDecimal(feeModel.grossPct) : undefined;
 
   return (
     <ResourceToolLayout tool={tool} access={access}>
@@ -37,7 +42,7 @@ export default async function Page() {
         <EarningsEstimator
           asset="car"
           canSync={access.canSync}
-          feePct={feeModel?.grossPct}
+          feePct={feePct}
         />
       </ResourceGate>
     </ResourceToolLayout>
