@@ -201,12 +201,6 @@ export default function TermsPage() {
                 purchase and we will refund the full amount, no questions.
               </li>
               <li>
-                <strong>Signal engagements.</strong> Every productized
-                engagement under five thousand dollars comes with a
-                thirty-day money-back guarantee, in writing, in the
-                statement of work.
-              </li>
-              <li>
                 <strong>Retainers.</strong> Retainers are month-to-month.
                 Cancel any month with no claw-back and no rolling-month
                 clause.
@@ -251,16 +245,11 @@ export default function TermsPage() {
           <LegalSection title="9. Intellectual property">
             <p>
               The site, the courses, the lesson videos and slides, the
-              resource library, the Signal frameworks, and the BNHG brand
-              marks are owned by Be Nice Hospitality Group or our licensors.
-              All rights are reserved except for the licenses we explicitly
+              resource library, the operating systems and playbooks behind
+              our fleet and co-living management, and the BNHG brand marks
+              are owned by Be Nice Hospitality Group or our licensors. All
+              rights are reserved except for the licenses we explicitly
               grant in these terms.
-            </p>
-            <p>
-              For Signal engagements, the deliverables we build for your
-              property (code, schemas, content, automations) become yours on
-              full payment. We keep the right to reuse the underlying
-              frameworks, methods, and know-how.
             </p>
           </LegalSection>
 

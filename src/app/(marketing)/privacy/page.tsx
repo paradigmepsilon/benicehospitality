@@ -64,11 +64,12 @@ export default function PrivacyPage() {
           <LegalSection title="1. Who we are">
             <p>
               Be Nice Hospitality Group (&ldquo;BNHG,&rdquo; &ldquo;we,&rdquo;
-              &ldquo;us&rdquo;) is a hospitality consulting and education
-              company based in Hapeville, Georgia. We are the owners of
-              benicehospitality.com and the services available on it,
-              including the Room Rental Riches course, our community, our
-              Signal AI services, our resource library, and the{" "}
+              &ldquo;us&rdquo;) is a hospitality education and asset
+              management company based in Hapeville, Georgia. We are the
+              owners of benicehospitality.com and the services available on
+              it, including the Room Rental Riches course, our community, our
+              resource library, our fleet and co-living management services,
+              and the{" "}
               <strong>Claim Proof Command Center</strong> (a Be Nice
               Hospitality Group product for Turo and rental-vehicle hosts).
             </p>
