@@ -59,7 +59,10 @@ export default async function AccountPage() {
           The modal renders only when ?welcome=1 is in the URL — set by the
           onboarding submit redirect — and self-clears the query string. */}
       <Suspense fallback={null}>
-        <WelcomeModal userName={ctx.userName} />
+        <WelcomeModal
+          userName={ctx.userName}
+          facebookGroupUrl={process.env.FACEBOOK_GROUP_URL}
+        />
       </Suspense>
       <AccountDashboard
         initialUser={{

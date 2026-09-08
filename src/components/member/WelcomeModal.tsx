@@ -8,7 +8,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 // dismissing it does a router.replace to strip the query string so refresh
 // or back-nav doesn't reopen the modal. Chose a query param over a cookie
 // because it's naturally one-shot and needs no server-side cleanup.
-export default function WelcomeModal({ userName }: { userName: string }) {
+export default function WelcomeModal({
+  userName,
+  facebookGroupUrl,
+}: {
+  userName: string;
+  /** Set only when process.env.FACEBOOK_GROUP_URL exists. This component is
+   *  "use client" and cannot read server env vars itself, so the server page
+   *  resolves it and passes it down. Gates the Facebook-community mention so
+   *  a new member is never told about a group that doesn't exist yet. */
+  facebookGroupUrl?: string;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const showFromUrl = searchParams.get("welcome") === "1";
@@ -62,9 +72,19 @@ export default function WelcomeModal({ userName }: { userName: string }) {
           Welcome, {firstName}.
         </h2>
         <p className="font-sans text-base text-charcoal leading-relaxed mb-3">
-          Thanks for telling us a little about why you&rsquo;re here. This
-          is your home base. Your courses, the Facebook community, and
-          everything you save will live in here.
+          {facebookGroupUrl ? (
+            <>
+              Thanks for telling us a little about why you&rsquo;re here.
+              This is your home base. Your courses, the Facebook community,
+              and everything you save will live in here.
+            </>
+          ) : (
+            <>
+              Thanks for telling us a little about why you&rsquo;re here.
+              This is your home base. Your courses and everything you save
+              will live in here.
+            </>
+          )}
         </p>
         <p className="font-sans text-sm text-charcoal/75 leading-relaxed mb-7">
           Nothing fancy to do next. Look around, follow what catches your

@@ -33,9 +33,10 @@ interface FooterColumn {
 
 // Books link straight to their own sales pages rather than to /books, which
 // has no index route (only these three static children exist). Guestally and
-// the marketplace ("Recommended gear") are both external product surfaces,
-// grouped here alongside the books and tools rather than in a standalone
-// Affiliates column.
+// The Retreat at Douglasville are both sibling-property affiliate links,
+// carried over from the old Affiliates column with the same external
+// treatment; the marketplace ("Recommended gear") joins them here rather
+// than keeping its own standalone column.
 const RESOURCES_COLUMN: FooterColumn = {
   heading: "Resources",
   links: [
@@ -48,6 +49,11 @@ const RESOURCES_COLUMN: FooterColumn = {
     { label: "Before You Buy the Car", href: "/books/before-you-buy-the-car" },
     { label: "Recommended gear", href: "/marketplace" },
     { label: "Guestally", href: "https://guestally.ai", external: true },
+    {
+      label: "The Retreat at Douglasville",
+      href: "https://www.theretreatatdouglasville.com",
+      external: true,
+    },
   ],
 };
 
@@ -115,10 +121,10 @@ export default function Footer() {
               />
             </Link>
             <p className="text-white/65 text-sm leading-relaxed font-sans mb-2">
-              The operator&apos;s company for the sharing economy.
+              Sharing economy asset management for the Southeast.
             </p>
             <p className="text-white/45 text-sm leading-relaxed font-sans italic">
-              Use OTAs for discovery. Run the rest like a business.
+              Learn to run it, or let us run it.
             </p>
 
             <div className="flex flex-wrap gap-3 mt-6">
