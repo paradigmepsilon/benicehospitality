@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ManagementOffer from "@/components/sections/management/ManagementOffer";
 
 export const metadata: Metadata = {
-  title: "Fleet Management | Be Nice Hospitality",
+  title: "Fleet Management",
   description:
     "Your vehicle earns without becoming your second job. BNHG runs the listing, pricing, turnover, and claims. You keep the title, the insurance choice, and the final say.",
   keywords: [
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://benicehospitality.com/management/fleet" },
   openGraph: {
-    title: "Fleet Management | Be Nice Hospitality",
+    title: "Fleet Management | Be Nice Hospitality Group",
     description:
       "Your vehicle earns without becoming your second job. BNHG runs the listing, pricing, turnover, and claims.",
     url: "https://benicehospitality.com/management/fleet",

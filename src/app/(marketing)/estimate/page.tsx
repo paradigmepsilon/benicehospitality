@@ -16,12 +16,12 @@ import { SERVICE_AREA_LABEL } from "@/lib/management/constants";
 const SITE_URL = "https://benicehospitality.com";
 
 export const metadata: Metadata = {
-  title: "Earnings Estimator | Be Nice Hospitality",
+  title: "Earnings Estimator",
   description:
     "A fast, honest monthly range for what your car or your spare rooms could earn in your market, before you go deeper or apply for management.",
   alternates: { canonical: `${SITE_URL}/estimate` },
   openGraph: {
-    title: "Earnings Estimator | Be Nice Hospitality",
+    title: "Earnings Estimator | Be Nice Hospitality Group",
     description:
       "A fast, honest monthly range for what your car or your spare rooms could earn in your market.",
     url: `${SITE_URL}/estimate`,

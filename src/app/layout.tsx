@@ -33,16 +33,13 @@ export const metadata: Metadata = {
     template: "%s | Be Nice Hospitality Group",
   },
   description:
-    "Training, services, and software for operators running co-living properties, boutique stays, and rental fleets. Direct booking strategy, operations, guest experience, fleet management, and Guestally software.",
+    "Training, resources, and done-for-you asset management for co-living properties and rental fleets across Georgia, Florida, South Carolina, North Carolina, Alabama, and Tennessee. Direct booking strategy, operations, guest experience, and Guestally software.",
   keywords: [
     "co-living property management",
     "co-living operations",
-    "boutique stays",
-    "boutique stay direct booking",
     "fleet management",
     "Turo fleet management",
     "short-term rental operations",
-    "boutique hotel consulting",
   ],
   authors: [{ name: "Be Nice Hospitality Group" }],
   openGraph: {

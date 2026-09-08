@@ -3,12 +3,12 @@ import { Suspense } from "react";
 import ApplicationForm from "@/components/sections/management/ApplicationForm";
 
 export const metadata: Metadata = {
-  title: "Apply for Management | Be Nice Hospitality",
+  title: "Apply for Management",
   description:
     "Tell us about your vehicle or your property. We confirm fit and schedule a call before anything is signed.",
   alternates: { canonical: "https://benicehospitality.com/management/apply" },
   openGraph: {
-    title: "Apply for Management | Be Nice Hospitality",
+    title: "Apply for Management | Be Nice Hospitality Group",
     description:
       "Tell us about your vehicle or your property. We confirm fit and schedule a call before anything is signed.",
     url: "https://benicehospitality.com/management/apply",

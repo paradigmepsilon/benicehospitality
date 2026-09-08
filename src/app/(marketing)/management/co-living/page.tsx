@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ManagementOffer from "@/components/sections/management/ManagementOffer";
 
 export const metadata: Metadata = {
-  title: "Co-living Management | Be Nice Hospitality",
+  title: "Co-living Management",
   description:
     "Your spare rooms earn without becoming your second job. BNHG runs the listing, screening, leases, and turnover. You keep the mortgage, the insurance choice, and the final say.",
   keywords: [
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://benicehospitality.com/management/co-living" },
   openGraph: {
-    title: "Co-living Management | Be Nice Hospitality",
+    title: "Co-living Management | Be Nice Hospitality Group",
     description:
       "Your spare rooms earn without becoming your second job. BNHG runs the listing, screening, leases, and turnover.",
     url: "https://benicehospitality.com/management/co-living",

@@ -13,7 +13,7 @@ import {
   CANONICAL_CALL_TYPE,
   callDurationLabel,
 } from "@/lib/constants/call-types";
-import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
+import { VALID_BOOKING_SOURCES, isHotelAuditBooking } from "@/lib/booking-url";
 
 type Step = "date" | "time" | "focus" | "details" | "success";
 
@@ -182,6 +182,18 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
       .catch(() => {});
   }, []);
 
+  // Hotel context: true only for the legacy hotel-audit / Signal funnel
+  // (audit_token present, or the click source or call_type came from that
+  // funnel). Everything else, including the management application funnel
+  // (source=mgmt_apply_car|mgmt_apply_rooms, call_type=discovery_call_45),
+  // is not a hotel booking, so it skips the hotel-name field and the Focus
+  // step below.
+  const isHotelBooking = isHotelAuditBooking({
+    auditToken,
+    source: clickSource,
+    callType,
+  });
+
   // Fetch available days for current month (single efficient API call)
   useEffect(() => {
     const monthStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
@@ -219,7 +231,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    setStep("focus");
+    setStep(isHotelBooking ? "focus" : "details");
   };
 
   const handleFocusContinue = () => {
@@ -250,14 +262,14 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       errors.email = "Please enter a valid email address.";
     }
-    if (!form.hotelName.trim()) errors.hotelName = "Hotel name is required.";
+    if (isHotelBooking && !form.hotelName.trim()) errors.hotelName = "Hotel name is required.";
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
     }
 
-    if (!focusDimension) {
+    if (isHotelBooking && !focusDimension) {
       // Defensive: the focus step should have set this. If it didn't, send the
       // user back rather than submitting without one.
       setStep("focus");
@@ -394,17 +406,24 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
         {step !== "success" && (
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <div className="flex items-center justify-center gap-2 sm:gap-3 mb-12">
-              {[
-                { key: "date" as Step, label: "Date" },
-                { key: "time" as Step, label: "Time" },
-                { key: "focus" as Step, label: "Focus" },
-                { key: "details" as Step, label: "Details" },
-              ].map((s, i) => {
+              {(isHotelBooking
+                ? [
+                    { key: "date" as Step, label: "Date" },
+                    { key: "time" as Step, label: "Time" },
+                    { key: "focus" as Step, label: "Focus" },
+                    { key: "details" as Step, label: "Details" },
+                  ]
+                : [
+                    { key: "date" as Step, label: "Date" },
+                    { key: "time" as Step, label: "Time" },
+                    { key: "details" as Step, label: "Details" },
+                  ]
+              ).map((s, i, steps) => {
                 const reachable =
                   s.key === "date" ||
                   (s.key === "time" && !!selectedDate) ||
                   (s.key === "focus" && !!selectedTime) ||
-                  (s.key === "details" && !!focusDimension);
+                  (s.key === "details" && (isHotelBooking ? !!focusDimension : !!selectedTime));
                 const isComplete =
                   (s.key === "date" && (step === "time" || step === "focus" || step === "details")) ||
                   (s.key === "time" && (step === "focus" || step === "details")) ||
@@ -443,7 +462,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                       </span>
                       <span className="hidden sm:inline">{s.label}</span>
                     </button>
-                    {i < 3 && <div className="w-6 sm:w-8 h-px bg-charcoal/15" />}
+                    {i < steps.length - 1 && <div className="w-6 sm:w-8 h-px bg-charcoal/15" />}
                   </div>
                 );
               })}
@@ -634,7 +653,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
         )}
 
         {/* Step 4: Details form */}
-        {step === "details" && selectedDate && selectedTime && focusDimension && (
+        {step === "details" && selectedDate && selectedTime && (!isHotelBooking || focusDimension) && (
           <motion.div initial="hidden" animate="visible" variants={fadeUp}>
             <div className="max-w-lg mx-auto">
               {/* Selected date/time/focus summary */}
@@ -645,12 +664,14 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                 <p className="font-sans text-sm text-primary-green font-medium mt-1">
                   {formatTime(selectedTime)} ET &middot; {durationLabel(callType)}
                 </p>
-                <p className="font-sans text-xs text-charcoal/60 mt-2">
-                  Focus:{" "}
-                  <span className="font-medium text-charcoal">
-                    {DIMENSIONS.find((d) => d.key === focusDimension)?.label}
-                  </span>
-                </p>
+                {isHotelBooking && (
+                  <p className="font-sans text-xs text-charcoal/60 mt-2">
+                    Focus:{" "}
+                    <span className="font-medium text-charcoal">
+                      {DIMENSIONS.find((d) => d.key === focusDimension)?.label}
+                    </span>
+                  </p>
+                )}
                 <div className="flex items-center justify-center gap-3 mt-2">
                   <button
                     type="button"
@@ -659,14 +680,18 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                   >
                     Change time
                   </button>
-                  <span className="text-charcoal/20" aria-hidden="true">·</span>
-                  <button
-                    type="button"
-                    onClick={() => setStep("focus")}
-                    className="font-sans text-xs text-charcoal/40 hover:text-charcoal/60 transition-colors"
-                  >
-                    Change focus
-                  </button>
+                  {isHotelBooking && (
+                    <>
+                      <span className="text-charcoal/20" aria-hidden="true">·</span>
+                      <button
+                        type="button"
+                        onClick={() => setStep("focus")}
+                        className="font-sans text-xs text-charcoal/40 hover:text-charcoal/60 transition-colors"
+                      >
+                        Change focus
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -726,7 +751,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className={`grid grid-cols-1 gap-5 ${isHotelBooking ? "sm:grid-cols-2" : ""}`}>
                   <div>
                     <label htmlFor="phone" className={labelClass}>
                       Phone Number
@@ -741,24 +766,26 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                       className={inputClass()}
                     />
                   </div>
-                  <div>
-                    <label htmlFor="hotelName" className={labelClass}>
-                      Hotel Name <span className="text-primary-green">*</span>
-                    </label>
-                    <input
-                      id="hotelName"
-                      name="hotelName"
-                      type="text"
-                      required
-                      value={form.hotelName}
-                      onChange={handleChange}
-                      placeholder="The Magnolia Inn"
-                      className={inputClass("hotelName")}
-                    />
-                    {formErrors.hotelName && (
-                      <p className="font-sans text-xs text-red-500 mt-1">{formErrors.hotelName}</p>
-                    )}
-                  </div>
+                  {isHotelBooking && (
+                    <div>
+                      <label htmlFor="hotelName" className={labelClass}>
+                        Hotel Name <span className="text-primary-green">*</span>
+                      </label>
+                      <input
+                        id="hotelName"
+                        name="hotelName"
+                        type="text"
+                        required
+                        value={form.hotelName}
+                        onChange={handleChange}
+                        placeholder="The Magnolia Inn"
+                        className={inputClass("hotelName")}
+                      />
+                      {formErrors.hotelName && (
+                        <p className="font-sans text-xs text-red-500 mt-1">{formErrors.hotelName}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div>

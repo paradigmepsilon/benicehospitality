@@ -19,7 +19,7 @@ import {
 } from "@/components/sections/management/ManagementOffer";
 
 export const metadata: Metadata = {
-  title: "Management | Be Nice Hospitality",
+  title: "Management",
   description:
     "Sharing economy asset management for the Southeast. BNHG manages your car or your spare rooms while you keep ownership. Georgia, Florida, South Carolina, North Carolina, Alabama, and Tennessee.",
   keywords: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://benicehospitality.com/management" },
   openGraph: {
-    title: "Management | Be Nice Hospitality",
+    title: "Management | Be Nice Hospitality Group",
     description:
       "BNHG manages your car or your spare rooms while you keep ownership. Learn to run it yourself, or let us run it.",
     url: "https://benicehospitality.com/management",

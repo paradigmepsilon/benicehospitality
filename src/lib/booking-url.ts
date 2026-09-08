@@ -7,6 +7,8 @@
  * notification email alongside the founder and call type.
  */
 
+import { CANONICAL_CALL_TYPE } from "@/lib/constants/call-types";
+
 export const BOOKING_SOURCES = {
   ALEX_HERO: "alex_hero",
   ALEX_DOORS_CARD: "alex_doors_card",
@@ -58,6 +60,47 @@ export type BookingSource =
 export const VALID_BOOKING_SOURCES = new Set<string>(
   Object.values(BOOKING_SOURCES),
 );
+
+/**
+ * Sources that originate from the hotel-audit funnel (Tier 0 audit report
+ * CTAs) or the retired Signal services offer. A booking from one of these
+ * still needs the hotel-name field and the audit "Focus" step. Every other
+ * source, including the management application funnel, does not.
+ */
+export const HOTEL_AUDIT_SOURCES = new Set<string>([
+  BOOKING_SOURCES.AUDIT_DEFAULT_CTA,
+  BOOKING_SOURCES.AUDIT_OWNER_CTA,
+  BOOKING_SOURCES.AUDIT_OPERATOR_CTA,
+  BOOKING_SOURCES.SIGNAL_HERO,
+  BOOKING_SOURCES.SIGNAL_ENGAGEMENTS_GRID,
+  BOOKING_SOURCES.SIGNAL_FREE_AUDIT_BODY,
+  BOOKING_SOURCES.SIGNAL_OFFERINGS_CARD,
+  BOOKING_SOURCES.SIGNAL_OFFERINGS_FOOTER,
+  BOOKING_SOURCES.SIGNAL_PAGE_FINAL_CTA,
+  BOOKING_SOURCES.SIGNAL_COMPONENT_HERO,
+  BOOKING_SOURCES.SIGNAL_COMPONENT_FINAL_CTA,
+  BOOKING_SOURCES.HOME_SIGNAL_SPOTLIGHT,
+]);
+
+/**
+ * True when a /book visit belongs to the legacy hotel-audit flow: it carries
+ * an audit_token, it clicked through from an audit/Signal CTA, or its
+ * call_type is one of the two pre-canonical aliases that only ever shipped
+ * on audit/Signal links (see CANONICAL_CALL_TYPE in constants/call-types.ts).
+ * Everything else, including every management and general discovery booking,
+ * is not a hotel booking and should not be asked for a hotel name or shown
+ * the audit "Focus" step.
+ */
+export function isHotelAuditBooking(input: {
+  auditToken?: string | null;
+  source?: string | null;
+  callType?: string | null;
+}): boolean {
+  if (input.auditToken) return true;
+  if (input.source && HOTEL_AUDIT_SOURCES.has(input.source)) return true;
+  if (input.callType && input.callType !== CANONICAL_CALL_TYPE) return true;
+  return false;
+}
 
 export interface BookingUrlOptions {
   source?: BookingSource;

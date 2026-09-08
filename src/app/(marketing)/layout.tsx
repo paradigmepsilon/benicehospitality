@@ -60,9 +60,9 @@ const graph = {
       "@id": PROFESSIONAL_SERVICE_ID,
       name: "Be Nice Hospitality Group",
       url: SITE_URL,
-      serviceType: "Hospitality Operations Consulting",
+      serviceType: "Sharing Economy Asset Management",
       description:
-        "Consulting and fractional advisory services for independent boutique stays and co-living operators. Revenue strategy, operations, guest experience, and hospitality technology.",
+        "Training and done-for-you asset management for co-living operators and rental fleet owners across the Southeast. Revenue strategy, operations, guest experience, and hospitality technology.",
       areaServed: {
         "@type": "Country",
         name: "United States",
@@ -87,7 +87,7 @@ const graph = {
       worksFor: { "@id": ORG_ID },
       url: "https://alexhenry.bio",
       description:
-        "Co-founder and CEO of Be Nice Hospitality Group. Military veteran with enterprise operations background focused on hospitality technology, revenue strategy, and direct booking for co-living properties, boutique stays, and rental fleets.",
+        "Co-founder and CEO of Be Nice Hospitality Group. Military veteran with enterprise operations background focused on hospitality technology, revenue strategy, and direct booking for co-living properties and rental fleets.",
       sameAs: [
         "https://alexhenry.bio",
         "https://www.linkedin.com/company/be-nice-hospitality/",

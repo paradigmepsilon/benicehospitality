@@ -12,7 +12,7 @@ import {
   CALL_BLOCK_MINUTES,
   callDurationLabel,
 } from "@/lib/constants/call-types";
-import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
+import { VALID_BOOKING_SOURCES, isHotelAuditBooking } from "@/lib/booking-url";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { stopNurture } from "@/lib/nurture/engine";
 
@@ -74,14 +74,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid call_type." }, { status: 400 });
     }
 
-    if (!focusDimension) {
-      return NextResponse.json(
-        { error: "Please choose a focus area for your call." },
-        { status: 400 }
-      );
-    }
-    if (!FOCUS_DIMENSION_KEYS.includes(focusDimension)) {
-      return NextResponse.json({ error: "Invalid focus_dimension." }, { status: 400 });
+    // Hotel context mirrors the client-side gating in BookingCalendar.tsx:
+    // only the legacy hotel-audit / Signal funnel requires a hotel name and a
+    // focus dimension. Management and general discovery bookings do not.
+    const isHotelBooking = isHotelAuditBooking({
+      auditToken: typeof auditToken === "string" ? auditToken : null,
+      source: clickSource,
+      callType,
+    });
+
+    if (isHotelBooking) {
+      if (!focusDimension) {
+        return NextResponse.json(
+          { error: "Please choose a focus area for your call." },
+          { status: 400 }
+        );
+      }
+      if (!FOCUS_DIMENSION_KEYS.includes(focusDimension)) {
+        return NextResponse.json({ error: "Invalid focus_dimension." }, { status: 400 });
+      }
     }
 
     // Honeypot check. Silently reject bots that fill in the hidden field.
@@ -95,7 +106,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Verification failed. Please try again." }, { status: 400 });
     }
 
-    if (!name || !email || !hotelName || !date || !time) {
+    if (!name || !email || !date || !time || (isHotelBooking && !hotelName)) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
