@@ -1680,10 +1680,13 @@ Two entries in `RESOURCE_TOOLS`, following the shape of the existing entries exa
     "room-earnings-estimator": "estimate_rooms",
   };
   const sequenceKey =
-    ESTIMATOR_SEQUENCES[slug] ?? (lane === "fleet" ? "crr_calculator" : "rrr_welcome");
+    ESTIMATOR_SEQUENCES[input.slug] ??
+    (tool.category === "fleet" ? "crr_calculator" : "rrr_welcome");
 ```
 
-Then pass `sequenceKey` to the existing `enrollInNurture` call. Do not change the fallback behavior for any other tool.
+Then pass `sequenceKey` to the existing `enrollInNurture` call at `src/lib/resources/leads.ts:139`.
+
+Verified against the real file: the existing branch is `tool.category === "fleet" ? "crr_calculator" : "rrr_welcome"`, keyed off the registry `category`, NOT off a `lane` variable, and the slug in scope is `input.slug`. Do not change the fallback behavior for any other tool.
 
 - [ ] **Step 3: Write the two sequences**
 
