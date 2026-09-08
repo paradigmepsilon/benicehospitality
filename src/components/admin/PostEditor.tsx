@@ -749,8 +749,9 @@ export default function PostEditor({ post }: { post?: PostData }) {
         />
       ) : (
         <div className="space-y-4">
-          {/* Post type selector. Drives whether the post lives at /insights/[slug]
-              (default) or feeds the BNHG Labs Build Log at /labs/build-log. */}
+          {/* Post type selector. Both types render at /insights/[slug]. Build
+              Log entries used to also feed a standalone Labs listing page;
+              that page is retired now that Labs is gone. */}
           <div className="bg-[#f8f6f1] border border-[#e8e4dd] rounded p-4">
             <label className="block text-sm font-medium text-[#1a1a1a] mb-2">
               Post type
@@ -758,7 +759,7 @@ export default function PostEditor({ post }: { post?: PostData }) {
             <div className="grid grid-cols-2 gap-2">
               {[
                 { value: "insight" as PostType, label: "Insight", body: "Long-form essay. Lives at /insights." },
-                { value: "build_log" as PostType, label: "Build Log entry", body: "Build-in-public update. Lives at /labs/build-log." },
+                { value: "build_log" as PostType, label: "Build Log entry", body: "Build-in-public update. Lives at /insights." },
               ].map((opt) => (
                 <button
                   key={opt.value}
