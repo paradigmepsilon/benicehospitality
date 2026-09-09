@@ -349,7 +349,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
   const labelClass = "block font-sans text-sm font-medium text-near-black mb-2";
 
   return (
-    <AnimatedSection theme="off-white" className="py-16 px-6">
+    <AnimatedSection theme="off-white" className="py-10 px-6">
       <div className="max-w-4xl mx-auto">
         {/* Audit context banner (shown when arriving from /audit/[token]) */}
         {auditTeaser && step !== "success" && (

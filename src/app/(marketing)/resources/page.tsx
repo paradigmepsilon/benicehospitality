@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
-import { STOCK_LIBRARY } from "@/lib/stock-images";
+import PhotoHero from "@/components/sections/shared/PhotoHero";
 import { type Resource } from "./_components/ResourceCard";
 import ResourceCatalog, {
   type ResourceTab,
@@ -143,8 +142,8 @@ const TABS: ResourceTab[] = [
   },
   {
     id: "auto",
-    label: "Cars",
-    sectionLabel: "For car operators",
+    label: "Vehicles",
+    sectionLabel: "For vehicle operators",
     headline: "Turo and peer-to-peer fleet.",
     body: "Fleet-grade interactive tools for Turo hosts and peer-to-peer operators, built on the same underwriting method Car Rental Riches teaches: 2026 earnings-plan math, true-net thinking, no gross-number theater. The set is growing as the course ships.",
     image: {
@@ -163,37 +162,23 @@ const TABS: ResourceTab[] = [
 export default function ResourcesPage() {
   return (
     <>
-      {/* Hero. Full-bleed editorial image behind the headline. Mirrors the
-          dark-hero pattern used by the MTR scorecard detail pages. */}
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
-        <Image
-          src={STOCK_LIBRARY.src}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-30"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/85 to-near-black/60"
-        />
-        <div className="relative z-10 max-w-4xl">
-          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-8">
-            Resource Library
-          </p>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
-            An ever-growing operator library.
-          </h1>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl">
+      <PhotoHero
+        eyebrow="Resource library"
+        headline="An ever-growing operator library."
+        lede={
+          <>
             Diagnostic tools, scorecards, and calculators we&rsquo;ve built for
             the operators we serve, grouped by asset class. Some are public,
             some need a quick signup, and some are bundled inside our courses.
-          </p>
-        </div>
-      </section>
-
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
+          </>
+        }
+        image={{
+          src: "/images/Website Images/Workspace Nook.png",
+          alt: "A quiet operator workspace with a desk by the window",
+          position: "object-[60%_center]",
+        }}
+        compact
+      />
 
       <ResourceCatalog tabs={TABS} />
 

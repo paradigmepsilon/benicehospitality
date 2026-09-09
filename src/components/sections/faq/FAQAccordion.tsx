@@ -14,7 +14,7 @@ export default function FAQAccordion() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section className="py-24 px-6 bg-off-white">
+    <section className="py-14 px-6 bg-off-white">
       <div className="max-w-4xl mx-auto space-y-16">
         {FAQ_CATEGORIES.map((category) => {
           const items = FAQ_ITEMS.filter((q) => q.category === category);

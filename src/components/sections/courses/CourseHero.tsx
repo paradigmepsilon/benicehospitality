@@ -41,7 +41,7 @@ export default function CourseHero({
         "relative overflow-hidden px-6 md:px-12 lg:px-20",
         hasImage
           ? "bg-near-black pt-32 md:pt-40 lg:pt-44 pb-24 md:pb-28"
-          : "bg-cream pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-20 lg:pb-24",
+          : "bg-cream pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-14 lg:pb-24",
       ].join(" ")}
     >
       {hasImage && backgroundImage && (

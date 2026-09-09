@@ -62,7 +62,7 @@ const graph = {
       url: SITE_URL,
       serviceType: "Sharing Economy Asset Management",
       description:
-        "Training and done-for-you asset management for co-living operators and rental fleet owners across the Southeast. Revenue strategy, operations, guest experience, and hospitality technology.",
+        "Training and done-for-you asset management for co-living operators and rental fleet owners across the Southeast U.S.. Revenue strategy, operations, guest experience, and hospitality technology.",
       areaServed: {
         "@type": "Country",
         name: "United States",

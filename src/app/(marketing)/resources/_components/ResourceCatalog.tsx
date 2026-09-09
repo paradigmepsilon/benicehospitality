@@ -68,7 +68,7 @@ export default function ResourceCatalog({ tabs }: ResourceCatalogProps) {
     // One /api/resources/saved fetch here resolves the save state for every
     // card in every tab, rather than one request per card.
     <SavedToolsProvider>
-    <section className="bg-off-white py-14 md:py-16 px-6">
+    <section className="bg-off-white py-10 md:py-12 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Tab strip */}
         <div

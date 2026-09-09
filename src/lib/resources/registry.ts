@@ -562,7 +562,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     slug: "car-earnings-estimator",
     name: "Car Earnings Estimator",
     blurb:
-      "A fast first read on what your car could earn in your market, before you build out the full three-way profitability breakdown.",
+      "A fast first read on what your vehicle could earn in your market, before you build out the full three-way profitability breakdown.",
     bullets: [
       "A monthly gross range for your metro, from days available and condition",
       "A net range too, once a management fee applies",
@@ -585,7 +585,7 @@ export const RESOURCE_TOOLS: Record<string, ResourceToolMeta> = {
     status: "soon",
     heroImage: HERO_DEFAULT,
     eyebrow: "Car Earnings",
-    headline: "What could this car\nactually earn?",
+    headline: "What could this vehicle\nactually earn?",
     subhead:
       "Pick your market, tell us how many days it is available and what kind of shape it is in, and get an honest monthly range before you commit to anything.",
     howItWorks: [

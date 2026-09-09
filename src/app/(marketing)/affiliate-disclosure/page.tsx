@@ -35,7 +35,7 @@ const EFFECTIVE_DATE = "August 10, 2026";
 export default function AffiliateDisclosurePage() {
   return (
     <>
-      <section className="bg-near-black pt-48 pb-20 px-6 md:px-12 lg:px-20">
+      <section className="bg-near-black pt-48 pb-12 px-6 md:px-12 lg:px-20">
         <div className="max-w-3xl">
           <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.35em] uppercase text-warm-gold mb-6">
             Legal
@@ -56,7 +56,7 @@ export default function AffiliateDisclosurePage() {
 
       <SectionDivider fromColor={C.nearBlack} toColor={C.offWhite} />
 
-      <section className="bg-off-white py-20 md:py-24 px-6 md:px-12 lg:px-20">
+      <section className="bg-off-white py-12 md:py-16 px-6 md:px-12 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <LegalSection title="1. The short version">
             <p>

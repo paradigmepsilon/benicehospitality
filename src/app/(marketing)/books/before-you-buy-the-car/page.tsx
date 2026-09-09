@@ -64,7 +64,7 @@ export default function BeforeYouBuyTheCarPage() {
   return (
     <>
       {/* HERO with the form */}
-      <section className="relative overflow-hidden bg-near-black px-6 pb-16 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="relative overflow-hidden bg-near-black px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-10 h-[36rem] w-[36rem] rounded-full bg-warm-gold/20 blur-[120px]"
@@ -112,7 +112,7 @@ export default function BeforeYouBuyTheCarPage() {
       <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
 
       {/* THE TWELVE */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -152,7 +152,7 @@ export default function BeforeYouBuyTheCarPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} />
 
       {/* WHO WROTE IT + WHAT IT IS NOT */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-16">
           <AnimatedItem>
             <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm lg:mx-0 lg:max-w-none">
@@ -224,7 +224,7 @@ export default function BeforeYouBuyTheCarPage() {
       <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
 
       {/* SECOND FORM + WHERE IT GOES NEXT */}
-      <section className="bg-near-black px-6 py-16 md:px-12 md:py-20 lg:px-20">
+      <section className="bg-near-black px-6 py-10 md:px-12 md:py-20 lg:px-20">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="mb-4 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold">

@@ -52,6 +52,8 @@ export const BOOKING_SOURCES = {
   MGMT_APPLY_CAR: "mgmt_apply_car",
   MGMT_APPLY_ROOMS: "mgmt_apply_rooms",
   HOME_OWNER_PORTAL: "home_owner_portal",
+  // Home page closing photo band (2026-09 redesign).
+  HOME_FINAL_CTA: "home_final_cta",
 } as const;
 
 export type BookingSource =

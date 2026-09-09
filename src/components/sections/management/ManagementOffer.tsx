@@ -6,6 +6,9 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import SectionDivider from "@/components/ui/SectionDivider";
 import Button from "@/components/ui/Button";
+import PhotoHero from "@/components/sections/shared/PhotoHero";
+import PhotoCTA from "@/components/sections/shared/PhotoCTA";
+import OnboardingTimeline from "@/components/sections/management/OnboardingTimeline";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { BOOKING_SOURCES, type BookingSource } from "@/lib/booking-url";
 import {
@@ -62,6 +65,30 @@ export const ONBOARDING_STEPS = [
   },
 ] as const;
 
+const HERO_IMAGE: Record<ManagedAsset, { src: string; alt: string; position?: string }> = {
+  car: {
+    src: "/images/Website Images/Alex Turo Shot.png",
+    alt: "Alex Henry at the wheel of a managed rental vehicle",
+    position: "object-[70%_center]",
+  },
+  rooms: {
+    src: "/images/Website Images/hf_20260528_162140_0ee925d0-fbc6-4a93-af15-0c4174b02574.png",
+    alt: "A furnished co-living living room with a fireplace",
+    position: "object-[60%_center]",
+  },
+};
+
+const CTA_IMAGE: Record<ManagedAsset, { src: string; alt: string; position?: string }> = {
+  car: {
+    src: "/images/Website Images/image5.png",
+    alt: "Managed rental vehicles with the Atlanta skyline behind them",
+  },
+  rooms: {
+    src: "/images/Website Images/hf_20260312_143806_033b0238-3b74-42ea-ad06-8c3119b6ad1a.jpeg",
+    alt: "A welcome basket on a co-living kitchen counter",
+  },
+};
+
 const FEE_STRUCTURE = [
   {
     label: "Percentage of gross",
@@ -97,7 +124,7 @@ const ASSET_COPY: Record<ManagedAsset, AssetCopy> = {
     subject: "your vehicle",
     fitFor: [
       "The vehicle is titled and insured in your name today, or will be before management starts.",
-      "The car is road-ready today: no open recalls, no mechanical work standing between now and a rental.",
+      "The vehicle is road-ready today: no open recalls, no mechanical work standing between now and a rental.",
       "You want the vehicle earning as a rental, not parked between trips.",
       "You're ready to hand day-to-day pricing, scheduling, and renter communication to an operator.",
       "The vehicle is based inside our service area.",
@@ -237,63 +264,39 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
 
   return (
     <>
-      {/* 1. HERO, plus the "Your operator" sidebar. */}
-      <AnimatedSection theme="green" className="pt-32 md:pt-40 pb-16 md:pb-20 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-12 lg:gap-16 items-start">
-          <div>
-            <AnimatedItem>
-              <SectionLabel light>
-                {offer.name} &middot; {SERVICE_AREA_LABEL}
-              </SectionLabel>
-            </AnimatedItem>
-            <AnimatedItem>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.1] tracking-tight mb-6">
-                {offer.promise}
-              </h1>
-            </AnimatedItem>
-            <AnimatedItem>
-              <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-10 max-w-2xl">
-                BNHG manages {copy.subject} day to day: the listing, the
-                pricing, the turnover, and the people. You keep ownership and
-                the decisions that matter.
-              </p>
-            </AnimatedItem>
-            <AnimatedItem>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                <Button
-                  href={applyHref(HERO_SOURCE[asset], asset)}
-                  variant="primary"
-                  size="lg"
-                >
-                  Check Your Fit
-                </Button>
-                <p className="font-sans text-sm text-white/60">
-                  A few minutes, no sales script.
-                </p>
-              </div>
-            </AnimatedItem>
+      {/* 1. HERO, plus the "Your operator" card floating on the photo. */}
+      <PhotoHero
+        eyebrow={`${offer.name} across ${SERVICE_AREA_LABEL}`}
+        headline={offer.promise}
+        lede={
+          <>
+            BNHG manages {copy.subject} day to day: the listing, the pricing,
+            the turnover, and the people. You keep ownership and the decisions
+            that matter.
+          </>
+        }
+        primaryCta={{
+          label: "Check your fit",
+          href: applyHref(HERO_SOURCE[asset], asset),
+        }}
+        note="A few minutes, no sales script."
+        image={HERO_IMAGE[asset]}
+        dividerTo={C.white}
+        aside={
+          <div className="rounded-card border border-white/60 bg-white/85 backdrop-blur-xl text-near-black p-6 md:p-7">
+            <p className="font-sans text-sm text-charcoal/65 mb-2">Your operator</p>
+            <h2 className="font-display text-2xl font-semibold leading-tight mb-2">
+              {offer.operator.name}
+            </h2>
+            <p className="font-sans text-[15px] text-charcoal/80 leading-snug">
+              {offer.operator.blurb}
+            </p>
           </div>
-
-          <AnimatedItem>
-            <div className="bg-white/5 border border-white/15 rounded-lg p-7 md:p-8">
-              <p className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-4">
-                Your operator
-              </p>
-              <h2 className="font-display text-2xl font-semibold text-white leading-tight mb-3">
-                {offer.operator.name}
-              </h2>
-              <p className="font-sans text-base text-white/80 leading-snug">
-                {offer.operator.blurb}
-              </p>
-            </div>
-          </AnimatedItem>
-        </div>
-      </AnimatedSection>
-
-      <SectionDivider fromColor={C.deepTeal} toColor={C.white} />
+        }
+      />
 
       {/* 2. WHO IT'S FOR / WHO IT ISN'T */}
-      <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-12 md:mb-14">
             <AnimatedItem>
@@ -367,7 +370,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* 3. WHAT WE HANDLE / WHAT YOU KEEP */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-12 md:mb-14">
             <AnimatedItem>
@@ -439,7 +442,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
 
       {/* 4. FEE MODEL. Structure-only until every env var is set; never a
           placeholder digit. */}
-      <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-12 md:mb-14">
             <AnimatedItem>
@@ -479,61 +482,25 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
         </div>
       </AnimatedSection>
 
-      <SectionDivider fromColor={C.white} toColor={C.cream} flip />
+      <SectionDivider fromColor={C.white} toColor={C.white} flip />
 
       {/* 5. ONBOARDING. Order, not duration: no named timeline exists yet. */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="max-w-3xl mb-12 md:mb-14">
-            <AnimatedItem>
-              <SectionLabel>How it works</SectionLabel>
-            </AnimatedItem>
-            <AnimatedItem>
-              <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-6">
-                From apply to live.
-              </h2>
-            </AnimatedItem>
-            <AnimatedItem>
-              <p className="font-sans text-lg text-charcoal leading-snug">
-                No named timeline until we&rsquo;ve seen the asset.
-                Here&rsquo;s the order every application moves through.
-              </p>
-            </AnimatedItem>
-          </div>
-
-          <AnimatedDiv
-            stagger
-            className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-10"
-          >
-            {ONBOARDING_STEPS.map((s, i) => (
-              <AnimatedItem key={s.step}>
-                <article className="border-l-2 border-warm-gold pl-6 h-full">
-                  <p
-                    aria-hidden="true"
-                    className="font-display italic text-3xl text-warm-gold leading-none mb-4"
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="font-display text-xl font-semibold text-deep-teal leading-tight mb-3">
-                    {s.step}
-                  </h3>
-                  <p className="font-sans text-base text-charcoal/85 leading-snug">
-                    {s.body}
-                  </p>
-                </article>
-              </AnimatedItem>
-            ))}
-          </AnimatedDiv>
-        </div>
-      </AnimatedSection>
+      <OnboardingTimeline
+        lede={
+          <>
+            No named timeline until we&rsquo;ve seen the asset. Here&rsquo;s
+            the order every application moves through.
+          </>
+        }
+      />
 
       {/* 6. OWNER PORTAL PREVIEW. Renders only when OWNER_PORTAL_URL exists.
           When it doesn't, this whole block (section + both dividers) is
           skipped so nothing points at a dead link. */}
       {ownerPortalUrl ? (
         <>
-          <SectionDivider fromColor={C.cream} toColor={C.deepTeal} />
-          <AnimatedSection theme="green" className="py-16 md:py-24 px-6">
+          <SectionDivider fromColor={C.white} toColor={C.deepTeal} />
+          <AnimatedSection theme="green" className="py-10 md:py-14 px-6">
             <div className="max-w-7xl mx-auto">
               <div className="max-w-3xl mb-12 md:mb-14">
                 <AnimatedItem>
@@ -580,11 +547,11 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
           <SectionDivider fromColor={C.deepTeal} toColor={C.white} flip />
         </>
       ) : (
-        <SectionDivider fromColor={C.cream} toColor={C.white} />
+        <SectionDivider fromColor={C.white} toColor={C.white} />
       )}
 
       {/* 7. OBJECTIONS */}
-      <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-12 md:mb-14">
             <AnimatedItem>
@@ -628,7 +595,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* 8. TRANSPARENCY LINE + THE DIY ALTERNATIVE */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <AnimatedItem>
             <div className="max-w-3xl bg-white border-t-2 border-warm-gold p-8 md:p-10">
@@ -637,7 +604,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
               </p>
               <p className="font-display italic text-2xl md:text-3xl text-deep-teal leading-snug mb-5">
                 You can run this yourself with our course. If you would
-                rather not, we do.
+                rather not, we can do it for you.
               </p>
               <p className="font-sans text-base text-charcoal/85 leading-snug mb-7">
                 {copy.courseLabel} teaches the same operator method we run on
@@ -651,29 +618,16 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
         </div>
       </AnimatedSection>
 
-      <SectionDivider fromColor={C.cream} toColor={C.deepTeal} />
-
       {/* 9. FINAL CTA */}
-      <AnimatedSection theme="green" className="py-16 md:py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
-            Ready when you are
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
-            Check your fit.
-          </h2>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-12 max-w-2xl mx-auto">
-            Applying takes a few minutes. Nothing is signed until the call.
-          </p>
-          <Button
-            href={applyHref(FINAL_CTA_SOURCE[asset], asset)}
-            variant="primary"
-            size="lg"
-          >
-            Check Your Fit
-          </Button>
-        </div>
-      </AnimatedSection>
+      <PhotoCTA
+        headline="Check your fit."
+        body="Applying takes a few minutes. Nothing is signed until the call."
+        primary={{
+          label: "Check your fit",
+          href: applyHref(FINAL_CTA_SOURCE[asset], asset),
+        }}
+        image={CTA_IMAGE[asset]}
+      />
     </>
   );
 }

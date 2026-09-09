@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import SectionLabel from "@/components/ui/SectionLabel";
 import SectionDivider from "@/components/ui/SectionDivider";
 import Button from "@/components/ui/Button";
+import PhotoHero from "@/components/sections/shared/PhotoHero";
+import PhotoCTA from "@/components/sections/shared/PhotoCTA";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
-import { STOCK_COMMUNITY } from "@/lib/stock-images";
 import { RRR_PRICES, RRR_PATHS } from "@/lib/room-rental-riches";
 import { CRR, isCrrPresaleOpen } from "@/lib/car-rental-riches";
 import { isOperatorBundleOpen } from "@/lib/operator-bundle";
@@ -59,41 +59,28 @@ export default function TrainingPage() {
 
   return (
     <>
-      {/* Hero. Mirrors the /resources dark-hero pattern for family resemblance
-          across the three-bin nav (Resources, Training, Management). */}
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
-        <Image
-          src={STOCK_COMMUNITY.src}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-30"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/85 to-near-black/60"
-        />
-        <div className="relative z-10 max-w-4xl">
-          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-8">
-            Training
-          </p>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
-            Learn to run it yourself.
-          </h1>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl">
+      <PhotoHero
+        eyebrow="Training"
+        headline="Learn to run it yourself."
+        lede={
+          <>
             Room Rental Riches for co-living operators and Car Rental Riches
             for fleet operators, taught by the operators who run BNHG&rsquo;s
             own units. Self-paced, live, or 1:1, all built on the same
             curriculum underneath.
-          </p>
-        </div>
-      </section>
-
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
+          </>
+        }
+        primaryCta={{ label: "Room Rental Riches", href: RRR_PATHS.selfPaced }}
+        secondaryCta={{ label: "Car Rental Riches", href: "/courses/car-rental-riches" }}
+        image={{
+          src: "/images/Website Images/course-operator-della-v1.webp",
+          alt: "Della Henry teaching from a co-living property",
+          position: "object-[65%_center]",
+        }}
+      />
 
       {/* Room Rental Riches */}
-      <section className="bg-cream py-16 md:py-20 px-6">
+      <section className="bg-cream py-10 md:py-14 px-6">
         <div className="max-w-6xl mx-auto">
           <SectionLabel>Co-living &amp; MTR</SectionLabel>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-tight mt-4 mb-4">
@@ -157,7 +144,7 @@ export default function TrainingPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* Car Rental Riches */}
-      <section className="bg-white py-16 md:py-20 px-6">
+      <section className="bg-white py-10 md:py-14 px-6">
         <div className="max-w-6xl mx-auto">
           <SectionLabel>Fleet &amp; Turo</SectionLabel>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-deep-teal leading-tight mt-4 mb-4">
@@ -190,30 +177,24 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {bundleOpen ? (
+      {bundleOpen && (
         <>
           <SectionDivider fromColor={C.white} toColor={C.cream} />
           <OperatorBundleBand source="training-page" />
-          <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />
         </>
-      ) : (
-        <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
       )}
 
-      {/* Management pointer */}
-      <section className="bg-near-black py-16 md:py-20 px-6 text-center">
-        <div className="max-w-2xl mx-auto">
-          <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
-            Or skip straight to done for you
-          </p>
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-white leading-tight mb-8">
-            Would rather not run it yourself? See what management costs.
-          </h2>
-          <Button href="/management" variant="primary" size="lg">
-            See what management costs
-          </Button>
-        </div>
-      </section>
+      <PhotoCTA
+        dividerFrom={bundleOpen ? C.cream : C.white}
+        headline="Would rather not run it yourself?"
+        body="Hand the day-to-day to BNHG and keep ownership of the vehicle or the property."
+        primary={{ label: "See how management works", href: "/management" }}
+        secondary={{ label: "Browse the resources", href: "/resources" }}
+        image={{
+          src: "/images/Website Images/crr-collage-01-keys-handoff.png",
+          alt: "Keys handed over at a vehicle",
+        }}
+      />
     </>
   );
 }

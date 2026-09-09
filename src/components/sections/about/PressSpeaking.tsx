@@ -37,7 +37,7 @@ const APPEARANCES: Appearance[] = [
  */
 export default function PressSpeaking() {
   return (
-    <AnimatedSection id="press" theme="off-white" className="py-20 md:py-28 px-6">
+    <AnimatedSection id="press" theme="off-white" className="py-12 md:py-16 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12 max-w-2xl mx-auto">
           <AnimatedItem>

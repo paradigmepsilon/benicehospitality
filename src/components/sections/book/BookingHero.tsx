@@ -1,6 +1,6 @@
 export default function BookingHero() {
   return (
-    <section className="bg-near-black pt-32 pb-20 px-6 md:px-12 lg:px-20">
+    <section className="bg-near-black pt-32 pb-12 px-6 md:px-12 lg:px-20">
       <div className="max-w-4xl">
         <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-5">
           Book a Discovery Call

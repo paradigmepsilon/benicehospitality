@@ -40,7 +40,6 @@ export default async function InsightsPage({
   return (
     <>
       <InsightsHero />
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
       <InsightsGrid
         category={params.category}
         sort={params.sort}

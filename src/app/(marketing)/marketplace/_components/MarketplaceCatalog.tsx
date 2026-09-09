@@ -108,7 +108,7 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
   const gridCols = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
 
   return (
-    <section className="bg-off-white py-14 md:py-16 px-6">
+    <section className="bg-off-white py-10 md:py-12 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Tab strip */}
         <div
@@ -360,7 +360,7 @@ export default function MarketplaceCatalog({ tabs }: MarketplaceCatalogProps) {
   return (
     <Suspense
       fallback={
-        <section className="bg-off-white py-14 md:py-16 px-6">
+        <section className="bg-off-white py-10 md:py-12 px-6">
           <div className="max-w-7xl mx-auto h-32" />
         </section>
       }

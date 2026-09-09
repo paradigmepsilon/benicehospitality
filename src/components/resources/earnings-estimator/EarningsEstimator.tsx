@@ -167,7 +167,7 @@ export default function EarningsEstimator({
                   className="w-full border border-light-gray rounded-lg bg-white px-3 py-2.5 font-sans text-sm text-near-black focus:outline-none focus:ring-1 focus:ring-primary-green/50 focus:border-primary-green/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <p className="font-sans text-[11px] text-charcoal/50 mt-1.5">
-                  How many days a month the car is actually free to rent, not sitting in your driveway or in the shop.
+                  How many days a month the vehicle is actually free to rent, not sitting in your driveway or in the shop.
                 </p>
               </div>
               <div>

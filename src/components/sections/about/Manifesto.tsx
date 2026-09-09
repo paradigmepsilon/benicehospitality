@@ -10,7 +10,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
  */
 export default function Manifesto() {
   return (
-    <AnimatedSection id="manifesto" theme="light" className="py-20 md:py-28 px-6">
+    <AnimatedSection id="manifesto" theme="light" className="py-12 md:py-16 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <AnimatedItem>

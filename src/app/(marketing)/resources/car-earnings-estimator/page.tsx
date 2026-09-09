@@ -12,7 +12,7 @@ const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("car-earnings-estimator")!;
 
 export const metadata: Metadata = {
-  title: { absolute: `${tool.name}: Free Car Earnings Range | BNHG` },
+  title: { absolute: `${tool.name}: Free Vehicle Earnings Range | BNHG` },
   description: tool.blurb,
   alternates: { canonical: `${SITE_URL}/resources/${tool.slug}` },
   openGraph: {

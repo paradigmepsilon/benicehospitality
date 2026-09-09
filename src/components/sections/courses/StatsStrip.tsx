@@ -9,7 +9,7 @@ interface StatsStripProps {
 
 export default function StatsStrip({ items }: StatsStripProps) {
   return (
-    <section className="bg-cream pb-16 md:pb-20 lg:pb-24 px-6">
+    <section className="bg-cream pb-10 md:pb-14 lg:pb-24 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="border-y border-warm-gold/30 py-8 md:py-10">
           <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-warm-gold/30">

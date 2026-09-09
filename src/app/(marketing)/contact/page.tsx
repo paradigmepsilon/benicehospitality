@@ -30,7 +30,6 @@ export default function ContactPage() {
   return (
     <>
       <ContactHero />
-      <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
       <Suspense fallback={null}>
         <ContactForm />
       </Suspense>

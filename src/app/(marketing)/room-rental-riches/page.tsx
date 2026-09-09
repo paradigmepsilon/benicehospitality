@@ -42,7 +42,7 @@ export default function RoomRentalRichesPage() {
   return (
     <>
       {/* HERO */}
-      <section className="bg-cream px-6 pb-14 pt-24 md:px-12 md:pb-16 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="bg-cream px-6 pb-10 pt-24 md:px-12 md:pb-16 md:pt-32 lg:px-20 lg:pt-36">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-6 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-warm-gold md:text-sm">
             The Be Nice Way
@@ -61,7 +61,7 @@ export default function RoomRentalRichesPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} />
 
       {/* THE THREE WAYS IN */}
-      <AnimatedSection theme="light" className="px-6 py-16 md:py-20">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-14">
         <div className="mx-auto max-w-6xl">
           <AnimatedDiv
             stagger
@@ -203,7 +203,7 @@ export default function RoomRentalRichesPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* WHERE TO START */}
-      <AnimatedSection theme="off-white" className="px-6 py-20 md:py-24">
+      <AnimatedSection theme="off-white" className="px-6 py-12 md:py-16">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Where to start</SectionLabel>

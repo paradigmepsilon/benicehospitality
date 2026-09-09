@@ -51,7 +51,7 @@ export default function CommunityPage() {
 
   return (
     <>
-      <section className="bg-cream pt-32 md:pt-40 lg:pt-44 pb-20 md:pb-24 px-6 md:px-12 lg:px-20">
+      <section className="bg-cream pt-32 md:pt-40 lg:pt-44 pb-12 md:pb-16 px-6 md:px-12 lg:px-20">
         <div className="max-w-4xl">
           <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-charcoal/70 mb-8">
             Community
@@ -97,7 +97,8 @@ export default function CommunityPage() {
         alt="Operator community placeholder"
       />
 
-      <AnimatedSection theme="off-white" className="py-24 md:py-28 px-6">
+      <SectionDivider fromColor={C.cream} toColor={C.offWhite} />
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <AnimatedItem>
@@ -140,7 +141,7 @@ export default function CommunityPage() {
 
       <AnimatedSection
         theme="none"
-        className="bg-primary-green text-white py-24 md:py-28 px-6"
+        className="bg-primary-green text-white py-10 md:py-14 px-6"
       >
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedItem>

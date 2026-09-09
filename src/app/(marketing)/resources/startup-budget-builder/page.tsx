@@ -9,7 +9,7 @@ const SITE_URL = "https://benicehospitality.com";
 const tool = getResourceTool("startup-budget-builder")!;
 
 export const metadata: Metadata = {
-  title: { absolute: `${tool.name}: Free Car Rental Launch Budget | BNHG` },
+  title: { absolute: `${tool.name}: Free Vehicle Rental Launch Budget | BNHG` },
   description: tool.blurb,
   alternates: { canonical: `${SITE_URL}/resources/${tool.slug}` },
   openGraph: {

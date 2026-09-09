@@ -182,7 +182,7 @@ export default function ApplicationForm() {
   }
 
   return (
-    <AnimatedSection theme="light" className="pt-32 md:pt-40 pb-20 md:pb-24 px-6">
+    <AnimatedSection theme="light" className="pt-32 md:pt-40 pb-12 md:pb-16 px-6">
       <div className="max-w-3xl mx-auto">
         <AnimatedItem>
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-primary-green mb-6">
@@ -237,7 +237,7 @@ export default function ApplicationForm() {
                       ].join(" ")}
                       aria-pressed={selected}
                     >
-                      {a === "car" ? "A car" : "Rooms"}
+                      {a === "car" ? "A vehicle" : "Rooms"}
                     </button>
                   );
                 })}

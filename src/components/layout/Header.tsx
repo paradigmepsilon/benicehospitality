@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/components/ui/Button";
-import { NAV_LEFT, NAV_RIGHT, NAV_TREE, UTILITY_NAV } from "@/lib/nav";
+import { NAV_TREE, UTILITY_NAV } from "@/lib/nav";
 import type { NavGroup } from "@/lib/types";
 
 function isActiveGroup(group: NavGroup, pathname: string): boolean {
@@ -26,6 +26,12 @@ interface SessionUser {
   role: "admin" | "user";
 }
 
+/**
+ * The floating pill nav from the reference pins. It is inset from the
+ * viewport and glass-white, so it sits over the framed photo heroes and over
+ * plain cream pages alike without a solid bar behind it. Logo left, nav
+ * centre, account pill right; the mobile sheet is unchanged in behaviour.
+ */
 export default function Header({
   ownerPortalUrl,
 }: {
@@ -44,7 +50,8 @@ export default function Header({
   const navRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -137,6 +144,9 @@ export default function Header({
     [pathname],
   );
 
+  const topLinkBase =
+    "font-sans text-sm font-medium tracking-wide px-3.5 py-2 rounded-full transition-colors duration-200";
+
   function renderTopLink(group: NavGroup) {
     const active = isActiveGroup(group, pathname);
     const hasChildren = !!group.children?.length;
@@ -147,14 +157,12 @@ export default function Header({
         <Link
           key={group.label}
           href={group.href}
+          aria-current={active ? "page" : undefined}
           className={[
-            "font-sans text-sm font-medium tracking-wide",
-            "transition-colors duration-200 relative group/link",
-            "after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:bg-warm-gold",
-            "after:origin-left after:transition-transform after:duration-300",
+            topLinkBase,
             active
-              ? "text-warm-gold after:scale-x-100"
-              : "text-charcoal/80 hover:text-charcoal after:scale-x-0 hover:after:scale-x-100",
+              ? "bg-near-black text-white"
+              : "text-charcoal/80 hover:text-charcoal hover:bg-near-black/5",
           ].join(" ")}
         >
           {group.label}
@@ -176,13 +184,11 @@ export default function Header({
           onClick={() => setOpenMenu(isOpen ? null : group.label)}
           onFocus={() => setOpenMenu(group.label)}
           className={[
-            "font-sans text-sm font-medium tracking-wide flex items-center gap-1 relative",
-            "transition-colors duration-200",
-            "after:absolute after:left-0 after:-bottom-1 after:h-px after:bg-warm-gold",
-            "after:right-4 after:origin-left after:transition-transform after:duration-300",
+            topLinkBase,
+            "flex items-center gap-1",
             active || isOpen
-              ? "text-warm-gold after:scale-x-100"
-              : "text-charcoal/80 hover:text-charcoal after:scale-x-0 hover:after:scale-x-100",
+              ? "bg-near-black text-white"
+              : "text-charcoal/80 hover:text-charcoal hover:bg-near-black/5",
           ].join(" ")}
         >
           {group.label}
@@ -211,7 +217,7 @@ export default function Header({
               role="menu"
               className="absolute left-0 top-full pt-3 w-80"
             >
-              <div className="bg-white border border-charcoal/10 shadow-2xl rounded-md py-2 overflow-hidden">
+              <div className="bg-white/95 backdrop-blur-xl border border-charcoal/10 shadow-2xl rounded-card py-2 overflow-hidden">
                 {group.children!.map((child) => (
                   <Link
                     key={child.href}
@@ -239,126 +245,61 @@ export default function Header({
 
   return (
     <>
-      <header
-        className={[
-          "fixed top-0 left-0 right-0 z-50",
-          "transition-all duration-300",
-          scrolled
-            ? "bg-white/80 backdrop-blur-md shadow-sm py-2"
-            : "bg-white py-5",
-        ].join(" ")}
-      >
-        {/* Mobile row: logo left, hamburger right */}
-        <div className="lg:hidden max-w-7xl mx-auto px-6 flex items-center justify-between gap-4 relative z-10">
-          <Link
-            href="/"
-            onClick={handleLogoClick}
-            className="flex items-center flex-shrink-0"
-            aria-label="Be Nice Hospitality Group home"
-          >
-            <Image
-              src="/images/logo.png"
-              alt="Be Nice Hospitality Group"
-              width={400}
-              height={150}
-              sizes="(min-width: 640px) 213px, 170px"
-              className="h-16 sm:h-20 w-auto"
-              priority
-            />
-          </Link>
-
-          <button
-            type="button"
-            className="flex flex-col gap-1.5 p-2 min-h-[44px] min-w-[44px] items-center justify-center"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            <span
-              className={[
-                "block w-6 h-0.5 bg-charcoal transition-all duration-300",
-                mobileOpen ? "rotate-45 translate-y-2" : "",
-              ].join(" ")}
-            />
-            <span
-              className={[
-                "block w-6 h-0.5 bg-charcoal transition-all duration-300",
-                mobileOpen ? "opacity-0" : "",
-              ].join(" ")}
-            />
-            <span
-              className={[
-                "block w-6 h-0.5 bg-charcoal transition-all duration-300",
-                mobileOpen ? "-rotate-45 -translate-y-2" : "",
-              ].join(" ")}
-            />
-          </button>
-        </div>
-
-        {/* Desktop row: 3-col grid with left nav, centered logo, right nav + login */}
+      <header className="fixed top-3 md:top-5 inset-x-0 z-50 px-3 md:px-5">
         <div
           ref={navRef}
-          className="hidden lg:grid grid-cols-[1fr_auto_1fr] items-center max-w-7xl mx-auto px-6 gap-8 relative z-10"
+          className={[
+            "mx-auto max-w-7xl rounded-[10px]",
+            "bg-white/85 backdrop-blur-xl border border-white/70",
+            "transition-shadow duration-300",
+            scrolled
+              ? "shadow-lg shadow-near-black/10"
+              : "shadow-md shadow-near-black/5",
+          ].join(" ")}
         >
-          <nav aria-label="Primary left" className="flex items-center justify-end gap-7 xl:gap-9">
-            {NAV_LEFT.map(renderTopLink)}
-          </nav>
+          <div className="flex items-center justify-between gap-4 pl-4 pr-2 py-1.5 md:pl-5 md:py-2">
+            <Link
+              href="/"
+              onClick={handleLogoClick}
+              className="flex items-center flex-shrink-0"
+              aria-label="Be Nice Hospitality Group home"
+            >
+              <Image
+                src="/images/logo.png"
+                alt="Be Nice Hospitality Group"
+                width={400}
+                height={150}
+                sizes="(min-width: 768px) 150px, 120px"
+                className="h-10 md:h-12 w-auto"
+                priority
+              />
+            </Link>
 
-          <Link
-            href="/"
-            onClick={handleLogoClick}
-            className="flex items-center justify-center flex-shrink-0"
-            aria-label="Be Nice Hospitality Group home"
-          >
-            {/* Full lockup, visible at top of page */}
-            <Image
-              src="/images/logo.png"
-              alt="Be Nice Hospitality Group"
-              width={400}
-              height={150}
-              sizes="213px"
-              className={[
-                "w-auto transition-all duration-300",
-                scrolled ? "h-0 opacity-0 absolute" : "h-20 opacity-100",
-              ].join(" ")}
-              priority
-            />
-            {/* Transparent letter mark, visible once scrolled */}
-            <Image
-              src="/images/logo-mark-transparent.png"
-              alt=""
-              aria-hidden="true"
-              width={400}
-              height={400}
-              sizes="56px"
-              className={[
-                "w-auto transition-all duration-300",
-                scrolled ? "h-14 opacity-100" : "h-0 opacity-0 absolute",
-              ].join(" ")}
-            />
-          </Link>
-
-          <div className="flex items-center justify-start gap-7 xl:gap-9">
-            <nav aria-label="Primary right" className="flex items-center gap-7 xl:gap-9">
-              {NAV_RIGHT.map(renderTopLink)}
+            <nav
+              aria-label="Primary"
+              className="hidden lg:flex items-center gap-1"
+            >
+              {NAV_TREE.map(renderTopLink)}
             </nav>
 
-            <div className="ml-auto flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-2">
               {authUser ? (
                 <>
-                  <Link
-                    href={authUser.role === "admin" ? "/admin" : "/account"}
-                    className="font-sans text-sm font-medium text-charcoal/80 hover:text-charcoal"
-                  >
-                    {authUser.role === "admin" ? "Admin" : "Your Account"}
-                  </Link>
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="font-sans text-sm font-medium text-charcoal/60 hover:text-warm-gold transition-colors"
+                    className="font-sans text-sm font-medium text-charcoal/60 hover:text-charcoal px-3 py-2 rounded-full transition-colors"
                   >
                     Sign out
                   </button>
+                  <Button
+                    href={authUser.role === "admin" ? "/admin" : "/account"}
+                    variant="primary"
+                    size="sm"
+                    arrow
+                  >
+                    {authUser.role === "admin" ? "Admin" : "Your account"}
+                  </Button>
                 </>
               ) : (
                 <>
@@ -367,21 +308,49 @@ export default function Header({
                       href={ownerPortalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-sans text-sm font-medium text-charcoal/80 hover:text-charcoal transition-colors"
+                      className="font-sans text-sm font-medium text-charcoal/70 hover:text-charcoal px-3 py-2 rounded-full transition-colors"
                     >
-                      Owner Portal
+                      Owner portal
                     </a>
                   )}
                   <Button
                     href={UTILITY_NAV.communityLogin.href}
                     variant="primary"
                     size="sm"
+                    arrow
                   >
                     {UTILITY_NAV.communityLogin.label}
                   </Button>
                 </>
               )}
             </div>
+
+            <button
+              type="button"
+              className="lg:hidden flex flex-col gap-1.5 items-center justify-center w-11 h-11 rounded-full bg-near-black text-white"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+            >
+              <span
+                className={[
+                  "block w-5 h-0.5 bg-current transition-all duration-300",
+                  mobileOpen ? "rotate-45 translate-y-2" : "",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "block w-5 h-0.5 bg-current transition-all duration-300",
+                  mobileOpen ? "opacity-0" : "",
+                ].join(" ")}
+              />
+              <span
+                className={[
+                  "block w-5 h-0.5 bg-current transition-all duration-300",
+                  mobileOpen ? "-rotate-45 -translate-y-2" : "",
+                ].join(" ")}
+              />
+            </button>
           </div>
         </div>
       </header>
@@ -389,13 +358,13 @@ export default function Header({
       {/* Mobile sheet */}
       <div
         className={[
-          "fixed inset-0 z-40 bg-white overflow-y-auto",
+          "fixed inset-0 z-40 bg-cream overflow-y-auto",
           "transition-all duration-300",
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
         ].join(" ")}
         aria-hidden={!mobileOpen}
       >
-        <div className="min-h-full flex flex-col px-6 pt-24 pb-16">
+        <div className="min-h-full flex flex-col px-6 pt-28 pb-16">
           <nav aria-label="Mobile primary" className="flex flex-col">
             {NAV_TREE.map((group) => {
               const active = isActiveGroup(group, pathname);
@@ -408,7 +377,7 @@ export default function Header({
                     key={group.label}
                     href={group.href}
                     className={[
-                      "font-display text-2xl py-4 border-b border-charcoal/10",
+                      "font-display text-3xl py-4 border-b border-charcoal/10",
                       active ? "text-warm-gold" : "text-charcoal",
                     ].join(" ")}
                   >
@@ -424,7 +393,7 @@ export default function Header({
                     onClick={() => toggleMobileGroup(group.label)}
                     aria-expanded={isOpen}
                     className={[
-                      "w-full flex items-center justify-between font-display text-2xl py-4",
+                      "w-full flex items-center justify-between font-display text-3xl py-4",
                       active ? "text-warm-gold" : "text-charcoal",
                     ].join(" ")}
                   >
@@ -479,8 +448,9 @@ export default function Header({
                   variant="primary"
                   size="lg"
                   fullWidth
+                  arrow
                 >
-                  {authUser.role === "admin" ? "Admin" : "Your Account"}
+                  {authUser.role === "admin" ? "Admin" : "Your account"}
                 </Button>
                 <button
                   type="button"
@@ -497,6 +467,7 @@ export default function Header({
                   variant="primary"
                   size="lg"
                   fullWidth
+                  arrow
                 >
                   {UTILITY_NAV.communityLogin.label}
                 </Button>
@@ -507,7 +478,7 @@ export default function Header({
                     rel="noopener noreferrer"
                     className="font-sans text-sm text-charcoal/70 hover:text-charcoal py-3 text-center"
                   >
-                    Owner Portal
+                    Owner portal
                   </a>
                 )}
               </>

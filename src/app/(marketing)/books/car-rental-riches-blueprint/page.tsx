@@ -131,7 +131,7 @@ export default function CrrBlueprintPage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-near-black px-6 pb-14 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="relative overflow-hidden bg-near-black px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
         {/* warm glow so the cover sits in light rather than floating on black */}
         <div
           aria-hidden
@@ -244,7 +244,7 @@ export default function CrrBlueprintPage() {
       {/* PULL QUOTE: Alex's framing of the whole book, and the one place the
           Turo figure appears, labeled as Turo's own published gross average
           before costs. Runs straight on from the hero's dark ground. */}
-      <section className="bg-near-black px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
+      <section className="bg-near-black px-6 pb-10 md:px-12 md:pb-20 lg:px-20">
         {/* Closes the promise band. A curve divider would be invisible here,
             both sides are near-black, so the rule does the separating. */}
         <div aria-hidden className="mx-auto max-w-6xl border-t border-white/15" />
@@ -275,7 +275,7 @@ export default function CrrBlueprintPage() {
 
       {/* WHY I WROTE THIS: Alex's letter. Short paragraphs on purpose; the
           line breaks are the cadence of how he actually says it. */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
           <AnimatedItem>
             <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm lg:mx-0 lg:max-w-none">
@@ -355,7 +355,7 @@ export default function CrrBlueprintPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* THE CHAPTERS */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -411,7 +411,7 @@ export default function CrrBlueprintPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} />
 
       {/* WHAT YOU GET + BUY */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl text-center">
           <AnimatedItem>
             <SectionLabel>What you get</SectionLabel>
@@ -532,7 +532,7 @@ export default function CrrBlueprintPage() {
       <SectionDivider fromColor={C.nearBlack} toColor={C.cream} />
 
       {/* FAQ */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Questions</SectionLabel>

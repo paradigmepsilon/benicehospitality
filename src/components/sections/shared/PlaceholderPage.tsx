@@ -55,7 +55,7 @@ export default function PlaceholderPage({
 }: PlaceholderPageProps) {
   return (
     <>
-      <AnimatedSection theme="dark" className="relative pt-32 pb-20 px-6 overflow-hidden">
+      <AnimatedSection theme="dark" className="relative pt-32 pb-12 px-6 overflow-hidden">
         {heroImage && (
           <div className="absolute inset-0 pointer-events-none">
             <Image
@@ -91,7 +91,7 @@ export default function PlaceholderPage({
         </div>
       </AnimatedSection>
 
-      <AnimatedSection theme="off-white" className="py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
             {bullets.map((b, i) => (
@@ -113,7 +113,7 @@ export default function PlaceholderPage({
         </div>
       </AnimatedSection>
 
-      <AnimatedSection theme="light" className="py-20 px-6">
+      <AnimatedSection theme="light" className="py-12 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mb-4 leading-tight">

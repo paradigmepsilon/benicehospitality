@@ -29,6 +29,39 @@
   --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
   --font-script: var(--font-dancing), cursive;
+
+  /* Editorial photo layout (2026-09 redesign). Two radii only: the framed
+     hero / CTA panels and everything that floats on a photograph. Buttons and
+     chips are pills and use rounded-full directly. */
+  --radius-panel: 2rem;
+  --radius-card: 1.5rem;
+}
+
+/* The one orchestrated entrance on the site: the home hero's headline and
+   door cards rise in sequence on load. Delay is set inline per element.
+   Sections elsewhere no longer fade in on scroll. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Reset and base styles */

@@ -10,7 +10,7 @@ import OperatorBundleBuyButton from "@/components/sections/courses/OperatorBundl
  */
 export default function OperatorBundleBand({ source }: { source: string }) {
   return (
-    <section className="bg-cream px-6 py-16 md:py-20">
+    <section className="bg-cream px-6 py-10 md:py-14">
       <div className="mx-auto max-w-4xl rounded-lg border-2 border-warm-gold bg-white p-8 md:p-10">
         <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-3">
           {OPERATOR_BUNDLE.name}

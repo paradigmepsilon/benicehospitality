@@ -1,88 +1,85 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import AnimatedSection, {
-  AnimatedDiv,
-  AnimatedItem,
-} from "@/components/ui/AnimatedSection";
-import SectionLabel from "@/components/ui/SectionLabel";
+import PhotoCard from "@/components/ui/PhotoCard";
+import SectionIntro from "@/components/ui/SectionIntro";
 
 interface Door {
   label: string;
   promise: string;
   ctaLabel: string;
   href: string;
+  image: { src: string; alt: string; position?: string };
 }
 
-// The three-bin ladder: Resources (free) -> Training (paid courses) ->
-// Management (done-for-you). Same order as NAV_LEFT in src/lib/nav.ts, so
-// the homepage teaches the same structure the header already shows.
+// The three-bin ladder: Resources (free, email-gated) -> Training (paid courses) ->
+// Management (done-for-you). Same order as NAV_TREE in src/lib/nav.ts, so
+// the homepage teaches the same structure the header already shows. The
+// cards are numbered because the ladder is a sequence: most operators start
+// free, some train, a few hand it off.
 const DOORS: Door[] = [
   {
-    label: "Resources",
+    label: "Learn it",
     promise:
-      "Free calculators, checklists, and guides for co-living and rental fleet operators.",
-    ctaLabel: "Browse the tools",
+      "Calculators, checklists, and guides for co-living and rental fleet operators. Most are free; an email address opens them.",
+    ctaLabel: "Browse the resources",
     href: "/resources",
+    image: {
+      src: "/images/Website Images/hf_20260512_145736_e7084398-0668-4426-9b89-fbfaf407bf36.png",
+      alt: "An operator working through a worksheet on a laptop",
+    },
   },
   {
-    label: "Training",
+    label: "Train for it",
     promise:
-      "Room Rental Riches and Car Rental Riches, taught by the operators who run both.",
+      "Room Rental Riches and Car Rental Riches, self-paced or live, taught by the operators who run both businesses.",
     ctaLabel: "See the courses",
     href: "/training",
+    image: {
+      src: "/images/Website Images/course-masterclass-cohort-v2.png",
+      alt: "A small Masterclass cohort around a table",
+    },
   },
   {
-    label: "Management",
+    label: "Hand it off",
     promise:
-      "Hand the day-to-day to BNHG and keep ownership of the car or the property.",
+      "When you would rather not run it yourself, apply for management. BNHG takes the day-to-day and you keep ownership.",
     ctaLabel: "Check your fit",
     href: "/management",
+    image: {
+      src: "/images/Website Images/crr-collage-01-keys-handoff.png",
+      alt: "Keys handed over at a vehicle",
+    },
   },
 ];
 
 export default function ThreeDoors() {
   return (
-    <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="max-w-3xl mb-12 md:mb-14">
-          <AnimatedItem>
-            <SectionLabel>Three ways in</SectionLabel>
-          </AnimatedItem>
-          <AnimatedItem>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4">
-              Learn it, train for it, or hand it off.
-            </h2>
-          </AnimatedItem>
-        </div>
+    <section className="bg-white px-3 md:px-5 py-10 md:py-14">
+      <div className="max-w-7xl mx-auto px-3 md:px-5">
+        <SectionIntro
+          label="Three ways in"
+          heading="Pick how involved you want to be."
+          lede="Most of the tools are free and take an email address to open. The courses teach the method behind them. Management is for owners who would rather hand BNHG the keys. Most operators walk through the three in that order, but you can start at any door."
+        />
 
-        <AnimatedDiv
-          stagger
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
-        >
-          {DOORS.map((door) => (
-            <AnimatedItem key={door.label}>
-              <article className="h-full bg-cream border-t-2 border-warm-gold rounded-sm p-8 md:p-10 flex flex-col">
-                <h3 className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
-                  {door.label}
-                </h3>
-                <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-1">
-                  {door.promise}
-                </p>
-                <Link
-                  href={door.href}
-                  className="group mt-auto inline-flex items-center gap-2 font-sans text-sm font-semibold tracking-wide text-deep-teal hover:text-warm-gold-dark transition-colors duration-200"
-                >
-                  {door.ctaLabel}
-                  <ArrowRight
-                    className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
-              </article>
-            </AnimatedItem>
+        <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {DOORS.map((door, i) => (
+            <li key={door.href}>
+              <PhotoCard
+                image={door.image}
+                kicker={
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/85 text-near-black font-display text-base font-semibold">
+                    {i + 1}
+                  </span>
+                }
+                title={door.label}
+                body={door.promise}
+                ctaLabel={door.ctaLabel}
+                href={door.href}
+                aspect="aspect-[4/5]"
+              />
+            </li>
           ))}
-        </AnimatedDiv>
+        </ol>
       </div>
-    </AnimatedSection>
+    </section>
   );
 }

@@ -141,7 +141,7 @@ export default async function BlogPostPage({
       />
       {faqItems.length > 0 && <FAQSchema items={faqItems} />}
       {/* Hero */}
-      <section className="bg-near-black pt-32 pb-16 px-4 sm:px-6">
+      <section className="bg-near-black pt-32 pb-10 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <span
             className={`inline-block font-sans text-xs font-semibold px-3 py-1 mb-6 ${

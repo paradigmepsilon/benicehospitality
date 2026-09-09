@@ -265,7 +265,8 @@ export default async function CRRPage({
       </section>
 
       {/* Who this is for */}
-      <AnimatedSection theme="off-white" className="py-20 md:py-24 px-6">
+      <SectionDivider fromColor={C.white} toColor={C.cream} flip />
+      <AnimatedSection theme="off-white" className="py-12 md:py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
             <AnimatedItem>
@@ -326,7 +327,7 @@ export default async function CRRPage({
       <AnimatedSection
         theme="light"
         id="curriculum"
-        className="py-20 md:py-24 px-6"
+        className="py-12 md:py-16 px-6"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
@@ -413,7 +414,7 @@ export default async function CRRPage({
       <AnimatedSection
         theme="off-white"
         id="tiers"
-        className="py-20 md:py-24 px-6"
+        className="py-12 md:py-16 px-6"
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
@@ -485,6 +486,7 @@ export default async function CRRPage({
         </div>
       </AnimatedSection>
 
+      <SectionDivider fromColor={C.cream} toColor={C.cream} />
       {bundleOpen ? <OperatorBundleBand source="crr-page" /> : null}
 
       <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />

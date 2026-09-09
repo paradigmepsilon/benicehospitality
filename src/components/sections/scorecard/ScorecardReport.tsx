@@ -90,7 +90,7 @@ export default function ScorecardReport({
   return (
     <article className="scorecard-report bg-off-white">
       {/* Hero */}
-      <section className="bg-near-black text-white py-16 sm:py-20 px-6 print:py-8">
+      <section className="bg-near-black text-white py-10 sm:py-20 px-6 print:py-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
             <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold">
@@ -136,7 +136,7 @@ export default function ScorecardReport({
       </section>
 
       {/* Section bars */}
-      <section className="py-16 sm:py-20 px-6 bg-off-white print:py-8">
+      <section className="py-10 sm:py-20 px-6 bg-off-white print:py-8">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-display text-2xl sm:text-3xl font-semibold text-near-black leading-tight mb-2">
             Section breakdown
@@ -193,7 +193,7 @@ export default function ScorecardReport({
       </section>
 
       {/* Recommendations */}
-      <section className="py-16 sm:py-20 px-6 bg-white print:py-8 print:break-before-page">
+      <section className="py-10 sm:py-20 px-6 bg-white print:py-8 print:break-before-page">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-display text-2xl sm:text-3xl font-semibold text-near-black leading-tight mb-2">
             What to fix, by section
@@ -261,7 +261,7 @@ export default function ScorecardReport({
       </section>
 
       {/* CTA */}
-      <section className="py-16 sm:py-20 px-6 bg-near-black text-white print:hidden">
+      <section className="py-10 sm:py-20 px-6 bg-near-black text-white print:hidden">
         <div className="max-w-3xl mx-auto text-center">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-4">
             Recommended next move

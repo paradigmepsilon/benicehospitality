@@ -65,7 +65,7 @@ export default function OperatorPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} />
 
       {/* Ninety-day arc: three perk cards */}
-      <AnimatedSection theme="light" className="py-20 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-12 md:py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
@@ -108,7 +108,7 @@ export default function OperatorPage() {
       {/* Who picks this tier */}
       <AnimatedSection
         theme="none"
-        className="bg-primary-green text-white py-20 md:py-24 px-6"
+        className="bg-primary-green text-white py-12 md:py-16 px-6"
       >
         <div className="max-w-3xl mx-auto">
           <AnimatedItem>

@@ -18,12 +18,12 @@ const SITE_URL = "https://benicehospitality.com";
 export const metadata: Metadata = {
   title: "Earnings Estimator",
   description:
-    "A fast, honest monthly range for what your car or your spare rooms could earn in your market, before you go deeper or apply for management.",
+    "A fast, honest monthly range for what your vehicle or your spare rooms could earn in your market, before you go deeper or apply for management.",
   alternates: { canonical: `${SITE_URL}/estimate` },
   openGraph: {
     title: "Earnings Estimator | Be Nice Hospitality Group",
     description:
-      "A fast, honest monthly range for what your car or your spare rooms could earn in your market.",
+      "A fast, honest monthly range for what your vehicle or your spare rooms could earn in your market.",
     url: `${SITE_URL}/estimate`,
     type: "website",
   },
@@ -33,8 +33,8 @@ const CARDS = [
   {
     asset: "car" as const,
     slug: "car-earnings-estimator",
-    label: "Car",
-    cta: "Estimate Your Car",
+    label: "Vehicle",
+    cta: "Estimate Your Vehicle",
   },
   {
     asset: "rooms" as const,
@@ -54,7 +54,7 @@ export default function EstimatePage() {
   return (
     <>
       {/* HERO */}
-      <AnimatedSection theme="green" className="pt-32 md:pt-40 pb-16 md:pb-20 px-6">
+      <AnimatedSection theme="green" className="pt-32 md:pt-40 pb-10 md:pb-14 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedItem>
             <SectionLabel light>Free, two minutes</SectionLabel>
@@ -66,7 +66,7 @@ export default function EstimatePage() {
           </AnimatedItem>
           <AnimatedItem>
             <p className="font-sans text-lg md:text-xl text-white/85 leading-snug max-w-2xl mx-auto">
-              Pick the car or the rooms you already own. We will give you an
+              Pick the vehicle or the rooms you already own. We will give you an
               honest monthly range for your market, then show you what
               running it yourself or handing it to BNHG actually looks like.
             </p>
@@ -77,7 +77,7 @@ export default function EstimatePage() {
       <SectionDivider fromColor={C.deepTeal} toColor={C.white} />
 
       {/* CHOOSER CARDS */}
-      <AnimatedSection theme="light" className="py-16 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="max-w-2xl mb-12 md:mb-14">
             <AnimatedItem>

@@ -183,7 +183,7 @@ export default async function InsightsGrid({
     "bg-white text-charcoal/70 border border-light-gray hover:border-near-black hover:text-near-black";
 
   return (
-    <AnimatedSection theme="off-white" className="py-24 px-6">
+    <AnimatedSection theme="off-white" className="py-14 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <AnimatedItem>

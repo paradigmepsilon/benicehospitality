@@ -40,7 +40,7 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <AnimatedSection id="newsletter" theme="dark" className="py-20 px-6">
+    <AnimatedSection id="newsletter" theme="dark" className="py-12 px-6">
       <div className="max-w-2xl mx-auto text-center">
         <AnimatedItem>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-white mb-4">

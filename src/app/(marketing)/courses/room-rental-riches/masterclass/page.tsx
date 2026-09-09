@@ -188,7 +188,7 @@ export default function MasterclassPage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-near-black px-6 pb-14 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="relative overflow-hidden bg-near-black px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-10 h-[36rem] w-[36rem] rounded-full bg-warm-gold/20 blur-[120px]"
@@ -266,7 +266,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.nearBlack} toColor={C.white} />
 
       {/* WHY THIS MASTERCLASS IS DIFFERENT */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -317,7 +317,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.white} toColor={C.offWhite} flip />
 
       {/* WHAT WE'LL WORKSHOP TOGETHER — the two-day agenda. */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-4xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -419,7 +419,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.primaryGreen} toColor={C.white} />
 
       {/* EVERYTHING INCLUDED + PRICE + CTA */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <AnimatedItem>
@@ -478,7 +478,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} />
 
       {/* WE ONLY HOST FOUR MASTERCLASSES EACH YEAR — scarcity, stated plainly. */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>The cadence</SectionLabel>
@@ -519,7 +519,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* CONTINUE BUILDING AFTER THE WORKSHOP + slimmed cross-links. */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>After the two days</SectionLabel>
@@ -607,7 +607,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.white} toColor={C.offWhite} flip />
 
       {/* BEFORE WE MEET — the intake questionnaire, framed as preparation. */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Before we meet</SectionLabel>
@@ -659,7 +659,7 @@ export default function MasterclassPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.white} />
 
       {/* FAQ */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Questions</SectionLabel>

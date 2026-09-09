@@ -13,7 +13,7 @@ interface HeroImageBandProps {
  */
 export default function HeroImageBand({ src, alt }: HeroImageBandProps) {
   return (
-    <section className="bg-cream pb-12 md:pb-16 lg:pb-20 px-6">
+    <section className="bg-cream pb-8 md:pb-10 lg:pb-12 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="relative aspect-[16/10] md:aspect-[3/1] overflow-hidden">
           <Image

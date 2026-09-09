@@ -128,7 +128,8 @@ export default function RRRPage() {
           tiers below share one curriculum and are waitlist-only. Prices come
           from RRR_PRICES and BLUEPRINT so this page and the tier table can't
           drift. */}
-      <AnimatedSection theme="light" id="ways-in" className="py-20 md:py-24 px-6">
+      <SectionDivider fromColor={C.white} toColor={C.white} flip />
+      <AnimatedSection theme="light" id="ways-in" className="py-12 md:py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
@@ -336,7 +337,7 @@ export default function RRRPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* Who this is for */}
-      <AnimatedSection theme="off-white" className="py-20 md:py-24 px-6">
+      <AnimatedSection theme="off-white" className="py-12 md:py-16 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10">
             <AnimatedItem>
@@ -400,7 +401,7 @@ export default function RRRPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* Curriculum perk-card grid */}
-      <AnimatedSection theme="light" className="py-20 md:py-24 px-6">
+      <AnimatedSection theme="light" className="py-12 md:py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <AnimatedItem>
@@ -486,7 +487,7 @@ export default function RRRPage() {
       <AnimatedSection
         theme="off-white"
         id="tiers"
-        className="py-20 md:py-24 px-6"
+        className="py-12 md:py-16 px-6"
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14 max-w-2xl mx-auto">
@@ -525,6 +526,7 @@ export default function RRRPage() {
         </div>
       </AnimatedSection>
 
+      <SectionDivider fromColor={C.cream} toColor={C.cream} />
       {bundleOpen ? <OperatorBundleBand source="rrr-page" /> : null}
 
       <SectionDivider fromColor={C.cream} toColor={C.nearBlack} flip />

@@ -101,12 +101,41 @@ export default function Footer() {
   ];
 
   return (
-    <footer
-      className="bg-near-black text-white"
-      role="contentinfo"
-    >
-      <HomeNewsletter />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-8">
+    <footer className="bg-near-black text-white" role="contentinfo">
+      {/* Photo band. The footer keeps the photography going instead of cutting
+          to a flat dark block: the closing line on the left, the newsletter as
+          a glass card on the right, one Atlanta neighbourhood behind both. */}
+      <div className="px-3 md:px-5 pt-3 md:pt-5">
+        <div className="relative overflow-hidden rounded-panel min-h-[420px] flex items-end">
+          <Image
+            src="/images/Website Images/Golden hour Atlanta Neighborhood.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+            style={{ filter: "saturate(0.85) contrast(1.05)" }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-near-black via-near-black/55 to-near-black/25"
+          />
+          <div className="relative z-10 w-full p-6 sm:p-8 md:p-12 lg:p-14 grid gap-10 lg:grid-cols-[1.2fr_minmax(0,1fr)] lg:items-end">
+            <div className="max-w-xl">
+              <p className="font-sans text-sm md:text-base text-white/75 mb-4">
+                Sharing economy asset management for the Southeast.
+              </p>
+              <p className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight">
+                Learn to run it, or let us run it.
+              </p>
+            </div>
+            <div className="lg:justify-self-end w-full lg:max-w-md">
+              <HomeNewsletter />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-10 mb-12">
           {/* Brand block */}
           <div>
@@ -135,7 +164,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-10 h-10 flex items-center justify-center border border-white/15 text-white/55 hover:border-warm-gold hover:text-warm-gold transition-colors duration-200"
+                  className="w-10 h-10 rounded-full flex items-center justify-center border border-white/15 text-white/55 hover:border-warm-gold hover:text-warm-gold transition-colors duration-200"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d={s.path} />
@@ -156,8 +185,8 @@ export default function Footer() {
 
           {/* Get in Touch */}
           <div>
-            <h3 className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-5">
-              Get in Touch
+            <h3 className="font-sans text-sm font-semibold text-warm-gold-dark mb-5">
+              Get in touch
             </h3>
             <ul className="space-y-2">
               <li>
@@ -185,7 +214,7 @@ export default function Footer() {
 
           {/* Company, two stacked columns */}
           <div>
-            <h3 className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-5">
+            <h3 className="font-sans text-sm font-semibold text-warm-gold-dark mb-5">
               Company
             </h3>
             {/* On md (when the parent grid becomes 2-col, halving this column's
@@ -261,7 +290,7 @@ export default function Footer() {
 function FooterLinkColumn({ column }: { column: FooterColumn }) {
   return (
     <div>
-      <h3 className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-warm-gold mb-5">
+      <h3 className="font-sans text-sm font-semibold text-warm-gold-dark mb-5">
         {column.heading}
       </h3>
       <ul className="space-y-3">

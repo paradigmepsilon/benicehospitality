@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function RequestResetPage() {
   return (
-    <section className="bg-cream pt-32 md:pt-40 pb-20 md:pb-24 px-6 min-h-screen">
+    <section className="bg-cream pt-32 md:pt-40 pb-12 md:pb-16 px-6 min-h-screen">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-10">
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-charcoal/70 mb-6">

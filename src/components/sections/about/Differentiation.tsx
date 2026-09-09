@@ -7,7 +7,7 @@ import { DIFFERENTIATORS } from "@/lib/constants";
 
 export default function Differentiation() {
   return (
-    <AnimatedSection theme="dark" className="py-24 px-6">
+    <AnimatedSection theme="dark" className="py-14 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <AnimatedItem>

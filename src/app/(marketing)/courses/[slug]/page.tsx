@@ -120,7 +120,7 @@ const ASSET_LABEL: Record<Course["assetClass"], string> = {
 function WaitlistCoursePage({ course }: { course: Course }) {
   return (
     <>
-      <AnimatedSection theme="dark" className="pt-32 pb-20 px-6">
+      <AnimatedSection theme="dark" className="pt-32 pb-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedItem>
             <SectionLabel light>{course.edition} course</SectionLabel>
@@ -153,7 +153,7 @@ function WaitlistCoursePage({ course }: { course: Course }) {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection theme="off-white" className="py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-12">
             <div>
@@ -210,7 +210,7 @@ function WaitlistCoursePage({ course }: { course: Course }) {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection theme="light" className="py-20 px-6">
+      <AnimatedSection theme="light" className="py-12 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-near-black mb-4 leading-tight">
@@ -267,7 +267,7 @@ function LiveCoursePage({ course }: { course: Course }) {
   return (
     <>
       {/* Hero */}
-      <AnimatedSection theme="dark" className="pt-32 pb-20 px-6">
+      <AnimatedSection theme="dark" className="pt-32 pb-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedItem>
             <SectionLabel light>{course.edition} course · {ASSET_LABEL[course.assetClass]}</SectionLabel>
@@ -296,7 +296,7 @@ function LiveCoursePage({ course }: { course: Course }) {
       </AnimatedSection>
 
       {/* The pitch */}
-      <AnimatedSection theme="off-white" className="py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-12 px-6">
         <div className="max-w-3xl mx-auto">
           <p className="font-sans text-xl text-charcoal/85 leading-relaxed text-center mb-10">
             {course.description}
@@ -313,7 +313,7 @@ function LiveCoursePage({ course }: { course: Course }) {
       </AnimatedSection>
 
       {/* Outcomes */}
-      <AnimatedSection theme="light" className="py-20 px-6">
+      <AnimatedSection theme="light" className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <SectionLabel>What changes for you</SectionLabel>
@@ -337,7 +337,7 @@ function LiveCoursePage({ course }: { course: Course }) {
       </AnimatedSection>
 
       {/* Curriculum */}
-      <AnimatedSection theme="off-white" className="py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <SectionLabel>The Curriculum</SectionLabel>
@@ -393,7 +393,7 @@ function LiveCoursePage({ course }: { course: Course }) {
       </AnimatedSection>
 
       {/* What's included + bonuses */}
-      <AnimatedSection theme="light" className="py-20 px-6">
+      <AnimatedSection theme="light" className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
@@ -434,7 +434,7 @@ function LiveCoursePage({ course }: { course: Course }) {
 
       {/* Testimonials (optional) */}
       {course.testimonials && course.testimonials.length > 0 && (
-        <AnimatedSection theme="off-white" className="py-20 px-6">
+        <AnimatedSection theme="off-white" className="py-12 px-6">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-10">
               <SectionLabel>From members</SectionLabel>
@@ -460,7 +460,7 @@ function LiveCoursePage({ course }: { course: Course }) {
       <CourseFAQ course={course} />
 
       {/* Final CTA */}
-      <AnimatedSection theme="dark" className="py-24 px-6">
+      <AnimatedSection theme="dark" className="py-14 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedItem>
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-white mb-5 leading-tight">
@@ -489,7 +489,7 @@ function LiveCoursePage({ course }: { course: Course }) {
 
 function CourseFAQ({ course }: { course: Course }) {
   return (
-    <AnimatedSection theme="light" className="py-20 px-6">
+    <AnimatedSection theme="light" className="py-12 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <SectionLabel>Common questions</SectionLabel>

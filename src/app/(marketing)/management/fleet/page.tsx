@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Your vehicle earns without becoming your second job. BNHG runs the listing, pricing, turnover, and claims. You keep the title, the insurance choice, and the final say.",
   keywords: [
     "fleet management for Turo hosts",
-    "car rental fleet management",
+    "vehicle rental fleet management",
     "vehicle management company",
     "Turo host management",
     "rental fleet operator Southeast",

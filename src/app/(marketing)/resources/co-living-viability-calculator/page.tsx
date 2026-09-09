@@ -71,7 +71,7 @@ export default function CoLivingViabilityCalculatorPage() {
       />
 
       {/* Hero */}
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-20 md:pb-24 px-6 overflow-hidden">
+      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-12 md:pb-16 px-6 overflow-hidden">
         <Image
           src={STOCK_COLIVING.src}
           alt=""
@@ -149,7 +149,7 @@ export default function CoLivingViabilityCalculatorPage() {
       </section>
 
       {/* Form + side panel */}
-      <section className="py-16 sm:py-20 px-6 bg-off-white">
+      <section className="py-10 sm:py-20 px-6 bg-off-white">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Form */}
           <div className="lg:col-span-3">

@@ -7,6 +7,7 @@ import AnimatedSection, {
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import SectionDivider from "@/components/ui/SectionDivider";
+import PhotoHero from "@/components/sections/shared/PhotoHero";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 
 export const metadata: Metadata = {
@@ -85,52 +86,21 @@ export default function AboutPage() {
           warmer Our Story section below. Matches the hero treatment
           used on Insights and the other primary surfaces.
           ───────────────────────────────────────────────────────────── */}
-      <section className="bg-near-black pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
-          <div>
-            <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
-              About Be Nice Hospitality
-            </p>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.05] tracking-tight mb-7">
-              We&rsquo;re{" "}
-              <span className="italic text-warm-gold">Alex and Della</span>{" "}
-              Henry.
-            </h1>
-            <p className="font-sans text-lg md:text-xl text-white/85 leading-snug mb-6 max-w-xl">
-              The husband-and-wife team behind BNHG. Two U.S. military veterans,
-              lifelong partners, and lifelong operators.
-            </p>
-            <p className="font-sans text-base md:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
-              BNHG is the company we built to help independent hospitality
-              brands run smarter, market sharper, and deliver the kind of
-              guest experience people actually talk about.
-            </p>
-            <p className="font-script text-2xl md:text-3xl text-warm-gold">
-              Alex &amp; Della
-            </p>
-          </div>
-
-          <div className="max-w-2xl mx-auto lg:max-w-none lg:mx-0">
-            <div className="relative">
-              <div className="absolute inset-0 bg-warm-gold/30 rounded-sm translate-x-3 translate-y-3" />
-              <div className="relative overflow-hidden rounded-sm">
-                <Image
-                  src="/images/Website%20Images/hf_20260523_234948_572e0ebd-8748-4e21-84cd-68f9e2e2b41e.png"
-                  alt="Della and Alex Henry, co-founders of Be Nice Hospitality Group"
-                  width={5120}
-                  height={2880}
-                  priority
-                  className="block w-full h-auto"
-                  style={{ filter: "saturate(0.9) contrast(1.05)" }}
-                  sizes="(min-width: 1024px) 45vw, 90vw"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider fromColor={C.nearBlack} toColor={C.offWhite} />
+      <PhotoHero
+        eyebrow="About Be Nice Hospitality"
+        headline={<>We&rsquo;re Alex and Della Henry.</>}
+        lede="The husband-and-wife team behind BNHG. Two U.S. military veterans, lifelong partners, and lifelong operators. BNHG is the company we built to help independent operators run smarter and deliver the kind of guest experience people actually talk about."
+        note={
+          <span className="font-script text-2xl md:text-3xl text-warm-gold-dark">
+            Alex &amp; Della
+          </span>
+        }
+        image={{
+          src: "/images/Website Images/hf_20260523_234948_572e0ebd-8748-4e21-84cd-68f9e2e2b41e.png",
+          alt: "Della and Alex Henry, co-founders of Be Nice Hospitality Group",
+          position: "object-[55%_center]",
+        }}
+      />
 
       {/* ─────────────────────────────────────────────────────────────
           SECTION 2: OUR STORY

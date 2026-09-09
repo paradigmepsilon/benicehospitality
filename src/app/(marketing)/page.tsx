@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import HeroSection from "@/components/sections/home/HeroSection";
-import ThreeDoors from "@/components/sections/home/ThreeDoors";
 import ProofBand from "@/components/sections/home/ProofBand";
-import LadderSection from "@/components/sections/home/LadderSection";
+import ThreeDoors from "@/components/sections/home/ThreeDoors";
+import StorySection from "@/components/sections/home/StorySection";
+import ManagedAssets from "@/components/sections/home/ManagedAssets";
 import FoundersBand from "@/components/sections/home/FoundersBand";
+import HomeFAQ from "@/components/sections/home/HomeFAQ";
+import LatestInsights, {
+  fetchLatestInsights,
+} from "@/components/sections/home/LatestInsights";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 
@@ -34,22 +39,44 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+// The latest-insights block reads blog_posts, so the page renders per request
+// like /insights does. Every other section is static data.
+export const dynamic = "force-dynamic";
+
+// Every home section hands off through a tall curved divider. The stroke
+// along the curve is what makes a white-to-cream edge read as a border; the
+// grounds alternate underneath it. Direction flips each time.
+const GOLD = C.warmGold;
+
+export default async function HomePage() {
+  const posts = await fetchLatestInsights(3);
+  const hasInsights = posts.length > 0;
+
   return (
     <>
       <HeroSection />
-      <SectionDivider fromColor={C.nearBlack} toColor={C.white} />
-      <ThreeDoors />
-      <SectionDivider fromColor={C.white} toColor={C.cream} />
       {/* ProofBand renders nothing until Alex supplies real operating
-          figures (src/lib/constants.ts OPERATING_PROOF). Both it and
-          LadderSection share the cream/off-white background, so the divider
-          above is correct whether or not ProofBand is present. */}
+          figures (src/lib/constants.ts OPERATING_PROOF). */}
       <ProofBand />
-      <LadderSection />
-      <SectionDivider fromColor={C.cream} toColor={C.white} flip />
+      <SectionDivider fromColor={C.cream} toColor={C.white} size="lg" stroke={GOLD} />
+      <ThreeDoors />
+      <SectionDivider fromColor={C.white} toColor={C.cream} size="lg" stroke={GOLD} flip />
+      <StorySection />
+      <SectionDivider fromColor={C.cream} toColor={C.white} size="lg" stroke={GOLD} />
+      <ManagedAssets />
+      <SectionDivider fromColor={C.white} toColor={C.cream} size="lg" stroke={GOLD} flip />
       <FoundersBand />
-      <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
+      <SectionDivider fromColor={C.cream} toColor={C.white} size="lg" stroke={GOLD} />
+      <HomeFAQ />
+      {hasInsights ? (
+        <>
+          <SectionDivider fromColor={C.white} toColor={C.cream} size="lg" stroke={GOLD} flip />
+          <LatestInsights posts={posts} />
+          <SectionDivider fromColor={C.cream} toColor={C.nearBlack} size="lg" stroke={GOLD} />
+        </>
+      ) : (
+        <SectionDivider fromColor={C.white} toColor={C.nearBlack} size="lg" stroke={GOLD} flip />
+      )}
     </>
   );
 }

@@ -7,7 +7,7 @@ import { FRAMEWORK_PHASES } from "@/lib/constants";
 
 export default function BNHGFramework() {
   return (
-    <AnimatedSection theme="off-white" className="py-24 px-6">
+    <AnimatedSection theme="off-white" className="py-14 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <AnimatedItem>

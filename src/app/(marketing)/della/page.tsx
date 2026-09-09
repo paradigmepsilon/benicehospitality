@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import SectionDivider from "@/components/ui/SectionDivider";
+import { SECTION_COLORS as C } from "@/lib/section-colors";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection, {
@@ -113,7 +115,7 @@ export default function DellaPage() {
   return (
     <>
       {/* HERO */}
-      <section className="bg-cream pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
+      <section className="bg-cream pt-24 md:pt-32 lg:pt-36 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
           <div>
             <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-charcoal/70 mb-6">
@@ -178,6 +180,7 @@ export default function DellaPage() {
       </section>
 
       {/* TRUST BAR */}
+      <SectionDivider fromColor={C.cream} toColor={C.deepTeal} />
       <section className="bg-deep-teal py-7 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {STATS.map((s) => (
@@ -194,7 +197,8 @@ export default function DellaPage() {
       </section>
 
       {/* THE SOUTHEAST PLAY (problem framing) */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.deepTeal} toColor={C.offWhite} flip />
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatedItem>
             <SectionLabel>The Southeast play</SectionLabel>
@@ -235,7 +239,7 @@ export default function DellaPage() {
       </AnimatedSection>
 
       {/* IMAGE BAND: Atlanta exterior / market shot */}
-      <section className="bg-off-white pb-14 md:pb-16 px-6">
+      <section className="bg-off-white pb-10 md:pb-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
@@ -251,7 +255,8 @@ export default function DellaPage() {
       </section>
 
       {/* THREE WAYS IN (moved between Southeast Play and Journey) */}
-      <AnimatedSection theme="light" className="py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.offWhite} toColor={C.white} />
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <AnimatedItem>
@@ -385,8 +390,8 @@ export default function DellaPage() {
                 </h3>
                 <p className="font-sans text-base text-charcoal/85 leading-snug mb-8 flex-grow">
                   Checklists, market briefs, vendor templates, and articles
-                  Della has written from real operating reps. Free. No email
-                  wall on most of it. Use what you need.
+                  Della has written from real operating reps. Most of it is free
+                  with an email address. Use what you need.
                 </p>
                 <div className="space-y-3 mb-8">
                   <p className="font-sans text-sm text-charcoal/70 flex items-start gap-2">
@@ -415,6 +420,7 @@ export default function DellaPage() {
           her titles; Alex's Car Rental Riches Blueprint belongs on his page.
           Positioned as the $32 rung between the free library and the $500
           course. */}
+      <SectionDivider fromColor={C.white} toColor={C.nearBlack} flip />
       <BookPromoBand
         books={publishedBooksBy("Della Henry")}
         eyebrow="Della’s book"
@@ -424,7 +430,8 @@ export default function DellaPage() {
       />
 
       {/* DELLA'S JOURNEY */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.nearBlack} toColor={C.offWhite} />
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20">
             <div>
@@ -538,7 +545,8 @@ export default function DellaPage() {
       </AnimatedSection>
 
       {/* EXPERTISE GRID */}
-      <AnimatedSection theme="light" className="py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.offWhite} toColor={C.white} flip />
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-16">
             <AnimatedItem>
@@ -580,6 +588,7 @@ export default function DellaPage() {
       </AnimatedSection>
 
       {/* TESTIMONIAL / PULL QUOTE */}
+      <SectionDivider fromColor={C.white} toColor={C.deepTeal} />
       <AnimatedSection theme="green" className="py-9 md:py-12 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedItem>
@@ -598,7 +607,8 @@ export default function DellaPage() {
       </AnimatedSection>
 
       {/* FAQ */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.deepTeal} toColor={C.offWhite} flip />
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
             <AnimatedItem>
@@ -637,7 +647,8 @@ export default function DellaPage() {
       </AnimatedSection>
 
       {/* IMAGE BAND: warm closing image before final CTA */}
-      <section className="bg-cream py-12 md:py-14 px-6">
+      <SectionDivider fromColor={C.offWhite} toColor={C.cream} />
+      <section className="bg-cream py-8 md:py-10 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
@@ -653,7 +664,8 @@ export default function DellaPage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-deep-teal py-16 md:py-20 px-6">
+      <SectionDivider fromColor={C.cream} toColor={C.deepTeal} flip />
+      <section className="bg-deep-teal py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
             Your move

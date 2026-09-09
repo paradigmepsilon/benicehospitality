@@ -118,7 +118,7 @@ export default function SelfPacedPage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-near-black px-6 pb-14 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="relative overflow-hidden bg-near-black px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
         {/* Warm glow so the photo sits in light rather than floating on black. */}
         <div
           aria-hidden
@@ -238,7 +238,7 @@ export default function SelfPacedPage() {
       {/* PULL QUOTE — runs straight on from the hero's dark ground. The promise
           band closes the pitch, the quote answers "says who?" before the page
           opens to light. */}
-      <section className="bg-near-black px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
+      <section className="bg-near-black px-6 pb-10 md:px-12 md:pb-20 lg:px-20">
         {/* A curve divider would be invisible here, both sides being
             near-black, so the rule does the separating. */}
         <div aria-hidden className="mx-auto max-w-6xl border-t border-white/15" />
@@ -267,7 +267,7 @@ export default function SelfPacedPage() {
       {/* WHO THIS IS FOR — the two operator profiles. Copy deliberately kept in
           step with the hub page so the two surfaces never describe different
           people. */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Who this is for</SectionLabel>
@@ -332,7 +332,7 @@ export default function SelfPacedPage() {
           gates Phase 4 by design. The status marks turn the honest release
           story into part of the structure rather than a disclaimer bolted on
           underneath it. */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-4xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -451,7 +451,7 @@ export default function SelfPacedPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* WHAT YOU GET */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl text-center">
           <AnimatedItem>
             <SectionLabel>What you get</SectionLabel>
@@ -539,7 +539,7 @@ export default function SelfPacedPage() {
       {/* THE PATH FORWARD — the value ladder. Where the reader is now, the
           Masterclass as the next step once they are operating, and 1:1
           advisement after that. */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>The path forward</SectionLabel>
@@ -637,7 +637,7 @@ export default function SelfPacedPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* FAQ */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Questions</SectionLabel>

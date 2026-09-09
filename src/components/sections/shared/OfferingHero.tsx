@@ -59,7 +59,7 @@ export default function OfferingHero({
     // carries the longest message). That is what makes the lock real — the
     // floor drives the height, not the copy, so no page drifts when its
     // headline wraps differently. Re-measure if copy grows materially.
-    <section className="relative flex items-center min-h-186 md:min-h-176 lg:min-h-180 bg-near-black pt-32 md:pt-36 pb-16 md:pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <section className="relative flex items-center min-h-186 md:min-h-176 lg:min-h-180 bg-near-black pt-32 md:pt-36 pb-10 md:pb-14 px-6 md:px-12 lg:px-20 overflow-hidden">
       <Image
         src={image.src}
         alt={image.alt}

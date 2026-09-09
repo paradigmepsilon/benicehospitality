@@ -56,7 +56,7 @@ export default function PageCTA({
   const resolvedSubtext = subtext ?? preset.subtext;
 
   return (
-    <AnimatedSection theme="dark" className="py-24 px-6">
+    <AnimatedSection theme="dark" className="py-14 px-6">
       <div className="max-w-4xl mx-auto text-center">
         <AnimatedItem>
           <SectionLabel light>{preset.sectionLabel}</SectionLabel>

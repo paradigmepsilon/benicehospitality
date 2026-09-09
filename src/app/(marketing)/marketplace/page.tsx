@@ -59,7 +59,7 @@ const TAB_META: TabMeta[] = [
     id: "auto",
     label: "Autos",
     sectionLabel: "Gear for auto operators",
-    headline: "What lives in every Be Nice Auto car.",
+    headline: "What lives in every Be Nice Auto vehicle.",
     body: "Dashcams, OBD-II readers, turnover detail kits, and the small upgrades that keep guest reviews high and dispute resolution easy. Built around what works for Turo hosts and small fleets today.",
     image: {
       src: "/images/Website Images/Alex Turo Shot.png",
@@ -131,7 +131,7 @@ export default async function MarketplacePage() {
 
   return (
     <>
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-20 px-6 md:px-12 lg:px-20 overflow-hidden">
+      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-14 px-6 md:px-12 lg:px-20 overflow-hidden">
         <Image
           src={STOCK_LIBRARY.src}
           alt=""

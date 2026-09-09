@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Alex Henry. Fleet operations, real systems, and AI without the hype.",
     description:
-      "Della runs the co-living properties. Alex runs the vehicles and the technology: fleet operations for 3 to 30 cars, custom tools and integrations, and AI his clients can actually explain.",
+      "Della runs the co-living properties. Alex runs the vehicles and the technology: fleet operations for 3 to 30 vehicles, custom tools and integrations, and AI his clients can actually explain.",
     url: "https://benicehospitality.com/alex",
     type: "profile",
     images: [
@@ -86,18 +86,18 @@ const STATS = [
 const FAQS = [
   {
     q: "What do you actually do at BNHG?",
-    a: "I run the vehicle side of the company, and I handle the technology. That means fleet operations day to day, plus the systems and AI work underneath it. Della handles the co-living property coaching. So if you have cars, or you have software that is not doing what it promised, you are talking to the right one of us.",
+    a: "I run the vehicle side of the company, and I handle the technology. That means fleet operations day to day, plus the systems and AI work underneath it. Della handles the co-living property coaching. So if you have vehicles, or you have software that is not doing what it promised, you are talking to the right one of us.",
   },
   {
     q: "Who is the fleet work for?",
-    a: "Operators running 3 to 30 vehicles who have outgrown running the whole thing from their phone. If you have 1 car and it is covering its note, you do not need a system yet. You need a second car. That is the honest answer, and it is the one I would want somebody to give me.",
+    a: "Operators running 3 to 30 vehicles who have outgrown running the whole thing from their phone. If you have 1 vehicle and it is covering its note, you do not need a system yet. You need a second vehicle. That is the honest answer, and it is the one I would want somebody to give me.",
   },
   {
     q: "How is Car Rental Riches different from Room Rental Riches?",
-    a: "Same operating method, different asset. Della's course is for people running co-living properties. Mine is for people running cars. Pricing logic, channel strategy, ops cadence, customer flow. It is in production now and opens later this year.",
+    a: "Same operating method, different asset. Della's course is for people running co-living properties. Mine is for people running vehicles. Pricing logic, channel strategy, ops cadence, customer flow. It is in production now and opens later this year.",
   },
   {
-    q: "What does a tech background have to do with renting cars?",
+    q: "What does a tech background have to do with renting vehicles?",
     a: "More than you would think. A fleet is an inventory system with a maintenance schedule and a claims process bolted onto it. I spent years as a Technical Program Manager and a Software Engineering Manager building exactly that kind of thing. It is why I can tell you what to fix and then go build it, instead of handing you a list and wishing you luck.",
   },
   {
@@ -139,7 +139,7 @@ export default function AlexPage() {
       }
     >
       {/* HERO */}
-      <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-14 md:pb-16 px-6 md:px-12 lg:px-20">
+      <section className="bg-(--lane-wash,var(--color-cream)) pt-24 md:pt-32 lg:pt-36 pb-10 md:pb-12 px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-16 items-center">
           <div>
             <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-(--lane-accent,var(--color-warm-gold)) mb-6">
@@ -156,7 +156,7 @@ export default function AlexPage() {
               operation behave.
             </p>
             <p className="font-sans text-base text-charcoal/85 leading-snug mb-10 max-w-xl">
-              Most of my work is with people running 3 to 30 cars who have
+              Most of my work is with people running 3 to 30 vehicles who have
               outgrown the spreadsheet. The rest is the systems and AI work
               underneath it, which travels to any operation, boutique stays
               included. Book a working call and we will find the piece you
@@ -222,21 +222,21 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.primaryGreen} toColor={C.offWhite} flip />
 
       {/* THE PROBLEM */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatedItem>
             <SectionLabel>The real problem</SectionLabel>
           </AnimatedItem>
           <AnimatedItem>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-deep-teal leading-[1.1] tracking-tight mt-4 mb-8">
-              Fleets do not stall on cars. They stall on everything around the
-              cars.
+              Fleets do not stall on vehicles. They stall on everything around the
+              vehicles.
             </h2>
           </AnimatedItem>
           <AnimatedItem>
             <div className="space-y-5 font-sans text-lg text-charcoal leading-snug">
               <p>
-                The story usually goes the same way. You buy the second car,
+                The story usually goes the same way. You buy the second vehicle,
                 then the third, and for a while it feels great. Then the
                 calendar gets messy. A claim gets denied because nobody
                 photographed the bumper. Pricing drifts because you have not
@@ -244,7 +244,7 @@ export default function AlexPage() {
                 chat at 10 at night.
               </p>
               <p>
-                None of that is a car problem. It is an operations problem, and
+                None of that is a vehicle problem. It is an operations problem, and
                 underneath that it is a systems problem. Systems are what I did
                 for a living before I ever bought a vehicle.
               </p>
@@ -268,7 +268,7 @@ export default function AlexPage() {
       </AnimatedSection>
 
       {/* IMAGE BAND */}
-      <section className="bg-off-white pb-14 md:pb-16 px-6">
+      <section className="bg-off-white pb-10 md:pb-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
@@ -286,7 +286,7 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.white} />
 
       {/* THREE WAYS IN */}
-      <AnimatedSection theme="light" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-14">
             <AnimatedItem>
@@ -426,7 +426,7 @@ export default function AlexPage() {
                   </h3>
                   <p className="font-sans text-sm text-charcoal/75 leading-snug mb-6 flex-grow">
                     Everything above, written down for operators running 3 to 30
-                    economy cars. Pricing, channels, ops cadence, customer flow.
+                    economy vehicles. Pricing, channels, ops cadence, customer flow.
                     In production now, opens later this year.
                   </p>
                   <CarRentalRichesWaitlistTrigger
@@ -446,7 +446,7 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.white} toColor={C.offWhite} flip />
 
       {/* ALEX'S JOURNEY */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20">
             <div>
@@ -507,14 +507,14 @@ export default function AlexPage() {
                     Running the fleet
                   </p>
                   <h3 className="font-display text-2xl font-semibold text-deep-teal mb-3">
-                    Cars taught me the same lesson software did.
+                    Vehicles taught me the same lesson software did.
                   </h3>
                   <p className="font-sans text-base text-charcoal/85 leading-snug">
                     I started operating vehicles the way I would have run a
                     product. Measure the thing, find where it leaks, fix that
                     first. Pricing, channel mix, claim documentation, cleaning
-                    cadence. A car sitting in a driveway is a note with wheels.
-                    A car on the right channel at the right price is inventory
+                    cadence. A vehicle sitting in a driveway is a note with wheels.
+                    A vehicle on the right channel at the right price is inventory
                     that pays for itself, and the operators who make money treat
                     it that way. Car Rental Riches is that whole playbook,
                     written down.
@@ -568,7 +568,7 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.offWhite} toColor={C.white} />
 
       {/* EXPERTISE GRID */}
-      <AnimatedSection theme="light" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="light" className="py-10 md:py-14 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-3xl mb-16">
             <AnimatedItem>
@@ -640,7 +640,7 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.primaryGreen} toColor={C.offWhite} />
 
       {/* FAQ */}
-      <AnimatedSection theme="off-white" className="py-16 md:py-20 px-6">
+      <AnimatedSection theme="off-white" className="py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
             <AnimatedItem>
@@ -682,7 +682,8 @@ export default function AlexPage() {
           should never wonder whether they are hiring a hotel consultant. Its job
           is to prove the systems and AI work travels past fleets, then get out
           of the way. */}
-      <section className="bg-cream py-12 md:py-14 px-6">
+      <SectionDivider fromColor={C.offWhite} toColor={C.cream} />
+      <section className="bg-cream py-8 md:py-10 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.35fr] gap-8 lg:gap-12 items-center">
           <div className="relative aspect-[16/9] w-full max-w-md mx-auto lg:mx-0 overflow-hidden rounded-sm">
             <Image
@@ -726,7 +727,7 @@ export default function AlexPage() {
       <SectionDivider fromColor={C.cream} toColor={C.primaryGreen} flip />
 
       {/* FINAL CTA */}
-      <section className="bg-deep-teal py-16 md:py-20 px-6">
+      <section className="bg-deep-teal py-10 md:py-14 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-6">
             Your move

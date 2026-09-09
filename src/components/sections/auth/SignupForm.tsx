@@ -24,7 +24,7 @@ const SERVICE_OPTIONS = [
   {
     value: "autos",
     label: "Autos",
-    helper: "Turo, car rental, and fleet management.",
+    helper: "Turo, vehicle rental, and fleet management.",
   },
 ] as const;
 

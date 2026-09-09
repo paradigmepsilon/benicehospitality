@@ -156,7 +156,7 @@ export default function BlueprintPage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-near-black px-6 pb-14 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
+      <section className="relative overflow-hidden bg-near-black px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20 lg:pt-36">
         {/* warm glow so the cover sits in light rather than floating on black */}
         <div
           aria-hidden
@@ -271,7 +271,7 @@ export default function BlueprintPage() {
           straight on from the hero's dark ground: the promise band closes the
           pitch, the quote answers "says who?" before the page opens to light.
           Same padding scale as the hero so the two hairline rules line up. */}
-      <section className="bg-near-black px-6 pb-14 md:px-12 md:pb-20 lg:px-20">
+      <section className="bg-near-black px-6 pb-10 md:px-12 md:pb-20 lg:px-20">
         {/* Closes the promise band. A curve divider would be invisible here —
             both sides are near-black — so the rule does the separating. */}
         <div aria-hidden className="mx-auto max-w-6xl border-t border-white/15" />
@@ -300,7 +300,7 @@ export default function BlueprintPage() {
 
       {/* WHY I WROTE THIS — Della's letter. Short paragraphs on purpose; the
           line breaks are the cadence of how she actually says it. */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
           <AnimatedItem>
             <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-sm lg:mx-0 lg:max-w-none">
@@ -377,7 +377,7 @@ export default function BlueprintPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} flip />
 
       {/* LOOK INSIDE — real pages rendered from the manuscript */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 max-w-2xl">
             <AnimatedItem>
@@ -427,7 +427,7 @@ export default function BlueprintPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* THE MODULES */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-5xl">
           <AnimatedItem>
             <figure className="mb-12">
@@ -504,7 +504,7 @@ export default function BlueprintPage() {
       <SectionDivider fromColor={C.white} toColor={C.cream} />
 
       {/* WHAT YOU GET + BUY */}
-      <AnimatedSection theme="off-white" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="off-white" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl text-center">
           <AnimatedItem>
             <SectionLabel>What you get</SectionLabel>
@@ -599,7 +599,7 @@ export default function BlueprintPage() {
       <SectionDivider fromColor={C.cream} toColor={C.white} flip />
 
       {/* FAQ */}
-      <AnimatedSection theme="light" className="px-6 py-14 md:py-16">
+      <AnimatedSection theme="light" className="px-6 py-10 md:py-12">
         <div className="mx-auto max-w-3xl">
           <AnimatedItem>
             <SectionLabel>Questions</SectionLabel>

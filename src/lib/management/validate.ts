@@ -47,7 +47,7 @@ export function validateApplication(raw: unknown): ApplicationResult {
 
   const asset = str(r.asset, 10);
   if (asset !== "car" && asset !== "rooms") {
-    return { ok: false, error: "Please choose a car or rooms." };
+    return { ok: false, error: "Please choose a vehicle or rooms." };
   }
 
   // No length cap here: truncating before validating would let a malformed
