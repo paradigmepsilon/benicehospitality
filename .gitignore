@@ -55,3 +55,6 @@ __pycache__/
 
 # SDD scratch workspace (subagent-driven development ledger, briefs, review packages)
 .superpowers/
+
+# vehicle management agreement drafts — local work in progress
+/docs/management/
