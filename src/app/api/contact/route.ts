@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
+import { getAuditFromAddress } from "@/lib/email/send";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getPostHogClient } from "@/lib/posthog-server";
@@ -44,8 +45,12 @@ export async function POST(req: Request) {
     const locationValue = location || null;
     const roomCountValue = roomCount || null;
 
-    await getResend().emails.send({
-      from: "BNHG Website <onboarding@resend.dev>",
+    // The Resend SDK does not throw on a delivery failure (e.g. a
+    // sandbox-restricted "from" address, or an unverified domain) — it
+    // resolves with { data: null, error }. Checking that field is required
+    // or a failed send is otherwise indistinguishable from a successful one.
+    const { error: contactEmailError } = await getResend().emails.send({
+      from: getAuditFromAddress(),
       to: process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
       replyTo: email,
       subject: `New Contact: ${name}${interests ? ` — ${interests}` : ""}`,
@@ -60,6 +65,9 @@ export async function POST(req: Request) {
         </table>
       `,
     });
+    if (contactEmailError) {
+      console.error("Failed to send contact notification email:", contactEmailError);
+    }
 
     // Store in database
     try {

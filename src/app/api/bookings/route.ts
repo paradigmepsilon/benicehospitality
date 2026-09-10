@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { bookingConfirmationEmail } from "@/lib/email-templates";
+import { getAuditFromAddress } from "@/lib/email/send";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { FOCUS_DIMENSION_KEYS } from "@/lib/constants/dimensions";
@@ -218,14 +219,21 @@ export async function POST(req: Request) {
       console.error("Failed to create pipeline contact:", crmError);
     }
 
-    // Send confirmation email to guest
+    // Send confirmation email to guest. The Resend SDK does not throw on a
+    // delivery failure (e.g. a sandbox-restricted "from" address, or an
+    // unverified domain) — it resolves with { data: null, error }. Checking
+    // that field is required or a failed send is otherwise indistinguishable
+    // from a successful one.
     try {
-      await getResend().emails.send({
-        from: "BNHG Website <onboarding@resend.dev>",
+      const { error: guestEmailError } = await getResend().emails.send({
+        from: getAuditFromAddress(),
         to: email,
         subject: `Your Discovery Call is Confirmed for ${formattedDate}`,
         html: bookingConfirmationEmail({ name, formattedDate, formattedTime, durationLabel }),
       });
+      if (guestEmailError) {
+        console.error("Failed to send guest confirmation email:", guestEmailError);
+      }
     } catch (emailError) {
       console.error("Failed to send guest confirmation email:", emailError);
     }
@@ -244,8 +252,8 @@ export async function POST(req: Request) {
       const contextRow = isHotelBooking
         ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Hotel</td><td style="padding:8px;border-bottom:1px solid #eee;">${hotelName}</td></tr>`
         : `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Source</td><td style="padding:8px;border-bottom:1px solid #eee;">${clickSource || "Not captured"}</td></tr>`;
-      await getResend().emails.send({
-        from: "BNHG Website <onboarding@resend.dev>",
+      const { error: adminEmailError } = await getResend().emails.send({
+        from: getAuditFromAddress(),
         to: process.env.CONTACT_EMAIL || "admin@benicehospitality.com",
         replyTo: email,
         subject,
@@ -265,6 +273,9 @@ export async function POST(req: Request) {
           </table>
         `,
       });
+      if (adminEmailError) {
+        console.error("Failed to send admin notification email:", adminEmailError);
+      }
     } catch (emailError) {
       console.error("Failed to send admin notification email:", emailError);
     }
