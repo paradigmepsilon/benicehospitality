@@ -307,9 +307,11 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
         turnstileRef.current?.reset();
       } else {
         setError(data.error || "Something went wrong. Please try again.");
+        turnstileRef.current?.reset();
       }
     } catch {
       setError("Something went wrong. Please try again.");
+      turnstileRef.current?.reset();
     } finally {
       setSubmitting(false);
     }
@@ -817,6 +819,8 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                     ref={turnstileRef}
                     siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                     options={{ size: "invisible" }}
+                    onExpire={() => turnstileRef.current?.reset()}
+                    onError={() => turnstileRef.current?.reset()}
                   />
                 )}
 
