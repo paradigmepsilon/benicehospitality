@@ -211,7 +211,8 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
     setLoadingSlots(true);
     setSlots([]);
     try {
-      const res = await fetch(`/api/bookings/slots?date=${date}&call_type=${callType}`);
+      const founderParam = requestedFounder ? `&founder=${requestedFounder}` : "";
+      const res = await fetch(`/api/bookings/slots?date=${date}&call_type=${callType}${founderParam}`);
       const data = await res.json();
       setSlots(data.slots || []);
     } catch {
@@ -219,7 +220,7 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
     } finally {
       setLoadingSlots(false);
     }
-  }, [callType]);
+  }, [callType, requestedFounder]);
 
   const handleDateSelect = (day: number) => {
     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;

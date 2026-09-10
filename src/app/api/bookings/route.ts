@@ -11,11 +11,22 @@ import { logAuditEvent, cancelPendingNurture } from "@/lib/audit/events";
 import {
   CANONICAL_CALL_TYPE,
   CALL_BLOCK_MINUTES,
+  CALL_VISIBLE_MINUTES,
   callDurationLabel,
 } from "@/lib/constants/call-types";
+import { FOUNDER_LABELS, founderCalendarEmail } from "@/lib/constants/founders";
 import { VALID_BOOKING_SOURCES, isHotelAuditBooking } from "@/lib/booking-url";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { stopNurture } from "@/lib/nurture/engine";
+import { hasBookingConflict } from "@/lib/booking-conflict";
+import { createBookingMeetEvent } from "@/lib/google-calendar";
+import {
+  formatBookingDate,
+  formatBookingTime,
+  toLocalDateTimeString,
+  addMinutesToTime,
+} from "@/lib/booking-format";
+import { buildBookingManageUrl } from "@/lib/booking-manage-token";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -24,10 +35,6 @@ function getResend(): Resend {
 }
 
 const VALID_FOUNDERS = new Set(["alex", "della"]);
-const FOUNDER_LABELS: Record<string, string> = {
-  alex: "Alex Henry",
-  della: "Della Henry",
-};
 
 export async function POST(req: Request) {
   try {
@@ -117,21 +124,13 @@ export async function POST(req: Request) {
 
     // Range-aware conflict check: existing bookings of any call_type on this date
     // could partially overlap the requested slot (e.g., a 40-min Signal call starting
-    // at 10:30 conflicts with a 60-min advisory at 10:00).
-    const [reqH, reqM] = String(time).split(":").map(Number);
-    const requestedStart = reqH * 60 + reqM;
-    const requestedEnd = requestedStart + slotDuration;
-
-    const sameDayBookings = await sql`
-      SELECT booking_time, call_type FROM bookings
-      WHERE booking_date = ${date} AND status = 'confirmed'
-    `;
-
-    const conflict = sameDayBookings.find((b) => {
-      const [bh, bm] = String(b.booking_time).split(":").map(Number);
-      const start = bh * 60 + bm;
-      const end = start + (CALL_BLOCK_MINUTES[String(b.call_type)] ?? 60);
-      return requestedStart < end && requestedEnd > start;
+    // at 10:30 conflicts with a 60-min advisory at 10:00). A founder's own bookings
+    // never conflict with the other founder's calendar (see hasBookingConflict).
+    const conflict = await hasBookingConflict({
+      date: String(date),
+      time: String(time),
+      callType,
+      founder: requestedFounder,
     });
 
     if (conflict) {
@@ -176,19 +175,42 @@ export async function POST(req: Request) {
     }
 
     // Format date/time for emails
-    const bookingDate = new Date(date + "T00:00:00");
-    const formattedDate = bookingDate.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-    const [h, m] = time.split(":");
-    const hour = parseInt(h);
-    const ampm = hour >= 12 ? "PM" : "AM";
-    const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-    const formattedTime = `${hour12}:${m} ${ampm} ET`;
+    const formattedDate = formatBookingDate(String(date));
+    const formattedTime = formatBookingTime(String(time));
     const durationLabel = callDurationLabel(callType);
+
+    // Create the Google Meet event (best-effort — returns null when no
+    // calendar account is connected yet, same as every other side effect
+    // below). Both the guest and the requested founder are invited directly
+    // by Google's own calendar invite; our confirmation email below also
+    // includes the link for convenience.
+    let meetLink: string | null = null;
+    try {
+      const startDateTime = toLocalDateTimeString(String(date), String(time));
+      const endDateTime = toLocalDateTimeString(
+        String(date),
+        addMinutesToTime(String(time), CALL_VISIBLE_MINUTES[callType] ?? 45)
+      );
+      const meetEvent = await createBookingMeetEvent({
+        summary: `Discovery call: ${name}${requestedFounder ? ` + ${FOUNDER_LABELS[requestedFounder]}` : ""}`,
+        description: message ? `Note from ${name}: ${message}` : `Discovery call booked via benicehospitality.com`,
+        startDateTime,
+        endDateTime,
+        guestEmail: email,
+        founderEmail: founderCalendarEmail(requestedFounder),
+      });
+      if (meetEvent) {
+        meetLink = meetEvent.meetLink;
+        await sql`
+          UPDATE bookings SET google_event_id = ${meetEvent.eventId}, meet_link = ${meetEvent.meetLink}
+          WHERE id = ${booking.id}
+        `;
+      }
+    } catch (calendarError) {
+      console.error("Failed to create Calendar event:", calendarError);
+    }
+
+    const manageUrl = buildBookingManageUrl(booking.id as number, email);
 
     // Create/update pipeline contact. hotel_name is '' rather than null for
     // a non-hotel (e.g. management) booking, because bookings.hotel_name is
@@ -229,7 +251,7 @@ export async function POST(req: Request) {
         from: getAuditFromAddress(),
         to: email,
         subject: `Your Discovery Call is Confirmed for ${formattedDate}`,
-        html: bookingConfirmationEmail({ name, formattedDate, formattedTime, durationLabel }),
+        html: bookingConfirmationEmail({ name, formattedDate, formattedTime, durationLabel, meetLink, manageUrl }),
       });
       if (guestEmailError) {
         console.error("Failed to send guest confirmation email:", guestEmailError);
@@ -268,6 +290,7 @@ export async function POST(req: Request) {
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Time</td><td style="padding:8px;border-bottom:1px solid #eee;">${formattedTime}</td></tr>
             <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Type</td><td style="padding:8px;border-bottom:1px solid #eee;">Discovery call (45 min, blocks 60 min)</td></tr>
             ${requestedFounder ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Requested founder</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-weight:600;">${FOUNDER_LABELS[requestedFounder]}</td></tr>` : ""}
+            ${meetLink ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Google Meet</td><td style="padding:8px;border-bottom:1px solid #eee;"><a href="${meetLink}">${meetLink}</a></td></tr>` : ""}
             ${clickSource && isHotelBooking ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;background:#fff8e6;">Click source</td><td style="padding:8px;border-bottom:1px solid #eee;background:#fff8e6;font-family:monospace;">${clickSource}</td></tr>` : ""}
             ${message ? `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Message</td><td style="padding:8px;border-bottom:1px solid #eee;">${message}</td></tr>` : ""}
           </table>

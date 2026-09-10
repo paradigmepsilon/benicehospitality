@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
+import { cancelBooking, rescheduleBooking } from "@/lib/booking-actions";
 
 export async function PUT(
   request: Request,
@@ -10,8 +11,20 @@ export async function PUT(
   if (authError) return authError;
 
   const { id } = await params;
+  const bookingId = Number(id);
   const body = await request.json();
-  const { status } = body;
+  const { status, booking_date: newDate, booking_time: newTime } = body;
+
+  // A date/time change reschedules (and re-notifies + updates the Calendar
+  // event) regardless of status; a bare status change only applies when no
+  // reschedule was requested.
+  if (newDate && newTime) {
+    const result = await rescheduleBooking(bookingId, newDate, newTime);
+    if (!result.ok) {
+      return NextResponse.json({ error: result.error }, { status: result.error.includes("not found") ? 404 : 409 });
+    }
+    return NextResponse.json(result.booking);
+  }
 
   const valid = ["confirmed", "cancelled"];
   if (!valid.includes(status)) {
@@ -21,9 +34,19 @@ export async function PUT(
     );
   }
 
+  if (status === "cancelled") {
+    const result = await cancelBooking(bookingId);
+    if (!result.ok) {
+      return NextResponse.json({ error: result.error }, { status: 404 });
+    }
+    return NextResponse.json(result.booking);
+  }
+
+  // Re-confirming (undoing an accidental cancel) is a plain status flip —
+  // there's no guest-facing "change" to notify about in that direction.
   const result = await sql`
     UPDATE bookings SET status = ${status}
-    WHERE id = ${id} RETURNING *
+    WHERE id = ${bookingId} RETURNING *
   `;
 
   if (result.length === 0) {

@@ -2119,6 +2119,26 @@ async function migrate() {
   `;
   console.log("  ✓ management_applications table created");
 
+  // Google Meet on bookings: the created event's id/link, best-effort like the
+  // email sends below it in the booking route (nullable, never blocks a booking).
+  await sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS google_event_id TEXT`;
+  await sql`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS meet_link TEXT`;
+  console.log("  ✓ bookings.google_event_id and bookings.meet_link columns added");
+
+  // Single-row store for the shared host Google account's Calendar OAuth
+  // refresh token (see src/lib/google-calendar.ts). Not a per-founder table —
+  // one connected account organizes every booking's Meet event, per design.
+  await sql`
+    CREATE TABLE IF NOT EXISTS calendar_connections (
+      id SERIAL PRIMARY KEY,
+      account_email TEXT NOT NULL,
+      refresh_token TEXT NOT NULL,
+      connected_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  console.log("  ✓ calendar_connections table created");
+
   console.log("Migrations complete!");
 }
 

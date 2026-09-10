@@ -9,6 +9,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get("date");
   const callType = searchParams.get("call_type") ?? CANONICAL_CALL_TYPE;
+  const founderParam = searchParams.get("founder");
+  const founder = founderParam === "alex" || founderParam === "della" ? founderParam : null;
 
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: "Valid date parameter required (YYYY-MM-DD)." }, { status: 400 });
@@ -51,12 +53,20 @@ export async function GET(request: Request) {
     return NextResponse.json({ slots: [] });
   }
 
-  // Get existing confirmed bookings, time-range overrides, and calendar events in parallel
+  // Get existing confirmed bookings, time-range overrides, and calendar events in parallel.
+  // A founder's own bookings never block the other founder's calendar; a founder-less
+  // (general/management) booking is conservative and still blocks both.
   const [bookings, timeOverrides, calendarEvents] = await Promise.all([
-    sql`
-      SELECT booking_time, call_type FROM bookings
-      WHERE booking_date = ${date} AND status = 'confirmed'
-    `,
+    founder
+      ? sql`
+          SELECT booking_time, call_type FROM bookings
+          WHERE booking_date = ${date} AND status = 'confirmed'
+            AND (requested_founder = ${founder} OR requested_founder IS NULL)
+        `
+      : sql`
+          SELECT booking_time, call_type FROM bookings
+          WHERE booking_date = ${date} AND status = 'confirmed'
+        `,
     sql`
       SELECT start_time, end_time FROM date_overrides
       WHERE override_date = ${date} AND start_time IS NOT NULL AND is_available = false

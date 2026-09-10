@@ -46,6 +46,7 @@
     "arctic": "^3.7.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.35.2",
+    "googleapis": "^178.1.1",
     "jose": "^6.2.1",
     "lucide-react": "^1.14.0",
     "next": "16.1.6",
