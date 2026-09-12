@@ -26,11 +26,25 @@ export function getCalendarRedirectUri(): string {
   return `${getBaseUrl()}/api/admin/calendar/callback`;
 }
 
+// The booking calendar uses its own OAuth client (GOOGLE_CALENDAR_CLIENT_ID /
+// GOOGLE_CALENDAR_CLIENT_SECRET) so it can be provisioned, scoped, and rotated
+// independently of the ClaimProof "Sign in with Google" client, which owns
+// GOOGLE_OAUTH_CLIENT_ID / GOOGLE_OAUTH_CLIENT_SECRET in src/lib/oauth/providers.ts.
+// Falls back to the sign-in client only when no calendar-specific client is set.
+// Values are trimmed because env vars pasted via the Vercel CLI can carry a
+// trailing newline, which Google rejects as an unknown client.
 function getOAuth2Client() {
-  const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+  const clientId = (
+    process.env.GOOGLE_CALENDAR_CLIENT_ID || process.env.GOOGLE_OAUTH_CLIENT_ID || ""
+  ).trim();
+  const clientSecret = (
+    process.env.GOOGLE_CALENDAR_CLIENT_SECRET || process.env.GOOGLE_OAUTH_CLIENT_SECRET || ""
+  ).trim();
   if (!clientId || !clientSecret) {
-    throw new Error("GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET must be set.");
+    throw new Error(
+      "GOOGLE_CALENDAR_CLIENT_ID and GOOGLE_CALENDAR_CLIENT_SECRET must be set " +
+        "(or GOOGLE_OAUTH_CLIENT_ID / GOOGLE_OAUTH_CLIENT_SECRET as a fallback)."
+    );
   }
   return new google.auth.OAuth2(clientId, clientSecret, getCalendarRedirectUri());
 }

@@ -11,7 +11,9 @@ export const FOUNDER_LABELS: Record<string, string> = {
  * best-effort Calendar side effect: a missing address just skips the invite.
  */
 export function founderCalendarEmail(founder: string | null): string | null {
-  if (founder === "alex") return process.env.ALEX_CALENDAR_EMAIL || null;
-  if (founder === "della") return process.env.DELLA_CALENDAR_EMAIL || null;
+  // Trimmed: a trailing newline (easy to introduce via `vercel env add`) makes
+  // the Calendar API reject the attendee as an invalid email address.
+  if (founder === "alex") return process.env.ALEX_CALENDAR_EMAIL?.trim() || null;
+  if (founder === "della") return process.env.DELLA_CALENDAR_EMAIL?.trim() || null;
   return null;
 }
