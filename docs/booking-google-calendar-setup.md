@@ -20,7 +20,9 @@ Configured on 2026-09-12 (via Cloud Console as admin@benicehospitality.com):
 - Data Access scopes registered: `calendar.events`, `openid`, `userinfo.email`, `userinfo.profile`.
 - Audience: `admin@benicehospitality.com` added as a test user.
 
-### Open risk: consent screen is External + Testing
+### Consent screen: External, published to production on 2026-09-12
+
+Branding was completed (home page, `/privacy`, `/terms`) and the app pushed to production, so the Testing-mode limits below no longer apply. Kept for history:
 
 - In Testing, only listed test users can complete OAuth. That is fine for the calendar (admin@ is listed) but it means **ClaimProof "Sign in with Google" only works for test users**. Lifetime user count was 0, so no customer has ever completed it.
 - In Testing, Google **expires refresh tokens after 7 days**. Meet creation will stop about a week after connecting until someone reconnects.
@@ -50,3 +52,9 @@ Vercel prod was corrected on 2026-09-12 (client ID restored to `481555686391…`
 ## Verify
 
 Create a test booking. Expect a row in `bookings` with `google_event_id` and `meet_link` set, and an invite in the guest inbox and admin@ inbox. Then confirm ClaimProof Google sign-in still works at `/claimproof/login`.
+
+## Verified live (2026-09-13)
+
+- Migration run against production by Alex. Code `cfc6596` deployed.
+- admin@benicehospitality.com connected via `/api/admin/calendar/connect` on production.
+- Test booking (Sep 30, 3:00 PM ET) created a Meet event organized by admin@ with a `meet.google.com` link and the guest as attendee; admin cancel removed it from the guest calendar.
