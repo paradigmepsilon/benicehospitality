@@ -6,6 +6,7 @@ import { getCampaignHealth } from "@/lib/outreach/health";
 import { internalCampaignAlertEmail } from "@/lib/email-templates";
 import { logAuditEvent } from "@/lib/audit/events";
 import { buildAuditUrl } from "@/lib/audit/token";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
@@ -30,7 +31,7 @@ async function pauseCampaign(campaignId: number, name: string, reason: string) {
     SET status = 'paused', paused_at = NOW(), paused_reason = ${reason}, updated_at = NOW()
     WHERE id = ${campaignId} AND status != 'paused'
   `;
-  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
+  const baseUrl = getPublicSiteUrl();
   const resumeUrl = `${baseUrl}/admin/outreach/campaigns/${campaignId}`;
   try {
     await getResend().emails.send({

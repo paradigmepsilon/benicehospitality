@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { sql } from "@/lib/db";
 import { dailyApprovalNotificationEmail } from "@/lib/email-templates";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 interface ScheduledTargetRow {
   id: number;
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
       ScheduledTargetRow & { overall_score: number | null; overall_grade: string | null }
     >;
 
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
+    const baseUrl = getPublicSiteUrl();
     const approvalUrl = `${baseUrl}/admin/daily-approval/today`;
 
     try {

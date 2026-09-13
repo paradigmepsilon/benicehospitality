@@ -1,5 +1,5 @@
 const SITE_URL = "https://www.benicehospitality.com";
-const LOGO_URL = `${SITE_URL}/images/logo-horizontal.png`;
+const LOGO_URL = `${SITE_URL}/images/email-logo.png`;
 
 function auditLayout({
   preheader,

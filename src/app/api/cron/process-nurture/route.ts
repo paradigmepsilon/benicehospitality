@@ -5,6 +5,7 @@ import { logAuditEvent } from "@/lib/audit/events";
 import { sendAuditEmail, type AuditEmailSendArgs } from "@/lib/email/send";
 import { DIMENSIONS } from "@/lib/constants/dimensions";
 import type { AuditData, NurtureStep } from "@/lib/types/audit";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 interface PendingNurtureRow {
   id: number;
@@ -39,7 +40,7 @@ function findLowestDimension(audit: AuditData) {
 
 function buildSendArgs(row: PendingNurtureRow): AuditEmailSendArgs | null {
   const auditUrl = buildAuditUrl(row.audit_token);
-  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
+  const baseUrl = getPublicSiteUrl();
   const bookingUrl = `${baseUrl}/book?audit_token=${row.audit_token}&utm_source=tier-0-audit&utm_medium=nurture-${row.sequence_step}`;
   const base = {
     hotelName: row.hotel_name,

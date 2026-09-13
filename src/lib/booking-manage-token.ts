@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 // Same shape as src/lib/outreach/unsubscribe.ts, scoped to a specific booking
 // id + email so a guest can manage their own booking without an account.
@@ -28,7 +29,7 @@ export function verifyBookingManageToken(bookingId: number, email: string, token
 }
 
 export function buildBookingManageUrl(bookingId: number, email: string): string {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
+  const base = getPublicSiteUrl();
   const token = generateBookingManageToken(bookingId, email);
   const params = new URLSearchParams({ id: String(bookingId), email, token });
   return `${base}/book/manage?${params.toString()}`;

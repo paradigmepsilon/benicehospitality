@@ -11,8 +11,9 @@ import {
   scorecardReadyEmail,
   internalScorecardRequestEmail,
 } from "@/lib/email-templates";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.benicehospitality.com";
+const SITE_URL = getPublicSiteUrl();
 
 // Verified Della/BNHG sender for lead-facing + internal scorecard emails.
 // Prefer an explicit override, then the shared verified BNHG identity, then the

@@ -10,6 +10,7 @@ import { auditUnlockBodySchema } from "@/lib/validation/audit";
 import { auditUnlockLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { sendAuditEmail } from "@/lib/email/send";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 const VIEW_COOKIE = "audit_view_id";
 const VIEW_COOKIE_TTL_DAYS = 90;
@@ -93,7 +94,7 @@ export async function POST(
 
       // Send the audit-ready email so the recipient has a permanent return link
       const auditUrl = buildAuditUrl(token);
-      const bookingUrl = `${(process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "")}/book?audit_token=${token}&utm_source=tier-0-audit&utm_medium=audit-email`;
+      const bookingUrl = `${getPublicSiteUrl()}/book?audit_token=${token}&utm_source=tier-0-audit&utm_medium=audit-email`;
       await sendAuditEmail({
         kind: "audit_ready",
         to: email,

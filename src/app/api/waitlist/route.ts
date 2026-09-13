@@ -9,9 +9,9 @@ import {
   waitlistAdminNotificationEmail,
 } from "@/lib/email-templates";
 import { enrollInNurture } from "@/lib/nurture/engine";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.benicehospitality.com";
+const SITE_URL = getPublicSiteUrl();
 
 let cachedResend: Resend | null = null;
 function getResend(): Resend {
