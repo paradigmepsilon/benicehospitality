@@ -1,11 +1,12 @@
 import type { NavGroup, NavLink, UtilityNav } from "./types";
 
 /**
- * Primary nav: the three-bin ladder (Resources -> Training -> Management)
- * on the left, Insights and About on the right, flanking the centered logo.
+ * Primary nav: the three-bin ladder (Resources -> Training -> Management),
+ * then Marketplace, Insights and About.
  *
- * The header renders NAV_LEFT and NAV_RIGHT as two flanking groups. The
- * mobile sheet renders the combined NAV_TREE as one flat list.
+ * Both the header and the mobile sheet render the combined NAV_TREE as one
+ * flat list (Header.tsx). NAV_LEFT / NAV_RIGHT are kept as the authoring
+ * split -- the ladder vs. everything else -- and only control ordering.
  *
  * The Owner Portal utility link is not in this file: it only exists when
  * process.env.OWNER_PORTAL_URL is set, so Header.tsx renders it directly
@@ -18,6 +19,10 @@ export const NAV_LEFT: NavGroup[] = [
 ];
 
 export const NAV_RIGHT: NavGroup[] = [
+  // Marketplace sits here rather than in NAV_LEFT so the three-bin ladder
+  // above stays three bins. It was previously reachable only from the footer
+  // ("Recommended gear") and from inside the supply-inventory tracker.
+  { label: "Marketplace", href: "/marketplace" },
   { label: "Insights", href: "/insights" },
   { label: "About", href: "/about" },
 ];
