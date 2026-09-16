@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isRenderableImageUrl } from "@/lib/image-sources";
 import {
   NETWORK_CTA,
   NETWORK_LABEL,
@@ -21,10 +22,77 @@ function badgeTone(badge: ProductBadge): string {
   }
 }
 
-export default function ProductCard({ p }: { p: Product }) {
+export interface PlateSpec {
+  /** Category tint, a brand token hex. */
+  tint: string;
+  /** Room or job name, rendered in small caps. */
+  label: string;
+  /** 1-based position within its section. */
+  index: number;
+}
+
+/**
+ * What fills the image slot when a product has no photograph.
+ *
+ * Collapsing the slot entirely would break grid rhythm and strip the card of
+ * the visual anchor shoppers scan for, so the slot is occupied deliberately
+ * instead: the category tint washed over cream, a ruled field, the room name,
+ * and a large index numeral. Ink stays dark on a light ground, so contrast
+ * holds for every tint without per-color tuning.
+ *
+ * When Amazon PA-API access opens and real product photography lands in
+ * image_url, this is simply no longer rendered — see the branch in ProductCard.
+ */
+function ProductPlate({ tint, label, index }: PlateSpec) {
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-0 overflow-hidden"
+      style={{ backgroundColor: `color-mix(in srgb, ${tint} 9%, #FAF8F3)` }}
+    >
+      {/* Ruled field. Low-contrast, purely textural. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `repeating-linear-gradient(135deg, ${tint}14 0px, ${tint}14 1px, transparent 1px, transparent 11px)`,
+        }}
+      />
+      <span
+        className="absolute bottom-3 left-4 font-sans text-[10px] font-semibold tracking-[0.22em] uppercase"
+        style={{ color: tint }}
+      >
+        {label}
+      </span>
+      <span
+        className="absolute -bottom-3 right-3 font-display text-[4.5rem] leading-none font-semibold italic select-none"
+        style={{ color: tint, opacity: 0.17 }}
+      >
+        {String(index).padStart(2, "0")}
+      </span>
+    </div>
+  );
+}
+
+export default function ProductCard({
+  p,
+  plate,
+}: {
+  p: Product;
+  plate: PlateSpec;
+}) {
   const inactive = p.status !== "live";
   const cta = NETWORK_CTA[p.network];
   const networkLabel = NETWORK_LABEL[p.network];
+
+  // Guard the src rather than trusting the column. An empty string makes
+  // next/image render an <img> with no src at all; an un-allowlisted host makes
+  // it throw during server render. Both are reachable from the admin form.
+  const hasPhoto = isRenderableImageUrl(p.image.src);
+
+  // The first bullet is promoted onto the card as the one-line reason to care.
+  // The rest stay below, so the card reads at a glance but still rewards
+  // stopping on it.
+  const [lead, ...rest] = p.bullets;
 
   const handleClick = () => {
     try {
@@ -44,19 +112,24 @@ export default function ProductCard({ p }: { p: Product }) {
   };
 
   const containerClass = inactive
-    ? "group relative flex flex-col bg-light-gray/60 border border-light-gray rounded-lg overflow-hidden h-full opacity-75 transition-all duration-200 hover:opacity-90"
-    : "group relative flex flex-col bg-white border border-light-gray rounded-lg overflow-hidden h-full transition-all duration-200 cursor-pointer hover:border-warm-gold hover:shadow-lg hover:-translate-y-1 focus-within:border-warm-gold focus-within:shadow-lg";
+    ? "group relative flex flex-col bg-light-gray/60 border border-light-gray rounded-card overflow-hidden h-full opacity-75 transition-all duration-200 hover:opacity-90"
+    : "group relative flex flex-col bg-white border border-light-gray rounded-card overflow-hidden h-full transition-all duration-200 cursor-pointer hover:border-warm-gold hover:-translate-y-1 focus-within:border-warm-gold";
 
   return (
     <article className={containerClass}>
       <div className="relative aspect-[16/9] overflow-hidden bg-cream">
-        <Image
-          src={p.image.src}
-          alt={p.image.alt}
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-        />
+        {hasPhoto ? (
+          <Image
+            src={p.image.src}
+            alt={p.image.alt}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            style={{ filter: "saturate(0.9) contrast(1.05)" }}
+          />
+        ) : (
+          <ProductPlate {...plate} />
+        )}
         <span
           className="absolute top-3 right-3 inline-flex items-center gap-1 bg-near-black/80 backdrop-blur-sm text-white rounded-full px-2.5 py-1 font-sans text-[10px] font-semibold tracking-[0.16em] uppercase"
           aria-label={`Available on ${networkLabel}`}
@@ -74,9 +147,11 @@ export default function ProductCard({ p }: { p: Product }) {
 
       <div className="flex flex-col flex-1 p-6">
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="inline-flex items-center border border-warm-gold/60 bg-cream text-warm-gold-dark rounded-full px-2.5 py-1 font-sans text-[11px] font-semibold tracking-[0.16em] uppercase">
-            {p.priceRange}
-          </span>
+          {p.priceRange && (
+            <span className="inline-flex items-center border border-warm-gold/60 bg-cream text-warm-gold-dark rounded-full px-2.5 py-1 font-sans text-[11px] font-semibold tracking-[0.16em] uppercase">
+              {p.priceRange}
+            </span>
+          )}
           {p.status === "out-of-stock" && (
             <span className="inline-flex items-center border border-charcoal/30 text-charcoal/70 rounded-full px-2.5 py-1 font-sans text-[10px] font-semibold tracking-[0.16em] uppercase">
               Out of stock
@@ -92,13 +167,20 @@ export default function ProductCard({ p }: { p: Product }) {
         <h3 className="font-display text-lg font-semibold text-deep-teal leading-tight mb-3">
           {p.name}
         </h3>
-        <p className="font-sans text-sm text-charcoal/85 leading-relaxed mb-4">
+
+        {lead && (
+          <p className="font-sans text-sm text-charcoal font-medium leading-relaxed mb-3 pl-3 border-l-2 border-warm-gold/70">
+            {lead}
+          </p>
+        )}
+
+        <p className="font-sans text-sm text-charcoal/80 leading-relaxed mb-4">
           {p.body}
         </p>
 
-        {p.bullets.length > 0 && (
+        {rest.length > 0 && (
           <ul className="space-y-2 mb-5">
-            {p.bullets.map((b) => (
+            {rest.map((b) => (
               <li
                 key={b}
                 className="flex gap-2.5 font-sans text-xs text-charcoal/75 leading-relaxed"
@@ -123,6 +205,8 @@ export default function ProductCard({ p }: { p: Product }) {
             target="_blank"
             rel="sponsored noopener noreferrer"
             onClick={handleClick}
+            /* before:inset-0 makes the whole card one hover target and one
+               link. Baymard finds 76% of sites fail to do this. */
             className="mt-auto pt-2 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide text-warm-gold-dark hover:text-deep-teal transition-colors outline-none before:absolute before:inset-0 before:z-10 before:content-['']"
           >
             <span className="sr-only">{p.name}: </span>

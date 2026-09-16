@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import {
+  MARKETPLACE_CATEGORY_IDS,
+  findCategory,
+  normalizeCategory,
+} from "@/lib/marketplace-categories";
+import {
+  describeAllowedImageSources,
+  isRenderableImageUrl,
+} from "@/lib/image-sources";
+import {
   deleteProduct,
   updateProduct,
   VALID_BADGES,
@@ -21,6 +30,7 @@ interface RouteContext {
 interface PatchBody {
   slug?: unknown;
   tabId?: unknown;
+  category?: unknown;
   name?: unknown;
   body?: unknown;
   bullets?: unknown;
@@ -79,12 +89,54 @@ export async function PATCH(request: Request, ctx: RouteContext) {
     }
     patch.tabId = body.tabId as MarketplaceTabId;
   }
+  // Guarded on !== undefined rather than typeof string so togglePublish's
+  // one-key body ({ isPublished }) keeps working untouched.
+  if (body.category !== undefined) {
+    const category = normalizeCategory(body.category);
+    if (!findCategory(category)) {
+      return NextResponse.json(
+        { error: `category must be one of ${MARKETPLACE_CATEGORY_IDS.join(", ")}` },
+        { status: 400 },
+      );
+    }
+    patch.category = category;
+  }
+  // Moving a product between tabs without also setting a category would strand
+  // it: categories are disjoint per tab, so the old value no longer applies.
+  // groupByCategory would file it under "More gear" rather than crash, but this
+  // is the point where it is still cheap to refuse.
+  if (patch.tabId !== undefined && patch.category === undefined) {
+    return NextResponse.json(
+      { error: "changing tabId requires a category belonging to the new tab" },
+      { status: 400 },
+    );
+  }
+  if (patch.tabId !== undefined && patch.category !== undefined) {
+    const def = findCategory(patch.category);
+    if (def && def.tabId !== patch.tabId) {
+      return NextResponse.json(
+        { error: `category "${patch.category}" does not belong to tab "${patch.tabId}"` },
+        { status: 400 },
+      );
+    }
+  }
   if (typeof body.name === "string" && body.name.trim().length >= 3) {
     patch.name = body.name.trim();
   }
   if (typeof body.body === "string") patch.body = body.body;
   if (body.bullets !== undefined) patch.bullets = asStringArray(body.bullets);
-  if (typeof body.imageUrl === "string") patch.imageUrl = body.imageUrl.trim();
+  if (typeof body.imageUrl === "string") {
+    const trimmed = body.imageUrl.trim();
+    // See the POST route: a non-empty, un-allowlisted src makes next/image
+    // throw during server render on two public, error-boundary-less pages.
+    if (trimmed && !isRenderableImageUrl(trimmed)) {
+      return NextResponse.json(
+        { error: `imageUrl must be empty, or ${describeAllowedImageSources()}` },
+        { status: 400 },
+      );
+    }
+    patch.imageUrl = trimmed;
+  }
   if (typeof body.imageAlt === "string") patch.imageAlt = body.imageAlt.trim();
   if (typeof body.priceRange === "string")
     patch.priceRange = body.priceRange.trim();

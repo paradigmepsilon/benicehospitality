@@ -9,12 +9,19 @@ import type {
   ProductBadge,
   ProductStatus,
 } from "@/lib/marketplace";
+import {
+  MARKETPLACE_TAB_IDS,
+  MARKETPLACE_TAB_LABELS,
+  categoriesForTab,
+  categoryLabel,
+  findCategory,
+  isKnownCategory,
+} from "@/lib/marketplace-categories";
 
-const TAB_LABELS: Record<MarketplaceTabId, string> = {
-  property: "Property",
-  auto: "Auto",
-  "back-office": "Back Office",
-};
+// Labels and ids both come from marketplace-categories.ts. They used to be
+// declared here as well, and the drift between the two copies is how the
+// retired "hotel" tab survived in some places and vanished from others.
+const TAB_LABELS = MARKETPLACE_TAB_LABELS;
 
 const NETWORK_LABELS: Record<AffiliateNetwork, string> = {
   amazon: "Amazon",
@@ -30,7 +37,7 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
   soon: "Coming soon",
 };
 
-const TAB_IDS: MarketplaceTabId[] = ["property", "auto", "back-office"];
+const TAB_IDS: readonly MarketplaceTabId[] = MARKETPLACE_TAB_IDS;
 const NETWORKS: AffiliateNetwork[] = [
   "amazon",
   "lowes",
@@ -55,6 +62,7 @@ type FilterTab = "all" | MarketplaceTabId;
 interface FormState {
   slug: string;
   tabId: MarketplaceTabId;
+  category: string;
   name: string;
   body: string;
   bullets: string;
@@ -74,6 +82,7 @@ function blankForm(): FormState {
   return {
     slug: "",
     tabId: "property",
+    category: "",
     name: "",
     body: "",
     bullets: "",
@@ -94,6 +103,7 @@ function productToForm(p: MarketplaceProduct): FormState {
   return {
     slug: p.slug,
     tabId: p.tabId,
+    category: p.category,
     name: p.name,
     body: p.body,
     bullets: p.bullets.join("\n"),
@@ -114,6 +124,7 @@ function formToPayload(f: FormState) {
   return {
     slug: f.slug.trim() || undefined,
     tabId: f.tabId,
+    category: f.category,
     name: f.name.trim(),
     body: f.body.trim(),
     bullets: f.bullets
@@ -260,15 +271,21 @@ export default function MarketplaceAdmin({ initialProducts }: Props) {
     refresh();
   }
 
+  // A Map, not a literal Record: `out[p.tabId]++` on a Record produces NaN for
+  // any tab outside the declared set rather than failing loudly. That is how a
+  // stale tab value stayed invisible here for months.
   const countsByTab = useMemo(() => {
-    const out: Record<MarketplaceTabId, number> = {
-      property: 0,
-      auto: 0,
-      "back-office": 0,
-    };
-    for (const p of products) out[p.tabId]++;
+    const out = new Map<string, number>();
+    for (const p of products) out.set(p.tabId, (out.get(p.tabId) ?? 0) + 1);
     return out;
   }, [products]);
+
+  // Surfaced as a chip so a row that slipped through without a category is
+  // visible immediately rather than sitting under "More gear" for a month.
+  const uncategorizedCount = useMemo(
+    () => products.filter((p) => !isKnownCategory(p.category)).length,
+    [products],
+  );
 
   return (
     <div className="p-6 md:p-8 max-w-6xl mx-auto">
@@ -306,9 +323,18 @@ export default function MarketplaceAdmin({ initialProducts }: Props) {
             active={filter === id}
             onClick={() => setFilter(id)}
             label={TAB_LABELS[id]}
-            count={countsByTab[id]}
+            count={countsByTab.get(id) ?? 0}
           />
         ))}
+        {/* The silent failure this guards against: a row created during a
+            rolling deploy lands with category '', renders on the public page
+            under "More gear", and nobody notices. If this reads 0 you are
+            fine; if it does not, it is visible the next time you open admin. */}
+        {uncategorizedCount > 0 && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-terracotta/50 bg-terracotta/10 px-3 py-1.5 text-xs font-semibold text-terracotta">
+            {uncategorizedCount} uncategorized
+          </span>
+        )}
       </div>
 
       <div className="bg-white border border-light-gray rounded-lg overflow-hidden">
@@ -364,6 +390,11 @@ export default function MarketplaceAdmin({ initialProducts }: Props) {
                   </td>
                   <td className="px-5 py-4 text-sm text-near-black/85">
                     {TAB_LABELS[p.tabId]}
+                    <span className="block text-near-black/45 text-[11px]">
+                      {isKnownCategory(p.category)
+                        ? categoryLabel(p.category)
+                        : "— uncategorized —"}
+                    </span>
                   </td>
                   <td className="px-5 py-4 text-sm text-near-black/85">
                     {NETWORK_LABELS[p.network]}
@@ -495,6 +526,18 @@ function ProductForm({
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm({ ...form, [key]: value });
 
+  /**
+   * Categories are disjoint per tab, so switching tabs must drop a category
+   * that no longer applies. Handled explicitly rather than through update(),
+   * because leaving stale state behind reproduces the exact bug that stranded
+   * the retired "hotel" rows: the <select> renders the first option while state
+   * still holds a value absent from the list, and submit writes the stale one.
+   */
+  const onTabChange = (next: MarketplaceTabId) => {
+    const stillValid = categoriesForTab(next).some((c) => c.id === form.category);
+    setForm({ ...form, tabId: next, category: stillValid ? form.category : "" });
+  };
+
   return (
     <div className="bg-white border border-light-gray rounded-lg p-6">
       <h2 className="text-base font-semibold text-near-black mb-4">{title}</h2>
@@ -514,12 +557,37 @@ function ProductForm({
           <FieldLabel>Tab (audience) *</FieldLabel>
           <select
             value={form.tabId}
-            onChange={(e) => update("tabId", e.target.value as MarketplaceTabId)}
+            onChange={(e) => onTabChange(e.target.value as MarketplaceTabId)}
             className={inputClass}
           >
             {TAB_IDS.map((id) => (
               <option key={id} value={id}>
                 {TAB_LABELS[id]}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-1.5">
+          <FieldLabel>Category (section) *</FieldLabel>
+          <select
+            value={form.category}
+            onChange={(e) => update("category", e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select a category…</option>
+            {/* An unrecognized stored value is shown rather than silently
+                swapped for whichever option the browser defaults to. Without
+                this, opening a drifted row and saving an unrelated field would
+                rewrite its category. */}
+            {form.category && !findCategory(form.category) && (
+              <option value={form.category} disabled>
+                {form.category} (unrecognized)
+              </option>
+            )}
+            {categoriesForTab(form.tabId).map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.label}
               </option>
             ))}
           </select>

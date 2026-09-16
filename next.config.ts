@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import {
+  ALLOWED_IMAGE_HOSTS,
+  ALLOWED_IMAGE_PATH_PREFIXES,
+} from "./src/lib/image-sources";
 
 const nextConfig: NextConfig = {
   images: {
@@ -15,33 +19,27 @@ const nextConfig: NextConfig = {
     // 640.
     deviceSizes: [360, 414, 640, 750, 828, 1080, 1280, 1536, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "plus.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
+    // Derived from src/lib/image-sources.ts so this config and the admin API's
+    // image_url validator can never disagree. An admin-saved URL on a host
+    // missing from here makes next/image throw during server render, which is
+    // a 500 on /marketplace and /resources/supply-inventory-tracker — both
+    // force-dynamic with no error boundary.
+    remotePatterns: ALLOWED_IMAGE_HOSTS.map((hostname) => ({
+      protocol: "https" as const,
+      hostname,
+      port: "",
+      pathname: "/**",
+    })),
     // Allow any query string (e.g. ?v=2 cache-busters) on local public
     // images. Omitting `search` permits both no-query and any-query URLs.
-    localPatterns: [
-      {
-        pathname: "/images/**",
-      },
-      // Blog/insight post covers are served through the DB-backed image route
-      // (e.g. /api/images/5). Without this, any page that renders a post card
-      // with such a cover 500s on next/image src validation.
-      {
-        pathname: "/api/images/**",
-      },
-    ],
+    //
+    // /images/** covers public/images/. /api/images/** covers blog and insight
+    // post covers served through the DB-backed image route (e.g.
+    // /api/images/5); without it, any page rendering such a cover 500s on
+    // next/image src validation.
+    localPatterns: ALLOWED_IMAGE_PATH_PREFIXES.map((prefix) => ({
+      pathname: `${prefix}**`,
+    })),
   },
 
   async rewrites() {

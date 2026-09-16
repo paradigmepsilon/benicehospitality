@@ -1,6 +1,15 @@
 import { sql } from "./db";
+import {
+  MARKETPLACE_TAB_IDS,
+  normalizeCategory,
+  type MarketplaceTabId,
+} from "./marketplace-categories";
 
-export type MarketplaceTabId = "property" | "auto" | "back-office";
+// Re-exported so existing importers keep working. The single declaration lives
+// in marketplace-categories.ts, which has no DB imports and is therefore safe
+// for "use client" components to import values from.
+export type { MarketplaceTabId };
+
 export type AffiliateNetwork =
   | "amazon"
   | "lowes"
@@ -14,11 +23,7 @@ export type ProductBadge =
   | "Best Value"
   | "Editor's Pick";
 
-export const VALID_TAB_IDS: MarketplaceTabId[] = [
-  "property",
-  "auto",
-  "back-office",
-];
+export const VALID_TAB_IDS: readonly MarketplaceTabId[] = MARKETPLACE_TAB_IDS;
 export const VALID_NETWORKS: AffiliateNetwork[] = [
   "amazon",
   "lowes",
@@ -38,6 +43,8 @@ export interface MarketplaceProduct {
   id: number;
   slug: string;
   tabId: MarketplaceTabId;
+  /** Room (Homes) or job (Vehicles / Back Office). See marketplace-categories.ts. */
+  category: string;
   name: string;
   body: string;
   bullets: string[];
@@ -59,6 +66,7 @@ interface ProductRow {
   id: number;
   slug: string;
   tab_id: string;
+  category: string | null;
   name: string;
   body: string;
   bullets: string[] | null;
@@ -81,6 +89,9 @@ function rowToProduct(r: ProductRow): MarketplaceProduct {
     id: r.id,
     slug: r.slug,
     tabId: r.tab_id as MarketplaceTabId,
+    // ?? "" covers the deploy-before-migrate window, and src/lib/db.ts silently
+    // stubs sql`` to [] when DATABASE_URL is unset.
+    category: r.category ?? "",
     name: r.name,
     body: r.body,
     bullets: r.bullets ?? [],
@@ -110,7 +121,7 @@ export async function listPublishedProducts(): Promise<MarketplaceProduct[]> {
   const rows = (await sql`
     SELECT * FROM marketplace_products
     WHERE is_published = true
-    ORDER BY tab_id, position, id
+    ORDER BY tab_id, category, position, id
   `) as ProductRow[];
   return rows.map(rowToProduct);
 }
@@ -119,7 +130,7 @@ export async function listPublishedProducts(): Promise<MarketplaceProduct[]> {
 export async function listAllProducts(): Promise<MarketplaceProduct[]> {
   const rows = (await sql`
     SELECT * FROM marketplace_products
-    ORDER BY tab_id, position, id
+    ORDER BY tab_id, category, position, id
   `) as ProductRow[];
   return rows.map(rowToProduct);
 }
@@ -127,6 +138,7 @@ export async function listAllProducts(): Promise<MarketplaceProduct[]> {
 export interface CreateProductInput {
   slug: string;
   tabId: MarketplaceTabId;
+  category: string;
   name: string;
   body: string;
   bullets: string[];
@@ -147,12 +159,13 @@ export async function createProduct(
 ): Promise<MarketplaceProduct> {
   const rows = (await sql`
     INSERT INTO marketplace_products (
-      slug, tab_id, name, body, bullets, image_url, image_alt,
+      slug, tab_id, category, name, body, bullets, image_url, image_alt,
       price_range, network, affiliate_url, badge, status, tags,
       position, is_published
     )
     VALUES (
-      ${input.slug}, ${input.tabId}, ${input.name}, ${input.body},
+      ${input.slug}, ${input.tabId}, ${normalizeCategory(input.category)},
+      ${input.name}, ${input.body},
       ${input.bullets}, ${input.imageUrl}, ${input.imageAlt},
       ${input.priceRange}, ${input.network}, ${input.affiliateUrl},
       ${input.badge}, ${input.status}, ${input.tags},
@@ -182,6 +195,10 @@ export async function updateProduct(
   const next = {
     slug: patch.slug ?? existing.slug,
     tab_id: patch.tabId ?? existing.tab_id,
+    // Normalizing here rather than in the routes keeps this the single choke
+    // point every write passes through, which is what makes the database's
+    // normalization CHECK unfireable in practice.
+    category: normalizeCategory(patch.category ?? existing.category ?? ""),
     name: patch.name ?? existing.name,
     body: patch.body ?? existing.body,
     bullets: patch.bullets ?? existing.bullets ?? [],
@@ -203,6 +220,7 @@ export async function updateProduct(
     UPDATE marketplace_products SET
       slug = ${next.slug},
       tab_id = ${next.tab_id},
+      category = ${next.category},
       name = ${next.name},
       body = ${next.body},
       bullets = ${next.bullets},

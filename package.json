@@ -26,7 +26,9 @@
     "crr-book:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts",
     "crr-covers:build": "tsx scripts/build-crr-covers.ts",
     "crr-free-ebook:upload": "node --env-file=.env.local --import tsx scripts/upload-crr-book.ts --free",
-    "test": "node --import tsx --test \"src/**/*.test.ts\""
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "marketplace:backup": "node --env-file=.env.local --import tsx scripts/backup-marketplace.ts",
+    "marketplace:restore": "node --env-file=.env.local --import tsx scripts/restore-marketplace.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",

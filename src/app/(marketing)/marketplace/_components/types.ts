@@ -1,4 +1,7 @@
 import { type FeaturedBook } from "@/lib/featured-books";
+import type { MarketplaceTabId } from "@/lib/marketplace-categories";
+
+export type { MarketplaceTabId };
 
 export type AffiliateNetwork =
   | "amazon"
@@ -20,6 +23,11 @@ export interface Product {
   name: string;
   body: string;
   bullets: string[];
+  /**
+   * `src` is empty for most rows. The card renders a designed plate in that
+   * case rather than handing an empty string to next/image, which drops the
+   * src attribute entirely and leaves a blank box.
+   */
   image: { src: string; alt: string };
   priceRange: string;
   network: AffiliateNetwork;
@@ -27,9 +35,9 @@ export interface Product {
   badge?: ProductBadge;
   status: ProductStatus;
   tags?: string[];
+  /** Room or job id. See src/lib/marketplace-categories.ts. */
+  category: string;
 }
-
-export type MarketplaceTabId = "property" | "auto" | "back-office";
 
 export interface MarketplaceTab {
   id: MarketplaceTabId;

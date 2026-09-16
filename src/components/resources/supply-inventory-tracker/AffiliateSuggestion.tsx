@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { isRenderableImageUrl } from "@/lib/image-sources";
 import {
   ctaFor,
   type SuggestedProduct,
@@ -49,13 +50,20 @@ export function InlineSuggestion({ product }: { product: SuggestedProduct }) {
       className="no-print group flex items-center gap-2 w-full max-w-full rounded-md border border-warm-gold/50 bg-warm-gold/5 hover:bg-warm-gold/15 hover:border-warm-gold px-2.5 py-1.5 transition-colors"
     >
       <span className="relative w-8 h-8 shrink-0 rounded overflow-hidden bg-cream">
-        <Image
-          src={product.imageUrl}
-          alt=""
-          fill
-          sizes="32px"
-          className="object-cover"
-        />
+        {isRenderableImageUrl(product.imageUrl) ? (
+          <Image
+            src={product.imageUrl}
+            alt=""
+            fill
+            sizes="32px"
+            className="object-cover"
+          />
+        ) : (
+          <span
+            aria-hidden
+            className="absolute inset-0 bg-warm-gold/15 border border-warm-gold/30 rounded"
+          />
+        )}
       </span>
       <span className="min-w-0">
         <span className="block font-sans text-[10px] font-semibold tracking-[0.16em] uppercase text-warm-gold-dark leading-none mb-0.5">
@@ -87,13 +95,24 @@ function SuggestionCard({ product }: { product: SuggestedProduct }) {
       className="group flex flex-col bg-white border border-light-gray hover:border-warm-gold rounded-lg overflow-hidden transition-colors"
     >
       <span className="relative block aspect-[16/9] bg-cream overflow-hidden">
-        <Image
-          src={product.imageUrl}
-          alt={product.imageAlt}
-          fill
-          sizes="(min-width: 768px) 33vw, 100vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-        />
+        {isRenderableImageUrl(product.imageUrl) ? (
+          <Image
+            src={product.imageUrl}
+            alt={product.imageAlt}
+            fill
+            sizes="(min-width: 768px) 33vw, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <span
+            aria-hidden
+            className="absolute inset-0 bg-warm-gold/10"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(135deg, rgba(176,141,87,0.14) 0px, rgba(176,141,87,0.14) 1px, transparent 1px, transparent 11px)",
+            }}
+          />
+        )}
         {product.badge && (
           <span className="absolute top-2 left-2 inline-flex items-center bg-deep-teal text-white rounded-full px-2 py-0.5 font-sans text-[9px] font-semibold tracking-[0.16em] uppercase">
             {product.badge}

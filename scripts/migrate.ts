@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import { RAW_TAG_TO_CATEGORY } from "../src/lib/marketplace-categories";
 
 async function migrate() {
   const sql = neon(process.env.DATABASE_URL!);
@@ -1249,16 +1250,17 @@ async function migrate() {
 
   // ---------------------------------------------------------------------------
   // Marketplace products. Admin-managed catalog feeding /marketplace. tab_id
-  // groups by audience (property / hotel / auto / back-office). position
-  // controls display order within the tab. Slug doubles as the click-tracking
-  // product_id so existing marketplace_clicks rows keep working when a row
-  // is renamed in admin (id stays stable on update).
+  // groups by audience (property / auto / back-office), category groups by room
+  // or job within a tab, and position controls order within a category. Slug
+  // doubles as the click-tracking product_id so existing marketplace_clicks
+  // rows keep working when a row is renamed in admin (id stays stable on
+  // update).
   // ---------------------------------------------------------------------------
   await sql`
     CREATE TABLE IF NOT EXISTS marketplace_products (
       id SERIAL PRIMARY KEY,
       slug TEXT UNIQUE NOT NULL,
-      tab_id TEXT NOT NULL CHECK (tab_id IN ('property','hotel','auto','back-office')),
+      tab_id TEXT NOT NULL CHECK (tab_id IN ('property','auto','back-office')),
       name TEXT NOT NULL,
       body TEXT NOT NULL DEFAULT '',
       bullets TEXT[] NOT NULL DEFAULT '{}',
@@ -1280,6 +1282,158 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_marketplace_products_published ON marketplace_products(is_published) WHERE is_published = true`;
   console.log("  ✓ marketplace_products table created");
 
+  // ---------------------------------------------------------------------------
+  // marketplace_products.category — the room/job grouping /marketplace renders
+  // as sections.
+  //
+  // Until now the category lived in tags[0] by convention for the 80 rows
+  // imported in September 2026, so the page's grouping depended on array
+  // ordering that no UI enforced and no constraint protected. The 12 rows
+  // seeded in May 2026 never followed that convention at all: their tags[0] is
+  // a keyword ("lockbox", "dashcam"), not a category, so they would each have
+  // grouped into a one-item section.
+  //
+  // Free text, NOT a value CHECK. The canonical list lives in
+  // src/lib/marketplace-categories.ts and is enforced by the admin <select> and
+  // the API. See bookings_call_type_check above for why a value CHECK on a
+  // business-vocabulary column is the wrong trade: that constraint 500'd every
+  // booking when the canonical value changed in TypeScript. A CHECK would not
+  // prevent a typo, it would only turn a wrong string into an outage.
+  //
+  // NOT NULL DEFAULT '' matches every other optional text column here and keeps
+  // INSERT safe in both directions during a rolling deploy: new code against an
+  // old database is absorbed by rowToProduct's `?? ""`, old code against a
+  // migrated database gets the default.
+  // ---------------------------------------------------------------------------
+  const marketplaceCategoryExisted = (await sql`
+    SELECT EXISTS (
+      SELECT 1 FROM information_schema.columns
+      WHERE table_name = 'marketplace_products' AND column_name = 'category'
+    ) AS present
+  `) as Array<{ present: boolean }>;
+  const hadCategoryColumn = marketplaceCategoryExisted[0]?.present === true;
+
+  await sql`
+    ALTER TABLE marketplace_products
+    ADD COLUMN IF NOT EXISTS category TEXT NOT NULL DEFAULT ''
+  `;
+
+  // Normalization, not vocabulary. Never needs widening when a category is
+  // added, and it catches the failure that actually produces visible damage:
+  // "Bedroom" and "bedroom " rendering as two separate sections. Safe because
+  // normalizeCategory() runs inside createProduct/updateProduct, which is the
+  // single choke point every write passes through.
+  await sql`
+    DO $$ BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'marketplace_products_category_normalized'
+      ) THEN
+        ALTER TABLE marketplace_products
+          ADD CONSTRAINT marketplace_products_category_normalized
+          CHECK (category = lower(btrim(category)));
+      END IF;
+    END $$;
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_marketplace_products_category
+    ON marketplace_products(tab_id, category, position)
+  `;
+  console.log("  ✓ marketplace_products.category column ready");
+
+  // ---------------------------------------------------------------------------
+  // Retire the hotel tab.
+  //
+  // 'hotel' was dropped from VALID_TAB_IDS (src/lib/marketplace.ts) and the
+  // admin's TAB_IDS but left in the CHECK, which stranded three rows: invisible
+  // on /marketplace AND unsavable in admin. The tabId <select> has no "hotel"
+  // option, so the form displays "Property" while state still says "hotel" —
+  // saving untouched 400s, and touching the select silently retabs the product.
+  //
+  // Retabbed rather than deleted so the slugs survive for marketplace_clicks,
+  // and left unpublished so nothing appears publicly. Positions offset by 900
+  // to stay clear of the live property sequence.
+  //
+  // Order is load-bearing: the UPDATE must precede narrowing the CHECK, in the
+  // same run.
+  // ---------------------------------------------------------------------------
+  await sql`
+    UPDATE marketplace_products
+    SET tab_id = 'property', is_published = false,
+        position = 900 + position, updated_at = NOW()
+    WHERE tab_id = 'hotel'
+  `;
+  await sql`
+    DO $$ BEGIN
+      IF EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'marketplace_products_tab_id_check'
+          AND pg_get_constraintdef(oid) LIKE '%hotel%'
+      ) THEN
+        ALTER TABLE marketplace_products DROP CONSTRAINT marketplace_products_tab_id_check;
+        ALTER TABLE marketplace_products ADD CONSTRAINT marketplace_products_tab_id_check
+          CHECK (tab_id IN ('property','auto','back-office'));
+      END IF;
+    END $$;
+  `;
+  console.log("  ✓ marketplace hotel tab retired");
+
+  // ---------------------------------------------------------------------------
+  // One-time category backfill.
+  //
+  // Guarded on the column having been absent, because migrate re-runs on every
+  // deploy and an unguarded UPDATE would stomp every admin recategorisation.
+  //
+  // tags[0] is NOT stripped: MarketplaceCatalog joins tags into the search
+  // haystack, and supply-inventory-tracker/config.ts weights tag tokens highest
+  // in its restock scorer. The duplication is deliberate — category is the
+  // authoritative grouping, tags stay the search corpus. It also means this
+  // backfill touches exactly one column, so its revert is a single UPDATE.
+  // ---------------------------------------------------------------------------
+  if (!hadCategoryColumn) {
+    // Step 1: the May 2026 seed rows, keyed by slug because their tags[0] is a
+    // search keyword rather than a category. Slug-keyed, not id-keyed — ids are
+    // not a contract and id 189 is already gone from this table.
+    const LEGACY_SLUG_CATEGORY: Array<[string, string]> = [
+      ["property-smart-lockbox", "safety-smart-home"],
+      ["property-linen-set", "bedroom"],
+      ["property-mattress-topper", "bedroom"],
+      ["hotel-bathroom-amenity-set", "bathroom"],
+      ["hotel-front-desk-tablet", "operations-welcome"],
+      ["hotel-luggage-cart", "living-common"],
+      ["auto-dashcam-front-rear", "vehicle-safety"],
+      ["auto-obd2-reader", "vehicle-maintenance"],
+      ["auto-detail-kit", "vehicle-turnover"],
+      ["back-office-unreasonable-hospitality", "books"],
+      ["back-office-quickbooks", "software"],
+      ["back-office-planner", "paper"],
+    ];
+    for (const [slug, category] of LEGACY_SLUG_CATEGORY) {
+      await sql`
+        UPDATE marketplace_products SET category = ${category}
+        WHERE slug = ${slug} AND category = ''
+      `;
+    }
+
+    // Step 2: everything else. tags[1] IS the category by construction of the
+    // September 2026 import — note Postgres arrays are 1-indexed, so tags[1] is
+    // what TypeScript calls tags[0]. WHERE category = '' so step 1 always wins.
+    for (const [rawTag, category] of Object.entries(RAW_TAG_TO_CATEGORY)) {
+      await sql`
+        UPDATE marketplace_products SET category = ${category}
+        WHERE category = '' AND lower(btrim(tags[1])) = ${rawTag}
+      `;
+    }
+
+    const orphanRows = (await sql`
+      SELECT count(*)::int AS n FROM marketplace_products WHERE category = ''
+    `) as Array<{ n: number }>;
+    const orphans = orphanRows[0]?.n ?? 0;
+    console.log(
+      `  ✓ marketplace category backfilled${orphans > 0 ? ` (${orphans} left uncategorized)` : ""}`,
+    );
+  }
+
   // Seed the 12 placeholder rows from the original typed catalog. ON CONFLICT
   // on slug keeps the seed idempotent — re-running the migration won't
   // overwrite admin edits.
@@ -1298,6 +1452,8 @@ async function migrate() {
     status: string;
     tags: string[];
     position: number;
+    category: string;
+    is_published?: boolean;
   }> = [
     {
       slug: "property-smart-lockbox",
@@ -1318,6 +1474,7 @@ async function migrate() {
       status: "live",
       tags: ["lockbox", "access", "check-in", "smart lock"],
       position: 10,
+      category: "safety-smart-home",
     },
     {
       slug: "property-linen-set",
@@ -1338,6 +1495,7 @@ async function migrate() {
       status: "live",
       tags: ["linen", "bedding", "sheets", "housekeeping"],
       position: 20,
+      category: "bedroom",
     },
     {
       slug: "property-mattress-topper",
@@ -1358,10 +1516,12 @@ async function migrate() {
       status: "live",
       tags: ["mattress", "topper", "bedding", "sleep"],
       position: 30,
+      category: "bedroom",
     },
     {
       slug: "hotel-bathroom-amenity-set",
-      tab_id: "hotel",
+      tab_id: "property",
+      is_published: false,
       name: "Refillable Bathroom Amenity Set",
       body: "Stop buying single-use bottles. Refillable shampoo, conditioner, and body wash that looks more upscale than the disposable stuff anyway.",
       bullets: [
@@ -1377,11 +1537,13 @@ async function migrate() {
       badge: "New",
       status: "live",
       tags: ["amenities", "bathroom", "sustainability"],
-      position: 10,
+      position: 910,
+      category: "bathroom",
     },
     {
       slug: "hotel-front-desk-tablet",
-      tab_id: "hotel",
+      tab_id: "property",
+      is_published: false,
       name: "Front Desk Tablet Stand (Secure)",
       body: "Locking, swiveling tablet stand for self-check-in and digital concierge. Same model we recommend in Signal teardowns.",
       bullets: [
@@ -1397,11 +1559,13 @@ async function migrate() {
       badge: null,
       status: "live",
       tags: ["front desk", "tablet", "kiosk", "tech"],
-      position: 20,
+      position: 920,
+      category: "operations-welcome",
     },
     {
       slug: "hotel-luggage-cart",
-      tab_id: "hotel",
+      tab_id: "property",
+      is_published: false,
       name: "Bellhop-Style Luggage Cart",
       body: "Looks the part, rolls quietly, doesn't dent a hardwood floor. The detail that makes a 12-room property feel like a hotel.",
       bullets: [
@@ -1418,7 +1582,8 @@ async function migrate() {
       badge: null,
       status: "live",
       tags: ["lobby", "luggage", "front of house"],
-      position: 30,
+      position: 930,
+      category: "living-common",
     },
     {
       slug: "auto-dashcam-front-rear",
@@ -1439,6 +1604,7 @@ async function migrate() {
       status: "live",
       tags: ["dashcam", "turo", "evidence", "camera"],
       position: 10,
+      category: "vehicle-safety",
     },
     {
       slug: "auto-obd2-reader",
@@ -1459,6 +1625,7 @@ async function migrate() {
       status: "live",
       tags: ["obd2", "diagnostics", "turo", "maintenance"],
       position: 20,
+      category: "vehicle-maintenance",
     },
     {
       slug: "auto-detail-kit",
@@ -1479,6 +1646,7 @@ async function migrate() {
       status: "live",
       tags: ["detail", "cleaning", "turo", "turnover"],
       position: 30,
+      category: "vehicle-turnover",
     },
     {
       slug: "back-office-unreasonable-hospitality",
@@ -1499,6 +1667,7 @@ async function migrate() {
       status: "live",
       tags: ["book", "hospitality", "guidara", "training"],
       position: 10,
+      category: "books",
     },
     {
       slug: "back-office-quickbooks",
@@ -1519,6 +1688,7 @@ async function migrate() {
       status: "live",
       tags: ["accounting", "bookkeeping", "tax", "software"],
       position: 20,
+      category: "software",
     },
     {
       slug: "back-office-planner",
@@ -1539,6 +1709,7 @@ async function migrate() {
       status: "live",
       tags: ["planner", "weekly", "productivity"],
       position: 30,
+      category: "paper",
     },
   ];
 
@@ -1546,12 +1717,14 @@ async function migrate() {
     await sql`
       INSERT INTO marketplace_products (
         slug, tab_id, name, body, bullets, image_url, image_alt,
-        price_range, network, affiliate_url, badge, status, tags, position
+        price_range, network, affiliate_url, badge, status, tags, position,
+        category, is_published
       )
       VALUES (
         ${p.slug}, ${p.tab_id}, ${p.name}, ${p.body}, ${p.bullets},
         ${p.image_url}, ${p.image_alt}, ${p.price_range}, ${p.network},
-        ${p.affiliate_url}, ${p.badge}, ${p.status}, ${p.tags}, ${p.position}
+        ${p.affiliate_url}, ${p.badge}, ${p.status}, ${p.tags}, ${p.position},
+        ${p.category}, ${p.is_published ?? true}
       )
       ON CONFLICT (slug) DO NOTHING
     `;

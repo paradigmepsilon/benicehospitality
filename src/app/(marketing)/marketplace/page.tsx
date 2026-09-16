@@ -4,10 +4,7 @@ import Link from "next/link";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 import { STOCK_LIBRARY } from "@/lib/stock-images";
-import {
-  listPublishedProducts,
-  type MarketplaceTabId as DbTabId,
-} from "@/lib/marketplace";
+import { listPublishedProducts } from "@/lib/marketplace";
 import { publishedBooks, type FeaturedBook } from "@/lib/featured-books";
 import MarketplaceCatalog from "./_components/MarketplaceCatalog";
 import type {
@@ -19,7 +16,7 @@ import type {
 export const metadata: Metadata = {
   title: "The Marketplace",
   description:
-    "The gear, books, and software we actually use to run our co-living properties and fleets. Curated by audience, vetted by us.",
+    "The gear, books, and software we actually use to run our co-living properties and fleets. Organized room by room, vetted by us.",
   alternates: { canonical: "https://www.benicehospitality.com/marketplace" },
   openGraph: {
     title: "The Marketplace | Be Nice Hospitality Group",
@@ -46,10 +43,10 @@ interface TabMeta {
 const TAB_META: TabMeta[] = [
   {
     id: "property",
-    label: "Co-living Properties",
+    label: "Homes",
     sectionLabel: "Gear for co-living operators",
     headline: "What we put in every unit.",
-    body: "Lockboxes, linen, mattress upgrades, smart-home gear, and the consumables we replace on every turnover. If it lives at the property and we'd buy it again, it's here.",
+    body: "Everything that goes into furnishing and running a by-the-room house, grouped the way you actually buy it. Start with the room you are working on.",
     image: {
       src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
       alt: "Co-living and short-term rental property interior",
@@ -57,8 +54,8 @@ const TAB_META: TabMeta[] = [
   },
   {
     id: "auto",
-    label: "Autos",
-    sectionLabel: "Gear for auto operators",
+    label: "Vehicles",
+    sectionLabel: "Gear for fleet operators",
     headline: "What lives in every Be Nice Auto vehicle.",
     body: "Dashcams, OBD-II readers, turnover detail kits, and the small upgrades that keep guest reviews high and dispute resolution easy. Built around what works for Turo hosts and small fleets today.",
     image: {
@@ -79,13 +76,6 @@ const TAB_META: TabMeta[] = [
   },
 ];
 
-function tabIdMatches(
-  uiId: MarketplaceTabId,
-  dbId: DbTabId,
-): boolean {
-  return uiId === dbId;
-}
-
 // Which tab each book audience surfaces in. Co-living books land in the
 // property tab; when The Car Rental Riches Blueprint flips to available in
 // src/lib/featured-books.ts it lands in the Autos tab with no change here.
@@ -103,7 +93,7 @@ export default async function MarketplacePage() {
 
   const TABS: MarketplaceTab[] = TAB_META.map((meta) => {
     const products: Product[] = dbProducts
-      .filter((p) => tabIdMatches(meta.id, p.tabId))
+      .filter((p) => p.tabId === meta.id)
       .map((p) => ({
         id: p.slug,
         name: p.name,
@@ -116,6 +106,7 @@ export default async function MarketplacePage() {
         badge: p.badge ?? undefined,
         status: p.status,
         tags: p.tags,
+        category: p.category,
       }));
     return {
       id: meta.id,
@@ -153,7 +144,7 @@ export default async function MarketplacePage() {
           </h1>
           <p className="font-sans text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-6">
             The gear, books, and software we&rsquo;ve picked across our
-            companies. Sorted by audience, vetted by us.
+            companies. Organized room by room, vetted by us.
           </p>
           <p className="font-sans text-sm text-white/55 italic max-w-2xl">
             We earn a commission on some of these links. We only recommend what

@@ -58,3 +58,7 @@ __pycache__/
 
 # vehicle management agreement drafts — local work in progress
 /docs/management/
+
+# marketplace DB dumps from scripts/backup-marketplace.ts — generated data,
+# and the JSON embeds the production Neon hostname
+/backups/

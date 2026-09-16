@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import {
+  MARKETPLACE_CATEGORY_IDS,
+  findCategory,
+  normalizeCategory,
+} from "@/lib/marketplace-categories";
+import {
+  describeAllowedImageSources,
+  isRenderableImageUrl,
+} from "@/lib/image-sources";
+import {
   createProduct,
   listAllProducts,
   VALID_BADGES,
@@ -41,6 +50,7 @@ export async function GET(request: Request) {
 interface PostBody {
   slug?: unknown;
   tabId?: unknown;
+  category?: unknown;
   name?: unknown;
   body?: unknown;
   bullets?: unknown;
@@ -114,6 +124,35 @@ export async function POST(request: Request) {
     );
   }
 
+  const category = normalizeCategory(body.category);
+  const categoryDef = findCategory(category);
+  if (!categoryDef) {
+    return NextResponse.json(
+      { error: `category must be one of ${MARKETPLACE_CATEGORY_IDS.join(", ")}` },
+      { status: 400 },
+    );
+  }
+  if (categoryDef.tabId !== body.tabId) {
+    return NextResponse.json(
+      { error: `category "${category}" does not belong to tab "${body.tabId}"` },
+      { status: 400 },
+    );
+  }
+
+  // Empty stays allowed — 80 rows carry it and the product card falls back to a
+  // designed plate. A NON-empty value that next/image cannot render is the
+  // problem: /marketplace and /resources/supply-inventory-tracker are both
+  // force-dynamic server components with no error boundary, so an
+  // un-allowlisted host is a 500 on two public pages, saved from this form.
+  const imageUrl =
+    typeof body.imageUrl === "string" ? body.imageUrl.trim() : "";
+  if (imageUrl && !isRenderableImageUrl(imageUrl)) {
+    return NextResponse.json(
+      { error: `imageUrl must be empty, or ${describeAllowedImageSources()}` },
+      { status: 400 },
+    );
+  }
+
   const affiliateUrl =
     typeof body.affiliateUrl === "string" ? body.affiliateUrl.trim() : "";
   if (!affiliateUrl) {
@@ -135,10 +174,11 @@ export async function POST(request: Request) {
     const product = await createProduct({
       slug,
       tabId: body.tabId as MarketplaceTabId,
+      category,
       name,
       body: typeof body.body === "string" ? body.body : "",
       bullets: asStringArray(body.bullets),
-      imageUrl: typeof body.imageUrl === "string" ? body.imageUrl.trim() : "",
+      imageUrl,
       imageAlt: typeof body.imageAlt === "string" ? body.imageAlt.trim() : "",
       priceRange:
         typeof body.priceRange === "string" ? body.priceRange.trim() : "",

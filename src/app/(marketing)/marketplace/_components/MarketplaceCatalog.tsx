@@ -2,18 +2,22 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import SectionLabel from "@/components/ui/SectionLabel";
 import BookPromoBand from "@/components/sections/books/BookPromoBand";
+import {
+  groupByCategory,
+  type MarketplaceCategory,
+} from "@/lib/marketplace-categories";
 import ProductCard from "./ProductCard";
 import {
   NETWORK_LABEL,
   type AffiliateNetwork,
   type MarketplaceTab,
   type MarketplaceTabId,
+  type Product,
 } from "./types";
-
-const PAGE_SIZE = 9;
 
 type SortOption = "default" | "az" | "za";
 type NetworkFilter = "all" | AffiliateNetwork;
@@ -22,8 +26,93 @@ interface MarketplaceCatalogProps {
   tabs: MarketplaceTab[];
 }
 
-function isTabId(value: string | null, tabs: MarketplaceTab[]): value is MarketplaceTabId {
+function isTabId(
+  value: string | null,
+  tabs: MarketplaceTab[],
+): value is MarketplaceTabId {
   return value !== null && tabs.some((t) => t.id === value);
+}
+
+/** Tinted fallback for a room tile with no photograph yet. */
+function RoomPlate({ category }: { category: MarketplaceCategory | null }) {
+  const tint = category?.tint ?? "#4B5563";
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-0"
+      style={{ backgroundColor: `color-mix(in srgb, ${tint} 14%, #FAF8F3)` }}
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `repeating-linear-gradient(135deg, ${tint}1f 0px, ${tint}1f 1px, transparent 1px, transparent 13px)`,
+        }}
+      />
+    </div>
+  );
+}
+
+/**
+ * The hub. IKEA's /rooms/ is thirteen tiles and zero products; Schoolhouse
+ * gives each category tile a sentence of intro copy rather than a bare label.
+ * Both are doing the same thing: turning a long catalog into a small number of
+ * decisions. Tiles jump to the matching section rather than navigating, so the
+ * page keeps one URL and the reader keeps their filters.
+ */
+function RoomHub({
+  groups,
+  heading,
+}: {
+  groups: Array<{ category: MarketplaceCategory | null; label: string; anchor: string; items: Product[] }>;
+  heading: string;
+}) {
+  if (groups.length < 2) return null;
+  return (
+    <div className="mb-12 md:mb-16">
+      <SectionLabel>{heading}</SectionLabel>
+      <div className="mt-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {groups.map((g) => (
+          <Link
+            key={g.anchor}
+            href={`#${g.anchor}`}
+            className="group relative flex flex-col overflow-hidden rounded-card border border-warm-gold/25 bg-white transition-all duration-200 hover:border-warm-gold hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warm-gold"
+          >
+            <div className="relative aspect-[4/3] overflow-hidden bg-cream">
+              {g.category?.image ? (
+                <Image
+                  src={g.category.image.src}
+                  alt={g.category.image.alt}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  style={{ filter: "saturate(0.9) contrast(1.05)" }}
+                />
+              ) : (
+                <RoomPlate category={g.category} />
+              )}
+              <span
+                className="absolute bottom-2 right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 rounded-full bg-near-black/80 backdrop-blur-sm text-white font-sans text-[11px] font-semibold"
+                aria-hidden
+              >
+                {g.items.length}
+              </span>
+            </div>
+            <div className="flex flex-col flex-1 p-4">
+              <h3 className="font-display text-base md:text-lg font-semibold text-deep-teal leading-tight">
+                {g.label}
+                <span className="sr-only"> — {g.items.length} products</span>
+              </h3>
+              {g.category?.blurb && (
+                <p className="mt-1.5 font-sans text-xs text-charcoal/70 leading-relaxed">
+                  {g.category.blurb}
+                </p>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function CatalogInner({ tabs }: MarketplaceCatalogProps) {
@@ -36,7 +125,6 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
   const [sort, setSort] = useState<SortOption>("default");
   const [hideUnavailable, setHideUnavailable] = useState(false);
   const [network, setNetwork] = useState<NetworkFilter>("all");
-  const [page, setPage] = useState(1);
 
   const activeTab = tabs.find((t) => t.id === active) ?? tabs[0];
 
@@ -55,12 +143,7 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
       if (hideUnavailable && p.status !== "live") return false;
       if (network !== "all" && p.network !== network) return false;
       if (!q) return true;
-      const hay = [
-        p.name,
-        p.body,
-        ...(p.tags ?? []),
-        ...p.bullets,
-      ]
+      const hay = [p.name, p.body, ...(p.tags ?? []), ...p.bullets]
         .join(" ")
         .toLowerCase();
       return hay.includes(q);
@@ -73,19 +156,15 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
     return list;
   }, [activeTab, query, sort, hideUnavailable, network]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const safePage = Math.min(page, totalPages);
-  const visible = filtered.slice(
-    (safePage - 1) * PAGE_SIZE,
-    safePage * PAGE_SIZE,
+  // Grouping runs on the FILTERED list, never on activeTab.products — otherwise
+  // section headings would report counts that don't match what renders beneath
+  // them while a search is active.
+  const groups = useMemo(
+    () => (activeTab ? groupByCategory(filtered, activeTab.id) : []),
+    [filtered, activeTab],
   );
 
-  useEffect(() => {
-    setPage(1);
-  }, [active, query, sort, hideUnavailable, network]);
-
-  // Reset the network filter when switching tabs (each tab may have a
-  // different set of networks).
+  // Reset the network filter when switching tabs (each tab has its own set).
   useEffect(() => {
     setNetwork("all");
   }, [active]);
@@ -105,15 +184,15 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
     setNetwork("all");
   };
 
-  const gridCols = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
-
   return (
     <section className="bg-off-white py-10 md:py-12 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Tab strip */}
+        {/* Departments. A co-living operator and a Turo host are different
+            shoppers, so these stay separate rather than becoming rows in one
+            grid — the same reason Faire splits by store type. */}
         <div
           role="tablist"
-          aria-label="Marketplace by audience"
+          aria-label="Marketplace departments"
           className="flex flex-wrap justify-center items-end gap-x-1 gap-y-1 border-b border-warm-gold/40 mb-8 md:mb-10"
         >
           {tabs.map((t) => {
@@ -153,126 +232,12 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
           })}
         </div>
 
-        {/* Control bar */}
-        <div className="bg-cream border border-warm-gold/30 rounded-lg p-4 md:p-5 mb-8 md:mb-10">
-          <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-3 md:gap-4">
-            {/* Search */}
-            <div className="relative flex-1 min-w-0">
-              <label htmlFor="marketplace-search" className="sr-only">
-                Search products
-              </label>
-              <span
-                aria-hidden
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/45"
-              >
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="9" cy="9" r="6" />
-                  <path d="M14 14l4 4" strokeLinecap="round" />
-                </svg>
-              </span>
-              <input
-                id="marketplace-search"
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search products"
-                className="w-full bg-white border border-warm-gold/40 rounded-md pl-9 pr-3 py-2.5 font-sans text-sm text-charcoal placeholder:text-charcoal/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors"
-              />
-            </div>
-
-            {/* Network filter */}
-            {availableNetworks.length > 1 && (
-              <div className="flex items-center gap-2 shrink-0">
-                <label
-                  htmlFor="marketplace-network"
-                  className="font-sans text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase text-charcoal/60"
-                >
-                  Source
-                </label>
-                <select
-                  id="marketplace-network"
-                  value={network}
-                  onChange={(e) => setNetwork(e.target.value as NetworkFilter)}
-                  className="bg-white border border-warm-gold/40 rounded-md pl-3 pr-8 py-2.5 font-sans text-sm text-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors appearance-none bg-no-repeat"
-                  style={{
-                    backgroundImage:
-                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='none' stroke='%23807868' stroke-width='2'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
-                    backgroundPosition: "right 0.65rem center",
-                    backgroundSize: "0.75rem",
-                  }}
-                >
-                  <option value="all">All sources</option>
-                  {availableNetworks.map((n) => (
-                    <option key={n} value={n}>
-                      {NETWORK_LABEL[n]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            {/* Availability toggle */}
-            <button
-              type="button"
-              onClick={() => setHideUnavailable((v) => !v)}
-              aria-pressed={hideUnavailable}
-              className={[
-                "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-sans text-xs font-semibold tracking-[0.16em] uppercase transition-colors whitespace-nowrap",
-                hideUnavailable
-                  ? "bg-deep-teal text-white border border-deep-teal hover:bg-deep-teal/90"
-                  : "bg-white text-charcoal border border-warm-gold/40 hover:border-warm-gold hover:text-deep-teal",
-              ].join(" ")}
-            >
-              <span
-                aria-hidden
-                className={[
-                  "inline-block w-2 h-2 rounded-full",
-                  hideUnavailable ? "bg-warm-gold" : "bg-charcoal/40",
-                ].join(" ")}
-              />
-              {hideUnavailable ? "Hiding unavailable" : "Hide unavailable"}
-            </button>
-
-            {/* Sort */}
-            <div className="flex items-center gap-2 shrink-0">
-              <label
-                htmlFor="marketplace-sort"
-                className="font-sans text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase text-charcoal/60"
-              >
-                Sort
-              </label>
-              <select
-                id="marketplace-sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
-                className="bg-white border border-warm-gold/40 rounded-md pl-3 pr-8 py-2.5 font-sans text-sm text-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors appearance-none bg-no-repeat"
-                style={{
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='none' stroke='%23807868' stroke-width='2'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
-                  backgroundPosition: "right 0.65rem center",
-                  backgroundSize: "0.75rem",
-                }}
-              >
-                <option value="default">Default</option>
-                <option value="az">A to Z</option>
-                <option value="za">Z to A</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Active panel */}
         <div
           role="tabpanel"
           id={`marketplace-panel-${activeTab.id}`}
           aria-labelledby={`marketplace-tab-${activeTab.id}`}
         >
+          {/* Department intro */}
           <div className="mb-10 md:mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
               <SectionLabel>{activeTab.sectionLabel}</SectionLabel>
@@ -283,26 +248,49 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
                 {activeTab.body}
               </p>
               <p className="font-sans text-xs text-charcoal/60 italic">
-                Showing {visible.length} of {filtered.length}
-                {filtered.length !== activeTab.products.length && (
-                  <> (filtered from {activeTab.products.length})</>
-                )}
+                {filtered.length === activeTab.products.length ? (
+                  <>
+                    {activeTab.products.length} products across {groups.length}{" "}
+                    {groups.length === 1 ? "section" : "sections"}.
+                  </>
+                ) : (
+                  <>
+                    Showing {filtered.length} of {activeTab.products.length}{" "}
+                    products.
+                  </>
+                )}{" "}
+                We earn a commission on some of these links.{" "}
+                <Link
+                  href="/affiliate-disclosure"
+                  className="not-italic text-warm-gold-dark hover:underline"
+                >
+                  How this works
+                </Link>
+                .
               </p>
             </div>
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+            <div className="relative aspect-[4/3] rounded-card overflow-hidden">
               <Image
                 src={activeTab.image.src}
                 alt={activeTab.image.alt}
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                style={{ filter: "saturate(0.9) contrast(1.05)" }}
               />
             </div>
           </div>
 
-          {/* Our own books for this audience, above the affiliate grid. Sits
-              outside the filter pipeline on purpose — see MarketplaceTab.books
-              — so it stays put while the reader searches and sorts the gear. */}
+          <RoomHub
+            groups={groups}
+            heading={
+              activeTab.id === "property" ? "Shop by room" : "Shop by job"
+            }
+          />
+
+          {/* Our own books for this audience, above the affiliate sections.
+              Sits outside the filter pipeline on purpose — see
+              MarketplaceTab.books — so it stays put while the reader searches. */}
           {activeTab.books && activeTab.books.length > 0 && (
             <BookPromoBand
               books={activeTab.books}
@@ -313,16 +301,151 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
             />
           )}
 
-          {visible.length === 0 ? (
-            <div className="bg-cream border border-warm-gold/30 rounded-lg p-8 md:p-12 text-center">
+          {/* Controls. Sticky so the search box and the section jump-list stay
+              reachable down a long page — the Strategist's anchor TOC, which
+              they credit for a large share of a +450% product CTR lift.
+              top-20/24 clears the fixed header pill. */}
+          <div className="sticky top-20 md:top-24 z-30 -mx-6 px-6 py-3 mb-8 md:mb-10 bg-off-white/95 backdrop-blur-sm border-b border-warm-gold/25">
+            <div className="flex flex-col md:flex-row md:items-center gap-3">
+              <div className="relative flex-1 min-w-0">
+                <label htmlFor="marketplace-search" className="sr-only">
+                  Search products
+                </label>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/45"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="9" cy="9" r="6" />
+                    <path d="M14 14l4 4" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <input
+                  id="marketplace-search"
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={`Search ${activeTab.products.length} products`}
+                  className="w-full bg-white border border-warm-gold/40 rounded-md pl-9 pr-3 py-2.5 font-sans text-sm text-charcoal placeholder:text-charcoal/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors"
+                />
+              </div>
+
+              {availableNetworks.length > 1 && (
+                <div className="flex items-center gap-2 shrink-0">
+                  <label
+                    htmlFor="marketplace-network"
+                    className="font-sans text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase text-charcoal/60"
+                  >
+                    Source
+                  </label>
+                  <select
+                    id="marketplace-network"
+                    value={network}
+                    onChange={(e) => setNetwork(e.target.value as NetworkFilter)}
+                    className="bg-white border border-warm-gold/40 rounded-md pl-3 pr-8 py-2.5 font-sans text-sm text-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors appearance-none bg-no-repeat"
+                    style={{
+                      backgroundImage:
+                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='none' stroke='%23807868' stroke-width='2'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+                      backgroundPosition: "right 0.65rem center",
+                      backgroundSize: "0.75rem",
+                    }}
+                  >
+                    <option value="all">All sources</option>
+                    {availableNetworks.map((n) => (
+                      <option key={n} value={n}>
+                        {NETWORK_LABEL[n]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setHideUnavailable((v) => !v)}
+                aria-pressed={hideUnavailable}
+                className={[
+                  "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md font-sans text-xs font-semibold tracking-[0.16em] uppercase transition-colors whitespace-nowrap",
+                  hideUnavailable
+                    ? "bg-deep-teal text-white border border-deep-teal hover:bg-deep-teal/90"
+                    : "bg-white text-charcoal border border-warm-gold/40 hover:border-warm-gold hover:text-deep-teal",
+                ].join(" ")}
+              >
+                <span
+                  aria-hidden
+                  className={[
+                    "inline-block w-2 h-2 rounded-full",
+                    hideUnavailable ? "bg-warm-gold" : "bg-charcoal/40",
+                  ].join(" ")}
+                />
+                {hideUnavailable ? "Hiding unavailable" : "Hide unavailable"}
+              </button>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <label
+                  htmlFor="marketplace-sort"
+                  className="font-sans text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase text-charcoal/60"
+                >
+                  Sort
+                </label>
+                <select
+                  id="marketplace-sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortOption)}
+                  className="bg-white border border-warm-gold/40 rounded-md pl-3 pr-8 py-2.5 font-sans text-sm text-charcoal focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus:border-warm-gold transition-colors appearance-none bg-no-repeat"
+                  style={{
+                    backgroundImage:
+                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 20 20' fill='none' stroke='%23807868' stroke-width='2'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+                    backgroundPosition: "right 0.65rem center",
+                    backgroundSize: "0.75rem",
+                  }}
+                >
+                  <option value="default">Room order</option>
+                  <option value="az">A to Z</option>
+                  <option value="za">Z to A</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Section jump list */}
+            {groups.length > 1 && (
+              <nav
+                aria-label="Jump to a section"
+                className="mt-3 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {groups.map((g) => (
+                  <Link
+                    key={g.anchor}
+                    href={`#${g.anchor}`}
+                    className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-warm-gold/40 bg-white px-3 py-1.5 font-sans text-[11px] font-semibold tracking-[0.1em] uppercase text-charcoal/75 hover:border-warm-gold hover:text-deep-teal transition-colors"
+                  >
+                    {g.label}
+                    <span aria-hidden className="text-charcoal/45">
+                      {g.items.length}
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+            )}
+          </div>
+
+          {groups.length === 0 ? (
+            <div className="bg-cream border border-warm-gold/30 rounded-card p-8 md:p-12 text-center">
               <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-warm-gold mb-3">
                 No matches
               </p>
               <p className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight mb-4">
-                Nothing in this tab matches your filters.
+                Nothing here matches your filters.
               </p>
               <p className="font-sans text-base text-charcoal/80 leading-relaxed max-w-xl mx-auto mb-6">
-                Try a different search term, switch tabs, or clear the filters.
+                Try a different search term, switch departments, or clear the
+                filters.
               </p>
               {hasActiveFilters && (
                 <button
@@ -335,20 +458,49 @@ function CatalogInner({ tabs }: MarketplaceCatalogProps) {
               )}
             </div>
           ) : (
-            <>
-              <div className={gridCols}>
-                {visible.map((p) => (
-                  <ProductCard key={p.id} p={p} />
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <Pagination
-                  page={safePage}
-                  totalPages={totalPages}
-                  onChange={setPage}
-                />
-              )}
-            </>
+            <div className="space-y-14 md:space-y-20">
+              {groups.map((g) => (
+                <section
+                  key={g.anchor}
+                  id={g.anchor}
+                  aria-labelledby={`${g.anchor}-heading`}
+                  /* Clears the fixed header plus the sticky control bar when a
+                     jump link lands here. */
+                  className="scroll-mt-[13rem] md:scroll-mt-[15rem]"
+                >
+                  <div className="mb-6 md:mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-warm-gold/30 pb-3">
+                    <h3
+                      id={`${g.anchor}-heading`}
+                      className="font-display text-2xl md:text-3xl font-semibold text-deep-teal leading-tight tracking-tight"
+                    >
+                      {g.label}
+                    </h3>
+                    <span className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-charcoal/50">
+                      {g.items.length}{" "}
+                      {g.items.length === 1 ? "product" : "products"}
+                    </span>
+                    {g.category?.blurb && (
+                      <p className="w-full md:w-auto md:flex-1 md:text-right font-sans text-sm text-charcoal/65 leading-relaxed">
+                        {g.category.blurb}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {g.items.map((p, i) => (
+                      <ProductCard
+                        key={p.id}
+                        p={p}
+                        plate={{
+                          tint: g.category?.tint ?? "#4B5563",
+                          label: g.label,
+                          index: i + 1,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -368,112 +520,4 @@ export default function MarketplaceCatalog({ tabs }: MarketplaceCatalogProps) {
       <CatalogInner tabs={tabs} />
     </Suspense>
   );
-}
-
-function Pagination({
-  page,
-  totalPages,
-  onChange,
-}: {
-  page: number;
-  totalPages: number;
-  onChange: (n: number) => void;
-}) {
-  const pages = pageList(page, totalPages);
-
-  const go = (n: number) => {
-    if (n < 1 || n > totalPages || n === page) return;
-    onChange(n);
-  };
-
-  return (
-    <nav
-      aria-label="Marketplace pages"
-      className="mt-10 md:mt-12 flex items-center justify-center gap-1.5"
-    >
-      <button
-        type="button"
-        onClick={() => go(page - 1)}
-        disabled={page === 1}
-        aria-label="Previous page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-warm-gold/40 bg-white text-charcoal hover:border-warm-gold hover:text-deep-teal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <svg
-          className="w-4 h-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden
-        >
-          <path d="M12 5l-5 5 5 5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {pages.map((p, i) =>
-        p === "…" ? (
-          <span
-            key={`gap-${i}`}
-            aria-hidden
-            className="px-1.5 font-sans text-sm text-charcoal/50"
-          >
-            …
-          </span>
-        ) : (
-          <button
-            key={p}
-            type="button"
-            onClick={() => go(p)}
-            aria-current={p === page ? "page" : undefined}
-            aria-label={`Page ${p}`}
-            className={[
-              "inline-flex items-center justify-center w-9 h-9 rounded-md font-sans text-sm font-semibold transition-colors",
-              p === page
-                ? "bg-warm-gold text-near-black border border-warm-gold"
-                : "bg-white text-charcoal border border-warm-gold/40 hover:border-warm-gold hover:text-deep-teal",
-            ].join(" ")}
-          >
-            {p}
-          </button>
-        ),
-      )}
-
-      <button
-        type="button"
-        onClick={() => go(page + 1)}
-        disabled={page === totalPages}
-        aria-label="Next page"
-        className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-warm-gold/40 bg-white text-charcoal hover:border-warm-gold hover:text-deep-teal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <svg
-          className="w-4 h-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden
-        >
-          <path d="M8 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-    </nav>
-  );
-}
-
-function pageList(current: number, total: number): (number | "…")[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-  const set = new Set<number>([1, total, current - 1, current, current + 1]);
-  const sorted = [...set]
-    .filter((n) => n >= 1 && n <= total)
-    .sort((a, b) => a - b);
-  const out: (number | "…")[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (n - prev > 1) out.push("…");
-    out.push(n);
-    prev = n;
-  }
-  return out;
 }
