@@ -3,13 +3,16 @@ import Link from "next/link";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
 
-// Site-wide affiliate disclosure. Linked from /marketplace and from the
-// Co-Living Property Profitability Analysis Worksheet's cost sections, which
-// are the two places affiliate links actually appear today.
+// Site-wide affiliate disclosure. Linked from the /marketplace listing modal,
+// from Terms §13, and from the Co-Living Property Profitability Analysis
+// Worksheet's cost sections.
 //
 // FTC guidance is that a material connection has to be disclosed clearly and
-// near the link. The inline note next to each set of links does that job; this
-// page is the fuller explanation both of them point at.
+// near the link. On /marketplace the retailer link exists only inside the
+// listing modal (ProductModal.tsx), with the disclaimer directly under it; the
+// worksheet carries an inline note beside its links. This page is the fuller
+// explanation they point at. Don't move a retailer link back onto the cards
+// without bringing a disclosure with it.
 
 export const metadata: Metadata = {
   title: {

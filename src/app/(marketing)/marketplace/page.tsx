@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { SECTION_COLORS as C } from "@/lib/section-colors";
-import { STOCK_LIBRARY } from "@/lib/stock-images";
 import { listPublishedProducts } from "@/lib/marketplace";
-import { publishedBooks, type FeaturedBook } from "@/lib/featured-books";
+import { publishedBooks } from "@/lib/featured-books";
+import { BLUEPRINT } from "@/lib/blueprint";
+import { EMPTY_ENDORSEMENTS } from "@/lib/marketplace-endorsements";
 import MarketplaceCatalog from "./_components/MarketplaceCatalog";
 import type {
   MarketplaceTab,
@@ -29,63 +29,46 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// Tab metadata (audience copy, hero image) stays in code — only the products
-// inside each tab are admin-managed via /admin/marketplace.
-interface TabMeta {
-  id: MarketplaceTabId;
-  label: string;
-  sectionLabel: string;
-  headline: string;
-  body: string;
-  image: { src: string; alt: string };
-}
-
-const TAB_META: TabMeta[] = [
-  {
-    id: "property",
-    label: "Homes",
-    sectionLabel: "Gear for co-living operators",
-    headline: "What we put in every unit.",
-    body: "Everything that goes into furnishing and running a by-the-room house, grouped the way you actually buy it. Start with the room you are working on.",
-    image: {
-      src: "/images/Website Images/pexels-curtis-adams-1694007-16641323.jpg",
-      alt: "Co-living and short-term rental property interior",
-    },
-  },
-  {
-    id: "auto",
-    label: "Vehicles",
-    sectionLabel: "Gear for fleet operators",
-    headline: "What lives in every Be Nice Auto vehicle.",
-    body: "Dashcams, OBD-II readers, turnover detail kits, and the small upgrades that keep guest reviews high and dispute resolution easy. Built around what works for Turo hosts and small fleets today.",
-    image: {
-      src: "/images/Website Images/Alex Turo Shot.png",
-      alt: "Auto operator vehicle in a peer-to-peer rental fleet setting",
-    },
-  },
-  {
-    id: "back-office",
-    label: "Back Office",
-    sectionLabel: "Books, software, paper",
-    headline: "What runs the business behind the business.",
-    body: "Books we recommend to every operator. Software with affiliate links worth using. Paper planners that survive a real operator's week. Cross-company, cross-audience.",
-    image: {
-      src: "/images/Website Images/Workspace Nook.png",
-      alt: "Warmly lit operator workspace with books, a planner, and a laptop",
-    },
-  },
+// Tab labels stay in code — only the products inside each tab are
+// admin-managed via /admin/marketplace.
+const TAB_META: Array<{ id: MarketplaceTabId; label: string }> = [
+  { id: "property", label: "Homes" },
+  { id: "auto", label: "Vehicles" },
+  { id: "back-office", label: "Back Office" },
 ];
 
-// Which tab each book audience surfaces in. Co-living books land in the
-// property tab; when The Car Rental Riches Blueprint flips to available in
-// src/lib/featured-books.ts it lands in the Autos tab with no change here.
-const BOOK_AUDIENCE_TAB: Record<FeaturedBook["audience"], MarketplaceTabId> = {
-  property: "property",
-  fleet: "auto",
-};
+// Decorative hero panels, one per department. Not links: the department
+// switcher lives in the catalog's sticky control bar.
+const HERO_PANELS = [
+  "/images/marketplace/hero/homes.webp",
+  "/images/marketplace/hero/vehicles-turnover.webp",
+  "/images/marketplace/hero/back-office.webp",
+] as const;
 
-function booksForTab(id: MarketplaceTabId): FeaturedBook[] {
-  return publishedBooks().filter((b) => BOOK_AUDIENCE_TAB[b.audience] === id);
+// Our own books become ordinary Back Office listings rather than a promo band.
+// Everything shown is derived from the featured-book catalog, so the price,
+// name, and route can't drift from the sales page. The CTA links into that page
+// with a ?src= tag; checkout and legal copy stay there.
+function bookListings(): Product[] {
+  return publishedBooks().map((b) => ({
+    id: `book-${b.tag}`,
+    name: b.name,
+    body: b.hook,
+    // The card promotes bullets[0] as its one-line lead, so the subtitle goes first.
+    bullets: [b.subtitle, `By ${b.author}`, ...b.specs],
+    image: {
+      src: b.tag === BLUEPRINT.productTag ? "/images/blueprint_book_3d.webp" : b.coverImage,
+      alt: `${b.name} book`,
+      anchor: "center",
+    },
+    priceRange: `$${b.priceUsd}`,
+    network: "direct",
+    affiliateUrl: `${b.path}?src=marketplace-listing`,
+    status: "live",
+    category: "books",
+    firstParty: { author: b.author },
+    ...EMPTY_ENDORSEMENTS,
+  }));
 }
 
 export default async function MarketplacePage() {
@@ -107,56 +90,55 @@ export default async function MarketplacePage() {
         status: p.status,
         tags: p.tags,
         category: p.category,
+        dellaUse: p.dellaUse,
+        dellaTake: p.dellaTake,
+        alexUse: p.alexUse,
+        alexTake: p.alexTake,
       }));
     return {
       id: meta.id,
       label: meta.label,
-      sectionLabel: meta.sectionLabel,
-      headline: meta.headline,
-      body: meta.body,
-      image: meta.image,
-      products,
-      books: booksForTab(meta.id),
+      products:
+        meta.id === "back-office" ? [...bookListings(), ...products] : products,
     };
   });
 
   return (
     <>
-      <section className="relative bg-near-black pt-32 md:pt-40 lg:pt-44 pb-10 md:pb-14 px-6 md:px-12 lg:px-20 overflow-hidden">
-        <Image
-          src={STOCK_LIBRARY.src}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-30"
-        />
+      <section className="relative bg-near-black h-[400px] md:h-[460px] overflow-hidden">
+        <div aria-hidden className="absolute inset-0 grid grid-cols-3">
+          {HERO_PANELS.map((src, i) => (
+            <div
+              key={src}
+              className={[
+                "relative overflow-hidden",
+                i > 0 ? "border-l border-white/15" : "",
+              ].join(" ")}
+            >
+              <Image
+                src={src}
+                alt=""
+                fill
+                priority
+                sizes="34vw"
+                className="object-cover"
+                style={{ filter: "saturate(0.85) contrast(1.05)" }}
+              />
+              <div className="absolute inset-0 bg-near-black/45" />
+            </div>
+          ))}
+        </div>
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/85 to-near-black/60"
+          className="absolute inset-x-0 top-0 h-2/3 bg-gradient-to-b from-near-black/90 via-near-black/70 to-transparent"
         />
-        <div className="relative z-10 max-w-4xl">
-          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-8">
+        <div className="relative z-10 pt-28 md:pt-32 px-6 md:px-12 lg:px-20 text-center">
+          <p className="font-sans text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-warm-gold mb-3">
             The Marketplace
           </p>
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-[1.1] tracking-tight mb-8">
+          <h1 className="font-display text-3xl md:text-5xl font-semibold text-white leading-[1.1] tracking-tight">
             What we actually use to run the work.
           </h1>
-          <p className="font-sans text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-6">
-            The gear, books, and software we&rsquo;ve picked across our
-            companies. Organized room by room, vetted by us.
-          </p>
-          <p className="font-sans text-sm text-white/55 italic max-w-2xl">
-            We earn a commission on some of these links. We only recommend what
-            we use ourselves.{" "}
-            <Link
-              href="/affiliate-disclosure"
-              className="not-italic text-warm-gold hover:underline"
-            >
-              How this works
-            </Link>
-            .
-          </p>
         </div>
       </section>
 

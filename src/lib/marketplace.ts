@@ -5,6 +5,7 @@ import {
   type MarketplaceTabId,
 } from "./marketplace-categories";
 import { coerceImageAnchor, type ImageAnchor } from "./image-anchor";
+import type { Endorsements } from "./marketplace-endorsements";
 
 // Re-exported so existing importers keep working. The single declaration lives
 // in marketplace-categories.ts, which has no DB imports and is therefore safe
@@ -41,7 +42,7 @@ export const VALID_BADGES: ProductBadge[] = [
   "Editor's Pick",
 ];
 
-export interface MarketplaceProduct {
+export interface MarketplaceProduct extends Endorsements {
   id: number;
   slug: string;
   tabId: MarketplaceTabId;
@@ -77,6 +78,11 @@ interface ProductRow {
   image_url: string;
   image_alt: string;
   image_anchor: string | null;
+  // null only in the deploy-before-migrate window.
+  della_use: string | null;
+  della_take: string | null;
+  alex_use: string | null;
+  alex_take: string | null;
   price_range: string;
   network: string;
   affiliate_url: string;
@@ -105,6 +111,10 @@ function rowToProduct(r: ProductRow): MarketplaceProduct {
     // coerce, not cast: degrades an unexpected value to center rather than
     // handing invalid CSS to a public page. Also covers deploy-before-migrate.
     imageAnchor: coerceImageAnchor(r.image_anchor),
+    dellaUse: r.della_use ?? "",
+    dellaTake: r.della_take ?? "",
+    alexUse: r.alex_use ?? "",
+    alexTake: r.alex_take ?? "",
     priceRange: r.price_range,
     network: r.network as AffiliateNetwork,
     affiliateUrl: r.affiliate_url,
@@ -143,7 +153,7 @@ export async function listAllProducts(): Promise<MarketplaceProduct[]> {
   return rows.map(rowToProduct);
 }
 
-export interface CreateProductInput {
+export interface CreateProductInput extends Endorsements {
   slug: string;
   tabId: MarketplaceTabId;
   category: string;
@@ -171,7 +181,7 @@ export async function createProduct(
     INSERT INTO marketplace_products (
       slug, tab_id, category, name, body, bullets, image_url, image_alt,
       image_anchor, price_range, network, affiliate_url, badge, status, tags,
-      position, is_published
+      position, is_published, della_use, della_take, alex_use, alex_take
     )
     VALUES (
       ${input.slug}, ${input.tabId}, ${normalizeCategory(input.category)},
@@ -179,7 +189,8 @@ export async function createProduct(
       ${input.bullets}, ${input.imageUrl}, ${input.imageAlt},
       ${input.imageAnchor}, ${input.priceRange}, ${input.network}, ${input.affiliateUrl},
       ${input.badge}, ${input.status}, ${input.tags},
-      ${input.position}, ${input.isPublished}
+      ${input.position}, ${input.isPublished},
+      ${input.dellaUse}, ${input.dellaTake}, ${input.alexUse}, ${input.alexTake}
     )
     RETURNING *
   `) as ProductRow[];
@@ -228,6 +239,10 @@ export async function updateProduct(
       patch.isPublished === undefined
         ? existing.is_published
         : patch.isPublished,
+    della_use: patch.dellaUse ?? existing.della_use ?? "",
+    della_take: patch.dellaTake ?? existing.della_take ?? "",
+    alex_use: patch.alexUse ?? existing.alex_use ?? "",
+    alex_take: patch.alexTake ?? existing.alex_take ?? "",
   };
   const rows = (await sql`
     UPDATE marketplace_products SET
@@ -248,6 +263,10 @@ export async function updateProduct(
       tags = ${next.tags},
       position = ${next.position},
       is_published = ${next.is_published},
+      della_use = ${next.della_use},
+      della_take = ${next.della_take},
+      alex_use = ${next.alex_use},
+      alex_take = ${next.alex_take},
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *

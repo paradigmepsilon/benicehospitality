@@ -1365,6 +1365,25 @@ async function migrate() {
   console.log("  ✓ marketplace_products.image_anchor column ready");
 
   // ---------------------------------------------------------------------------
+  // marketplace_products endorsement copy — how Della or Alex uses an item and
+  // their verdict on it, shown in the listing modal.
+  //
+  // DEFAULT '' because an empty field is the "not approved yet" state: the
+  // modal renders a block only when its text is non-empty, so adding the
+  // columns changes nothing on the public page. Filled only through the admin
+  // form or scripts/import-marketplace-endorsements.ts, which imports approved
+  // drafts only. See src/lib/marketplace-endorsements.ts.
+  // ---------------------------------------------------------------------------
+  await sql`
+    ALTER TABLE marketplace_products
+    ADD COLUMN IF NOT EXISTS della_use TEXT NOT NULL DEFAULT '',
+    ADD COLUMN IF NOT EXISTS della_take TEXT NOT NULL DEFAULT '',
+    ADD COLUMN IF NOT EXISTS alex_use TEXT NOT NULL DEFAULT '',
+    ADD COLUMN IF NOT EXISTS alex_take TEXT NOT NULL DEFAULT ''
+  `;
+  console.log("  ✓ marketplace_products endorsement columns ready");
+
+  // ---------------------------------------------------------------------------
   // Retire the hotel tab.
   //
   // 'hotel' was dropped from VALID_TAB_IDS (src/lib/marketplace.ts) and the

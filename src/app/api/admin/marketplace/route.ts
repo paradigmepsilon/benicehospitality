@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import {
+  EMPTY_ENDORSEMENTS,
+  parseEndorsementFields,
+} from "@/lib/marketplace-endorsements";
+import {
   MARKETPLACE_CATEGORY_IDS,
   findCategory,
   normalizeCategory,
@@ -52,7 +56,7 @@ export async function GET(request: Request) {
   return NextResponse.json({ products });
 }
 
-interface PostBody {
+interface PostBody extends Record<string, unknown> {
   slug?: unknown;
   tabId?: unknown;
   category?: unknown;
@@ -169,6 +173,11 @@ export async function POST(request: Request) {
   }
   const imageAnchor = coerceImageAnchor(body.imageAnchor);
 
+  const endorsements = parseEndorsementFields(body);
+  if (!endorsements.ok) {
+    return NextResponse.json({ error: endorsements.error }, { status: 400 });
+  }
+
   const affiliateUrl =
     typeof body.affiliateUrl === "string" ? body.affiliateUrl.trim() : "";
   if (!affiliateUrl) {
@@ -207,6 +216,8 @@ export async function POST(request: Request) {
       position: typeof body.position === "number" ? body.position : 0,
       isPublished:
         typeof body.isPublished === "boolean" ? body.isPublished : true,
+      ...EMPTY_ENDORSEMENTS,
+      ...endorsements.values,
     });
     return NextResponse.json({ product });
   } catch (err) {

@@ -11,6 +11,12 @@ import type {
 } from "@/lib/marketplace";
 import { isRenderableImageUrl } from "@/lib/image-sources";
 import {
+  ENDORSEMENT_MAX_LENGTH,
+  ENDORSER_NAME,
+  endorsersForTab,
+  type Endorsements,
+} from "@/lib/marketplace-endorsements";
+import {
   DEFAULT_IMAGE_ANCHOR,
   IMAGE_ANCHORS,
   IMAGE_ANCHOR_LABELS,
@@ -67,7 +73,7 @@ interface Props {
 
 type FilterTab = "all" | MarketplaceTabId;
 
-interface FormState {
+interface FormState extends Endorsements {
   slug: string;
   tabId: MarketplaceTabId;
   category: string;
@@ -106,6 +112,10 @@ function blankForm(): FormState {
     tags: "",
     position: "0",
     isPublished: true,
+    dellaUse: "",
+    dellaTake: "",
+    alexUse: "",
+    alexTake: "",
   };
 }
 
@@ -128,6 +138,10 @@ function productToForm(p: MarketplaceProduct): FormState {
     tags: p.tags.join(", "),
     position: String(p.position),
     isPublished: p.isPublished,
+    dellaUse: p.dellaUse,
+    dellaTake: p.dellaTake,
+    alexUse: p.alexUse,
+    alexTake: p.alexTake,
   };
 }
 
@@ -156,6 +170,12 @@ function formToPayload(f: FormState) {
       .filter(Boolean),
     position: Number(f.position) || 0,
     isPublished: f.isPublished,
+    // Always sent, including fields hidden for this tab, so switching a row's
+    // tab never silently wipes copy that was already approved.
+    dellaUse: f.dellaUse.trim(),
+    dellaTake: f.dellaTake.trim(),
+    alexUse: f.alexUse.trim(),
+    alexTake: f.alexTake.trim(),
   };
 }
 
@@ -665,6 +685,46 @@ function ProductForm({
             className={inputClass}
           />
         </label>
+
+        {endorsersForTab(form.tabId).map((who) => {
+          const useKey = who === "della" ? "dellaUse" : "alexUse";
+          const takeKey = who === "della" ? "dellaTake" : "alexTake";
+          const name = ENDORSER_NAME[who];
+          return (
+            <fieldset
+              key={who}
+              className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 rounded-md border border-light-gray p-4"
+            >
+              <legend className="px-1 text-xs font-semibold text-near-black">
+                {name}&apos;s endorsement{" "}
+                <span className="font-normal text-near-black/55">
+                  (shown in the listing modal only when filled. Only enter
+                  words {name} has approved.)
+                </span>
+              </legend>
+              <label className="flex flex-col gap-1.5">
+                <FieldLabel>How {name} uses it</FieldLabel>
+                <textarea
+                  rows={3}
+                  maxLength={ENDORSEMENT_MAX_LENGTH}
+                  value={form[useKey]}
+                  onChange={(e) => update(useKey, e.target.value)}
+                  className={`${inputClass} resize-y`}
+                />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <FieldLabel>{name}&apos;s take</FieldLabel>
+                <textarea
+                  rows={3}
+                  maxLength={ENDORSEMENT_MAX_LENGTH}
+                  value={form[takeKey]}
+                  onChange={(e) => update(takeKey, e.target.value)}
+                  className={`${inputClass} resize-y`}
+                />
+              </label>
+            </fieldset>
+          );
+        })}
 
         <label className="flex flex-col gap-1.5">
           <FieldLabel>Price range</FieldLabel>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
+import { parseEndorsementFields } from "@/lib/marketplace-endorsements";
 import {
   MARKETPLACE_CATEGORY_IDS,
   findCategory,
@@ -28,7 +29,7 @@ interface RouteContext {
   params: Promise<{ id: string }>;
 }
 
-interface PatchBody {
+interface PatchBody extends Record<string, unknown> {
   slug?: unknown;
   tabId?: unknown;
   category?: unknown;
@@ -149,6 +150,11 @@ export async function PATCH(request: Request, ctx: RouteContext) {
     patch.imageAnchor = body.imageAnchor;
   }
   if (typeof body.imageAlt === "string") patch.imageAlt = body.imageAlt.trim();
+  const endorsements = parseEndorsementFields(body);
+  if (!endorsements.ok) {
+    return NextResponse.json({ error: endorsements.error }, { status: 400 });
+  }
+  Object.assign(patch, endorsements.values);
   if (typeof body.priceRange === "string")
     patch.priceRange = body.priceRange.trim();
   if (typeof body.network === "string") {

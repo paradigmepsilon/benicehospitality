@@ -3,14 +3,9 @@
 import Image from "next/image";
 import { isRenderableImageUrl } from "@/lib/image-sources";
 import { objectPositionFor } from "@/lib/image-anchor";
-import {
-  NETWORK_CTA,
-  NETWORK_LABEL,
-  type Product,
-  type ProductBadge,
-} from "./types";
+import { NETWORK_LABEL, type Product, type ProductBadge } from "./types";
 
-function badgeTone(badge: ProductBadge): string {
+export function badgeTone(badge: ProductBadge): string {
   switch (badge) {
     case "Della Uses This":
       return "bg-deep-teal text-white";
@@ -44,7 +39,7 @@ export interface PlateSpec {
  * When Amazon PA-API access opens and real product photography lands in
  * image_url, this is simply no longer rendered — see the branch in ProductCard.
  */
-function ProductPlate({ tint, label, index }: PlateSpec) {
+export function ProductPlate({ tint, label, index }: PlateSpec) {
   return (
     <div
       aria-hidden
@@ -74,69 +69,84 @@ function ProductPlate({ tint, label, index }: PlateSpec) {
   );
 }
 
-export default function ProductCard({
+/** The dark pill on the photo: the retailer, or "Our book" for first-party. */
+export function sourceLabel(p: Product): string {
+  return p.firstParty ? "Our book" : NETWORK_LABEL[p.network];
+}
+
+/**
+ * The listing's photo slot, shared with the modal. First-party book art is a
+ * cut-out on a transparent ground, so it is contained rather than cropped.
+ */
+export function ProductPhoto({
   p,
   plate,
+  sizes,
 }: {
   p: Product;
   plate: PlateSpec;
+  sizes: string;
 }) {
-  const inactive = p.status !== "live";
-  const cta = NETWORK_CTA[p.network];
-  const networkLabel = NETWORK_LABEL[p.network];
-
   // Guard the src rather than trusting the column. An empty string makes
   // next/image render an <img> with no src at all; an un-allowlisted host makes
   // it throw during server render. Both are reachable from the admin form.
-  const hasPhoto = isRenderableImageUrl(p.image.src);
+  if (!isRenderableImageUrl(p.image.src)) return <ProductPlate {...plate} />;
+  return (
+    <Image
+      src={p.image.src}
+      alt={p.image.alt}
+      fill
+      sizes={sizes}
+      className={
+        p.firstParty
+          ? "object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]"
+          : "object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+      }
+      style={{
+        filter: p.firstParty ? undefined : "saturate(0.9) contrast(1.05)",
+        objectPosition: objectPositionFor(p.image.anchor),
+      }}
+    />
+  );
+}
+
+/**
+ * A listing tile. The whole card is one button that opens ProductModal; the
+ * outbound retailer link and its affiliate disclaimer live only in the modal,
+ * so the disclosure always sits next to the one link that needs it.
+ */
+export default function ProductCard({
+  p,
+  plate,
+  onOpen,
+}: {
+  p: Product;
+  plate: PlateSpec;
+  onOpen: (p: Product, trigger: HTMLElement) => void;
+}) {
+  const inactive = p.status !== "live";
+  const networkLabel = sourceLabel(p);
 
   // The first bullet is promoted onto the card as the one-line reason to care.
   // The rest stay below, so the card reads at a glance but still rewards
   // stopping on it.
   const [lead, ...rest] = p.bullets;
 
-  const handleClick = () => {
-    try {
-      fetch("/api/marketplace/click", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: p.id,
-          network: p.network,
-          referrer: typeof window !== "undefined" ? window.location.pathname : null,
-        }),
-        keepalive: true,
-      }).catch(() => {});
-    } catch {
-      // Tracking is best-effort. Never block the affiliate navigation.
-    }
-  };
-
   const containerClass = inactive
-    ? "group relative flex flex-col bg-light-gray/60 border border-light-gray rounded-card overflow-hidden h-full opacity-75 transition-all duration-200 hover:opacity-90"
+    ? "group relative flex flex-col bg-light-gray/60 border border-light-gray rounded-card overflow-hidden h-full opacity-75 transition-all duration-200 cursor-pointer hover:opacity-90 focus-within:opacity-90"
     : "group relative flex flex-col bg-white border border-light-gray rounded-card overflow-hidden h-full transition-all duration-200 cursor-pointer hover:border-warm-gold hover:-translate-y-1 focus-within:border-warm-gold";
 
   return (
     <article className={containerClass}>
       <div className="relative aspect-[16/9] overflow-hidden bg-cream">
-        {hasPhoto ? (
-          <Image
-            src={p.image.src}
-            alt={p.image.alt}
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            style={{
-              filter: "saturate(0.9) contrast(1.05)",
-              objectPosition: objectPositionFor(p.image.anchor),
-            }}
-          />
-        ) : (
-          <ProductPlate {...plate} />
-        )}
+        <ProductPhoto
+          p={p}
+          plate={plate}
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+        />
         <span
           className="absolute top-3 right-3 inline-flex items-center gap-1 bg-near-black/80 backdrop-blur-sm text-white rounded-full px-2.5 py-1 font-sans text-[10px] font-semibold tracking-[0.16em] uppercase"
-          aria-label={`Available on ${networkLabel}`}
+          aria-label={p.firstParty ? networkLabel : `Available on ${networkLabel}`}
         >
           {networkLabel}
         </span>
@@ -199,30 +209,28 @@ export default function ProductCard({
           </ul>
         )}
 
-        {inactive ? (
-          <span className="mt-auto pt-2 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide text-charcoal/55">
-            {p.status === "soon" ? "On the way" : "Currently unavailable"}
-          </span>
-        ) : (
-          <a
-            href={p.affiliateUrl}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            onClick={handleClick}
-            /* before:inset-0 makes the whole card one hover target and one
-               link. Baymard finds 76% of sites fail to do this. */
-            className="mt-auto pt-2 inline-flex items-center gap-1.5 font-sans text-sm font-semibold tracking-wide text-warm-gold-dark hover:text-deep-teal transition-colors outline-none before:absolute before:inset-0 before:z-10 before:content-['']"
-          >
-            <span className="sr-only">{p.name}: </span>
-            {cta}
-            <span
-              aria-hidden
-              className="inline-block transition-transform duration-200 group-hover:translate-x-1"
-            >
-              →
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          onClick={(e) => onOpen(p, e.currentTarget)}
+          /* before:inset-0 makes the whole card one hover target and one
+             control. Baymard finds 76% of sites fail to do this. */
+          className="mt-auto pt-2 inline-flex items-center gap-1.5 self-start font-sans text-sm font-semibold tracking-wide text-warm-gold-dark hover:text-deep-teal transition-colors outline-none focus-visible:underline before:absolute before:inset-0 before:z-10 before:content-['']"
+        >
+          <span className="sr-only">{p.name}: </span>
+          {inactive && (
+            <span className="text-charcoal/55">
+              {p.status === "soon" ? "On the way" : "Currently unavailable"} ·{" "}
             </span>
-          </a>
-        )}
+          )}
+          View details
+          <span
+            aria-hidden
+            className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+          >
+            →
+          </span>
+        </button>
       </div>
     </article>
   );

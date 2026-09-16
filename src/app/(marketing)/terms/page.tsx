@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
 };
 
-const EFFECTIVE_DATE = "July 11, 2026";
+const EFFECTIVE_DATE = "September 16, 2026";
 
 export default function TermsPage() {
   return (
@@ -309,6 +309,21 @@ export default function TermsPage() {
               (Stripe, Guestally, calendar tools, and others). Those
               services are governed by their own terms and privacy
               policies. We are not responsible for them.
+            </p>
+            <p>
+              Some product links on the site, including those in the
+              Marketplace, are affiliate links. We earn a commission on some
+              of these links, and as an Amazon Associate we earn from
+              qualifying purchases. You pay the same price either way. We
+              only recommend what we use ourselves, and affiliate links are
+              marked where they appear. See our{" "}
+              <Link
+                href="/affiliate-disclosure"
+                className="text-primary-green hover:text-primary-green-dark underline underline-offset-2"
+              >
+                affiliate disclosure
+              </Link>{" "}
+              for how this works.
             </p>
           </LegalSection>
 

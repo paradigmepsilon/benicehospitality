@@ -61,6 +61,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 1,
     blurb: "Beds, mattresses, linens, and the desk that makes a room work for a travel nurse.",
     tint: "#1A4D4F",
+    image: {
+      src: "/images/marketplace/rooms/bedroom.webp",
+      alt: "Co-living bedroom with a made bed and a small desk by the window",
+    },
   },
   {
     id: "living-common",
@@ -69,6 +73,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 2,
     blurb: "The shared spaces residents actually judge the house on.",
     tint: "#B08D57",
+    image: {
+      src: "/images/marketplace/rooms/living-common.webp",
+      alt: "Shared living room with a sage sofa, wood coffee table, and rug",
+    },
   },
   {
     id: "kitchen-dining",
@@ -77,6 +85,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 3,
     blurb: "Appliances, cookware, and the labeled storage that stops shared-kitchen arguments.",
     tint: "#c0674a",
+    image: {
+      src: "/images/marketplace/rooms/kitchen-dining-shared.webp",
+      alt: "Shared kitchen with matching storage bins and a small dining table",
+    },
   },
   {
     id: "bathroom",
@@ -85,6 +97,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 4,
     blurb: "Fixtures that survive four people, plus the consumables you restock every month.",
     tint: "#2D6A6C",
+    image: {
+      src: "/images/marketplace/rooms/bathroom.webp",
+      alt: "Bathroom vanity with rolled towels and refillable pump bottles",
+    },
   },
   {
     id: "laundry-linen",
@@ -93,6 +109,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 5,
     blurb: "What keeps towels and sheets in rotation instead of in the donation pile.",
     tint: "#4B5563",
+    image: {
+      src: "/images/marketplace/rooms/laundry-linen.webp",
+      alt: "Laundry room with folded towels and sheets above a washer and dryer",
+    },
   },
   {
     id: "cleaning-turnover",
@@ -101,6 +121,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 6,
     blurb: "The cart that resets a room between residents without a second trip to the store.",
     tint: "#2C3E50",
+    image: {
+      src: "/images/marketplace/rooms/cleaning-turnover.webp",
+      alt: "Turnover cart with a cleaning caddy, microfiber cloths, and fresh linens",
+    },
   },
   {
     id: "safety-smart-home",
@@ -109,6 +133,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 7,
     blurb: "Locks, detectors, and the connectivity that makes self-check-in work.",
     tint: "#bc3229",
+    image: {
+      src: "/images/marketplace/rooms/safety-smart-home.webp",
+      alt: "Keypad smart lock on a front door beside a console with a router",
+    },
   },
   {
     id: "operations-welcome",
@@ -117,6 +145,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 8,
     blurb: "Curb appeal, entry, labeling, and what greets a resident on day one.",
     tint: "#294d8c",
+    image: {
+      src: "/images/marketplace/rooms/operations-welcome.webp",
+      alt: "Craftsman front porch with a welcome basket on a bench",
+    },
   },
 
   {
@@ -126,6 +158,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 1,
     blurb: "What settles a damage dispute before it becomes your word against theirs.",
     tint: "#294d8c",
+    image: {
+      src: "/images/marketplace/rooms/vehicle-safety.webp",
+      alt: "Dashcam mounted behind a car's rear-view mirror",
+    },
   },
   {
     id: "vehicle-maintenance",
@@ -134,6 +170,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 2,
     blurb: "Diagnostics and upkeep that catch a problem before a guest does.",
     tint: "#2C3E50",
+    image: {
+      src: "/images/marketplace/rooms/vehicle-maintenance.webp",
+      alt: "OBD-II scanner plugged in under a car dashboard",
+    },
   },
   {
     id: "vehicle-turnover",
@@ -142,6 +182,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 3,
     blurb: "The kit that resets a car between trips and keeps review scores up.",
     tint: "#2D6A6C",
+    image: {
+      src: "/images/marketplace/rooms/vehicle-turnover.webp",
+      alt: "Car detailing kit laid out on a workbench beside a car",
+    },
   },
 
   {
@@ -151,6 +195,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 1,
     blurb: "The handful worth the shelf space.",
     tint: "#1A4D4F",
+    image: {
+      src: "/images/marketplace/rooms/books.webp",
+      alt: "Stack of hardcover books on an oak desk beside a coffee mug",
+    },
   },
   {
     id: "software",
@@ -159,6 +207,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 2,
     blurb: "What we run the books and the business on.",
     tint: "#c0674a",
+    image: {
+      src: "/images/marketplace/rooms/software.webp",
+      alt: "Laptop showing a bookkeeping dashboard beside a calculator",
+    },
   },
   {
     id: "paper",
@@ -167,6 +219,10 @@ export const MARKETPLACE_CATEGORIES: readonly MarketplaceCategory[] = [
     position: 3,
     blurb: "Analog tools that survive a real operator's week.",
     tint: "#B08D57",
+    image: {
+      src: "/images/marketplace/rooms/paper.webp",
+      alt: "Open weekly paper planner with a brass pen and coffee",
+    },
   },
 ] as const;
 

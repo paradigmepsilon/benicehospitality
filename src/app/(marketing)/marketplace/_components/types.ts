@@ -1,6 +1,6 @@
-import { type FeaturedBook } from "@/lib/featured-books";
 import type { MarketplaceTabId } from "@/lib/marketplace-categories";
 import type { ImageAnchor } from "@/lib/image-anchor";
+import type { Endorsements } from "@/lib/marketplace-endorsements";
 
 export type { MarketplaceTabId };
 
@@ -19,7 +19,16 @@ export type ProductBadge =
 
 export type ProductStatus = "live" | "out-of-stock" | "soon";
 
-export interface Product {
+/**
+ * A listing. Most come from marketplace_products (affiliate links); first-party
+ * books are mapped in from src/lib/featured-books.ts by page.tsx and carry
+ * `firstParty`, which swaps the affiliate CTA and disclaimer for a link to the
+ * book's own sales page.
+ *
+ * Endorsement fields are "" until approved. See marketplace-endorsements.ts.
+ */
+export interface Product extends Endorsements {
+  /** Slug. Also the product id recorded by /api/marketplace/click. */
   id: string;
   name: string;
   body: string;
@@ -38,23 +47,14 @@ export interface Product {
   tags?: string[];
   /** Room or job id. See src/lib/marketplace-categories.ts. */
   category: string;
+  /** Set on our own books. Never an affiliate link. */
+  firstParty?: { author: string };
 }
 
 export interface MarketplaceTab {
   id: MarketplaceTabId;
   label: string;
-  sectionLabel: string;
-  headline: string;
-  body: string;
-  image: { src: string; alt: string };
   products: Product[];
-  /**
-   * First-party books promoted at the top of this tab's panel, matched to the
-   * tab's audience in page.tsx. Deliberately NOT part of `products`: books are
-   * ours, not affiliate listings, so they sit above the grid and stay out of
-   * the search, sort, network filter, and the tab count badge.
-   */
-  books?: FeaturedBook[];
 }
 
 export const NETWORK_LABEL: Record<AffiliateNetwork, string> = {
