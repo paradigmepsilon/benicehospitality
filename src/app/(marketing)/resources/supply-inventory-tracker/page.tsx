@@ -42,6 +42,7 @@ async function loadSuggestions(): Promise<SuggestedProduct[]> {
         network: p.network,
         affiliateUrl: p.affiliateUrl,
         imageUrl: p.imageUrl,
+        imageAnchor: p.imageAnchor,
         imageAlt: p.imageAlt,
         badge: p.badge,
         tags: p.tags,

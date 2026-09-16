@@ -1,4 +1,5 @@
 import type { AffiliateNetwork } from "@/lib/marketplace";
+import type { ImageAnchor } from "@/lib/image-anchor";
 
 // Supply Inventory Tracker — digitized from Della's "Product/Supply Inventory
 // Tracker" handout, then rebuilt around the way it actually gets used: someone
@@ -289,6 +290,7 @@ export interface SuggestedProduct {
   affiliateUrl: string;
   imageUrl: string;
   imageAlt: string;
+  imageAnchor: ImageAnchor;
   badge: string | null;
   tags: string[];
 }

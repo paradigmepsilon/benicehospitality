@@ -10,6 +10,11 @@ import {
   isRenderableImageUrl,
 } from "@/lib/image-sources";
 import {
+  IMAGE_ANCHORS,
+  coerceImageAnchor,
+  isImageAnchor,
+} from "@/lib/image-anchor";
+import {
   createProduct,
   listAllProducts,
   VALID_BADGES,
@@ -55,6 +60,7 @@ interface PostBody {
   body?: unknown;
   bullets?: unknown;
   imageUrl?: unknown;
+  imageAnchor?: unknown;
   imageAlt?: unknown;
   priceRange?: unknown;
   network?: unknown;
@@ -153,6 +159,16 @@ export async function POST(request: Request) {
     );
   }
 
+  // Rejected rather than silently coerced: an ignored anchor reads as a broken
+  // feature. Omitting the field entirely is still fine and means center.
+  if (body.imageAnchor !== undefined && !isImageAnchor(body.imageAnchor)) {
+    return NextResponse.json(
+      { error: `imageAnchor must be one of ${IMAGE_ANCHORS.join(", ")}` },
+      { status: 400 },
+    );
+  }
+  const imageAnchor = coerceImageAnchor(body.imageAnchor);
+
   const affiliateUrl =
     typeof body.affiliateUrl === "string" ? body.affiliateUrl.trim() : "";
   if (!affiliateUrl) {
@@ -180,6 +196,7 @@ export async function POST(request: Request) {
       bullets: asStringArray(body.bullets),
       imageUrl,
       imageAlt: typeof body.imageAlt === "string" ? body.imageAlt.trim() : "",
+      imageAnchor,
       priceRange:
         typeof body.priceRange === "string" ? body.priceRange.trim() : "",
       network: body.network as AffiliateNetwork,

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { isRenderableImageUrl } from "@/lib/image-sources";
+import { objectPositionFor } from "@/lib/image-anchor";
 import {
   NETWORK_CTA,
   NETWORK_LABEL,
@@ -125,7 +126,10 @@ export default function ProductCard({
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            style={{ filter: "saturate(0.9) contrast(1.05)" }}
+            style={{
+              filter: "saturate(0.9) contrast(1.05)",
+              objectPosition: objectPositionFor(p.image.anchor),
+            }}
           />
         ) : (
           <ProductPlate {...plate} />

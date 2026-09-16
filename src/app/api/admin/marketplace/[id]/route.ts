@@ -9,6 +9,7 @@ import {
   describeAllowedImageSources,
   isRenderableImageUrl,
 } from "@/lib/image-sources";
+import { IMAGE_ANCHORS, isImageAnchor } from "@/lib/image-anchor";
 import {
   deleteProduct,
   updateProduct,
@@ -35,6 +36,7 @@ interface PatchBody {
   body?: unknown;
   bullets?: unknown;
   imageUrl?: unknown;
+  imageAnchor?: unknown;
   imageAlt?: unknown;
   priceRange?: unknown;
   network?: unknown;
@@ -136,6 +138,15 @@ export async function PATCH(request: Request, ctx: RouteContext) {
       );
     }
     patch.imageUrl = trimmed;
+  }
+  if (body.imageAnchor !== undefined) {
+    if (!isImageAnchor(body.imageAnchor)) {
+      return NextResponse.json(
+        { error: `imageAnchor must be one of ${IMAGE_ANCHORS.join(", ")}` },
+        { status: 400 },
+      );
+    }
+    patch.imageAnchor = body.imageAnchor;
   }
   if (typeof body.imageAlt === "string") patch.imageAlt = body.imageAlt.trim();
   if (typeof body.priceRange === "string")

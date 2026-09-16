@@ -1,5 +1,6 @@
 import { type FeaturedBook } from "@/lib/featured-books";
 import type { MarketplaceTabId } from "@/lib/marketplace-categories";
+import type { ImageAnchor } from "@/lib/image-anchor";
 
 export type { MarketplaceTabId };
 
@@ -28,7 +29,7 @@ export interface Product {
    * case rather than handing an empty string to next/image, which drops the
    * src attribute entirely and leaves a blank box.
    */
-  image: { src: string; alt: string };
+  image: { src: string; alt: string; anchor: ImageAnchor };
   priceRange: string;
   network: AffiliateNetwork;
   affiliateUrl: string;

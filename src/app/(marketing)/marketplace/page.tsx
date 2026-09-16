@@ -99,7 +99,7 @@ export default async function MarketplacePage() {
         name: p.name,
         body: p.body,
         bullets: p.bullets,
-        image: { src: p.imageUrl, alt: p.imageAlt },
+        image: { src: p.imageUrl, alt: p.imageAlt, anchor: p.imageAnchor },
         priceRange: p.priceRange,
         network: p.network,
         affiliateUrl: p.affiliateUrl,

@@ -1342,6 +1342,29 @@ async function migrate() {
   console.log("  ✓ marketplace_products.category column ready");
 
   // ---------------------------------------------------------------------------
+  // marketplace_products.image_anchor — which part of the photo survives the crop.
+  //
+  // Product images render into fixed-aspect boxes with object-cover, so a
+  // portrait shot (packaging, a tall bottle) loses its top and bottom. This maps
+  // to CSS object-position so the admin can keep the identifying part.
+  //
+  // NO value CHECK, deliberately, for the same reason category has none: a CHECK
+  // on a vocabulary column cannot prevent a typo, it can only convert a wrong
+  // string into an outage. The canonical list lives in src/lib/image-anchor.ts,
+  // the admin button group and the API guard enforce it on write, and
+  // coerceImageAnchor() degrades anything unexpected to 'center' on read.
+  //
+  // DEFAULT 'center' is exactly how every one of these images rendered before
+  // this column existed, so the backfill is a no-op visually and a rolling
+  // deploy is safe in both directions.
+  // ---------------------------------------------------------------------------
+  await sql`
+    ALTER TABLE marketplace_products
+    ADD COLUMN IF NOT EXISTS image_anchor TEXT NOT NULL DEFAULT 'center'
+  `;
+  console.log("  ✓ marketplace_products.image_anchor column ready");
+
+  // ---------------------------------------------------------------------------
   // Retire the hotel tab.
   //
   // 'hotel' was dropped from VALID_TAB_IDS (src/lib/marketplace.ts) and the

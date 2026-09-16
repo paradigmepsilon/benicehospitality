@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition, type FormEvent } from "react";
+import { useMemo, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type {
   AffiliateNetwork,
@@ -9,6 +9,14 @@ import type {
   ProductBadge,
   ProductStatus,
 } from "@/lib/marketplace";
+import { isRenderableImageUrl } from "@/lib/image-sources";
+import {
+  DEFAULT_IMAGE_ANCHOR,
+  IMAGE_ANCHORS,
+  IMAGE_ANCHOR_LABELS,
+  objectPositionFor,
+  type ImageAnchor,
+} from "@/lib/image-anchor";
 import {
   MARKETPLACE_TAB_IDS,
   MARKETPLACE_TAB_LABELS,
@@ -68,6 +76,7 @@ interface FormState {
   bullets: string;
   imageUrl: string;
   imageAlt: string;
+  imageAnchor: ImageAnchor;
   priceRange: string;
   network: AffiliateNetwork;
   affiliateUrl: string;
@@ -88,6 +97,7 @@ function blankForm(): FormState {
     bullets: "",
     imageUrl: "",
     imageAlt: "",
+    imageAnchor: DEFAULT_IMAGE_ANCHOR,
     priceRange: "",
     network: "amazon",
     affiliateUrl: "",
@@ -109,6 +119,7 @@ function productToForm(p: MarketplaceProduct): FormState {
     bullets: p.bullets.join("\n"),
     imageUrl: p.imageUrl,
     imageAlt: p.imageAlt,
+    imageAnchor: p.imageAnchor,
     priceRange: p.priceRange,
     network: p.network,
     affiliateUrl: p.affiliateUrl,
@@ -133,6 +144,7 @@ function formToPayload(f: FormState) {
       .filter(Boolean),
     imageUrl: f.imageUrl.trim(),
     imageAlt: f.imageAlt.trim(),
+    imageAnchor: f.imageAnchor,
     priceRange: f.priceRange.trim(),
     network: f.network,
     affiliateUrl: f.affiliateUrl.trim(),
@@ -636,16 +648,12 @@ function ProductForm({
           />
         </label>
 
-        <label className="flex flex-col gap-1.5">
-          <FieldLabel>Image URL</FieldLabel>
-          <input
-            type="text"
-            value={form.imageUrl}
-            onChange={(e) => update("imageUrl", e.target.value)}
-            placeholder="/images/products/lockbox.jpg"
-            className={inputClass}
-          />
-        </label>
+        <ImageField
+          value={form.imageUrl}
+          onChange={(next) => update("imageUrl", next)}
+          anchor={form.imageAnchor}
+          onAnchorChange={(next) => update("imageAnchor", next)}
+        />
 
         <label className="flex flex-col gap-1.5">
           <FieldLabel>Image alt text</FieldLabel>
@@ -840,6 +848,220 @@ function EditModal({
             submitting={submitting}
             submitLabel="Save changes"
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Product image: type a path, upload a file, or import from a web URL.
+ *
+ * Upload and import both resolve to /api/images/<id>. A pasted link is copied
+ * server-side rather than stored as-is -- see src/lib/image-import.ts for why.
+ */
+function ImageField({
+  value,
+  onChange,
+  anchor,
+  onAnchorChange,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  anchor: ImageAnchor;
+  onAnchorChange: (next: ImageAnchor) => void;
+}) {
+  const [busy, setBusy] = useState<"" | "upload" | "import">("");
+  const [error, setError] = useState("");
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [link, setLink] = useState("");
+  const [broken, setBroken] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function post(
+    endpoint: string,
+    init: RequestInit,
+    kind: "upload" | "import",
+  ) {
+    setError("");
+    setBusy(kind);
+    try {
+      const res = await fetch(endpoint, init);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Something went wrong.");
+      setBroken(false);
+      onChange(data.url as string);
+      setLink("");
+      setLinkOpen(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setBusy("");
+    }
+  }
+
+  const trimmed = value.trim();
+  // Flags a value the public page cannot render BEFORE it is saved: an
+  // un-allowlisted host in image_url 500s /marketplace on next/image.
+  const willNotRender = trimmed !== "" && !isRenderableImageUrl(trimmed);
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <FieldLabel>Product image</FieldLabel>
+
+      <div className="flex gap-3 items-start">
+        {/* 16:9 to match ProductCard's aspect box, so the crop shown here is
+            the crop that ships. A square preview would lie about it. */}
+        {trimmed && !broken ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={trimmed}
+            alt=""
+            onError={() => setBroken(true)}
+            onLoad={() => setBroken(false)}
+            style={{ objectPosition: objectPositionFor(anchor) }}
+            className="w-32 aspect-video rounded-md object-cover border border-light-gray bg-white shrink-0"
+          />
+        ) : (
+          <div className="w-32 aspect-video rounded-md border border-dashed border-light-gray bg-off-white shrink-0 flex items-center justify-center text-[10px] text-near-black/40 text-center px-1">
+            {broken ? "Won't load" : "No image"}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2 flex-1 min-w-0">
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => {
+              setBroken(false);
+              onChange(e.target.value);
+            }}
+            placeholder="/images/products/lockbox.jpg"
+            className={inputClass}
+          />
+
+          <div className="flex flex-wrap gap-2">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                if (!file) return;
+                const body = new FormData();
+                body.append("file", file);
+                void post("/api/admin/uploads", { method: "POST", body }, "upload");
+              }}
+            />
+            <button
+              type="button"
+              disabled={busy !== ""}
+              onClick={() => fileRef.current?.click()}
+              className="text-xs font-semibold px-3 py-1.5 rounded-full border border-light-gray hover:border-primary-green disabled:opacity-50"
+            >
+              {busy === "upload" ? "Uploading..." : "Upload file"}
+            </button>
+            <button
+              type="button"
+              disabled={busy !== ""}
+              onClick={() => setLinkOpen((o) => !o)}
+              className="text-xs font-semibold px-3 py-1.5 rounded-full border border-light-gray hover:border-primary-green disabled:opacity-50"
+            >
+              Import from URL
+            </button>
+            {trimmed && (
+              <button
+                type="button"
+                disabled={busy !== ""}
+                onClick={() => {
+                  setBroken(false);
+                  setError("");
+                  onChange("");
+                }}
+                className="text-xs font-semibold px-3 py-1.5 rounded-full border border-light-gray hover:border-terracotta text-near-black/60 disabled:opacity-50"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] uppercase tracking-wider text-near-black/50 mr-0.5">
+              Anchor
+            </span>
+            {IMAGE_ANCHORS.map((a) => (
+              <button
+                key={a}
+                type="button"
+                aria-pressed={anchor === a}
+                onClick={() => onAnchorChange(a)}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-full border transition-colors ${
+                  anchor === a
+                    ? "border-primary-green bg-primary-green text-white"
+                    : "border-light-gray text-near-black/60 hover:border-primary-green"
+                }`}
+              >
+                {IMAGE_ANCHOR_LABELS[a]}
+              </button>
+            ))}
+          </div>
+
+          {linkOpen && (
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter") return;
+                  // The field lives inside the product <form>; Enter would
+                  // otherwise submit the whole product.
+                  e.preventDefault();
+                  if (link.trim() && busy === "") {
+                    void post(
+                      "/api/admin/uploads/from-url",
+                      {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ url: link.trim() }),
+                      },
+                      "import",
+                    );
+                  }
+                }}
+                placeholder="https://example.com/product-photo.jpg"
+                className={`${inputClass} flex-1 min-w-0`}
+              />
+              <button
+                type="button"
+                disabled={busy !== "" || !link.trim()}
+                onClick={() =>
+                  void post(
+                    "/api/admin/uploads/from-url",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ url: link.trim() }),
+                    },
+                    "import",
+                  )
+                }
+                className="text-xs font-semibold px-3 py-1.5 rounded-full bg-primary-green text-white disabled:opacity-50 shrink-0"
+              >
+                {busy === "import" ? "Importing..." : "Import"}
+              </button>
+            </div>
+          )}
+
+          {error && <p className="text-xs text-terracotta">{error}</p>}
+          {!error && willNotRender && (
+            <p className="text-xs text-terracotta">
+              This value will not render on /marketplace. Upload the file or
+              import it from its URL instead.
+            </p>
+          )}
         </div>
       </div>
     </div>

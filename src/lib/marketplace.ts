@@ -4,11 +4,13 @@ import {
   normalizeCategory,
   type MarketplaceTabId,
 } from "./marketplace-categories";
+import { coerceImageAnchor, type ImageAnchor } from "./image-anchor";
 
 // Re-exported so existing importers keep working. The single declaration lives
 // in marketplace-categories.ts, which has no DB imports and is therefore safe
 // for "use client" components to import values from.
 export type { MarketplaceTabId };
+export type { ImageAnchor };
 
 export type AffiliateNetwork =
   | "amazon"
@@ -50,6 +52,8 @@ export interface MarketplaceProduct {
   bullets: string[];
   imageUrl: string;
   imageAlt: string;
+  /** Which part of the photo survives the object-cover crop. */
+  imageAnchor: ImageAnchor;
   priceRange: string;
   network: AffiliateNetwork;
   affiliateUrl: string;
@@ -72,6 +76,7 @@ interface ProductRow {
   bullets: string[] | null;
   image_url: string;
   image_alt: string;
+  image_anchor: string | null;
   price_range: string;
   network: string;
   affiliate_url: string;
@@ -97,6 +102,9 @@ function rowToProduct(r: ProductRow): MarketplaceProduct {
     bullets: r.bullets ?? [],
     imageUrl: r.image_url,
     imageAlt: r.image_alt,
+    // coerce, not cast: degrades an unexpected value to center rather than
+    // handing invalid CSS to a public page. Also covers deploy-before-migrate.
+    imageAnchor: coerceImageAnchor(r.image_anchor),
     priceRange: r.price_range,
     network: r.network as AffiliateNetwork,
     affiliateUrl: r.affiliate_url,
@@ -144,6 +152,8 @@ export interface CreateProductInput {
   bullets: string[];
   imageUrl: string;
   imageAlt: string;
+  /** Which part of the photo survives the object-cover crop. */
+  imageAnchor: ImageAnchor;
   priceRange: string;
   network: AffiliateNetwork;
   affiliateUrl: string;
@@ -160,14 +170,14 @@ export async function createProduct(
   const rows = (await sql`
     INSERT INTO marketplace_products (
       slug, tab_id, category, name, body, bullets, image_url, image_alt,
-      price_range, network, affiliate_url, badge, status, tags,
+      image_anchor, price_range, network, affiliate_url, badge, status, tags,
       position, is_published
     )
     VALUES (
       ${input.slug}, ${input.tabId}, ${normalizeCategory(input.category)},
       ${input.name}, ${input.body},
       ${input.bullets}, ${input.imageUrl}, ${input.imageAlt},
-      ${input.priceRange}, ${input.network}, ${input.affiliateUrl},
+      ${input.imageAnchor}, ${input.priceRange}, ${input.network}, ${input.affiliateUrl},
       ${input.badge}, ${input.status}, ${input.tags},
       ${input.position}, ${input.isPublished}
     )
@@ -204,6 +214,9 @@ export async function updateProduct(
     bullets: patch.bullets ?? existing.bullets ?? [],
     image_url: patch.imageUrl ?? existing.image_url,
     image_alt: patch.imageAlt ?? existing.image_alt,
+    // coerce the existing side too: a row written before the column existed
+    // reads back null, and null would violate the NOT NULL on write-back.
+    image_anchor: patch.imageAnchor ?? coerceImageAnchor(existing.image_anchor),
     price_range: patch.priceRange ?? existing.price_range,
     network: patch.network ?? existing.network,
     affiliate_url: patch.affiliateUrl ?? existing.affiliate_url,
@@ -226,6 +239,7 @@ export async function updateProduct(
       bullets = ${next.bullets},
       image_url = ${next.image_url},
       image_alt = ${next.image_alt},
+      image_anchor = ${next.image_anchor},
       price_range = ${next.price_range},
       network = ${next.network},
       affiliate_url = ${next.affiliate_url},
