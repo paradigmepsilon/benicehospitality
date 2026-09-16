@@ -31,16 +31,16 @@ export const metadata: Metadata = {
     "Alex Henry",
     "Be Nice Hospitality",
   ],
-  alternates: { canonical: "https://benicehospitality.com/alex" },
+  alternates: { canonical: "https://www.benicehospitality.com/alex" },
   openGraph: {
     title: "Alex Henry. Fleet operations, real systems, and AI without the hype.",
     description:
       "Della runs the co-living properties. Alex runs the vehicles and the technology: fleet operations for 3 to 30 vehicles, custom tools and integrations, and AI his clients can actually explain.",
-    url: "https://benicehospitality.com/alex",
+    url: "https://www.benicehospitality.com/alex",
     type: "profile",
     images: [
       {
-        url: "https://benicehospitality.com/images/Lex.jpeg",
+        url: "https://www.benicehospitality.com/images/Lex.jpeg",
         width: 1200,
         height: 1200,
         alt: "Alex Henry, Co-Founder of Be Nice Hospitality Group",

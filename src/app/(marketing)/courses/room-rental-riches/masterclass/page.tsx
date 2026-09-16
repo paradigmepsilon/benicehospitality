@@ -42,17 +42,17 @@ export const metadata: Metadata = {
   description:
     "A two-day, small-group workshop where six room rental operators work directly with Della Henry to apply the Room Rental Riches Operating Manual to their own business. Includes a 60-minute private follow-up. Hosted quarterly.",
   alternates: {
-    canonical: `https://benicehospitality.com${RRR_PATHS.masterclass}`,
+    canonical: `https://www.benicehospitality.com${RRR_PATHS.masterclass}`,
   },
   openGraph: {
     title: "Room Rental Riches: Masterclass | Della Henry",
     description:
       "Two days, six operators, your actual business on the table. Apply the Room Rental Riches Operating Manual alongside Della Henry.",
-    url: `https://benicehospitality.com${RRR_PATHS.masterclass}`,
+    url: `https://www.benicehospitality.com${RRR_PATHS.masterclass}`,
     type: "website",
     images: [
       {
-        url: "https://benicehospitality.com/images/Website%20Images/course-masterclass-cohort-v4.png",
+        url: "https://www.benicehospitality.com/images/Website%20Images/course-masterclass-cohort-v4.png",
         width: 1208,
         height: 1500,
         alt: "Della Henry teaching a small group of co-living operators",

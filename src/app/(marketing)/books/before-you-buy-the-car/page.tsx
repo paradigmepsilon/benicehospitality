@@ -35,17 +35,17 @@ export const metadata: Metadata = {
   description:
     "Free guide: 12 things nobody tells you before you start a car rental business or rent out your first vehicle. Gross versus net, depreciation, insurance, the same car three ways, and the quit criteria. By Alex Henry, operator of a real Atlanta-area fleet.",
   alternates: {
-    canonical: `https://benicehospitality.com${CRR_FREE_EBOOK.path}`,
+    canonical: `https://www.benicehospitality.com${CRR_FREE_EBOOK.path}`,
   },
   openGraph: {
     title: `${TITLE} | Alex Henry`,
     description:
       "A free, twelve-chapter guide for anyone about to buy a car to rent out. One insider fact and one action per chapter, from an operator who runs a real fleet.",
-    url: `https://benicehospitality.com${CRR_FREE_EBOOK.path}`,
+    url: `https://www.benicehospitality.com${CRR_FREE_EBOOK.path}`,
     type: "book",
     images: [
       {
-        url: `https://benicehospitality.com${CRR_FREE_EBOOK.coverImage}`,
+        url: `https://www.benicehospitality.com${CRR_FREE_EBOOK.coverImage}`,
         width: 1400,
         height: 2100,
         alt: `Cover of ${CRR_FREE_EBOOK.name} by Alex Henry`,

@@ -38,12 +38,12 @@ export const metadata: Metadata = {
   title: "Resource Library",
   description:
     "An ever-growing library of operator resources, grouped by asset class. Calculators, checklists, trackers, and worksheets for co-living and rental fleet operators. Some are free, some require a quick signup, some are bundled with the course.",
-  alternates: { canonical: "https://benicehospitality.com/resources" },
+  alternates: { canonical: "https://www.benicehospitality.com/resources" },
   openGraph: {
     title: "Resource Library | Be Nice Hospitality Group",
     description:
       "Operator-grade resources for co-living and rental fleet operators, grouped by asset class. Free, signup-gated, and course-bundled.",
-    url: "https://benicehospitality.com/resources",
+    url: "https://www.benicehospitality.com/resources",
     type: "website",
   },
 };

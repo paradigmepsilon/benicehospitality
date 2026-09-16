@@ -33,17 +33,17 @@ export const metadata: Metadata = {
   description:
     "The operating manual for building a co-living business that runs on systems, not stress. The exact system Della and Alex Henry use across their own co-living homes — property scoring, pricing, setup, operations, and scaling. PDF + ePub, $32.",
   alternates: {
-    canonical: `https://benicehospitality.com${BLUEPRINT.path}`,
+    canonical: `https://www.benicehospitality.com${BLUEPRINT.path}`,
   },
   openGraph: {
     title: "Room Rental Riches: The Blueprint | Della Henry",
     description:
       "Not another real estate book. The exact operating system Della and Alex Henry use across their own co-living homes to create consistent income without living inside the business.",
-    url: `https://benicehospitality.com${BLUEPRINT.path}`,
+    url: `https://www.benicehospitality.com${BLUEPRINT.path}`,
     type: "book",
     images: [
       {
-        url: `https://benicehospitality.com${BLUEPRINT.coverImage}`,
+        url: `https://www.benicehospitality.com${BLUEPRINT.coverImage}`,
         width: 1400,
         height: 2100,
         alt: "Cover of Room Rental Riches: The Blueprint by Della Henry",

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Your Account",
   description:
     "Your courses, resources, and Facebook community access in one place.",
-  alternates: { canonical: "https://benicehospitality.com/account" },
+  alternates: { canonical: "https://www.benicehospitality.com/account" },
   robots: { index: false, follow: false },
 };
 

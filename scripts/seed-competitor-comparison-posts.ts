@@ -133,7 +133,7 @@ const POSTS: PostSeed[] = [
 
 <h2>Try Before You Pay</h2>
 
-<p>If you want to evaluate BNHG without any commitment, our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a> are the right place to start. Each one is a research-backed deliverable specific to your property. We also keep an up-to-date <a href="https://benicehospitality.com/faq">FAQ</a> that answers the most common questions we get from hotel operators. The Tier 0 resources and the FAQ together will tell you more about how we think than any sales call would.</p>
+<p>If you want to evaluate BNHG without any commitment, our <a href="https://www.benicehospitality.com/services#tier-0">Tier 0 free resources</a> are the right place to start. Each one is a research-backed deliverable specific to your property. We also keep an up-to-date <a href="https://www.benicehospitality.com/faq">FAQ</a> that answers the most common questions we get from hotel operators. The Tier 0 resources and the FAQ together will tell you more about how we think than any sales call would.</p>
 
 <p>If you are considering Xotels, their website has a detailed services breakdown and case studies. We recommend reaching out to both firms with the same scoped brief and comparing the responses. That is the fastest way to see which firm matches how you want to work.</p>`,
   },
@@ -284,7 +284,7 @@ const POSTS: PostSeed[] = [
 
 <h2>Start With a Free Evaluation</h2>
 
-<p>If you want to try BNHG without any commitment, our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a> give you a research-backed deliverable specific to your property. The Revenue Opportunity Snapshot, Online Reputation Briefing, and Tech Stack Quick Scan are the three most common starting points. Our <a href="https://benicehospitality.com/faq">FAQ page</a> covers the rest of the common questions we get.</p>
+<p>If you want to try BNHG without any commitment, our <a href="https://www.benicehospitality.com/services#tier-0">Tier 0 free resources</a> give you a research-backed deliverable specific to your property. The Revenue Opportunity Snapshot, Online Reputation Briefing, and Tech Stack Quick Scan are the three most common starting points. Our <a href="https://www.benicehospitality.com/faq">FAQ page</a> covers the rest of the common questions we get.</p>
 
 <p>For the other firms on this list, reach out directly and ask for a scoped proposal against a specific problem you are trying to solve. That is the fastest way to see who is the right fit for your property.</p>`,
   },
@@ -410,9 +410,9 @@ const POSTS: PostSeed[] = [
 
 <h2>How BNHG Fits Into This</h2>
 
-<p>If you are running a 10 to 50 room independent luxury boutique property in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://benicehospitality.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question (the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five), and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
+<p>If you are running a 10 to 50 room independent luxury boutique property in the U.S. and you have read this far, you are exactly the kind of operator we built BNHG for. The fastest way to evaluate us is our <a href="https://www.benicehospitality.com/services#tier-0">Tier 0 free resources</a>. Pick the one that maps to your biggest question (the Revenue Opportunity Snapshot, Tech Stack Quick Scan, Online Reputation Briefing, or any of the other five), and you'll get a research-backed deliverable specific to your property in 3 to 5 business days.</p>
 
-<p>Our <a href="https://benicehospitality.com/faq">FAQ</a> covers most of the questions owners ask before they engage. Between the free resource and the FAQ, you'll know whether we're the right fit long before there's any pressure to commit.</p>
+<p>Our <a href="https://www.benicehospitality.com/faq">FAQ</a> covers most of the questions owners ask before they engage. Between the free resource and the FAQ, you'll know whether we're the right fit long before there's any pressure to commit.</p>
 
 <p>If we're not the right fit, we'll tell you. That's how we want to be evaluated. It's also how you should evaluate any firm you are considering.</p>`,
   },

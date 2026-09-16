@@ -21,13 +21,13 @@ export const metadata: Metadata = {
   description:
     "Build a profitable car rental business in the 2026 earnings-plan era. Taught by a real Atlanta fleet operator. Founding Member pricing open now: $197.",
   alternates: {
-    canonical: "https://benicehospitality.com/courses/car-rental-riches",
+    canonical: "https://www.benicehospitality.com/courses/car-rental-riches",
   },
   openGraph: {
     title: "Car Rental Riches | BNHG",
     description:
       "The Host-to-Operator method retuned for Turo hosts and small fleet operators. Same 3 commitment tiers, same operator-grade depth. Drops 2026.",
-    url: "https://benicehospitality.com/courses/car-rental-riches",
+    url: "https://www.benicehospitality.com/courses/car-rental-riches",
     type: "website",
   },
 };

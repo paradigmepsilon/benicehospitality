@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import ProfitCalculator from "@/components/resources/co-living-profit-calculator/ProfitCalculator";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("co-living-profit-calculator")!;
 
 export const metadata: Metadata = {

@@ -12,16 +12,16 @@ export const metadata: Metadata = {
     "MTR property management Southeast",
     "co-living operator",
   ],
-  alternates: { canonical: "https://benicehospitality.com/management/co-living" },
+  alternates: { canonical: "https://www.benicehospitality.com/management/co-living" },
   openGraph: {
     title: "Co-living Management | Be Nice Hospitality Group",
     description:
       "Your spare rooms earn without becoming your second job. BNHG runs the listing, screening, leases, and turnover.",
-    url: "https://benicehospitality.com/management/co-living",
+    url: "https://www.benicehospitality.com/management/co-living",
     type: "website",
     images: [
       {
-        url: "https://benicehospitality.com/images/Website%20Images/Della%20Casual.png",
+        url: "https://www.benicehospitality.com/images/Website%20Images/Della%20Casual.png",
         width: 1200,
         height: 1200,
         alt: "A managed co-living property in the Southeast",

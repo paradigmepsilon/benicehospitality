@@ -40,17 +40,17 @@ export const metadata: Metadata = {
   description:
     "What Turo, the rental giants, and the gurus won't tell you about building a car rental business, from one car to fifty. Written by Alex Henry, operator of a real Atlanta-area rental fleet. 17 chapters, PDF + ePub, $32.",
   alternates: {
-    canonical: `https://benicehospitality.com${CRR_BLUEPRINT.path}`,
+    canonical: `https://www.benicehospitality.com${CRR_BLUEPRINT.path}`,
   },
   openGraph: {
     title: "The Inside Lane | Alex Henry",
     description:
       "Not another side-hustle book. How the rental giants really make money, what the marketplace won't tell you, and the underwriting and operating system Alex Henry uses across his own fleet, one car to fifty.",
-    url: `https://benicehospitality.com${CRR_BLUEPRINT.path}`,
+    url: `https://www.benicehospitality.com${CRR_BLUEPRINT.path}`,
     type: "book",
     images: [
       {
-        url: `https://benicehospitality.com${CRR_BLUEPRINT.coverImage}`,
+        url: `https://www.benicehospitality.com${CRR_BLUEPRINT.coverImage}`,
         width: 1400,
         height: 2100,
         alt: "Cover of The Inside Lane by Alex Henry",

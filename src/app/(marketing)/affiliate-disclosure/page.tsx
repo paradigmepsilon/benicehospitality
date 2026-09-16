@@ -18,14 +18,14 @@ export const metadata: Metadata = {
   description:
     "Some links on this site earn us a commission. What that means, which links they are, and how it affects what we recommend. Short answer: it does not.",
   alternates: {
-    canonical: "https://benicehospitality.com/affiliate-disclosure",
+    canonical: "https://www.benicehospitality.com/affiliate-disclosure",
   },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Affiliate Disclosure | Be Nice Hospitality Group",
     description:
       "Some links on this site earn us a commission. What that means and how it affects what we recommend.",
-    url: "https://benicehospitality.com/affiliate-disclosure",
+    url: "https://www.benicehospitality.com/affiliate-disclosure",
     type: "website",
   },
 };

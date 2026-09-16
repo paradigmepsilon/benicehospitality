@@ -27,16 +27,16 @@ export const metadata: Metadata = {
     "vehicle and property management Southeast",
     "done for you rental management",
   ],
-  alternates: { canonical: "https://benicehospitality.com/management" },
+  alternates: { canonical: "https://www.benicehospitality.com/management" },
   openGraph: {
     title: "Management | Be Nice Hospitality Group",
     description:
       "BNHG manages your vehicle or your spare rooms while you keep ownership. Learn to run it yourself, or let us run it.",
-    url: "https://benicehospitality.com/management",
+    url: "https://www.benicehospitality.com/management",
     type: "website",
     images: [
       {
-        url: "https://benicehospitality.com/images/Website%20Images/Alex%20Turo%20Shot.png",
+        url: "https://www.benicehospitality.com/images/Website%20Images/Alex%20Turo%20Shot.png",
         width: 1600,
         height: 900,
         alt: "BNHG managed assets: a rental vehicle and a co-living property",

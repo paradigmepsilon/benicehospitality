@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import ContractorRolodexTool from "@/components/resources/contractor-rolodex/ContractorRolodexTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("contractor-rolodex")!;
 
 export const metadata: Metadata = {

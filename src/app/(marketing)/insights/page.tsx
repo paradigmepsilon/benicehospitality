@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   description:
     "Strategy, operations, and technology thinking for co-living operators, boutique stays, and fleet operators. Direct booking strategies, tech stack optimization, guest experience frameworks, and more.",
   alternates: {
-    canonical: "https://benicehospitality.com/insights",
+    canonical: "https://www.benicehospitality.com/insights",
   },
   openGraph: {
     title: "Hospitality Strategy Insights & Articles | BNHG",
     description:
       "Operator insights: revenue strategy, guest experience, and technology thinking for co-living, boutique stays, and fleets.",
-    url: "https://benicehospitality.com/insights",
+    url: "https://www.benicehospitality.com/insights",
     type: "website",
     images: [
       { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },

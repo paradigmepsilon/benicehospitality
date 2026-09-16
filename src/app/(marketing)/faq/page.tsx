@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   description:
     "Answers to the most common questions about our consulting for co-living operators, boutique stays, and fleet operators. OTA dependency, direct booking, tech stacks, guest messaging, and working with BNHG.",
   alternates: {
-    canonical: "https://benicehospitality.com/faq",
+    canonical: "https://www.benicehospitality.com/faq",
   },
   openGraph: {
     title: "Hospitality Consulting FAQ | Be Nice Hospitality Group",
     description:
       "What our consulting costs, how to reduce OTA dependency, the best guest messaging software for small operators, and more.",
-    url: "https://benicehospitality.com/faq",
+    url: "https://www.benicehospitality.com/faq",
     type: "website",
     images: [
       { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },

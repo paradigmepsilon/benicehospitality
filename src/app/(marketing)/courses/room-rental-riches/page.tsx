@@ -28,13 +28,13 @@ export const metadata: Metadata = {
   description:
     "Run your co-living portfolio like a real business. Four ways in, from the $32 Blueprint to the $7,497 90-day Operator engagement, with self-paced and Masterclass tiers between. Founding pricing for the first 100 students.",
   alternates: {
-    canonical: "https://benicehospitality.com/courses/room-rental-riches",
+    canonical: "https://www.benicehospitality.com/courses/room-rental-riches",
   },
   openGraph: {
     title: "Room Rental Riches | BNHG",
     description:
       "The Host-to-Operator method for co-living operators. Four ways in: the Blueprint book, self-paced, Masterclass, and Operator 1:1.",
-    url: "https://benicehospitality.com/courses/room-rental-riches",
+    url: "https://www.benicehospitality.com/courses/room-rental-riches",
     type: "website",
   },
 };

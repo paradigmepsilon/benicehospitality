@@ -254,7 +254,7 @@ export function claimProofGuideEmail(args: { downloadUrl: string }): {
     <p style="font-size:15px;line-height:1.55;margin:0 0 20px;">
       When you&rsquo;re ready for the full system — the 12-shot ritual, ten
       dispute scripts, the appeal workflow, and the desk-arbitration playbook —
-      it&rsquo;s all in <a href="https://benicehospitality.com/claimproof" style="color:#1A4D4F;font-weight:600;">Claim Proof</a>,
+      it&rsquo;s all in <a href="https://www.benicehospitality.com/claimproof" style="color:#1A4D4F;font-weight:600;">Claim Proof</a>,
       built and used daily by a working fleet.
     </p>
     ${EMAIL_SHELL_BOTTOM}

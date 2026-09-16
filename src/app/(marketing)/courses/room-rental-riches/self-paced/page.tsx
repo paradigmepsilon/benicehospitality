@@ -52,17 +52,17 @@ export const metadata: Metadata = {
   description:
     "Learn the complete Room Rental Riches Operating Manual at your own pace. Twelve modules across six phases, the resource library, lifetime access, and the Room Rental Riches Community. Founding price $287.",
   alternates: {
-    canonical: `https://benicehospitality.com${RRR_PATHS.selfPaced}`,
+    canonical: `https://www.benicehospitality.com${RRR_PATHS.selfPaced}`,
   },
   openGraph: {
     title: "Room Rental Riches: Self-paced | Della Henry",
     description:
       "Build a room rental business that runs on systems, not stress. Twelve modules, six phases, lifetime access, and the Room Rental Riches Community.",
-    url: `https://benicehospitality.com${RRR_PATHS.selfPaced}`,
+    url: `https://www.benicehospitality.com${RRR_PATHS.selfPaced}`,
     type: "website",
     images: [
       {
-        url: "https://benicehospitality.com/images/Website%20Images/course-self-paced-student-v4.png",
+        url: "https://www.benicehospitality.com/images/Website%20Images/course-self-paced-student-v4.png",
         width: 1208,
         height: 1500,
         alt: "A student working through Room Rental Riches on a laptop at a home desk",

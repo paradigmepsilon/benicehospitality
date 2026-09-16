@@ -28,12 +28,12 @@ export const metadata: Metadata = {
   title: "Room Rental Riches",
   description:
     "The co-living operating system from Della Henry, at every level. Read the Blueprint, take the course, or join the mastermind when it opens.",
-  alternates: { canonical: "https://benicehospitality.com/room-rental-riches" },
+  alternates: { canonical: "https://www.benicehospitality.com/room-rental-riches" },
   openGraph: {
     title: "Room Rental Riches | Be Nice Hospitality Group",
     description:
       "One system, three ways in. The Blueprint book, the full course at three commitment levels, and the operator mastermind.",
-    url: "https://benicehospitality.com/room-rental-riches",
+    url: "https://www.benicehospitality.com/room-rental-riches",
     type: "website",
   },
 };

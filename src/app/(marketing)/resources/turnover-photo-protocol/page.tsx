@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import TurnoverProtocolTool from "@/components/resources/turnover-photo-protocol/TurnoverProtocolTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("turnover-photo-protocol")!;
 
 export const metadata: Metadata = {

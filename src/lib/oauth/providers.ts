@@ -1,4 +1,5 @@
 import { Facebook, Google, LinkedIn } from "arctic";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 // Providers are instantiated lazily on first use so a missing client ID for one
 // provider doesn't crash the others. Each profile fetch normalizes to the same
@@ -64,12 +65,18 @@ export function getEnabledProviders(): Record<ProviderName, boolean> {
   };
 }
 
+// The OAuth redirect_uri must exactly match one registered in the provider
+// console. Production sets BNHG_BASE_URL to the canonical www origin, so that
+// still wins here and live behavior is unchanged. What changes is the failure
+// mode: the old "http://localhost:3000" fallback meant that clearing or
+// mistyping that one env var would silently ship a localhost redirect_uri to
+// production. getPublicSiteUrl() keeps localhost for real local dev (no
+// VERCEL_ENV) and falls back to the canonical origin on Vercel instead.
 function getBaseUrl(): string {
-  return (
-    process.env.BNHG_BASE_URL ||
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    "http://localhost:3000"
-  ).replace(/\/$/, "");
+  const legacy = (process.env.BNHG_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  return legacy || getPublicSiteUrl();
 }
 
 export function getRedirectUri(name: ProviderName): string {

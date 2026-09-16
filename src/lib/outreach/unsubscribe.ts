@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 function getSecret(): string {
   const s = process.env.UNSUBSCRIBE_HMAC_SECRET;
@@ -30,7 +31,7 @@ export function verifyUnsubscribeToken(email: string, token: string): boolean {
 }
 
 export function buildUnsubscribeUrl(email: string): string {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com").replace(/\/$/, "");
+  const base = getPublicSiteUrl();
   const token = generateUnsubscribeToken(email);
   const params = new URLSearchParams({ email, token });
   return `${base}/api/unsubscribe?${params.toString()}`;

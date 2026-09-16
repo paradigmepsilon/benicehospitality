@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   description:
     "BNHG teaches operators to run co-living properties and rental fleets, and manages those assets directly for owners who would rather hand it off. Georgia, Florida, South Carolina, North Carolina, Alabama, and Tennessee. Founded by Della and Alex Henry.",
   alternates: {
-    canonical: "https://benicehospitality.com",
+    canonical: "https://www.benicehospitality.com",
   },
   openGraph: {
     title: "Be Nice Hospitality Group",
     description:
       "Sharing economy asset management for the Southeast. Learn to run your co-living property or rental fleet yourself, or let BNHG run it for you.",
-    url: "https://benicehospitality.com",
+    url: "https://www.benicehospitality.com",
     type: "website",
     images: [
       {

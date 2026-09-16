@@ -9,7 +9,7 @@ import {
   MAINTENANCE_SUMMARY,
 } from "@/lib/resources/maintenance-tracker/config";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("maintenance-tracker")!;
 
 export const metadata: Metadata = {

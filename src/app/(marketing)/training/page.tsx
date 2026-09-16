@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   title: "Training",
   description:
     "Room Rental Riches and Car Rental Riches: the courses behind BNHG's own co-living properties and rental fleet. Self-paced, live Masterclass, or 1:1 Operator, taught by the operators who run it.",
-  alternates: { canonical: "https://benicehospitality.com/training" },
+  alternates: { canonical: "https://www.benicehospitality.com/training" },
   openGraph: {
     title: "Training | Be Nice Hospitality Group",
     description:
       "Room Rental Riches and Car Rental Riches. Learn to run a co-living property or a rental fleet like a real business, at your own pace, live, or 1:1.",
-    url: "https://benicehospitality.com/training",
+    url: "https://www.benicehospitality.com/training",
     type: "website",
   },
 };

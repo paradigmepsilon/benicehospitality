@@ -7,7 +7,7 @@ import ResourceGate from "@/components/resources/ResourceGate";
 import SupplyInventoryTool from "@/components/resources/supply-inventory-tracker/SupplyInventoryTool";
 import type { SuggestedProduct } from "@/lib/resources/supply-inventory-tracker/config";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("supply-inventory-tracker")!;
 
 export const metadata: Metadata = {

@@ -6,7 +6,7 @@ import ResourceGate from "@/components/resources/ResourceGate";
 import ChecklistTool from "@/components/resources/ChecklistTool";
 import { SHOT_SECTIONS } from "@/lib/resources/photo-shot-list/config";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("photo-shot-list")!;
 
 export const metadata: Metadata = {

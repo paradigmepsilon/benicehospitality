@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import ListingChecklistTool from "@/components/resources/listing-optimization-checklist/ListingChecklistTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("listing-optimization-checklist")!;
 
 export const metadata: Metadata = {

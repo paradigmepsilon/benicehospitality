@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   title: "The Host's Edge: Guest Message System",
   description:
     "A lean, tool-agnostic guest-message system for self-managing Airbnb & STR hosts. Six messages that kill repeat questions, protect your review, and sound like you. Not a spammy auto-drip.",
-  alternates: { canonical: "https://benicehospitality.com/thehostsedge" },
+  alternates: { canonical: "https://www.benicehospitality.com/thehostsedge" },
   openGraph: {
     title: "The Host's Edge: Guest Message System",
     description:
       "Six sharp guest messages that actually get read. Kill the repeat questions, protect your rating, keep your evenings. Drops into Hospitable, Guesty, Hostaway, or native Airbnb.",
-    url: "https://benicehospitality.com/thehostsedge",
+    url: "https://www.benicehospitality.com/thehostsedge",
     type: "website",
   },
 };

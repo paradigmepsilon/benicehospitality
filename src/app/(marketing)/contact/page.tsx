@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   description:
     "Start a conversation with Be Nice Hospitality Group. Request a free revenue snapshot, book a discovery call, or ask about our consulting for co-living operators, boutique stays, and fleets.",
   alternates: {
-    canonical: "https://benicehospitality.com/contact",
+    canonical: "https://www.benicehospitality.com/contact",
   },
   openGraph: {
     title: "Contact Our Hospitality Consultants | Be Nice Hospitality Group",
     description:
       "Get in touch with BNHG. Request a free resource, book a discovery call, or learn about our hospitality consulting and Guestally software.",
-    url: "https://benicehospitality.com/contact",
+    url: "https://www.benicehospitality.com/contact",
     type: "website",
     images: [
       { url: "/images/hero-banner.png", width: 1200, height: 630, alt: "Be Nice Hospitality Group" },

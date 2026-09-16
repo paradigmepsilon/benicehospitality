@@ -12,7 +12,7 @@ import { RRR_PATHS } from "@/lib/room-rental-riches";
 import { CRR } from "@/lib/car-rental-riches";
 import { MANAGEMENT_OFFERS } from "@/lib/management/constants";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 
 /**
  * "Next step" footer content per lane. Course link and management link both

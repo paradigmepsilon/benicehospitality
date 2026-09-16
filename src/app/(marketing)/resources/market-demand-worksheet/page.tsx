@@ -6,7 +6,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import MarketDemandTool from "@/components/resources/market-demand-worksheet/MarketDemandTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("market-demand-worksheet")!;
 
 export const metadata: Metadata = {

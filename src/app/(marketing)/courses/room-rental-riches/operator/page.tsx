@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "90 days with Della. 12 60-minute 1:1 sessions. Lifetime community. The deepest version of the Host-to-Operator method, capped at 5 students per cycle.",
   alternates: {
     canonical:
-      "https://benicehospitality.com/courses/room-rental-riches/operator",
+      "https://www.benicehospitality.com/courses/room-rental-riches/operator",
   },
 };
 

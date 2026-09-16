@@ -37,13 +37,13 @@ export async function generateMetadata({
     description,
     ...(keywords.length > 0 && { keywords }),
     alternates: {
-      canonical: `https://benicehospitality.com/insights/${slug}`,
+      canonical: `https://www.benicehospitality.com/insights/${slug}`,
     },
     openGraph: {
       type: "article",
       title: `${post.title} | Be Nice Hospitality Group`,
       description,
-      url: `https://benicehospitality.com/insights/${slug}`,
+      url: `https://www.benicehospitality.com/insights/${slug}`,
       images: post.featured_image_url ? [{ url: post.featured_image_url }] : undefined,
       publishedTime: post.published_at || post.created_at,
       modifiedTime: post.updated_at,
@@ -93,7 +93,7 @@ export default async function BlogPostPage({
       name: "Be Nice Hospitality Group",
       logo: {
         "@type": "ImageObject",
-        url: "https://benicehospitality.com/images/logo.png",
+        url: "https://www.benicehospitality.com/images/logo.png",
       },
     },
   };
@@ -106,19 +106,19 @@ export default async function BlogPostPage({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://benicehospitality.com",
+        item: "https://www.benicehospitality.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Insights",
-        item: "https://benicehospitality.com/insights",
+        item: "https://www.benicehospitality.com/insights",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: post.title,
-        item: `https://benicehospitality.com/insights/${slug}`,
+        item: `https://www.benicehospitality.com/insights/${slug}`,
       },
     ],
   };

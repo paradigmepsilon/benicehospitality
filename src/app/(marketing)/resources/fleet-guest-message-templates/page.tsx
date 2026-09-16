@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import FleetGuestTemplatesTool from "@/components/resources/fleet-guest-message-templates/FleetGuestTemplatesTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("fleet-guest-message-templates")!;
 
 export const metadata: Metadata = {

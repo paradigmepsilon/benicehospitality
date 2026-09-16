@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   title: "Community",
   description:
     "A Facebook group for sharing-economy operators. Tuesday workshops and Thursday implementation hours with Della and Alex, forty-seven weeks a year. Bundled with every course tier.",
-  alternates: { canonical: "https://benicehospitality.com/community" },
+  alternates: { canonical: "https://www.benicehospitality.com/community" },
   openGraph: {
     title: "Community | BNHG",
     description:
       "A room of operators doing the same work, live in a Facebook group. Tuesday workshops, Thursday implementation hours, forty-seven weeks a year.",
-    url: "https://benicehospitality.com/community",
+    url: "https://www.benicehospitality.com/community",
     type: "website",
   },
 };

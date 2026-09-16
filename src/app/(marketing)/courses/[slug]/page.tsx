@@ -11,7 +11,7 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const ORG_ID = `${SITE_URL}/#organization`;
 
 export async function generateStaticParams() {

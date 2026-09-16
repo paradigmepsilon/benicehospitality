@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import EarningsPlanOptimizer from "@/components/resources/earnings-plan-optimizer/EarningsPlanOptimizer";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("earnings-plan-optimizer")!;
 
 export const metadata: Metadata = {

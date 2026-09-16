@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import VehicleProfitCalculator from "@/components/resources/vehicle-profitability-calculator/VehicleProfitCalculator";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("vehicle-profitability-calculator")!;
 
 export const metadata: Metadata = {

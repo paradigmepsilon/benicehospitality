@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "The rules of the road for using benicehospitality.com, our courses, our community, and our services. Plain English.",
   alternates: {
-    canonical: "https://benicehospitality.com/terms",
+    canonical: "https://www.benicehospitality.com/terms",
   },
   robots: {
     index: true,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: "Terms of Service | Be Nice Hospitality Group",
     description:
       "The rules of the road for using benicehospitality.com, our courses, our community, and our services.",
-    url: "https://benicehospitality.com/terms",
+    url: "https://www.benicehospitality.com/terms",
     type: "website",
     images: [
       {

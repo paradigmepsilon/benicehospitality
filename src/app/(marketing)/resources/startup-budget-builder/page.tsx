@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import StartupBudgetBuilder from "@/components/resources/startup-budget-builder/StartupBudgetBuilder";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("startup-budget-builder")!;
 
 export const metadata: Metadata = {

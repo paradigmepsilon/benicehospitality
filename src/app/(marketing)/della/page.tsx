@@ -32,16 +32,16 @@ export const metadata: Metadata = {
     "Be Nice Hospitality",
     "co-living and mid-term rental course",
   ],
-  alternates: { canonical: "https://benicehospitality.com/della" },
+  alternates: { canonical: "https://www.benicehospitality.com/della" },
   openGraph: {
     title: "Della Henry. Southeast Co-Living and Mid-Term Rental Coach.",
     description:
       "12 co-living and MTR units. 5 Southeast markets. 1 operating system. Book a working call, take the Room to Rental Riches Masterclass, or pull from the free resource library.",
-    url: "https://benicehospitality.com/della",
+    url: "https://www.benicehospitality.com/della",
     type: "profile",
     images: [
       {
-        url: "https://benicehospitality.com/images/Dee.jpeg",
+        url: "https://www.benicehospitality.com/images/Dee.jpeg",
         width: 1200,
         height: 1200,
         alt: "Della Henry, Co-Founder of Be Nice Hospitality Group",

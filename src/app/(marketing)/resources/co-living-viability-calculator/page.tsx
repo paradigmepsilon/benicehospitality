@@ -7,7 +7,7 @@ import {
   SCORECARD_SECTIONS,
 } from "@/lib/scorecard/questions";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const PAGE_PATH = "/resources/co-living-viability-calculator";
 
 // Counts are read from the question set, never typed by hand. This copy has

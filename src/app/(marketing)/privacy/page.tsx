@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "How Be Nice Hospitality Group collects, uses, and protects your information. Plain English, no dark patterns.",
   alternates: {
-    canonical: "https://benicehospitality.com/privacy",
+    canonical: "https://www.benicehospitality.com/privacy",
   },
   robots: {
     index: true,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy | Be Nice Hospitality Group",
     description:
       "How Be Nice Hospitality Group collects, uses, and protects your information.",
-    url: "https://benicehospitality.com/privacy",
+    url: "https://www.benicehospitality.com/privacy",
     type: "website",
     images: [
       {

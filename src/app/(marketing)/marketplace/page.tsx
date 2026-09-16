@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   title: "The Marketplace",
   description:
     "The gear, books, and software we actually use to run our co-living properties and fleets. Curated by audience, vetted by us.",
-  alternates: { canonical: "https://benicehospitality.com/marketplace" },
+  alternates: { canonical: "https://www.benicehospitality.com/marketplace" },
   openGraph: {
     title: "The Marketplace | Be Nice Hospitality Group",
     description:
       "Curated gear, books, and software for co-living operators and fleet operators. The stuff we actually use.",
-    url: "https://benicehospitality.com/marketplace",
+    url: "https://www.benicehospitality.com/marketplace",
     type: "website",
   },
 };

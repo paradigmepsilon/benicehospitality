@@ -27,7 +27,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://benicehospitality.com"),
+  metadataBase: new URL("https://www.benicehospitality.com"),
   title: {
     default: "Be Nice Hospitality Group",
     template: "%s | Be Nice Hospitality Group",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://benicehospitality.com",
+    url: "https://www.benicehospitality.com",
     siteName: "Be Nice Hospitality Group",
     images: [
       {

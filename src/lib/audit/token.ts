@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { sql } from "@/lib/db";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import type { AuditData, AuditRow } from "@/lib/types/audit";
 
 export function generateAuditToken(): string {
@@ -18,8 +19,7 @@ export function getTokenTtlDays(): number {
  * string) and we'll do the right thing.
  */
 export function buildAuditUrl(slugOrToken: string): string {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://benicehospitality.com";
-  return `${base.replace(/\/$/, "")}/audit/${slugOrToken}`;
+  return `${getPublicSiteUrl()}/audit/${slugOrToken}`;
 }
 
 const AUDIT_COLUMNS = sql`

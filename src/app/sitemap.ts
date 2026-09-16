@@ -4,7 +4,7 @@ import { COURSES } from "@/lib/courses";
 import { liveResourceTools } from "@/lib/resources/registry";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://benicehospitality.com";
+  const baseUrl = "https://www.benicehospitality.com";
   const now = new Date();
 
   const staticPages: MetadataRoute.Sitemap = [

@@ -49,7 +49,7 @@ import type { AddressCandidate } from "@/lib/resources/address-lookup";
 const CENSUS_ENDPOINT = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress";
 const NOMINATIM_ENDPOINT = "https://nominatim.openstreetmap.org/search";
 /** Nominatim's policy requires a real identifying agent with a contact. */
-const USER_AGENT = "BeNiceHospitality-Worksheet/1.0 (+https://benicehospitality.com)";
+const USER_AGENT = "BeNiceHospitality-Worksheet/1.0 (+https://www.benicehospitality.com)";
 
 /**
  * A street-only search legitimately returns nine or ten across the country, and

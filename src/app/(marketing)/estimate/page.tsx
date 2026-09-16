@@ -13,7 +13,7 @@ import { isEstimatorEnabled } from "@/lib/estimate/flag";
 import { getResourceTool } from "@/lib/resources/registry";
 import { SERVICE_AREA_LABEL } from "@/lib/management/constants";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 
 export const metadata: Metadata = {
   title: "Earnings Estimator",

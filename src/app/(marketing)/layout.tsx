@@ -1,7 +1,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const ORG_ID = `${SITE_URL}/#organization`;
 const PROFESSIONAL_SERVICE_ID = `${SITE_URL}/#professional-service`;
 const ALEX_ID = `${SITE_URL}/#alex-henry`;

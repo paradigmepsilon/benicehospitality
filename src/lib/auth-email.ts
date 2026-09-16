@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 // Lazy-construct so importing this module doesn't crash at build/SSR time
 // when RESEND_API_KEY isn't set. Constructor only runs when an actual send
@@ -11,12 +12,13 @@ function getResend(): Resend {
   return cachedResend;
 }
 
+// Same contract as getBaseUrl() in src/lib/stripe.ts: legacy env vars win,
+// then the shared helper. No hardcoded host.
 function getBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    process.env.BNHG_BASE_URL ||
-    "https://benicehospitality.com"
-  );
+  const legacy = (process.env.NEXT_PUBLIC_BASE_URL || process.env.BNHG_BASE_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  return legacy || getPublicSiteUrl();
 }
 
 function getFrom(): string {

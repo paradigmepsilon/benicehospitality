@@ -14,12 +14,12 @@ export const metadata: Metadata = {
   title: "About Alex and Della Henry | Be Nice Hospitality Group",
   description:
     "We're Alex and Della Henry, the husband-and-wife team behind BNHG. 2 U.S. military veterans helping independent hospitality brands run smarter, market sharper, and deliver guest experiences worth talking about.",
-  alternates: { canonical: "https://benicehospitality.com/about" },
+  alternates: { canonical: "https://www.benicehospitality.com/about" },
   openGraph: {
     title: "About Alex and Della Henry | Be Nice Hospitality Group",
     description:
       "Husband-and-wife veteran operators behind Be Nice Hospitality Group. We help co-living operators, boutique stays, and small hospitality groups deliver experiences worth returning for.",
-    url: "https://benicehospitality.com/about",
+    url: "https://www.benicehospitality.com/about",
     type: "profile",
   },
 };

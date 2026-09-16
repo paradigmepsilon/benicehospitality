@@ -7,7 +7,7 @@ import { getResourceTool } from "@/lib/resources/registry";
 import { getResourceAccess } from "@/lib/resources/access";
 import { listCostOverrides } from "@/lib/resources/planner-cost-overrides";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("breakeven-analysis-worksheet")!;
 
 export const metadata: Metadata = {

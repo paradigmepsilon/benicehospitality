@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Login",
   description:
     "Sign in to access your courses, the Facebook community, and the resources you've enrolled in.",
-  alternates: { canonical: "https://benicehospitality.com/login" },
+  alternates: { canonical: "https://www.benicehospitality.com/login" },
   robots: { index: false, follow: false },
 };
 

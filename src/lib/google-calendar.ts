@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { google, type calendar_v3 } from "googleapis";
 import { sql } from "@/lib/db";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 // One shared host Google account organizes every booking's Meet event (both the
 // guest and the requested founder are added as attendees, so they each get the
@@ -14,12 +15,18 @@ const CALENDAR_SCOPES = [
   "email",
 ];
 
+// The OAuth redirect_uri must exactly match one registered in the provider
+// console. Production sets BNHG_BASE_URL to the canonical www origin, so that
+// still wins here and live behavior is unchanged. What changes is the failure
+// mode: the old "http://localhost:3000" fallback meant that clearing or
+// mistyping that one env var would silently ship a localhost redirect_uri to
+// production. getPublicSiteUrl() keeps localhost for real local dev (no
+// VERCEL_ENV) and falls back to the canonical origin on Vercel instead.
 function getBaseUrl(): string {
-  return (
-    process.env.BNHG_BASE_URL ||
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    "http://localhost:3000"
-  ).replace(/\/$/, "");
+  const legacy = (process.env.BNHG_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  return legacy || getPublicSiteUrl();
 }
 
 export function getCalendarRedirectUri(): string {

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Create your account",
   description:
     "Create a free account for access to resources, courses, and the Facebook community for co-living property and rental fleet operators.",
-  alternates: { canonical: "https://benicehospitality.com/signup" },
+  alternates: { canonical: "https://www.benicehospitality.com/signup" },
   robots: { index: false, follow: false },
 };
 

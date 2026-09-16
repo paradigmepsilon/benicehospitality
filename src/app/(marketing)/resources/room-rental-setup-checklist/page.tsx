@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import ChecklistTool from "@/components/resources/room-rental-setup-checklist/ChecklistTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("room-rental-setup-checklist")!;
 
 export const metadata: Metadata = {

@@ -52,7 +52,7 @@ export function getHostsEdgePriceId(): string | null {
 export function getHostsEdgeDownloadUrl(): string {
   return (
     process.env.HOSTS_EDGE_DOWNLOAD_URL ||
-    "https://benicehospitality.com/thehostsedge#download-not-configured"
+    "https://www.benicehospitality.com/thehostsedge#download-not-configured"
   );
 }
 

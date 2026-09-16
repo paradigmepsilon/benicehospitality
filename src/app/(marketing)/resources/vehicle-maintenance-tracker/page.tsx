@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import VehicleMaintenanceTracker from "@/components/resources/vehicle-maintenance-tracker/VehicleMaintenanceTracker";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("vehicle-maintenance-tracker")!;
 
 export const metadata: Metadata = {

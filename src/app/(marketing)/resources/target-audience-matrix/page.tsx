@@ -5,7 +5,7 @@ import ResourceToolLayout from "@/components/resources/ResourceToolLayout";
 import ResourceGate from "@/components/resources/ResourceGate";
 import AudienceMatrixTool from "@/components/resources/target-audience-matrix/AudienceMatrixTool";
 
-const SITE_URL = "https://benicehospitality.com";
+const SITE_URL = "https://www.benicehospitality.com";
 const tool = getResourceTool("target-audience-matrix")!;
 
 export const metadata: Metadata = {
