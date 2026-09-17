@@ -1,10 +1,12 @@
 /**
  * Which part of a product photo survives the crop.
  *
- * Product images render into fixed-aspect boxes with `object-cover`, so a
- * portrait shot (packaging, a tall bottle) gets its top and bottom cut off by
- * default. The anchor maps to CSS `object-position`, letting the admin keep
- * the part that identifies the product.
+ * Product images render into fixed-aspect boxes. The marketplace card and
+ * modal now use `object-contain` (the whole product shows, letterboxed on
+ * white), where the anchor maps to CSS `object-position` and decides where
+ * the image sits inside the frame. The small tracker thumbnail still crops
+ * with `object-cover`, where the anchor keeps the part that identifies the
+ * product.
  *
  * This lives in its own module on purpose. src/lib/marketplace.ts (server) and
  * the marketplace _components/types.ts (client) each declare their own copy of

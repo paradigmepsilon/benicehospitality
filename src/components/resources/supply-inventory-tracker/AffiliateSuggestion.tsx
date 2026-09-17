@@ -103,7 +103,7 @@ function SuggestionCard({ product }: { product: SuggestedProduct }) {
             alt={product.imageAlt}
             fill
             sizes="(min-width: 768px) 33vw, 100vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-[1.03]"
             style={{ objectPosition: objectPositionFor(product.imageAnchor) }}
           />
         ) : (

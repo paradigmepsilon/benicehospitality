@@ -75,8 +75,13 @@ export function sourceLabel(p: Product): string {
 }
 
 /**
- * The listing's photo slot, shared with the modal. First-party book art is a
- * cut-out on a transparent ground, so it is contained rather than cropped.
+ * The listing's photo slot, shared with the modal. Every photo is contained,
+ * never cropped: the slot keeps its fixed 16:9 frame so the grid stays
+ * uniform, and the whole product shows inside it. Retail product shots come
+ * on a white ground, so the frame is white to make the letterbox invisible.
+ * First-party book art is a cut-out on a transparent ground and gets the same
+ * treatment. The anchor now positions the image within the frame instead of
+ * choosing what survives a crop.
  */
 export function ProductPhoto({
   p,
@@ -97,11 +102,7 @@ export function ProductPhoto({
       alt={p.image.alt}
       fill
       sizes={sizes}
-      className={
-        p.firstParty
-          ? "object-contain p-4 transition-transform duration-300 group-hover:scale-[1.03]"
-          : "object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-      }
+      className="object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-[1.03]"
       style={{
         filter: p.firstParty ? undefined : "saturate(0.9) contrast(1.05)",
         objectPosition: objectPositionFor(p.image.anchor),
