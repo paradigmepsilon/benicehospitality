@@ -25,16 +25,26 @@ export default function HeroSection() {
       aria-labelledby="hero-headline"
     >
       <div className="relative overflow-hidden rounded-panel bg-near-black text-white min-h-[600px] md:min-h-[680px] lg:min-h-[calc(100vh-7rem)] lg:max-h-[920px] flex items-end">
-        <Image
-          src="/images/Website Images/image2.png"
-          alt="Della and Alex Henry in front of the Atlanta skyline at golden hour"
-          fill
-          sizes="100vw"
-          quality={90}
-          priority
-          className="object-cover object-[62%_center]"
-          style={{ filter: "saturate(0.9) contrast(1.05)" }}
-        />
+        {/* Below md the photograph is a fixed-height band at the top and the
+            copy sits under it, so the headline never covers the founders'
+            faces. From md up the photo fills the panel. Same treatment as
+            PhotoHero. */}
+        <div className="absolute inset-x-0 top-0 h-[400px] md:inset-0 md:h-auto">
+          <Image
+            src="/images/Website Images/image2.png"
+            alt="Della and Alex Henry in front of the Atlanta skyline at golden hour"
+            fill
+            sizes="100vw"
+            quality={90}
+            priority
+            className="object-cover object-[80%_center]"
+            style={{ filter: "saturate(0.9) contrast(1.05)" }}
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-near-black to-transparent md:hidden"
+          />
+        </div>
         <div
           aria-hidden
           className="absolute inset-0 bg-gradient-to-r from-near-black/85 via-near-black/40 to-near-black/10"
@@ -44,7 +54,7 @@ export default function HeroSection() {
           className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-near-black/80 via-near-black/30 to-transparent"
         />
 
-        <div className="relative z-10 w-full p-6 sm:p-8 md:p-12 lg:p-14">
+        <div className="relative z-10 w-full p-6 pt-[320px] sm:p-8 sm:pt-[320px] md:p-12 lg:p-14">
           <div className="max-w-3xl">
             <p
               className="animate-rise font-sans text-sm md:text-base font-medium text-white/80 mb-5"

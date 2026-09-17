@@ -60,7 +60,7 @@ export default function ManagementOverviewPage() {
         image={{
           src: "/images/Website Images/Della At Hutchens.png",
           alt: "Della Henry outside a managed co-living property at golden hour",
-          position: "object-[70%_center]",
+          position: "object-[55%_center]",
         }}
       />
 

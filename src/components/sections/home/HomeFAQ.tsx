@@ -59,10 +59,10 @@ export default function HomeFAQ() {
         <div className="relative overflow-hidden rounded-card bg-near-black aspect-[4/5] lg:aspect-auto lg:min-h-full">
           <Image
             src="/images/Website Images/hf_20260524_001332_9c9c7835-c37e-4f0d-8e3e-377f0b34d3a5.png"
-            alt="A furnished co-living living room in soft daylight"
+            alt="Alex and Della Henry welcoming a guest at the door of a co-living property"
             fill
             sizes="(min-width: 1024px) 45vw, 100vw"
-            className="object-cover object-center"
+            className="object-cover object-[72%_center]"
             style={{ filter: "saturate(0.9) contrast(1.05)" }}
           />
           <div

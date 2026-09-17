@@ -471,7 +471,7 @@ export default function AlexPage() {
                     src="/images/Website%20Images/alex%20at%20his%20computer.png"
                     alt="Alex Henry at his desk building fleet dashboards and operator tooling"
                     fill
-                    className="object-cover"
+                    className="object-cover object-[30%_center]"
                     style={{ filter: "saturate(0.9) contrast(1.05)" }}
                     sizes="(min-width: 1024px) 42vw, (min-width: 640px) 90vw, 100vw"
                   />
@@ -690,7 +690,7 @@ export default function AlexPage() {
               src="/images/Website%20Images/alex%20in%20hotel%20lobby.png"
               alt="Alex Henry in a boutique hotel lobby, the kind of independent stay this systems work also extends to"
               fill
-              className="object-cover"
+              className="object-cover object-[center_20%]"
               style={{ filter: "saturate(0.85) contrast(1.05)" }}
               sizes="(min-width: 1024px) 28rem, 90vw"
             />

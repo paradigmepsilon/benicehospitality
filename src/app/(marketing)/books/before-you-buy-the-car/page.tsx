@@ -161,7 +161,7 @@ export default function BeforeYouBuyTheCarPage() {
                 alt="Alex Henry with one of the Be Nice Autos fleet vehicles"
                 fill
                 quality={90}
-                className="object-cover"
+                className="object-cover object-[20%_center]"
                 style={{ filter: "saturate(0.9) contrast(1.05)" }}
                 sizes="(min-width: 1024px) 18rem, (min-width: 640px) 24rem, 100vw"
               />

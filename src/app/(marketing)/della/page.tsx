@@ -244,7 +244,7 @@ export default function DellaPage() {
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
               src="/images/Website%20Images/hf_20260528_162140_0ee925d0-fbc6-4a93-af15-0c4174b02574.png"
-              alt="Southeast neighborhood scene where Della operates co-living and mid-term rentals"
+              alt="Della Henry staging a furnished co-living living room"
               fill
               className="object-cover"
               style={{ filter: "saturate(0.9) contrast(1.05)" }}

@@ -167,7 +167,7 @@ export default function RoomRentalRichesPage() {
                     alt="Della Henry at her desk"
                     fill
                     sizes="(min-width: 1024px) 400px, 100vw"
-                    className="object-cover opacity-55 grayscale"
+                    className="object-cover object-[center_20%] opacity-55 grayscale"
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-7 md:p-8">

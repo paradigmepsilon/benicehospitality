@@ -98,7 +98,7 @@ export default function AboutPage() {
         image={{
           src: "/images/Website Images/hf_20260523_234948_572e0ebd-8748-4e21-84cd-68f9e2e2b41e.png",
           alt: "Della and Alex Henry, co-founders of Be Nice Hospitality Group",
-          position: "object-[55%_center]",
+          position: "object-[47%_center]",
         }}
       />
 

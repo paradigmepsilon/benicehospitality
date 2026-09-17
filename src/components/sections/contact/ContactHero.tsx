@@ -15,7 +15,7 @@ export default function ContactHero() {
       image={{
         src: "/images/Website Images/alex in hotel lobby.png",
         alt: "Alex Henry in conversation in a hotel lobby",
-        position: "object-[60%_center]",
+        position: "object-[22%_15%]",
       }}
       compact
     />

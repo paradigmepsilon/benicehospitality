@@ -69,12 +69,12 @@ const HERO_IMAGE: Record<ManagedAsset, { src: string; alt: string; position?: st
   car: {
     src: "/images/Website Images/Alex Turo Shot.png",
     alt: "Alex Henry at the wheel of a managed rental vehicle",
-    position: "object-[70%_center]",
+    position: "object-[24%_center]",
   },
   rooms: {
     src: "/images/Website Images/hf_20260528_162140_0ee925d0-fbc6-4a93-af15-0c4174b02574.png",
-    alt: "A furnished co-living living room with a fireplace",
-    position: "object-[60%_center]",
+    alt: "Della Henry staging a furnished co-living living room",
+    position: "object-[45%_center]",
   },
 };
 
