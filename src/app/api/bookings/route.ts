@@ -17,6 +17,7 @@ import {
 import { FOUNDER_LABELS, founderCalendarEmail } from "@/lib/constants/founders";
 import { VALID_BOOKING_SOURCES, isHotelAuditBooking } from "@/lib/booking-url";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { upsertContactByEmail } from "@/lib/pipeline-contacts";
 import { stopNurture } from "@/lib/nurture/engine";
 import { hasBookingConflict } from "@/lib/booking-conflict";
 import { createBookingMeetEvent } from "@/lib/google-calendar";
@@ -214,22 +215,17 @@ export async function POST(req: Request) {
 
     // Create/update pipeline contact. hotel_name is '' rather than null for
     // a non-hotel (e.g. management) booking, because bookings.hotel_name is
-    // NOT NULL and the client always sends a string. NULLIF here stops that
-    // empty string from ever overwriting a real hotel_name a repeat contact
-    // already had on file: an empty string is not NULL, so plain COALESCE
-    // let EXCLUDED.hotel_name = '' win and blank the existing value.
+    // NOT NULL and the client always sends a string. The helper normalizes
+    // that empty string to NULL, which stops it from ever overwriting a real
+    // hotel_name a repeat contact already had on file.
     try {
-      const crmResult = await sql`
-        INSERT INTO pipeline_contacts (name, email, phone, hotel_name, source)
-        VALUES (${name}, ${email}, ${phone || null}, ${hotelName}, 'booking')
-        ON CONFLICT (email) DO UPDATE SET
-          name = EXCLUDED.name,
-          phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),
-          hotel_name = COALESCE(NULLIF(EXCLUDED.hotel_name, ''), pipeline_contacts.hotel_name),
-          updated_at = NOW()
-        RETURNING id
-      `;
-      const contactId = crmResult[0].id;
+      const { id: contactId } = await upsertContactByEmail({
+        name,
+        email,
+        phone,
+        hotelName,
+        source: "booking",
+      });
 
       await sql`UPDATE bookings SET pipeline_contact_id = ${contactId} WHERE id = ${booking.id}`;
 

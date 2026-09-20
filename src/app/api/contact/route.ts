@@ -5,6 +5,7 @@ import { getAuditFromAddress } from "@/lib/email/send";
 import { contactBookingLimiter } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { upsertContactByEmail } from "@/lib/pipeline-contacts";
 
 // Lazy-construct so this module can load at build time without RESEND_API_KEY.
 let cachedResend: Resend | null = null;
@@ -81,19 +82,15 @@ export async function POST(req: Request) {
 
     // Create/update pipeline contact
     try {
-      const crmResult = await sql`
-        INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source)
-        VALUES (${name}, ${email}, ${phone || null}, ${hotelNameValue}, ${locationValue}, ${roomCountValue}, 'contact_form')
-        ON CONFLICT (email) DO UPDATE SET
-          name = EXCLUDED.name,
-          phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),
-          hotel_name = COALESCE(EXCLUDED.hotel_name, pipeline_contacts.hotel_name),
-          hotel_location = COALESCE(EXCLUDED.hotel_location, pipeline_contacts.hotel_location),
-          room_count = COALESCE(EXCLUDED.room_count, pipeline_contacts.room_count),
-          updated_at = NOW()
-        RETURNING id
-      `;
-      const contactId = crmResult[0].id;
+      const { id: contactId } = await upsertContactByEmail({
+        name,
+        email,
+        phone,
+        hotelName: hotelNameValue,
+        hotelLocation: locationValue,
+        roomCount: roomCountValue,
+        source: "contact_form",
+      });
 
       await sql`UPDATE contact_submissions SET pipeline_contact_id = ${contactId} WHERE email = ${email} AND pipeline_contact_id IS NULL`;
 

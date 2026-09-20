@@ -17,6 +17,7 @@ const NAV_ITEMS = [
   { label: "Outreach", href: "/admin/outreach", icon: "send" },
   { label: "Audits", href: "/admin/audits", icon: "chart" },
   { label: "Applications", href: "/admin/applications", icon: "inbox" },
+  { label: "Partnership", href: "/admin/partnership", icon: "briefcase" },
   { label: "Schedule", href: "/admin/schedule", icon: "calendar" },
   { label: "Blog Posts", href: "/admin/posts", icon: "edit" },
   { label: "Subscribers", href: "/admin/subscribers", icon: "mail" },

@@ -26,7 +26,8 @@ export const metadata: Metadata = {
 export default async function Page() {
   // Mirrors /estimate: this tool must be as unreachable as the front door
   // while the metro rate table is empty, not just hidden behind a link.
-  if (!isEstimatorEnabled()) redirect("/management");
+  // Asks about "car" specifically: rooms rates are seeded, car rates are not.
+  if (!isEstimatorEnabled("car")) redirect("/management");
 
   const access = await getResourceAccess(tool);
   const feeModel = getManagementFeeModel("car");

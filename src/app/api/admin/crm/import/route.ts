@@ -109,6 +109,9 @@ export async function POST(request: Request) {
     const fitQuality = row.fit_quality && /^[ABC]$/i.test(row.fit_quality) ? row.fit_quality.toUpperCase() : null;
 
     try {
+      // The conflict target's WHERE restates the predicate of the partial index
+      // pipeline_contacts_property_partial_uniq (scripts/migrate.ts). Without it
+      // Postgres cannot infer a partial index and rejects the statement.
       const result = await sql`
         INSERT INTO pipeline_contacts (
           name, email, hotel_name, hotel_location, room_count, company,
@@ -136,7 +139,9 @@ export async function POST(request: Request) {
           ${batchId},
           NOW()
         )
-        ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,''))) DO UPDATE SET
+        ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+          WHERE COALESCE(website_url,'') <> '' OR COALESCE(hotel_name,'') <> ''
+          DO UPDATE SET
           name = COALESCE(pipeline_contacts.name, EXCLUDED.name),
           email = COALESCE(pipeline_contacts.email, EXCLUDED.email),
           hotel_location = COALESCE(pipeline_contacts.hotel_location, EXCLUDED.hotel_location),

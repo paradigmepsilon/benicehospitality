@@ -790,6 +790,24 @@ export default function CrmPage() {
                     )}
                   </div>
 
+                  {/* Hand off to the Launch Partnership tracker, which picks up
+                      where this pipeline's `client` stage stops. */}
+                  <div className="pt-3 border-t border-[#e8e4dd]">
+                    <a
+                      href={`/admin/partnership?${new URLSearchParams({
+                        new: "1",
+                        contactId: String(contact.id),
+                        name: contact.name ?? "",
+                        email: contact.email ?? "",
+                        phone: contact.phone ?? "",
+                        source: contact.source ?? "",
+                      }).toString()}`}
+                      className="text-xs font-medium text-[#1A4D4F] hover:underline"
+                    >
+                      Start a Launch Partnership engagement →
+                    </a>
+                  </div>
+
                   {/* Delete */}
                   <div className="pt-3 border-t border-[#e8e4dd]">
                     {deleteConfirm === contact.id ? (

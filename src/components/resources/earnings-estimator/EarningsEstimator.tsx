@@ -296,6 +296,11 @@ export default function EarningsEstimator({
               not a promise of results. They come from BNHG&apos;s metro
               rate data and what you entered above, not a valuation of your
               specific {ASSET_NOUN[asset]}.
+              {/* Rooms only: the rooms rows in METRO_RATES are asking-rent
+                  ranges from listing comps at full occupancy (see the
+                  provenance comment in rates.ts). Say so where the number is. */}
+              {asset === "rooms" &&
+                " The range is an estimate from comparable public rental listings with every room rented all month, not a guarantee of income."}
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4">

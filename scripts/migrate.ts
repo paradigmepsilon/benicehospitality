@@ -198,13 +198,18 @@ async function migrate() {
   // frequently no hotel_name, so several would collide on the ('','') property key.
   // Guard with ON CONFLICT DO NOTHING, restating that index's expression (it's a bare
   // expression index, not a named constraint, so the target has to be the expression).
+  // The WHERE restates the predicate of the partial index that replaces it at the end
+  // of this file; Postgres will not infer a partial index without it, and the same
+  // target still infers the older non-partial index, so this runs either side of the swap.
   await sql`
     INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, source, created_at)
     SELECT DISTINCT ON (cs.email) cs.name, cs.email, cs.phone, cs.hotel_name, cs.hotel_location, cs.room_count, 'contact_form', cs.submitted_at
     FROM contact_submissions cs
     WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = cs.email)
     ORDER BY cs.email, cs.submitted_at DESC
-    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,''))) DO NOTHING
+    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+      WHERE COALESCE(website_url,'') <> '' OR COALESCE(hotel_name,'') <> ''
+      DO NOTHING
   `;
 
   // Migrate existing bookings into pipeline contacts
@@ -214,7 +219,9 @@ async function migrate() {
     FROM bookings b
     WHERE NOT EXISTS (SELECT 1 FROM pipeline_contacts pc WHERE pc.email = b.email)
     ORDER BY b.email, b.created_at DESC
-    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,''))) DO NOTHING
+    ON CONFLICT (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+      WHERE COALESCE(website_url,'') <> '' OR COALESCE(hotel_name,'') <> ''
+      DO NOTHING
   `;
 
   // Link existing records
@@ -501,9 +508,13 @@ async function migrate() {
 
   // Drop legacy email uniqueness — multi-property hotel groups share info@ addresses
   await sql`ALTER TABLE pipeline_contacts DROP CONSTRAINT IF EXISTS pipeline_contacts_email_key`;
+  // Partial from the start: see the pipeline_contacts_property_partial_uniq block at
+  // the end of this file, which also retires the non-partial index this used to create.
+  // Creating that one here again would bring it back on every run.
   await sql`
-    CREATE UNIQUE INDEX IF NOT EXISTS pipeline_contacts_property_uniq
+    CREATE UNIQUE INDEX IF NOT EXISTS pipeline_contacts_property_partial_uniq
     ON pipeline_contacts (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+    WHERE COALESCE(website_url,'') <> '' OR COALESCE(hotel_name,'') <> ''
   `;
   console.log("  ✓ pipeline_contacts extended for outbound CSV import");
 
@@ -2353,6 +2364,127 @@ async function migrate() {
     )
   `;
   console.log("  ✓ calendar_connections table created");
+
+  // Co-Living Launch Partnership tracker (/admin/partnership). One row per
+  // prospect or client property, from first touch through day-90 handoff.
+  // pipeline_contacts stays the sales CRM; this picks up where its `client`
+  // stage stops. Every CHECK list mirrors src/lib/partnership/journey.ts, and
+  // journey.test.ts fails if the two drift. Holds contact and status only:
+  // intake financials live in the client folder, never in this table.
+  await sql`
+    CREATE TABLE IF NOT EXISTS partnership_engagements (
+      id SERIAL PRIMARY KEY,
+      pipeline_contact_id INTEGER REFERENCES pipeline_contacts(id) ON DELETE SET NULL,
+      client_name TEXT NOT NULL,
+      email TEXT,
+      phone TEXT,
+      property_label TEXT,
+      property_city TEXT,
+      property_state TEXT,
+      source TEXT,
+      stage TEXT NOT NULL DEFAULT 'lead'
+        CHECK (stage IN ('lead','discovery','s1_proposed','s1_intake','s1_research','s1_verdict','decision','fix_it','pivot','s2_setup','s3_launch','s4_marketing','s5_operate','s5_advise','handoff','managed','alumni','nurture','closed_lost')),
+      stage_entered_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      path TEXT NOT NULL DEFAULT 'undecided'
+        CHECK (path IN ('undecided','partnership','a_la_carte','fix_it','alt_strategy','next_property','market_watch')),
+      verdict TEXT CHECK (verdict IN ('go','adjust','no_go')),
+      verdict_at DATE,
+      package TEXT NOT NULL DEFAULT 'none'
+        CHECK (package IN ('none','founding','standard','a_la_carte')),
+      s1_status TEXT NOT NULL DEFAULT 'not_sold' CHECK (s1_status IN ('not_sold','proposed','sold','in_progress','delivered')),
+      s2_status TEXT NOT NULL DEFAULT 'not_sold' CHECK (s2_status IN ('not_sold','proposed','sold','in_progress','delivered')),
+      s3_status TEXT NOT NULL DEFAULT 'not_sold' CHECK (s3_status IN ('not_sold','proposed','sold','in_progress','delivered')),
+      s4_status TEXT NOT NULL DEFAULT 'not_sold' CHECK (s4_status IN ('not_sold','proposed','sold','in_progress','delivered')),
+      s5_status TEXT NOT NULL DEFAULT 'not_sold' CHECK (s5_status IN ('not_sold','proposed','sold','in_progress','delivered')),
+      owner TEXT NOT NULL DEFAULT 'della' CHECK (owner IN ('della','alex')),
+      credit_cents INTEGER NOT NULL DEFAULT 0,
+      credit_expires_at DATE,
+      contract_cents INTEGER NOT NULL DEFAULT 0,
+      paid_cents INTEGER NOT NULL DEFAULT 0,
+      next_action TEXT,
+      next_action_due DATE,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  // The board is "everything open, soonest next action first", filtered by
+  // stage, so stage leads the index and the due date follows.
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_partnership_engagements_stage
+    ON partnership_engagements(stage, next_action_due)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_partnership_engagements_contact
+    ON partnership_engagements(pipeline_contact_id)
+  `;
+  console.log("  ✓ partnership_engagements table created");
+
+  // Checklist completions only. The steps themselves are defined in
+  // journey.ts, so editing a label or adding a step needs no migration.
+  await sql`
+    CREATE TABLE IF NOT EXISTS partnership_steps (
+      id SERIAL PRIMARY KEY,
+      engagement_id INTEGER NOT NULL REFERENCES partnership_engagements(id) ON DELETE CASCADE,
+      step_key TEXT NOT NULL,
+      done_by TEXT,
+      done_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (engagement_id, step_key)
+    )
+  `;
+  console.log("  ✓ partnership_steps table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS partnership_events (
+      id SERIAL PRIMARY KEY,
+      engagement_id INTEGER NOT NULL REFERENCES partnership_engagements(id) ON DELETE CASCADE,
+      kind TEXT NOT NULL
+        CHECK (kind IN ('created','stage','verdict','path','section','money','note','call','email','doc')),
+      body TEXT NOT NULL,
+      created_by TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_partnership_events_engagement
+    ON partnership_events(engagement_id, created_at DESC)
+  `;
+  console.log("  ✓ partnership_events table created");
+
+  // Doc library sign-off (/admin/partnership/docs). One row per document key
+  // from journey.ts DOCS: who read it, and whether the whole set was then
+  // approved for use. A document nobody has ticked simply has no row.
+  await sql`
+    CREATE TABLE IF NOT EXISTS partnership_doc_reviews (
+      doc_key TEXT PRIMARY KEY,
+      reviewed_by TEXT,
+      reviewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      approved_by TEXT,
+      approved_at TIMESTAMPTZ
+    )
+  `;
+  console.log("  ✓ partnership_doc_reviews table created");
+
+  // ============================================================
+  // pipeline_contacts: property dedup index becomes partial
+  // ============================================================
+  // pipeline_contacts_property_uniq covered every row, so the key ('','') could exist
+  // exactly once: one inbound lead with no website and no hotel name, ever. The
+  // second one (a resource-funnel signup, a management booking) hit a unique
+  // violation. The dedup only ever meant "one row per property", and a row with
+  // neither field names no property, so those rows are now outside the index.
+  //
+  // New name rather than a redefinition, because CREATE INDEX IF NOT EXISTS matches on
+  // name alone and would keep the old definition. Create before drop so there is no
+  // window without a property unique. Every ON CONFLICT on this expression has to
+  // restate the WHERE (the two backfills above, and /api/admin/crm/import).
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS pipeline_contacts_property_partial_uniq
+    ON pipeline_contacts (LOWER(COALESCE(website_url,'')), LOWER(COALESCE(hotel_name,'')))
+    WHERE COALESCE(website_url,'') <> '' OR COALESCE(hotel_name,'') <> ''
+  `;
+  await sql`DROP INDEX IF EXISTS pipeline_contacts_property_uniq`;
+  console.log("  ✓ pipeline_contacts property index made partial");
 
   console.log("Migrations complete!");
 }

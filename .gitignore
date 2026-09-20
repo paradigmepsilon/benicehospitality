@@ -62,3 +62,9 @@ __pycache__/
 # marketplace DB dumps from scripts/backup-marketplace.ts — generated data,
 # and the JSON embeds the production Neon hostname
 /backups/
+
+# Co-Living Launch Partnership working docs: internal margins, labor hours,
+# sales scripts, proposed pricing, agreement drafts. This repo is PUBLIC, so
+# they stay on disk only. Remove this line only after the repo is private or
+# the docs have a private home.
+docs/co-living-launch-partnership/

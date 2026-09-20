@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
+import { upsertContactByEmail } from "@/lib/pipeline-contacts";
 
 export async function GET(request: Request) {
   const authError = await requireAuth(request);
@@ -100,30 +101,43 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Name and email are required." }, { status: 400 });
   }
 
-  const result = await sql`
-    INSERT INTO pipeline_contacts (name, email, phone, hotel_name, hotel_location, room_count, company, pipeline_stage, source, notes)
-    VALUES (
-      ${name}, ${email}, ${phone || null}, ${hotel_name || null},
-      ${hotel_location || null}, ${room_count || null}, ${company || null},
-      ${pipeline_stage || "prospect"}, 'manual', ${notes || null}
-    )
-    ON CONFLICT (email) DO UPDATE SET
-      name = EXCLUDED.name,
-      phone = COALESCE(EXCLUDED.phone, pipeline_contacts.phone),
-      hotel_name = COALESCE(EXCLUDED.hotel_name, pipeline_contacts.hotel_name),
-      hotel_location = COALESCE(EXCLUDED.hotel_location, pipeline_contacts.hotel_location),
-      room_count = COALESCE(EXCLUDED.room_count, pipeline_contacts.room_count),
-      company = COALESCE(EXCLUDED.company, pipeline_contacts.company),
-      updated_at = NOW()
-    RETURNING *
-  `;
+  // No try/catch used to mean any DB error surfaced as a bare 500 with a
+  // stack. "+ Add Contact" now gets a JSON error it can show.
+  try {
+    const { id, outcome } = await upsertContactByEmail({
+      name,
+      email,
+      phone,
+      hotelName: hotel_name,
+      hotelLocation: hotel_location,
+      roomCount: room_count,
+      company,
+      pipelineStage: pipeline_stage,
+      notes,
+      source: "manual",
+    });
 
-  const contact = result[0];
+    // The row returned is another contact's: this hotel is already in the CRM
+    // under a different email. Say so rather than report a create that did
+    // not happen.
+    if (outcome === "property_match") {
+      return NextResponse.json(
+        { error: "A contact for this hotel already exists.", existing_id: id },
+        { status: 409 },
+      );
+    }
 
-  await sql`
-    INSERT INTO pipeline_activities (contact_id, type, title)
-    VALUES (${contact.id}, 'manual', 'Contact created manually')
-  `;
+    const rows = await sql`SELECT * FROM pipeline_contacts WHERE id = ${id}`;
+    const contact = rows[0];
 
-  return NextResponse.json(contact, { status: 201 });
+    await sql`
+      INSERT INTO pipeline_activities (contact_id, type, title)
+      VALUES (${id}, 'manual', 'Contact created manually')
+    `;
+
+    return NextResponse.json(contact, { status: 201 });
+  } catch (err) {
+    console.error("[admin/crm] contact upsert failed:", err);
+    return NextResponse.json({ error: "Could not save the contact." }, { status: 500 });
+  }
 }

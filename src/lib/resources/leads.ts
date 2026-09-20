@@ -21,6 +21,7 @@ import type { NurtureSequenceKey } from "@/lib/nurture/types";
 import { getResourceTool } from "@/lib/resources/registry";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { internalResourceLeadEmail } from "@/lib/email-templates";
+import { upsertContactByEmail } from "@/lib/pipeline-contacts";
 
 // Same verified sender chain as the scorecard and the old unlock route.
 const RESOURCE_FROM_EMAIL =
@@ -42,9 +43,9 @@ function getResend(): Resend {
  * Upsert a person into the CRM. Returns the contact id, or null if the write
  * failed (callers carry on regardless).
  *
- * Not an ON CONFLICT upsert: pipeline_contacts' unique index on email was
- * dropped (scripts/migrate.ts), and the live unique is on
- * (website_url, hotel_name). SELECT-then-write is the only correct shape here.
+ * The write itself lives in @/lib/pipeline-contacts, shared with the contact
+ * form, bookings, and the admin CRM. This wrapper only adds the funnel's
+ * never-throw contract.
  */
 export async function upsertPipelineContact(input: {
   name: string;
@@ -53,35 +54,14 @@ export async function upsertPipelineContact(input: {
   /** First-touch source. Only written on insert; never overwritten. */
   source: string;
 }): Promise<number | null> {
-  const email = input.email.toLowerCase().trim();
-  const name = input.name.trim();
-  const phone = input.phone?.trim() || null;
-
   try {
-    const existing = (await sql`
-      SELECT id FROM pipeline_contacts WHERE LOWER(email) = ${email} LIMIT 1
-    `) as Array<{ id: number }>;
-
-    if (existing.length > 0) {
-      const id = existing[0].id;
-      // `source` is deliberately not updated. It records first touch, so the
-      // campaign that originally found this person survives every later visit.
-      await sql`
-        UPDATE pipeline_contacts
-        SET name = COALESCE(NULLIF(${name}, ''), name),
-            phone = COALESCE(${phone}, phone),
-            updated_at = NOW()
-        WHERE id = ${id}
-      `;
-      return id;
-    }
-
-    const inserted = (await sql`
-      INSERT INTO pipeline_contacts (name, email, phone, source, pipeline_stage)
-      VALUES (${name}, ${email}, ${phone}, ${input.source}, 'prospect')
-      RETURNING id
-    `) as Array<{ id: number }>;
-    return inserted[0]?.id ?? null;
+    const { id } = await upsertContactByEmail({
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      source: input.source,
+    });
+    return id;
   } catch (err) {
     console.error("[resources/leads] pipeline_contacts upsert failed:", err);
     return null;

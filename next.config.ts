@@ -62,6 +62,25 @@ const nextConfig: NextConfig = {
   // Required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
 
+  // The admin partnership doc library streams rendered PDFs from docs/, which
+  // file tracing would otherwise leave out of the serverless bundle.
+  outputFileTracingIncludes: {
+    "/api/admin/partnership/docs/[key]": [
+      "./docs/co-living-launch-partnership/dist/**/*.pdf",
+    ],
+    "/api/admin/partnership/files/[...path]": [
+      "./docs/co-living-launch-partnership/client/**/*",
+      "./docs/co-living-launch-partnership/templates/**/*.{html,css,csv}",
+    ],
+    "/api/admin/partnership/docs": [
+      "./docs/co-living-launch-partnership/client/*.html",
+      "./docs/co-living-launch-partnership/templates/**/*.html",
+    ],
+    "/api/admin/partnership/[id]/email": [
+      "./docs/co-living-launch-partnership/templates/sales/email_pack.md",
+    ],
+  },
+
   /**
    * IA migration redirects.
    *

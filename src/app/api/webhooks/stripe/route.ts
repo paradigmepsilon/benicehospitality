@@ -60,6 +60,11 @@ import {
 } from "@/lib/operator-bundle";
 import { CRR_SEQUENCE_KEYS } from "@/lib/nurture/types";
 import { personId } from "@/lib/posthog-identity";
+import {
+  PARTNERSHIP_PRODUCT_TAG,
+  readPaidSession,
+  recordPartnershipPayment,
+} from "@/lib/partnership/payments";
 import { findUserById } from "@/lib/community-auth";
 
 let cachedResend: Resend | null = null;
@@ -120,6 +125,8 @@ export async function POST(request: Request) {
             await fulfillCrrPresale(session);
           } else if (session.metadata?.product === OPERATOR_BUNDLE_PRODUCT_TAG) {
             await fulfillOperatorBundle(session);
+          } else if (session.metadata?.product === PARTNERSHIP_PRODUCT_TAG) {
+            await fulfillPartnershipPayment(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -494,6 +501,33 @@ async function fulfillCrrPresale(
  * Same shape as fulfillCrrPresale, granting BOTH enrollments. Every step is
  * isolated and best-effort; the handler never sees a throw.
  */
+/**
+ * A Launch Partnership card payment, raised by an admin from the tracker
+ * (src/app/api/admin/partnership/[id]/checkout). Fulfillment is bookkeeping
+ * only: mark the client paid and write the timeline. No account, no
+ * enrollment, no email; Della sends the welcome packet by hand.
+ *
+ * Refunds are not mirrored back: a refund issued in the Stripe dashboard does
+ * not lower paid_cents. Adjust it on the client's tracker page.
+ */
+async function fulfillPartnershipPayment(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const parsed = readPaidSession(session);
+  if (!parsed.ok) {
+    console.error(
+      `[webhooks/stripe] partnership session ${session.id} cannot be recorded: ${parsed.reason}`,
+    );
+    return;
+  }
+  const result = await recordPartnershipPayment(parsed.facts);
+  if (result === "no_engagement") {
+    console.error(
+      `[webhooks/stripe] partnership session ${session.id} paid, but engagement ${parsed.facts.engagementId} no longer exists`,
+    );
+  }
+}
+
 async function fulfillOperatorBundle(
   session: Stripe.Checkout.Session,
 ): Promise<void> {
