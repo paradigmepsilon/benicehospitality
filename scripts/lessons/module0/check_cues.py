@@ -67,7 +67,28 @@ def main():
         if s.get("seg") and s["seg"] not in scripts: problems.append(f"S{i}: seg {s['seg']} has no script")
     for name, blob in (("hybrid_spec.json", json.dumps(spec)), ("v2_scripts.json", json.dumps(scripts))):
         if re.search("[–—]", blob): problems.append(f"{name}: em/en-dash present")
-    mode = "timings" if use_timings else "scripts"
+    # production markers belong in the scripts (stripped before TTS), never in on-screen text
+    leak = re.search(r"\[?(VERIFY|ALEX INPUT|SCREENSHOT)\b[^\"]{0,60}", json.dumps(spec, ensure_ascii=False))
+    if leak: problems.append(f"hybrid_spec.json: production marker in on-screen text: {leak.group(0)!r}")
+    # spec_to_hybrid.py artifacts: a parser label left on the front of on-screen text, and a
+    # checklist title whose step count disagrees with the items under it
+    label = re.compile(r"\s*(Lines?|Checklist|Points?|List|Heading|Bullets?|Steps|Footer line|Supporting text|Pull quote|Big stat|Caption|Card \d|Col \d)\s*:", re.I)
+    def shown(node, key=""):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k not in ("at", "stock", "video", "layout", "seg", "note"): yield from shown(v, k)
+        elif isinstance(node, list):
+            for v in node: yield from shown(v, key)
+        elif isinstance(node, str): yield re.sub(r"<[^>]+>", "", node)
+    for i, s in enumerate(spec["slides"], 1):
+        for t in shown(s):
+            if label.match(t) or re.search(r"\b(Supporting text|Supporting|Footer line|Pull quote|Big stat|Attribution):", t): problems.append(f"S{i}: parser label on screen: {t[:50]!r}")
+            elif re.search(r"\(\d*$", t.strip()) or t.count("(") != t.count(")"): problems.append(f"S{i}: on-screen text cut mid-sentence: {t[:60]!r}")
+            elif re.match(r"\s*1\.\s.*\s2\.\s", t): problems.append(f"S{i}: a whole numbered list in one on-screen string: {t[:50]!r}")
+        m = re.match(r"\s*(\d+)\s+steps?\b", re.sub(r"<[^>]+>", "", s.get("title_html", "")))
+        if s.get("layout") == "checklist" and m and int(m.group(1)) != len(s.get("items", [])):
+            problems.append(f"S{i}: title says {m.group(1)} steps, slide shows {len(s.get('items', []))}")
+    mode ="timings" if use_timings else "scripts"
     print(f"{d.name}: {len(spec['slides'])} slides, {len(scripts)} segments, {count} cues checked against {mode}")
     blocked = [k for k, v in scripts.items() if "[ALEX INPUT" in v]
     if blocked: print("segments with ALEX INPUT slots:", blocked)

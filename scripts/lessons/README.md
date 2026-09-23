@@ -279,3 +279,8 @@ Each lesson has a `lesson_spec.json` adjacent to its `spec.md`. The spec.md is h
 - `emdash_sweep.py` — scans for `\u2014` and `\u2013` across a directory
 - `_shared.py` — STYLE_PROMPT, design tokens, lesson helpers
 - `module0/stock_broll.py` — free Pexels/Pixabay b-roll for hybrid `video-split` slots
+- `masterclass/build_cohort_decks.py` — validates `sessions/session_*.json` and builds the live-cohort presenter decks (human-paced, one click per build, presenter window with a talk track per click). Schema lives with the content: `Courses/Car Rental Riches/Masterclass/AUTHORING.md`
+- `masterclass/deck_template.html` — the deck engine (CSS + JS) with `{{PAGE_TITLE}}` and `{{DECK_JSON}}` markers
+- `masterclass/check_decks.mjs` — Playwright walks every click of every deck, flags overflow and console errors; `--shots` saves a screenshot per slide
+- `module0/reimport_lesson.sh` — rebuild and re-import already-imported CRR lessons as drafts, keeping the stored title and summary (`finish_lesson.sh` is first-import only)
+- `module0/rerecord_segments.sh` — re-record named `lesson:seg` pairs whose script changed after recording; ElevenLabs balance preflight, `--dry-run`, then produce_audio + reimport

@@ -88,19 +88,19 @@
       }
     },
     "module_looks": {
-      "_note": "Assumption 2026-09-06 (Alex only named the Module 1 look). All landscape 2752x1536, full-frame renders. Re-render any intro if Alex wants a different look.",
+      "_note": "Alex's call 2026-09-20: every intro still to be rendered uses blue_shirt_b (9d966388dbde4830ad7c416e1ca51081). Modules 4, 5 and 6 were rendered on it that day; 8, 9, 11 and 12 follow. Modules 1, 3, 7 and 10 keep the looks they shipped with (1 blue_shirt_a, 3 studio, 7 podcast_host, 2 and 10 blue_shirt_b). All landscape 2752x1536, full-frame renders.",
       "1": "blue_shirt_a",
       "2": "blue_shirt_b",
       "3": "studio",
-      "4": "blue_shirt_a",
-      "5": "podcast_host",
+      "4": "blue_shirt_b",
+      "5": "blue_shirt_b",
       "6": "blue_shirt_b",
       "7": "podcast_host",
-      "8": "blue_shirt_a",
-      "9": "studio",
+      "8": "blue_shirt_b",
+      "9": "blue_shirt_b",
       "10": "blue_shirt_b",
-      "11": "podcast_host",
-      "12": "studio"
+      "11": "blue_shirt_b",
+      "12": "blue_shirt_b"
     }
   }
 }

@@ -139,6 +139,12 @@ def stt_dir(lesson_dir: Path, mp3_subdir: str):
 def main():
     lesson_dir = Path(sys.argv[1]).resolve()
     stage = sys.argv[2]
+    # Car Rental Riches is Alex's course: never narrate it in the default (Della) voice.
+    if stage.startswith("tts") and "Car Rental Riches" in lesson_dir.parts:
+        cfg = json.loads((Path(__file__).resolve().parents[1] / "config" / "avatars.json").read_text())
+        alex = cfg["car_rental_riches"]["voices"]["elevenlabs"]["id"]
+        if VOICE_ID != alex:
+            sys.exit(f"Car Rental Riches narrates in Alex_H. Set ELEVEN_VOICE_ID={alex} (got {VOICE_ID}).")
     if stage == "tts":
         tts(lesson_dir)
     elif stage == "stt":

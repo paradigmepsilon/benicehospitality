@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{PAGE_TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* Live cohort presenter deck. Human-paced: nothing on a slide moves until the presenter
+   clicks. The stage is a fixed 1920x1080 canvas scaled to the window (same idea as
+   BundleFrame), so px sizes inside .stage are safe. */
+:root {
+  --bnhg-primary: #5b9a2f;
+  --bnhg-primary-dark: #4a7d25;
+  --bnhg-secondary: #f5a623;
+  --bnhg-tertiary: #c0674a;
+  --bnhg-bg: #f8f6f1;
+  --bnhg-ink-primary: #1a1a1a;
+  --bnhg-ink-secondary: #3d3d3d;
+  --bnhg-ink-muted: #807868;
+  --bnhg-hairline: rgba(26, 26, 26, 0.14);
+  --deep: #22301a;
+  --font-display: "Playfair Display", "PlayfairDisplay", Georgia, serif;
+  --font-body: "DM Sans", "DMSans", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: #111; overflow: hidden; font-family: var(--font-body); color: var(--bnhg-ink-primary); }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+.viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #111; }
+.stage { position: relative; width: 1920px; height: 1080px; flex: none; transform-origin: center center; background: var(--bnhg-bg); overflow: hidden; }
+body.blackout .stage { visibility: hidden; }
+
+/* ---------- slides ---------- */
+.slide { position: absolute; inset: 0; padding: 96px 120px 120px; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 360ms var(--ease), visibility 0s linear 360ms; }
+.slide.active { opacity: 1; visibility: visible; transition: opacity 360ms var(--ease), visibility 0s; z-index: 2; }
+.slide.dark { background: var(--deep); color: var(--bnhg-bg); }
+.mark { position: absolute; right: 64px; top: 56px; width: 64px; height: 64px; opacity: 0.9; }
+.slide.dark .mark { opacity: 0.85; }
+
+.eyebrow { font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--bnhg-primary); margin-bottom: 26px; }
+.dark .eyebrow { color: var(--bnhg-secondary); }
+h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.015em; line-height: 1.06; }
+h1 em, h2 em, .headline em { font-style: italic; color: var(--bnhg-primary); }
+.dark h1 em, .dark h2 em, .dark .headline em { color: var(--bnhg-secondary); }
+h2 { font-size: 76px; max-width: 1500px; }
+.body-area { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; margin-top: 36px; }
+
+/* Build system. Every [data-b] starts hidden and appears when its build index is reached.
+   No timers: state only changes on presenter input. */
+[data-b] { opacity: 0; transform: translateY(18px); transition: opacity 460ms var(--ease), transform 460ms var(--ease); }
+[data-b].on { opacity: 1; transform: none; }
+.focus [data-b].on:not(.now) { opacity: 0.34; }
+.stagger [data-b].on { transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* title */
+.slide.t-title { justify-content: flex-end; padding-bottom: 150px; }
+.t-title .lockup { position: absolute; left: 120px; top: 84px; height: 96px; border-radius: 3px; }
+.t-title .week { font-family: var(--font-mono); font-size: 24px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--bnhg-secondary); margin-bottom: 30px; }
+.t-title h1 { font-size: 118px; max-width: 1500px; }
+.t-title .sub { margin-top: 34px; font-size: 34px; color: rgba(248, 246, 241, 0.78); max-width: 1200px; line-height: 1.35; }
+.t-title .meta { margin-top: 54px; font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(248, 246, 241, 0.55); }
+
+/* section */
+.slide.t-section { justify-content: center; }
+.t-section .num { font-family: var(--font-display); font-style: italic; font-size: 240px; line-height: 0.9; color: var(--bnhg-secondary); }
+.t-section h1 { font-size: 104px; margin-top: 18px; max-width: 1400px; }
+.t-section .blurb { margin-top: 30px; font-size: 34px; line-height: 1.4; color: rgba(248, 246, 241, 0.78); max-width: 1150px; }
+.t-section .mins { position: absolute; left: 120px; bottom: 96px; font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(248, 246, 241, 0.6); }
+
+/* agenda */
+.agenda { display: grid; gap: 0; border-top: 1px solid var(--bnhg-hairline); }
+.agenda .row { display: grid; grid-template-columns: 150px 1fr 150px; align-items: baseline; padding: 23px 0; border-bottom: 1px solid var(--bnhg-hairline); }
+.agenda .time { font-family: var(--font-mono); font-size: 24px; color: var(--bnhg-ink-muted); }
+.agenda .label { font-size: 34px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 26px; flex-wrap: wrap; }
+.agenda .label small { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 25px; color: var(--bnhg-ink-muted); }
+.agenda .len { font-family: var(--font-mono); font-size: 22px; color: var(--bnhg-primary); text-align: right; }
+
+/* statement */
+.t-statement .body-area { justify-content: center; }
+.headline { font-family: var(--font-display); font-size: 104px; line-height: 1.08; letter-spacing: -0.018em; max-width: 1560px; }
+.kicker { margin-top: 54px; padding-top: 34px; border-top: 1px solid var(--bnhg-hairline); font-family: var(--font-display); font-style: italic; font-size: 38px; line-height: 1.35; color: var(--bnhg-ink-secondary); max-width: 1280px; }
+.dark .kicker { border-color: rgba(248, 246, 241, 0.2); color: rgba(248, 246, 241, 0.8); }
+
+/* bullets */
+.bullets { display: grid; gap: 30px; max-width: 1560px; }
+.bullets .item { display: grid; grid-template-columns: 74px 1fr; align-items: start; }
+.bullets .n { font-family: var(--font-display); font-style: italic; font-size: 44px; color: var(--bnhg-primary); line-height: 1.1; }
+.bullets .text { font-size: 42px; font-weight: 500; line-height: 1.24; letter-spacing: -0.01em; }
+.bullets .sub { margin-top: 8px; font-family: var(--font-display); font-style: italic; font-size: 29px; font-weight: 400; color: var(--bnhg-ink-muted); line-height: 1.35; }
+.bullets.dense { gap: 22px; }
+.bullets.dense .text { font-size: 36px; }
+
+/* columns */
+.cols { display: grid; gap: 40px; align-items: stretch; }
+.cols.c2 { grid-template-columns: repeat(2, 1fr); }
+.cols.c3 { grid-template-columns: repeat(3, 1fr); }
+.cols.c4 { grid-template-columns: repeat(4, 1fr); gap: 30px; }
+.col { background: #fff; border: 1px solid var(--bnhg-hairline); border-top: 6px solid var(--bnhg-primary); padding: 40px 38px 44px; border-radius: 4px; }
+.col .tag { font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--bnhg-primary); margin-bottom: 18px; }
+.col .heading { font-family: var(--font-display); font-size: 42px; line-height: 1.12; letter-spacing: -0.01em; }
+.col .text { margin-top: 20px; font-size: 28px; line-height: 1.42; color: var(--bnhg-ink-secondary); }
+.c4 .col .heading { font-size: 34px; } .c4 .col .text { font-size: 24px; }
+.col.tone-warn { border-top-color: var(--bnhg-tertiary); } .col.tone-warn .tag { color: var(--bnhg-tertiary); }
+.col.tone-gold { border-top-color: var(--bnhg-secondary); } .col.tone-gold .tag { color: #b97a10; }
+
+/* stat */
+.t-stat .body-area { display: grid; grid-template-columns: auto 1fr; gap: 90px; align-items: center; }
+.figure { font-family: var(--font-display); font-style: italic; font-size: 330px; line-height: 0.92; color: var(--bnhg-primary); letter-spacing: -0.03em; white-space: nowrap; }
+.figure.len-m { font-size: 250px; } .figure.len-l { font-size: 196px; }
+.figure .unit { font-size: 0.42em; letter-spacing: -0.01em; margin-left: 0.06em; }
+.stat-side .label { font-size: 48px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+.stat-side .support { margin-top: 28px; font-size: 33px; line-height: 1.42; color: var(--bnhg-ink-secondary); }
+.stat-side .source { margin-top: 34px; font-family: var(--font-mono); font-size: 19px; letter-spacing: 0.06em; color: var(--bnhg-ink-muted); }
+
+/* table */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-family: var(--font-mono); font-size: 19px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bnhg-ink-muted); text-align: left; font-weight: 500; padding: 0 22px 18px; border-bottom: 2px solid var(--bnhg-ink-primary); }
+.tbl td { font-size: 31px; line-height: 1.3; padding: 22px; border-bottom: 1px solid var(--bnhg-hairline); vertical-align: top; }
+.tbl td:first-child { font-weight: 600; }
+.tbl tr.tone-good td:last-child { color: var(--bnhg-primary-dark); font-weight: 600; }
+.tbl tr.tone-warn td:last-child { color: #b97a10; font-weight: 600; }
+.tbl tr.tone-bad td:last-child { color: var(--bnhg-tertiary); font-weight: 600; }
+.tbl tr[data-b] { transform: none; }
+.tbl.dense td { font-size: 27px; padding: 16px 22px; }
+
+/* compare */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.side { padding: 44px 46px; border-radius: 4px; background: #fff; border: 1px solid var(--bnhg-hairline); }
+.side .heading { font-family: var(--font-display); font-size: 46px; line-height: 1.1; margin-bottom: 26px; }
+.side ul { list-style: none; display: grid; gap: 16px; }
+.side li { font-size: 30px; line-height: 1.36; padding-left: 34px; position: relative; color: var(--bnhg-ink-secondary); }
+.side li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 14px; height: 3px; background: var(--bnhg-ink-muted); }
+.side.left { border-top: 6px solid var(--bnhg-tertiary); } .side.right { border-top: 6px solid var(--bnhg-primary); }
+.verdict { margin-top: 40px; font-family: var(--font-display); font-style: italic; font-size: 40px; line-height: 1.3; color: var(--bnhg-ink-primary); max-width: 1500px; }
+
+/* poll */
+.poll { display: grid; gap: 22px; max-width: 1500px; }
+.poll .opt { display: grid; grid-template-columns: 70px 1fr 110px; align-items: center; gap: 20px; cursor: pointer; user-select: none; }
+.poll .key { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--bnhg-ink-primary); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 24px; }
+.poll .barwrap { position: relative; background: #fff; border: 1px solid var(--bnhg-hairline); border-radius: 4px; min-height: 82px; display: flex; align-items: center; overflow: hidden; }
+.poll .bar { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(91, 154, 47, 0.24); transition: width 520ms var(--ease); }
+.poll .opt.lead .bar { background: rgba(245, 166, 35, 0.42); }
+.poll .lbl { position: relative; padding: 14px 26px; font-size: 32px; font-weight: 500; line-height: 1.22; }
+.poll .count { font-family: var(--font-display); font-style: italic; font-size: 54px; text-align: right; color: var(--bnhg-primary-dark); }
+.poll-hint { margin-top: 22px; font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.08em; color: var(--bnhg-ink-muted); }
+.debrief { margin-top: 30px; font-family: var(--font-display); font-style: italic; font-size: 36px; line-height: 1.34; color: var(--bnhg-ink-secondary); max-width: 1500px; }
+
+/* board */
+.board-wrap { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.board-prompt { font-family: var(--font-display); font-style: italic; font-size: 32px; color: var(--bnhg-ink-secondary); margin-bottom: 24px; max-width: 1500px; line-height: 1.35; }
+.board-scroll { flex: 1; min-height: 0; overflow-y: auto; border-top: 2px solid var(--bnhg-ink-primary); }
+.board { width: 100%; border-collapse: collapse; }
+.board th { position: sticky; top: 0; background: var(--bnhg-bg); font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bnhg-ink-muted); text-align: left; font-weight: 500; padding: 16px 18px; border-bottom: 1px solid var(--bnhg-hairline); }
+.board td { font-size: 28px; padding: 15px 18px; border-bottom: 1px solid var(--bnhg-hairline); vertical-align: top; line-height: 1.3; }
+.board td:first-child { font-weight: 600; white-space: nowrap; }
+.board td.x { width: 60px; text-align: right; }
+.board .del { border: 0; background: none; color: var(--bnhg-ink-muted); font-size: 26px; cursor: pointer; opacity: 0.35; }
+.board .del:hover { opacity: 1; color: var(--bnhg-tertiary); }
+.board .v-PROCEED, .board .v-Done, .board .v-Yes { color: var(--bnhg-primary-dark); font-weight: 700; }
+.board .v-CAUTION, .board .v-Partly { color: #b97a10; font-weight: 700; }
+.board .v-PASS, .board .v-No, .board .v-Missed { color: var(--bnhg-tertiary); font-weight: 700; }
+.board-empty { padding: 34px 18px; font-family: var(--font-display); font-style: italic; font-size: 30px; color: var(--bnhg-ink-muted); }
+.board-form { display: flex; gap: 12px; margin-top: 18px; align-items: stretch; }
+.board-form input, .board-form select { flex: 1; min-width: 0; font-size: 24px; padding: 14px 16px; border: 1px solid var(--bnhg-hairline); border-radius: 4px; background: #fff; }
+.board-form button { font-size: 22px; font-weight: 600; padding: 0 28px; border: 0; border-radius: 4px; background: var(--bnhg-primary-dark); color: #fff; cursor: pointer; }
+.board-carry-note { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.08em; color: var(--bnhg-ink-muted); margin-top: 14px; }
+
+/* timer */
+.t-timer .body-area { display: grid; grid-template-columns: 1fr 640px; gap: 80px; align-items: center; }
+.timer-box { text-align: center; background: #fff; border: 1px solid var(--bnhg-hairline); border-radius: 6px; padding: 50px 30px 40px; }
+.timer-round { font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--bnhg-ink-muted); min-height: 28px; }
+.timer-clock { font-family: var(--font-display); font-size: 190px; line-height: 1; letter-spacing: -0.02em; margin: 14px 0 22px; font-variant-numeric: tabular-nums; transition: color 300ms; }
+.timer-box.low .timer-clock { color: #b97a10; } .timer-box.done .timer-clock { color: var(--bnhg-tertiary); }
+.timer-track { height: 8px; background: rgba(26, 26, 26, 0.08); border-radius: 4px; overflow: hidden; }
+.timer-fill { height: 100%; width: 100%; background: var(--bnhg-primary); transform-origin: left; }
+.timer-box.low .timer-fill { background: var(--bnhg-secondary); } .timer-box.done .timer-fill { background: var(--bnhg-tertiary); }
+.timer-btns { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+.timer-btns button { font-size: 21px; font-weight: 600; padding: 13px 26px; border-radius: 4px; border: 1px solid var(--bnhg-ink-primary); background: none; cursor: pointer; }
+.timer-btns button.primary { background: var(--bnhg-ink-primary); color: #fff; }
+
+/* tool */
+.t-tool .body-area { display: grid; grid-template-columns: 1fr 560px; gap: 70px; align-items: center; }
+.tool-card { background: var(--deep); color: var(--bnhg-bg); border-radius: 6px; padding: 46px 44px; }
+.tool-card .tag { font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--bnhg-secondary); }
+.tool-card .name { font-family: var(--font-display); font-size: 46px; line-height: 1.12; margin: 16px 0 14px; }
+.tool-card .cap { font-size: 25px; line-height: 1.42; color: rgba(248, 246, 241, 0.78); }
+.tool-card a { display: inline-block; margin-top: 30px; font-size: 23px; font-weight: 600; padding: 15px 28px; border-radius: 4px; background: var(--bnhg-secondary); color: #1a1a1a; text-decoration: none; }
+
+/* checklist */
+.check { display: grid; gap: 26px; max-width: 1520px; }
+.check .item { display: grid; grid-template-columns: 64px 1fr; align-items: start; }
+.check .box { width: 40px; height: 40px; border: 3px solid var(--bnhg-primary); border-radius: 4px; margin-top: 6px; }
+.check .text { font-size: 40px; font-weight: 500; line-height: 1.26; letter-spacing: -0.01em; }
+.due { margin-top: 40px; font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bnhg-tertiary); }
+
+/* quote */
+.t-quote .body-area { justify-content: center; }
+.qmark { font-family: var(--font-display); font-size: 200px; line-height: 0.6; color: var(--bnhg-secondary); }
+blockquote { font-family: var(--font-display); font-style: italic; font-size: 72px; line-height: 1.2; max-width: 1500px; margin-top: 10px; }
+.attr { margin-top: 40px; font-family: var(--font-mono); font-size: 21px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248, 246, 241, 0.6); }
+
+/* close */
+.next-card { margin-top: 44px; border-top: 1px solid rgba(248, 246, 241, 0.22); padding-top: 34px; max-width: 1400px; }
+.next-card .tag { font-family: var(--font-mono); font-size: 19px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--bnhg-secondary); }
+.next-card ul { list-style: none; margin-top: 20px; display: grid; gap: 14px; }
+.next-card li { font-size: 32px; line-height: 1.35; color: rgba(248, 246, 241, 0.86); padding-left: 34px; position: relative; }
+.next-card li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 14px; height: 3px; background: var(--bnhg-secondary); }
+
+.footer-note { position: absolute; left: 120px; right: 120px; bottom: 40px; font-size: 15px; line-height: 1.4; color: var(--bnhg-ink-muted); opacity: 0.85; }
+.dark .footer-note { color: rgba(248, 246, 241, 0.45); }
+
+/* ---------- HUD (presenter aid, subtle on a shared screen) ---------- */
+.hud { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; z-index: 5; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.12em; color: rgba(26, 26, 26, 0.45); pointer-events: none; }
+.hud.on-dark { color: rgba(248, 246, 241, 0.5); }
+body.no-hud .hud { display: none; }
+.dots { display: flex; gap: 7px; align-items: center; }
+.dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid currentColor; display: block; }
+.dots i.f { background: currentColor; }
+.progress { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--bnhg-primary); width: 0; transition: width 360ms var(--ease); z-index: 6; }
+
+/* ---------- overlays (outside the scaled stage) ---------- */
+.panel { position: fixed; z-index: 50; background: #161a13; color: #f1efe8; font-family: var(--font-body); display: none; }
+.panel.open { display: block; }
+#notes { top: 0; right: 0; bottom: 0; width: min(460px, 38vw); padding: 22px 24px; overflow-y: auto; border-left: 1px solid #2c3326; }
+body.notes-open .viewport { right: min(460px, 38vw); }
+#overview { inset: 0; padding: 34px 44px; overflow-y: auto; }
+#help { left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 30px 38px; border-radius: 8px; border: 1px solid #2c3326; width: min(640px, 92vw); }
+.panel h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bnhg-secondary); margin: 18px 0 8px; font-weight: 500; }
+.panel h3:first-child { margin-top: 0; }
+.pv-title { font-family: var(--font-display); font-size: 25px; line-height: 1.2; }
+.pv-clock { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+.pv-clock div { background: #1f2519; border-radius: 6px; padding: 10px 12px; }
+.pv-clock b { display: block; font-family: var(--font-display); font-size: 26px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.pv-clock span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #9aa38e; }
+.pv-clock .ahead b { color: #9fd27a; } .pv-clock .behind b { color: #f0a58b; }
+.pv-builds { list-style: none; display: grid; gap: 8px; }
+.pv-builds li { padding: 10px 12px; border-radius: 6px; background: #1f2519; font-size: 15px; line-height: 1.4; opacity: 0.5; }
+.pv-builds li.done { opacity: 0.4; } .pv-builds li.cur { opacity: 1; outline: 2px solid var(--bnhg-secondary); } .pv-builds li.next { opacity: 0.85; }
+.pv-builds .what { font-weight: 600; } .pv-builds .say { display: block; margin-top: 4px; color: #cfd4c6; }
+.pv-notes { font-size: 16px; line-height: 1.5; color: #dfe3d6; white-space: pre-wrap; }
+.story { background: rgba(245, 166, 35, 0.2); color: #ffd48a; border-radius: 3px; padding: 0 4px; }
+.pv-next { font-size: 15px; color: #cfd4c6; }
+.ov-seg { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bnhg-secondary); margin: 22px 0 10px; }
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.ov-card { text-align: left; background: #1f2519; border: 1px solid #2c3326; border-radius: 6px; padding: 12px 14px; cursor: pointer; color: inherit; }
+.ov-card.cur { outline: 2px solid var(--bnhg-secondary); }
+.ov-card .n { font-family: var(--font-mono); font-size: 11px; color: #9aa38e; } .ov-card .t { font-size: 15px; line-height: 1.3; margin-top: 4px; }
+.ov-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.ov-actions button, .ov-actions label { background: #1f2519; border: 1px solid #2c3326; border-radius: 6px; padding: 9px 14px; font-size: 13px; cursor: pointer; color: inherit; }
+#help table { width: 100%; border-collapse: collapse; font-size: 15px; }
+#help td { padding: 6px 0; border-bottom: 1px solid #2c3326; } #help td:first-child { font-family: var(--font-mono); color: var(--bnhg-secondary); width: 42%; }
+
+/* presenter window: the panel is the whole page */
+body.presenter .viewport { display: none; }
+body.presenter #notes { display: block; position: static; width: auto; min-height: 100vh; border: 0; padding: 28px 34px; font-size: 110%; }
+body.presenter .pv-title { font-size: 34px; } body.presenter .pv-builds li { font-size: 19px; } body.presenter .pv-notes { font-size: 19px; } body.presenter .pv-clock b { font-size: 38px; }
+
+/* print / PDF handout: every slide, fully built */
+body.print { overflow: auto; background: #fff; height: auto; }
+body.print .viewport { position: static; display: block; background: #fff; }
+body.print .stage { transform: none !important; height: auto; overflow: visible; background: none; }
+body.print .slide { position: relative; height: 1080px; opacity: 1; visibility: visible; page-break-after: always; break-after: page; background-color: var(--bnhg-bg); }
+body.print .slide.dark { background-color: var(--deep); }
+body.print [data-b] { opacity: 1 !important; transform: none !important; }
+body.print .hud, body.print .progress, body.print .board-form, body.print .timer-btns, body.print .poll-hint { display: none; }
+@page { size: 1920px 1080px; margin: 0; }
+@media (prefers-reduced-motion: reduce) { [data-b], .slide, .poll .bar { transition-duration: 1ms !important; } }
+</style>
+</head>
+<body>
+<div class="viewport"><div class="stage" id="stage"><div class="progress" id="progress"></div><div class="hud" id="hud"><div class="dots" id="dots"></div><div id="hudSeg"></div><div id="hudPos"></div></div></div></div>
+<aside class="panel" id="notes"></aside>
+<section class="panel" id="overview"></section>
+<section class="panel" id="help"></section>
+
+<script id="deck-data" type="application/json">{{DECK_JSON}}</script>
+<script>
+(function () {
+  "use strict";
+  var DECK = JSON.parse(document.getElementById("deck-data").textContent);
+  var S = DECK.session, SLIDES = DECK.slides;
+  var qs = new URLSearchParams(location.search);
+  var PRESENTER = qs.get("presenter") === "1", PRINT = qs.get("print") === "1";
+  var stage = document.getElementById("stage");
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var COHORT = store.get("crrfb:cohort", "default");
+  var NS = "crrfb:" + COHORT + ":";
+  var POS_KEY = NS + S.id + ":pos";
+
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  // Titles and headlines may carry <em> for the italic accent; everything else is escaped.
+  function rich(s) { return esc(s).replace(/&lt;(\/?)em&gt;/g, "<$1em>"); }
+  function plain(s) { return String(s || "").replace(/<[^>]+>/g, ""); }
+  function num(v, dec) { return Number(v).toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+  function fmt(sec) { sec = Math.max(0, Math.round(sec)); var m = Math.floor(sec / 60), s = sec % 60; return m + ":" + (s < 10 ? "0" : "") + s; }
+
+  // ---------- renderers: each returns {html, builds:[{what, say}]} ----------
+  var R = {};
+  function head(sl) { return (sl.eyebrow ? '<div class="eyebrow">' + esc(sl.eyebrow) + "</div>" : "") + (sl.title ? "<h2>" + rich(sl.title) + "</h2>" : ""); }
+
+  R.title = function (sl) {
+    return { dark: true, html: '<img class="lockup" src="BNHG_full_lockup.svg" alt="">' +
+      '<div class="week">' + esc(S.label) + " · " + esc(S.modules) + "</div><h1>" + rich(sl.title || S.title) + "</h1>" +
+      (sl.subtitle ? '<div class="sub">' + esc(sl.subtitle) + "</div>" : "") +
+      '<div class="meta">Car Rental Riches · Fleet Builder cohort · ' + esc(S.duration_min) + " minutes</div>", builds: [] };
+  };
+  R.section = function (sl) {
+    return { dark: true, html: '<div class="num">' + esc(sl.number || "") + "</div><h1>" + rich(sl.title) + "</h1>" +
+      (sl.blurb ? '<div class="blurb">' + esc(sl.blurb) + "</div>" : "") +
+      (sl.segment_minutes ? '<div class="mins">' + esc(sl.segment_minutes) + " minutes</div>" : ""), builds: [] };
+  };
+  R.agenda = function (sl) {
+    var rows = sl.rows.map(function (r, i) {
+      return '<div class="row" data-b="1" style="--i:' + i + '"><div class="time">' + esc(r.time) + '</div><div class="label">' + esc(r.label) +
+        (r.detail ? "<small>" + esc(r.detail) + "</small>" : "") + '</div><div class="len">' + esc(r.minutes) + " min</div></div>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area"><div class="agenda stagger">' + rows + "</div></div>",
+      builds: [{ what: "Reveal the run of show", say: sl.say || "" }] };
+  };
+  R.statement = function (sl) {
+    var b = [];
+    if (sl.kicker) b.push({ what: plain(sl.kicker), say: sl.say || "" });
+    return { dark: !!sl.dark, html: (sl.eyebrow ? '<div class="eyebrow">' + esc(sl.eyebrow) + "</div>" : "") +
+      '<div class="body-area"><div class="headline">' + rich(sl.headline) + "</div>" +
+      (sl.kicker ? '<div class="kicker" data-b="1">' + esc(sl.kicker) + "</div>" : "") + "</div>", builds: b };
+  };
+  R.bullets = function (sl) {
+    var items = sl.items.map(function (it, i) {
+      return '<div class="item" data-b="' + (i + 1) + '"><div class="n">' + (i + 1) + '</div><div><div class="text">' + esc(it.text) + "</div>" +
+        (it.sub ? '<div class="sub">' + esc(it.sub) + "</div>" : "") + "</div></div>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area' + (sl.focus === false ? "" : " focus") + '"><div class="bullets' + (sl.items.length > 4 ? " dense" : "") + '">' + items + "</div></div>",
+      builds: sl.items.map(function (it) { return { what: it.text, say: it.say || "" }; }) };
+  };
+  R.columns = function (sl) {
+    var cols = sl.cols.map(function (c, i) {
+      return '<div class="col' + (c.tone ? " tone-" + esc(c.tone) : "") + '" data-b="' + (i + 1) + '">' + (c.tag ? '<div class="tag">' + esc(c.tag) + "</div>" : "") +
+        '<div class="heading">' + esc(c.heading) + '</div><div class="text">' + esc(c.body) + "</div></div>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area"><div class="cols c' + sl.cols.length + '">' + cols + "</div></div>",
+      builds: sl.cols.map(function (c) { return { what: c.heading, say: c.say || "" }; }) };
+  };
+  R.stat = function (sl) {
+    var f = sl.figure, b = [{ what: "The number: " + (f.prefix || "") + f.value + (f.suffix || ""), say: sl.say || "" }], n = 1, side = "";
+    side += '<div class="label" data-b="1">' + esc(sl.label) + "</div>";
+    if (sl.support) { n++; side += '<div class="support" data-b="' + n + '">' + esc(sl.support) + "</div>"; b.push({ what: sl.support, say: sl.support_say || "" }); }
+    if (sl.source) { n++; side += '<div class="source" data-b="' + n + '">' + esc(sl.source) + "</div>"; b.push({ what: "Source line", say: "" }); }
+    return { html: head(sl) + '<div class="body-area"><div class="figure' + (function () { var L = ((f.prefix || "") + num(f.value, f.decimals || 0) + (f.suffix || "")).length; return L > 8 ? " len-l" : L > 5 ? " len-m" : ""; })() + '" data-b="1" data-count="' + esc(f.value) + '" data-dec="' + esc(f.decimals || 0) + '">' +
+      esc(f.prefix || "") + '<span class="val">0</span>' + (f.suffix ? '<span class="unit">' + esc(f.suffix) + "</span>" : "") +
+      '</div><div class="stat-side">' + side + "</div></div>", builds: b };
+  };
+  R.table = function (sl) {
+    var th = sl.columns.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("");
+    var rows = sl.rows.map(function (r, i) {
+      return '<tr class="' + (r.tone ? "tone-" + esc(r.tone) : "") + '" data-b="' + (i + 1) + '">' + r.cells.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area"><table class="tbl' + (sl.rows.length > 5 ? " dense" : "") + '"><thead><tr>' + th + "</tr></thead><tbody>" + rows + "</tbody></table></div>",
+      builds: sl.rows.map(function (r) { return { what: r.cells[0], say: r.say || "" }; }) };
+  };
+  R.compare = function (sl) {
+    function side(o, cls, b) { return '<div class="side ' + cls + '" data-b="' + b + '"><div class="heading">' + esc(o.heading) + "</div><ul>" + o.points.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul></div>"; }
+    var b = [{ what: sl.left.heading, say: sl.left.say || "" }, { what: sl.right.heading, say: sl.right.say || "" }];
+    if (sl.verdict) b.push({ what: sl.verdict, say: sl.verdict_say || "" });
+    return { html: head(sl) + '<div class="body-area"><div class="compare">' + side(sl.left, "left", 1) + side(sl.right, "right", 2) + "</div>" +
+      (sl.verdict ? '<div class="verdict" data-b="3">' + esc(sl.verdict) + "</div>" : "") + "</div>", builds: b };
+  };
+  R.poll = function (sl, idx) {
+    var opts = sl.options.map(function (o, i) {
+      return '<div class="opt" data-opt="' + i + '"><div class="key">' + (i + 1) + '</div><div class="barwrap"><div class="bar"></div><div class="lbl">' + esc(o.label) + '</div></div><div class="count">0</div></div>';
+    }).join("");
+    var b = [{ what: "Show the options and take the count", say: sl.say || "Read each option out loud. Tally with the number keys as hands go up or answers land in chat." }];
+    if (sl.debrief) b.push({ what: sl.debrief, say: sl.debrief_say || "" });
+    return { html: head(sl) + '<div class="body-area"><div class="poll" data-b="1" data-poll="' + idx + '">' + opts + '</div><div class="poll-hint" data-b="1">Keys 1 to ' + sl.options.length +
+      " add a vote · Shift plus the key removes one · click works too</div>" + (sl.debrief ? '<div class="debrief" data-b="2">' + esc(sl.debrief) + "</div>" : "") + "</div>", builds: b };
+  };
+  R.board = function (sl) {
+    var th = sl.columns.map(function (c) { return "<th>" + esc(c.label) + "</th>"; }).join("") + "<th></th>";
+    var form = sl.readonly ? "" : '<form class="board-form" autocomplete="off">' + sl.columns.map(function (c) {
+      if (c.options) return '<select name="' + esc(c.key) + '"><option value="">' + esc(c.label) + "</option>" + c.options.map(function (o) { return "<option>" + esc(o) + "</option>"; }).join("") + "</select>";
+      return '<input name="' + esc(c.key) + '" placeholder="' + esc(c.label) + '">';
+    }).join("") + "<button>Add</button></form>";
+    return { html: head(sl) + '<div class="body-area" style="justify-content:flex-start"><div class="board-wrap" data-board="' + esc(sl.board_id) + '">' +
+      (sl.prompt ? '<div class="board-prompt">' + esc(sl.prompt) + "</div>" : "") + '<div class="board-scroll"><table class="board"><thead><tr>' + th + "</tr></thead><tbody></tbody></table></div>" + form +
+      (sl.readonly ? '<div class="board-carry-note">Carried over from an earlier session. Read only here.</div>' : "") + "</div></div>", builds: [] };
+  };
+  R.timer = function (sl, idx) {
+    var items = (sl.instructions || []).map(function (it, i) {
+      return '<div class="item" data-b="' + (i + 1) + '"><div class="n">' + (i + 1) + '</div><div><div class="text">' + esc(it.text) + "</div></div></div>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area"><div class="bullets dense">' + items + '</div><div class="timer-box" data-timer="' + idx + '"><div class="timer-round"></div><div class="timer-clock">' + fmt(sl.timer_minutes * 60) +
+      '</div><div class="timer-track"><div class="timer-fill"></div></div><div class="timer-btns"><button class="primary" data-act="toggle">Start</button><button data-act="reset">Reset</button>' +
+      (sl.rounds ? '<button data-act="next">Next round</button>' : "") + "</div></div></div>",
+      builds: (sl.instructions || []).map(function (it) { return { what: it.text, say: it.say || "" }; }) };
+  };
+  R.tool = function (sl) {
+    var items = sl.steps.map(function (it, i) {
+      return '<div class="item" data-b="' + (i + 1) + '"><div class="n">' + (i + 1) + '</div><div><div class="text">' + esc(it.text) + "</div></div></div>";
+    }).join("");
+    return { html: head(sl) + '<div class="body-area"><div class="bullets dense focus">' + items + '</div><div class="tool-card"><div class="tag">Live in the room</div><div class="name">' + esc(sl.tool_name) +
+      '</div><div class="cap">' + esc(sl.caption || "") + "</div>" + (sl.url ? '<a href="' + esc(sl.url) + '" target="_blank" rel="noopener">Open the tool</a>' : "") + "</div></div>",
+      builds: sl.steps.map(function (it) { return { what: it.text, say: it.say || "" }; }) };
+  };
+  R.checklist = function (sl) {
+    var items = sl.items.map(function (it, i) { return '<div class="item" data-b="' + (i + 1) + '"><div class="box"></div><div class="text">' + esc(it.text) + "</div></div>"; }).join("");
+    return { html: head(sl) + '<div class="body-area"><div class="check">' + items + "</div>" + (sl.due ? '<div class="due" data-b="' + sl.items.length + '">' + esc(sl.due) + "</div>" : "") + "</div>",
+      builds: sl.items.map(function (it) { return { what: it.text, say: it.say || "" }; }) };
+  };
+  R.quote = function (sl) {
+    return { dark: true, html: '<div class="body-area"><div class="qmark">“</div><blockquote>' + esc(sl.quote) + "</blockquote>" + (sl.attribution ? '<div class="attr">' + esc(sl.attribution) + "</div>" : "") + "</div>", builds: [] };
+  };
+  R.close = function (sl) {
+    var li = (sl.next_prework || []).map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("");
+    return { dark: true, html: '<div class="eyebrow">' + esc(sl.eyebrow || "Next session") + '</div><div class="body-area"><div class="headline">' + rich(sl.next_title) + "</div>" +
+      (sl.next_modules ? '<div class="kicker">' + esc(sl.next_modules) + "</div>" : "") + (li ? '<div class="next-card" data-b="1"><div class="tag">' + esc(sl.prework_tag || "Before we meet") + '</div><ul>' + li + "</ul></div>" : "") + "</div>",
+      builds: li ? [{ what: "What to do before next session", say: sl.say || "" }] : [] };
+  };
+
+  // ---------- mount ----------
+  var META = [];
+  SLIDES.forEach(function (sl, i) {
+    var r = (R[sl.type] || R.statement)(sl, i);
+    var el = document.createElement("section");
+    el.className = "slide t-" + sl.type + (r.dark ? " dark" : "");
+    el.innerHTML = r.html + (sl.type === "title" ? "" : '<img class="mark" src="BNHG_letter_mark.svg" alt="">') +
+      (S.disclaimer && sl.type !== "title" && sl.type !== "section" ? '<div class="footer-note">' + esc(S.disclaimer) + "</div>" : "");
+    stage.insertBefore(el, document.getElementById("progress"));
+    META.push({ el: el, builds: r.builds, n: r.builds.length });
+  });
+  // planned cumulative minutes at the START of each slide, for the pace readout
+  var cum = 0; SLIDES.forEach(function (sl, i) { META[i].startMin = cum; cum += Number(sl.minutes || 0); });
+  var TOTAL_MIN = cum;
+
+  var st = { cur: 0, b: 0, startedAt: null };
+
+  function countUp(fig) {
+    var target = parseFloat(fig.dataset.count), dec = parseInt(fig.dataset.dec, 10) || 0, val = fig.querySelector(".val");
+    if (fig._ran) { val.textContent = num(target, dec); return; }
+    fig._ran = true;
+    var t0 = performance.now(), dur = 1100;
+    (function tick(t) { var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); val.textContent = num(target * e, dec); if (p < 1) requestAnimationFrame(tick); })(t0);
+  }
+  function apply(animate) {
+    META.forEach(function (m, i) {
+      var active = i === st.cur; m.el.classList.toggle("active", active);
+      if (!active) return;
+      m.el.querySelectorAll("[data-b]").forEach(function (n) {
+        var k = parseInt(n.dataset.b, 10);
+        n.classList.toggle("on", k <= st.b); n.classList.toggle("now", k === st.b);
+        if (n.dataset.count) { if (k <= st.b) { if (animate) countUp(n); else { n._ran = true; n.querySelector(".val").textContent = num(parseFloat(n.dataset.count), parseInt(n.dataset.dec, 10) || 0); } } else { n._ran = false; n.querySelector(".val").textContent = "0"; } }
+      });
+    });
+    var m = META[st.cur], dots = "";
+    for (var i = 1; i <= m.n; i++) dots += '<i class="' + (i <= st.b ? "f" : "") + '"></i>';
+    document.getElementById("dots").innerHTML = dots;
+    document.getElementById("hud").classList.toggle("on-dark", m.el.classList.contains("dark"));
+    document.getElementById("hudSeg").textContent = (SLIDES[st.cur].segment || "").toUpperCase();
+    document.getElementById("hudPos").textContent = (st.cur + 1) + " / " + SLIDES.length;
+    document.getElementById("progress").style.width = ((st.cur + (m.n ? st.b / (m.n + 1) : 0)) / (SLIDES.length - 1) * 100) + "%";
+    store.set(POS_KEY, { cur: st.cur, b: st.b, startedAt: st.startedAt });
+    try { history.replaceState(null, "", "#s=" + (st.cur + 1) + "&b=" + st.b); } catch (e) {}
+    renderNotes(); syncOut();
+  }
+  function startClock() { if (!st.startedAt) st.startedAt = Date.now(); }
+  function next() { var m = META[st.cur]; if (st.b < m.n) st.b++; else if (st.cur < SLIDES.length - 1) { st.cur++; st.b = 0; startClock(); } apply(true); }
+  function prev() { if (st.b > 0) st.b--; else if (st.cur > 0) { st.cur--; st.b = META[st.cur].n; } apply(false); }
+  function go(i, built) { st.cur = Math.max(0, Math.min(SLIDES.length - 1, i)); st.b = built ? META[st.cur].n : 0; if (st.cur > 0) startClock(); apply(false); }
+
+  // ---------- scale the stage ----------
+  function fit() {
+    if (PRINT) return;
+    var vp = document.querySelector(".viewport").getBoundingClientRect();
+    stage.style.transform = "scale(" + Math.min(vp.width / 1920, vp.height / 1080) + ")";
+  }
+  window.addEventListener("resize", fit);
+
+  // ---------- notes / presenter ----------
+  function storyMark(s) { return esc(s).replace(/\[ALEX STORY:([^\]]*)\]/g, '<span class="story">Your story:$1</span>'); }
+  function renderNotes() {
+    var box = document.getElementById("notes");
+    if (!PRESENTER && !document.body.classList.contains("notes-open")) return;
+    var sl = SLIDES[st.cur], m = META[st.cur], nx = SLIDES[st.cur + 1];
+    var elapsed = st.startedAt ? (Date.now() - st.startedAt) / 1000 : 0, plan = m.startMin * 60, delta = elapsed - plan;
+    var paceCls = !st.startedAt || Math.abs(delta) < 60 ? "" : delta > 0 ? "behind" : "ahead";
+    var paceTxt = !st.startedAt ? "not started" : Math.abs(delta) < 60 ? "on pace" : (delta > 0 ? "+" : "-") + fmt(Math.abs(delta));
+    var builds = m.builds.map(function (b, i) {
+      var k = i + 1, cls = k < st.b ? "done" : k === st.b ? "cur" : k === st.b + 1 ? "next" : "";
+      return '<li class="' + cls + '"><span class="what">' + k + ". " + esc(b.what) + "</span>" + (b.say ? '<span class="say">' + storyMark(b.say) + "</span>" : "") + "</li>";
+    }).join("");
+    box.innerHTML = "<h3>" + esc(sl.segment || S.label) + " · slide " + (st.cur + 1) + " of " + SLIDES.length + " · planned " + esc(sl.minutes || 0) + ' min</h3><div class="pv-title">' +
+      esc(plain(sl.title || sl.headline || sl.next_title || S.title)) + '</div><div class="pv-clock"><div><b id="pvElapsed">' + fmt(elapsed) + "</b><span>elapsed</span></div><div><b>" + fmt(plan) +
+      '</b><span>plan at this slide</span></div><div class="' + paceCls + '"><b id="pvPace">' + paceTxt + "</b><span>pace</span></div></div>" +
+      (sl.notes ? "<h3>Facilitator note</h3><div class=\"pv-notes\">" + storyMark(sl.notes) + "</div>" : "") +
+      (builds ? "<h3>Clicks on this slide (" + st.b + " of " + m.n + ')</h3><ol class="pv-builds">' + builds + "</ol>" : "<h3>No clicks on this slide</h3><div class=\"pv-next\">Next click moves to the next slide.</div>") +
+      "<h3>Up next</h3><div class=\"pv-next\">" + (nx ? esc(plain(nx.title || nx.headline || nx.next_title || nx.type)) : "End of session") + "</div>";
+  }
+  setInterval(function () { if (PRESENTER || document.body.classList.contains("notes-open")) renderNotes(); }, 1000);
+
+  var pw = null;
+  function syncOut() { if (pw && !pw.closed) pw.postMessage({ crrfb: "state", st: st }, "*"); }
+  window.addEventListener("message", function (e) {
+    var d = e.data || {};
+    if (d.crrfb === "state" && PRESENTER) { st = d.st; renderNotes(); }
+    if (d.crrfb === "cmd" && !PRESENTER) { if (d.cmd === "next") next(); if (d.cmd === "prev") prev(); if (d.cmd === "hello") syncOut(); }
+  });
+  function cmdUp(c) { if (window.opener && !window.opener.closed) window.opener.postMessage({ crrfb: "cmd", cmd: c }, "*"); }
+
+  // ---------- polls ----------
+  function pollKey(i) { return NS + S.id + ":poll:" + i; }
+  function drawPoll(i) {
+    var wrap = stage.querySelector('[data-poll="' + i + '"]'); if (!wrap) return;
+    var v = store.get(pollKey(i), []), max = Math.max.apply(null, v.concat([0])), total = v.reduce(function (a, b) { return a + (b || 0); }, 0);
+    wrap.querySelectorAll(".opt").forEach(function (o, k) {
+      var c = v[k] || 0; o.querySelector(".count").textContent = c; o.querySelector(".bar").style.width = total ? (c / total * 100) + "%" : "0";
+      o.classList.toggle("lead", c > 0 && c === max);
+    });
+  }
+  function vote(i, k, d) { var v = store.get(pollKey(i), []); v[k] = Math.max(0, (v[k] || 0) + d); store.set(pollKey(i), v); drawPoll(i); }
+  SLIDES.forEach(function (sl, i) { if (sl.type === "poll") drawPoll(i); });
+
+  // ---------- boards (saved in this browser only, per cohort) ----------
+  function boardKey(id) { return NS + "board:" + id; }
+  function drawBoard(wrap) {
+    var id = wrap.dataset.board, sl = SLIDES.filter(function (s) { return s.type === "board" && s.board_id === id && wrap.closest(".slide") === META[SLIDES.indexOf(s)].el; })[0];
+    var rows = store.get(boardKey(id), []), tb = wrap.querySelector("tbody");
+    if (!rows.length) { tb.innerHTML = '<tr><td class="board-empty" colspan="' + (sl.columns.length + 1) + '">' + esc(sl.empty || "Nothing on the board yet.") + "</td></tr>"; return; }
+    tb.innerHTML = rows.map(function (r, n) {
+      return "<tr>" + sl.columns.map(function (c) { var v = r[c.key] || ""; return '<td class="' + (c.options ? "v-" + esc(v) : "") + '">' + esc(v) + "</td>"; }).join("") +
+        '<td class="x">' + (sl.readonly ? "" : '<button class="del" data-row="' + n + '" title="Remove">×</button>') + "</td></tr>";
+    }).join("");
+  }
+  stage.querySelectorAll("[data-board]").forEach(function (wrap) {
+    drawBoard(wrap);
+    var form = wrap.querySelector("form");
+    if (form) form.addEventListener("submit", function (e) {
+      e.preventDefault(); var row = {}, any = false;
+      Array.prototype.forEach.call(form.elements, function (el) { if (el.name) { row[el.name] = el.value.trim(); if (row[el.name]) any = true; } });
+      if (!any) return;
+      var rows = store.get(boardKey(wrap.dataset.board), []); rows.push(row); store.set(boardKey(wrap.dataset.board), rows);
+      form.reset(); form.elements[0].focus(); stage.querySelectorAll('[data-board="' + wrap.dataset.board + '"]').forEach(drawBoard);
+    });
+    wrap.addEventListener("click", function (e) {
+      var d = e.target.closest(".del"); if (!d) return;
+      var rows = store.get(boardKey(wrap.dataset.board), []); rows.splice(parseInt(d.dataset.row, 10), 1); store.set(boardKey(wrap.dataset.board), rows);
+      stage.querySelectorAll('[data-board="' + wrap.dataset.board + '"]').forEach(drawBoard);
+    });
+  });
+
+  // ---------- timers (presenter starts them; they never advance a slide) ----------
+  var timers = {};
+  stage.querySelectorAll("[data-timer]").forEach(function (box) {
+    var i = parseInt(box.dataset.timer, 10), sl = SLIDES[i], total = sl.timer_minutes * 60;
+    var rounds = Array.isArray(sl.rounds) ? sl.rounds : sl.rounds ? Array.apply(null, Array(sl.rounds)).map(function (_, k) { return "Round " + (k + 1); }) : null;
+    var T = timers[i] = { left: total, run: false, last: 0, round: 0 };
+    function draw() {
+      box.querySelector(".timer-clock").textContent = fmt(T.left);
+      box.querySelector(".timer-fill").style.transform = "scaleX(" + (T.left / total) + ")";
+      box.classList.toggle("low", T.left <= 60 && T.left > 0); box.classList.toggle("done", T.left <= 0);
+      box.querySelector('[data-act="toggle"]').textContent = T.run ? "Pause" : T.left < total && T.left > 0 ? "Resume" : "Start";
+      box.querySelector(".timer-round").textContent = rounds ? rounds[T.round] + " · " + (T.round + 1) + " of " + rounds.length : "";
+    }
+    function loop(t) { if (!T.run) return; T.left = Math.max(0, T.left - (t - T.last) / 1000); T.last = t; if (T.left <= 0) T.run = false; draw(); if (T.run) requestAnimationFrame(loop); }
+    T.toggle = function () { if (T.left <= 0) return; T.run = !T.run; if (T.run) { T.last = performance.now(); requestAnimationFrame(loop); } draw(); };
+    T.reset = function () { T.run = false; T.left = total; draw(); };
+    T.next = function () { if (rounds) { T.round = (T.round + 1) % rounds.length; T.reset(); } };
+    box.addEventListener("click", function (e) { var a = e.target.dataset.act; if (a && T[a]) T[a](); });
+    draw();
+  });
+
+  // ---------- overview + help ----------
+  function renderOverview() {
+    var html = '<div class="ov-actions"><button data-ov="close">Close (O)</button><button data-ov="print">Open handout / PDF view</button><button data-ov="export">Export boards and polls</button><label>Import<input type="file" accept="application/json" hidden></label><button data-ov="resetpos">Restart this session</button></div>', seg = null;
+    SLIDES.forEach(function (sl, i) {
+      if (sl.segment !== seg) { if (seg !== null) html += "</div>"; seg = sl.segment; html += '<div class="ov-seg">' + esc(seg || "Open") + '</div><div class="ov-grid">'; }
+      html += '<button class="ov-card' + (i === st.cur ? " cur" : "") + '" data-go="' + i + '"><div class="n">' + (i + 1) + " · " + esc(sl.type) + " · " + esc(sl.minutes || 0) + ' min</div><div class="t">' + esc(plain(sl.title || sl.headline || sl.next_title || S.title)) + "</div></button>";
+    });
+    document.getElementById("overview").innerHTML = html + "</div>";
+  }
+  document.getElementById("overview").addEventListener("click", function (e) {
+    var g = e.target.closest("[data-go]"), a = e.target.closest("[data-ov]");
+    if (g) { go(parseInt(g.dataset.go, 10), false); toggle("overview", false); }
+    if (!a) return;
+    if (a.dataset.ov === "close") toggle("overview", false);
+    if (a.dataset.ov === "print") window.open(location.pathname + "?print=1", "_blank");
+    if (a.dataset.ov === "resetpos") { st = { cur: 0, b: 0, startedAt: null }; toggle("overview", false); apply(false); }
+    if (a.dataset.ov === "export") {
+      var out = {}; try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k.indexOf("crrfb:") === 0) out[k] = localStorage.getItem(k); } } catch (err) {}
+      var el = document.createElement("a"); el.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: "application/json" })); el.download = "crr_fleet_builder_" + COHORT + "_boards.json"; el.click();
+    }
+  });
+  document.getElementById("overview").addEventListener("change", function (e) {
+    var f = e.target.files && e.target.files[0]; if (!f) return;
+    var rd = new FileReader(); rd.onload = function () { try { var o = JSON.parse(rd.result); Object.keys(o).forEach(function (k) { if (k.indexOf("crrfb:") === 0) localStorage.setItem(k, o[k]); }); location.reload(); } catch (err) { alert("That file did not read as a board export."); } }; rd.readAsText(f);
+  });
+  document.getElementById("help").innerHTML = "<h3>Presenter keys</h3><table>" + [
+    ["→ · Space · PageDown · click", "Next click (one build at a time)"], ["← · PageUp", "Back one click"], ["Shift + → / ←", "Jump a whole slide"],
+    ["P", "Open the presenter window (notes, clock, pace)"], ["N", "Notes drawer in this window"], ["O", "Overview, jump, export boards, PDF view"],
+    ["T", "Start or pause the timer on a timer slide"], ["1 to 5", "Add a poll vote (Shift removes)"], ["B", "Black out the screen"], ["F", "Full screen"], ["H", "Hide or show the click dots"], ["?", "This list"]
+  ].map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"; }).join("") + "</table>";
+  function toggle(id, on) { var p = document.getElementById(id); var open = on == null ? !p.classList.contains("open") : on; p.classList.toggle("open", open); if (id === "overview" && open) renderOverview(); if (id === "notes") { document.body.classList.toggle("notes-open", open); fit(); renderNotes(); } }
+
+  // ---------- input ----------
+  function typing(e) { var t = e.target; return t && (t.tagName === "INPUT" || t.tagName === "SELECT" || t.tagName === "TEXTAREA"); }
+  document.addEventListener("keydown", function (e) {
+    if (typing(e)) { if (e.key === "Escape") e.target.blur(); return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (PRESENTER) { if (k === "ArrowRight" || k === " " || k === "PageDown" || k === "Enter") { e.preventDefault(); cmdUp("next"); } if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); cmdUp("prev"); } return; }
+    if (k === "Escape") { ["overview", "help"].forEach(function (id) { toggle(id, false); }); document.body.classList.remove("blackout"); return; }
+    if (document.getElementById("overview").classList.contains("open") && k.toLowerCase() !== "o") return;
+    if (k === "ArrowRight" || k === "PageDown" || k === " " || k === "Enter") { e.preventDefault(); if (e.shiftKey && k === "ArrowRight") go(st.cur + 1, false); else next(); }
+    else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); if (e.shiftKey) go(st.cur - 1, true); else prev(); }
+    else if (k === "Home") go(0, false); else if (k === "End") go(SLIDES.length - 1, false);
+    else if (k.toLowerCase() === "o") toggle("overview"); else if (k === "?" || k === "/") toggle("help");
+    else if (k.toLowerCase() === "n") toggle("notes"); else if (k.toLowerCase() === "h") document.body.classList.toggle("no-hud");
+    else if (k.toLowerCase() === "b") document.body.classList.toggle("blackout");
+    else if (k.toLowerCase() === "f") { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+    else if (k.toLowerCase() === "p") { pw = window.open(location.pathname + "?presenter=1", "crrfb-presenter", "width=560,height=900"); setTimeout(syncOut, 600); }
+    else if (k.toLowerCase() === "t") { var T = timers[st.cur]; if (T) T.toggle(); }
+    else if (SLIDES[st.cur].type === "poll" && st.b >= 1) {
+      var m = /^Digit([1-9])$/.exec(e.code); if (m) { var idx = parseInt(m[1], 10) - 1; if (idx < SLIDES[st.cur].options.length) vote(st.cur, idx, e.shiftKey ? -1 : 1); }
+    }
+  });
+  stage.addEventListener("click", function (e) {
+    if (e.target.closest("button, a, input, select, form, .board-scroll")) return;
+    var opt = e.target.closest(".opt"); if (opt && SLIDES[st.cur].type === "poll") { vote(st.cur, parseInt(opt.dataset.opt, 10), e.shiftKey ? -1 : 1); return; }
+    next();
+  });
+
+  // ---------- boot ----------
+  if (PRINT) { document.body.classList.add("print"); META.forEach(function (m) { m.el.querySelectorAll("[data-count]").forEach(function (n) { n.querySelector(".val").textContent = num(parseFloat(n.dataset.count), parseInt(n.dataset.dec, 10) || 0); }); }); return; }
+  if (PRESENTER) { document.body.classList.add("presenter"); document.title = "Presenter · " + document.title; cmdUp("hello"); renderNotes(); return; }
+  var h = /s=(\d+)(?:&b=(\d+))?/.exec(location.hash), saved = store.get(POS_KEY, null);
+  if (h) { st.cur = Math.min(SLIDES.length - 1, parseInt(h[1], 10) - 1); st.b = Math.min(META[st.cur].n, parseInt(h[2] || "0", 10)); if (saved) st.startedAt = saved.startedAt; }
+  else if (saved && saved.cur < SLIDES.length) { st = { cur: saved.cur, b: Math.min(saved.b, META[saved.cur].n), startedAt: saved.startedAt }; }
+  fit(); apply(false);
+})();
+</script>
+</body>
+</html>
