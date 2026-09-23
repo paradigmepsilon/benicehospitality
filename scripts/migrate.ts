@@ -2466,6 +2466,130 @@ async function migrate() {
   console.log("  ✓ partnership_doc_reviews table created");
 
   // ============================================================
+  // Fleet Management pipeline (/admin/fleet)
+  // ============================================================
+  // The car-side twin of the partnership tables above. One engagement is one
+  // owner, because one agreement is one owner; vehicles hang off it. The CHECK
+  // lists mirror src/lib/fleet/journey.ts, and journey.test.ts fails on drift.
+  //
+  // Deliberately absent: VIN, policy numbers, lienholder details, and the
+  // management percentage. Those live on the signed Exhibit A and B only.
+  await sql`
+    CREATE TABLE IF NOT EXISTS fleet_engagements (
+      id SERIAL PRIMARY KEY,
+      pipeline_contact_id INTEGER REFERENCES pipeline_contacts(id) ON DELETE SET NULL,
+      application_id INTEGER REFERENCES management_applications(id) ON DELETE SET NULL,
+      client_name TEXT NOT NULL,
+      email TEXT,
+      phone TEXT,
+      market_city TEXT,
+      market_state TEXT,
+      source TEXT,
+      stage TEXT NOT NULL DEFAULT 'lead'
+        CHECK (stage IN ('lead','fit_call','vehicle_review','proposed','signed','onboarding','operating','renewal','offboarding','alumni','nurture','declined','closed_lost')),
+      stage_entered_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      owner TEXT NOT NULL DEFAULT 'alex' CHECK (owner IN ('alex','della')),
+      agreement_signed_at DATE,
+      term_ends_at DATE,
+      statement_day SMALLINT CHECK (statement_day BETWEEN 1 AND 28),
+      onboarding_fee_cents INTEGER NOT NULL DEFAULT 0,
+      paid_cents INTEGER NOT NULL DEFAULT 0,
+      next_action TEXT,
+      next_action_due DATE,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_fleet_engagements_stage
+    ON fleet_engagements(stage, next_action_due)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_fleet_engagements_contact
+    ON fleet_engagements(pipeline_contact_id)
+  `;
+  console.log("  ✓ fleet_engagements table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS fleet_vehicles (
+      id SERIAL PRIMARY KEY,
+      engagement_id INTEGER NOT NULL REFERENCES fleet_engagements(id) ON DELETE CASCADE,
+      year SMALLINT,
+      make TEXT,
+      model TEXT,
+      color TEXT,
+      plate_state TEXT,
+      garaging_city TEXT,
+      garaging_state TEXT,
+      status TEXT NOT NULL DEFAULT 'proposed'
+        CHECK (status IN ('proposed','accepted','declined','onboarding','live','paused','returned')),
+      live_at DATE,
+      returned_at DATE,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_fleet_vehicles_engagement
+    ON fleet_vehicles(engagement_id)
+  `;
+  console.log("  ✓ fleet_vehicles table created");
+
+  // Checklist completions only; the steps are defined in journey.ts. A NULL
+  // vehicle_id is an owner-level step (stage checklists, the monthly cycle, the
+  // Stripe once-only marker). UNIQUE treats NULLs as distinct, so uniqueness is
+  // two partial indexes, and every ON CONFLICT has to restate the predicate.
+  await sql`
+    CREATE TABLE IF NOT EXISTS fleet_steps (
+      id SERIAL PRIMARY KEY,
+      engagement_id INTEGER NOT NULL REFERENCES fleet_engagements(id) ON DELETE CASCADE,
+      vehicle_id INTEGER REFERENCES fleet_vehicles(id) ON DELETE CASCADE,
+      step_key TEXT NOT NULL,
+      done_by TEXT,
+      done_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS fleet_steps_owner_uniq
+    ON fleet_steps(engagement_id, step_key) WHERE vehicle_id IS NULL
+  `;
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS fleet_steps_vehicle_uniq
+    ON fleet_steps(vehicle_id, step_key) WHERE vehicle_id IS NOT NULL
+  `;
+  console.log("  ✓ fleet_steps table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS fleet_events (
+      id SERIAL PRIMARY KEY,
+      engagement_id INTEGER NOT NULL REFERENCES fleet_engagements(id) ON DELETE CASCADE,
+      kind TEXT NOT NULL
+        CHECK (kind IN ('created','stage','vehicle','money','note','call','email','doc')),
+      body TEXT NOT NULL,
+      created_by TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_fleet_events_engagement
+    ON fleet_events(engagement_id, created_at DESC)
+  `;
+  console.log("  ✓ fleet_events table created");
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS fleet_doc_reviews (
+      doc_key TEXT PRIMARY KEY,
+      reviewed_by TEXT,
+      reviewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      approved_by TEXT,
+      approved_at TIMESTAMPTZ
+    )
+  `;
+  console.log("  ✓ fleet_doc_reviews table created");
+
+  // ============================================================
   // pipeline_contacts: property dedup index becomes partial
   // ============================================================
   // pipeline_contacts_property_uniq covered every row, so the key ('','') could exist

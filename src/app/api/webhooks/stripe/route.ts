@@ -65,6 +65,11 @@ import {
   readPaidSession,
   recordPartnershipPayment,
 } from "@/lib/partnership/payments";
+import {
+  FLEET_PRODUCT_TAG,
+  readPaidSession as readFleetPaidSession,
+  recordFleetPayment,
+} from "@/lib/fleet/payments";
 import { findUserById } from "@/lib/community-auth";
 
 let cachedResend: Resend | null = null;
@@ -127,6 +132,8 @@ export async function POST(request: Request) {
             await fulfillOperatorBundle(session);
           } else if (session.metadata?.product === PARTNERSHIP_PRODUCT_TAG) {
             await fulfillPartnershipPayment(session);
+          } else if (session.metadata?.product === FLEET_PRODUCT_TAG) {
+            await fulfillFleetPayment(session);
           } else {
             await fulfillCheckout(session);
           }
@@ -524,6 +531,31 @@ async function fulfillPartnershipPayment(
   if (result === "no_engagement") {
     console.error(
       `[webhooks/stripe] partnership session ${session.id} paid, but engagement ${parsed.facts.engagementId} no longer exists`,
+    );
+  }
+}
+
+/**
+ * A fleet management onboarding fee, raised by an admin from the fleet tracker
+ * (src/app/api/admin/fleet/[id]/checkout). Bookkeeping only, same as the
+ * partnership payment above: mark the owner paid, tick the fee step, write
+ * the timeline. No account, no enrollment, no email; Alex sends the welcome
+ * packet by hand. Refunds are not mirrored back either.
+ */
+async function fulfillFleetPayment(
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  const parsed = readFleetPaidSession(session);
+  if (!parsed.ok) {
+    console.error(
+      `[webhooks/stripe] fleet session ${session.id} cannot be recorded: ${parsed.reason}`,
+    );
+    return;
+  }
+  const result = await recordFleetPayment(parsed.facts);
+  if (result === "no_engagement") {
+    console.error(
+      `[webhooks/stripe] fleet session ${session.id} paid, but engagement ${parsed.facts.engagementId} no longer exists`,
     );
   }
 }

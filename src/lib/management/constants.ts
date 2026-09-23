@@ -53,7 +53,10 @@ export const MANAGEMENT_OFFERS: Record<ManagedAsset, ManagementOffer> = {
       "Title and registration",
       "Insurance policy and carrier choice",
       "Capital decisions, including when to buy or sell",
-      "Final say on any major repair",
+      // Section 8.2 of the vehicle agreement lets BNHG proceed without approval
+      // for safety, legal, and damage-prevention work, and treats silence as a
+      // yes. "Any major repair" with no qualifier promised more than it signs.
+      "Final say on major repairs, with the safety and legal exceptions your agreement spells out",
     ],
     operator: {
       name: "Alex Henry",

@@ -89,6 +89,26 @@ const CTA_IMAGE: Record<ManagedAsset, { src: string; alt: string; position?: str
   },
 };
 
+/**
+ * What the percentage is a percentage OF. For a vehicle the management
+ * agreement defines rental revenue as what the platform pays out for the
+ * vehicle, after the platform's own share, so "gross" here would promise a
+ * different base than the contract signs. Rooms keep "gross": there is no
+ * platform share between the tenant's rent and the owner.
+ */
+const FEE_BASIS: Record<ManagedAsset, { label: string; short: string; sentence: string }> = {
+  car: {
+    label: "Percentage of rental revenue",
+    short: "of rental revenue",
+    sentence: "a percentage of rental revenue, meaning what the platform pays out for your vehicle after its own share",
+  },
+  rooms: {
+    label: "Percentage of gross",
+    short: "of gross",
+    sentence: "a percentage of gross",
+  },
+};
+
 const FEE_STRUCTURE = [
   {
     label: "Percentage of gross",
@@ -242,7 +262,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
 
   const feeFigures = fees
     ? ([
-        `${fees.grossPct}% of gross`,
+        `${fees.grossPct}% ${FEE_BASIS[asset].short}`,
         `$${fees.onboardingUsd.toLocaleString("en-US")} onboarding fee`,
         `${fees.minimumTermMonths}-month minimum term`,
       ] as const)
@@ -457,7 +477,7 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
               <p className="font-sans text-lg text-charcoal leading-snug">
                 {feeFigures
                   ? "Here's what you'll pay. No surprises after you sign."
-                  : "We charge a percentage of gross, a one-time onboarding fee, and ask for a minimum term. We give you all three numbers on the call, before you sign anything."}
+                  : `We charge ${FEE_BASIS[asset].sentence}, a one-time onboarding fee, and ask for a minimum term. We give you all three numbers on the call, before you sign anything.`}
               </p>
             </AnimatedItem>
           </div>
@@ -467,10 +487,10 @@ export default function ManagementOffer({ asset }: ManagementOfferProps) {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
           >
             {FEE_STRUCTURE.map((f, i) => (
-              <AnimatedItem key={f.label}>
+              <AnimatedItem key={i === 0 ? FEE_BASIS[asset].label : f.label}>
                 <div className="h-full border-t-2 border-warm-gold bg-cream rounded-sm p-7">
                   <h3 className="font-display text-2xl font-semibold text-deep-teal leading-tight mb-3">
-                    {feeFigures ? feeFigures[i] : f.label}
+                    {feeFigures ? feeFigures[i] : i === 0 ? FEE_BASIS[asset].label : f.label}
                   </h3>
                   <p className="font-sans text-sm text-charcoal/70 leading-snug">
                     {f.note}

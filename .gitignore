@@ -68,3 +68,7 @@ __pycache__/
 # they stay on disk only. Remove this line only after the repo is private or
 # the docs have a private home.
 docs/co-living-launch-partnership/
+
+# Fleet Management working docs: sales scripts, fee terms, agreement drafts.
+# Same rule as the co-living folder above: this repo is PUBLIC.
+docs/fleet-management/

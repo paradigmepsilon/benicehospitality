@@ -6,17 +6,17 @@ export const DOCS_ROOT = path.join(process.cwd(), "docs", "co-living-launch-part
 
 /**
  * The editable HTML behind a library PDF, if there is one, as a path relative
- * to DOCS_ROOT. HTML forms are the source itself; Markdown templates and
+ * to `root` (the fleet library passes its own; see src/lib/fleet/doc-files.ts). HTML forms are the source itself; Markdown templates and
  * agreements are their generated _html twin. Internal docs have none.
  */
-export function editableSourceFor(doc: PartnershipDoc): string | null {
+export function editableSourceFor(doc: PartnershipDoc, root: string = DOCS_ROOT): string | null {
   if (doc.audience === "internal") return null;
   const rel = doc.pdf.replace(/\.pdf$/, "");
   const candidates = rel.startsWith("templates/")
     ? [`${rel}.html`, rel.replace(/^templates\//, "templates/_html/") + ".html"]
     : [`client/${rel}.html`];
   if (doc.key === "intake") candidates.unshift("templates/intake/client_intake.html");
-  return candidates.find((c) => existsSync(path.join(DOCS_ROOT, c))) ?? null;
+  return candidates.find((c) => existsSync(path.join(root, c))) ?? null;
 }
 
 const SERVABLE: Record<string, string> = {
@@ -32,11 +32,11 @@ const SERVABLE: Record<string, string> = {
  * only the four static types above, and the resolved path must still sit
  * inside the root after normalisation, which is what stops "../".
  */
-export function resolveServable(segments: string[]): { file: string; type: string } | null {
-  const file = path.resolve(DOCS_ROOT, segments.join("/"));
+export function resolveServable(segments: string[], root: string = DOCS_ROOT): { file: string; type: string } | null {
+  const file = path.resolve(root, segments.join("/"));
   // Test the path AFTER normalisation: "templates/../internal/x.html" starts
   // with an allowed folder and still lands in internal/.
-  const rel = path.relative(DOCS_ROOT, file).split(path.sep).join("/");
+  const rel = path.relative(root, file).split(path.sep).join("/");
   if (!/^(client|templates)\//.test(rel)) return null;
   const type = SERVABLE[path.extname(rel).toLowerCase()];
   if (!type) return null;

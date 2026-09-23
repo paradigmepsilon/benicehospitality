@@ -506,6 +506,26 @@ export default function ApplicationsAdminPage() {
                       aria-label={`Notes for ${a.email}`}
                       className="flex-1 min-w-[10rem] px-2 py-1.5 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
                     />
+
+                    {/* Hand off to the Fleet Management tracker. Car
+                        applications only; it opens the New owner form
+                        prefilled and creates nothing until that is saved. */}
+                    {a.asset === "car" && (
+                      <a
+                        href={`/admin/fleet?${new URLSearchParams({
+                          name: a.name,
+                          email: a.email,
+                          phone: a.phone ?? "",
+                          city: a.city ?? "",
+                          state: a.state,
+                          source: "Management application",
+                          applicationId: String(a.id),
+                        }).toString()}`}
+                        className="text-xs font-medium text-[#1A4D4F] hover:underline whitespace-nowrap"
+                      >
+                        Start a fleet engagement →
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>
