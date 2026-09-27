@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAuth, getSession } from "@/lib/auth";
 import { createEngagement, listEngagements } from "@/lib/fleet/engagements";
 import { OWNERS, type OwnerKey } from "@/lib/fleet/journey";
+import { markApplicationQualified } from "@/lib/management/applications";
 
 export async function GET(request: Request) {
   const authError = await requireAuth(request);
@@ -44,6 +45,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "marketState must be a two-letter state code" }, { status: 400 });
   }
 
+  const applicationId = positiveInt(body.applicationId);
+
   const session = await getSession();
   const { id } = await createEngagement(
     {
@@ -55,9 +58,18 @@ export async function POST(request: Request) {
       source: clean(body.source, 100),
       owner,
       pipelineContactId: positiveInt(body.pipelineContactId),
-      applicationId: positiveInt(body.applicationId),
+      applicationId,
     },
     session?.name || session?.email || null,
   );
+  // Starting a card is the "we are pursuing this" decision, so the application
+  // moves to qualified on its own. Best effort: the card is already saved.
+  if (applicationId) {
+    try {
+      await markApplicationQualified(applicationId);
+    } catch (err) {
+      console.error("[fleet] application status update failed:", err);
+    }
+  }
   return NextResponse.json({ id }, { status: 201 });
 }

@@ -2,13 +2,15 @@ import Link from "next/link";
 import { sql } from "@/lib/db";
 
 async function getDashboardData() {
-  const [published, subscribers, pipelineTotal, pipelineProspects, upcomingBookings, recentSubscribers, recentActivity] =
+  const [published, subscribers, pipelineTotal, pipelineProspects, upcomingBookings, newApplications, recentSubscribers, recentActivity] =
     await Promise.all([
       sql`SELECT COUNT(*)::int AS count FROM blog_posts WHERE published = true`,
       sql`SELECT COUNT(*)::int AS count FROM newsletter_subscribers`,
       sql`SELECT COUNT(*)::int AS count FROM pipeline_contacts`,
       sql`SELECT COUNT(*)::int AS count FROM pipeline_contacts WHERE pipeline_stage = 'prospect'`,
       sql`SELECT COUNT(*)::int AS count FROM bookings WHERE status = 'confirmed' AND booking_date >= CURRENT_DATE`,
+      // Intake inbox: management applications nobody has touched yet.
+      sql`SELECT COUNT(*)::int AS count FROM management_applications WHERE status = 'new'`,
       sql`SELECT id, email, source, subscribed_at FROM newsletter_subscribers ORDER BY subscribed_at DESC LIMIT 5`,
       sql`SELECT pa.id, pa.type, pa.title, pa.created_at, pc.name AS contact_name
           FROM pipeline_activities pa
@@ -23,6 +25,7 @@ async function getDashboardData() {
       pipelineTotal: pipelineTotal[0].count,
       pipelineProspects: pipelineProspects[0].count,
       upcomingBookings: upcomingBookings[0].count,
+      newApplications: newApplications[0].count,
     },
     recentSubscribers,
     recentActivity,
@@ -51,6 +54,7 @@ export default async function AdminDashboard() {
     { label: "Pipeline Contacts", value: stats.pipelineTotal, color: "border-[#3b82f6]", href: "/admin/outreach/crm" },
     { label: "Prospects", value: stats.pipelineProspects, color: "border-[#8b5cf6]", href: "/admin/outreach/crm" },
     { label: "Upcoming Bookings", value: stats.upcomingBookings, color: "border-[#c0674a]", href: "/admin/schedule" },
+    { label: "New Applications", value: stats.newApplications, color: "border-[#1A4D4F]", href: "/admin/applications?status=new" },
   ];
 
   return (
@@ -60,7 +64,7 @@ export default async function AdminDashboard() {
       </h1>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         {cards.map((card) => (
           <Link
             key={card.label}

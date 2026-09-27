@@ -71,11 +71,24 @@ A cross-consumer test now pins that both the offer page and the estimator read i
 
 - Marketplace rows with `tab_id = 'hotel'` no longer render and cannot be edited in admin.
   Rows are untouched in the database. One migration retabs or unpublishes them.
-- Offer-page attribution: five of seven new `MGMT_*` booking sources never reach the database,
-  because the apply form reads only `asset` from the URL.
+- ~~Offer-page attribution: five of seven new `MGMT_*` booking sources never reach the database,
+  because the apply form reads only `asset` from the URL.~~ Closed 2026-09-26: the form sends
+  `source`, the API keeps known `BOOKING_SOURCES` values in `management_applications.click_source`
+  (additive migration, run `npm run db:migrate`), and the admin list shows it under Details.
 - Nurture stop scope: booking stops `mgmt_applicant` but not `estimate_car` / `estimate_rooms`.
 - CSV formula injection and unescaped HTML in the admin notification email. House pattern,
   but this branch added the largest free-text field on the site.
 - `/audit/request/thanks` has no redirect entry beside `/audit/request`.
 - Owner Portal header link renders only when logged out.
-- `mgmt_applicant` step 1 says "thirty minutes"; the booking UI says 45.
+- ~~`mgmt_applicant` step 1 says "thirty minutes"; the booking UI says 45.~~ Closed 2026-09-26.
+
+## Intake flow completion (2026-09-26)
+
+The rooms side of intake now matches the car side: a rooms application hands off to
+`/admin/partnership` prefilled and linked (`partnership_engagements.application_id`, additive
+migration), both trackers move the application to `qualified` when a card is saved from it, the
+applications list shows a Details panel and links to the card once one exists, tracker cards
+deep-link back to the exact row (`/admin/applications?id=N`), the admin home has a New
+Applications card, applicants are upserted into the site CRM (`source = management_application`),
+and the public form shows the three-step intake with `/book` carrying a "Step 2 of 2" banner.
+Shared helpers: `src/lib/management/handoff.ts` and `src/lib/management/statuses.ts`.

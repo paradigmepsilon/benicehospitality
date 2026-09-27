@@ -16,6 +16,7 @@ import { createApplication } from "@/lib/management/applications";
 import { internalManagementApplicationEmail } from "@/lib/email-templates";
 import { enrollInNurture } from "@/lib/nurture/engine";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { upsertContactByEmail } from "@/lib/pipeline-contacts";
 
 export const runtime = "nodejs";
 
@@ -53,6 +54,28 @@ export async function POST(request: Request) {
 
     // Everything below is best effort. The application is already saved.
     after(async () => {
+      // Same CRM row a booking or contact-form lead gets, so an applicant who
+      // never books is still findable from the trackers' CRM search. Source is
+      // first-touch only and survives a later booking (see pipeline-contacts.ts).
+      try {
+        const { id: contactId } = await upsertContactByEmail({
+          name: input.name,
+          email: input.email,
+          phone: input.phone || null,
+          source: "management_application",
+        });
+        await sql`
+          INSERT INTO pipeline_activities (contact_id, type, title, metadata)
+          VALUES (
+            ${contactId},
+            'management_application',
+            ${`Management application: ${input.asset === "car" ? "fleet" : "co-living"}, ${input.state}`},
+            ${JSON.stringify({ application_id: id, asset: input.asset, asset_count: input.assetCount, state: input.state, timeline: input.timeline })}
+          )
+        `;
+      } catch (err) {
+        console.error("[management] CRM upsert failed:", err);
+      }
       try {
         await enrollInNurture({
           email: input.email,

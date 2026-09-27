@@ -2,24 +2,18 @@ import { NextResponse } from "next/server";
 import { sql } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { updateApplicationStatus } from "@/lib/management/applications";
+import {
+  APPLICATION_STATUSES,
+  isApplicationStatus,
+  type ApplicationStatus,
+} from "@/lib/management/statuses";
 
-// Mirrors the CHECK constraint on management_applications.status exactly.
-// Keep this list in sync with scripts/migrate.ts if that constraint changes.
-const VALID_STATUSES = [
-  "new",
-  "contacted",
-  "call_booked",
-  "qualified",
-  "declined",
-  "signed",
-] as const;
-type ApplicationStatus = (typeof VALID_STATUSES)[number];
+// The status list lives in statuses.ts and is pinned to the table CHECK by
+// applications.test.ts, so a drift fails the suite instead of a 500 here.
+const VALID_STATUSES = APPLICATION_STATUSES;
 
 function isValidStatus(value: unknown): value is ApplicationStatus {
-  return (
-    typeof value === "string" &&
-    (VALID_STATUSES as readonly string[]).includes(value)
-  );
+  return isApplicationStatus(value);
 }
 
 function parseId(idParam: string): number | null {

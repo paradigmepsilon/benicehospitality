@@ -29,6 +29,7 @@ import {
   type VehicleStatusKey,
 } from "@/lib/fleet/journey";
 import type { EngagementDetail, EngagementPatch, VehiclePatch, VehicleRow } from "@/lib/fleet/engagements";
+import { applicationDeepLink } from "@/lib/management/handoff";
 import type { EmailTemplate } from "@/lib/fleet/emails";
 import { OWNER_CHIP, dollars, shortDate, todayLocal } from "@/components/admin/partnership/ui";
 import { Modal } from "@/components/admin/partnership/Modal";
@@ -453,7 +454,7 @@ export default function FleetOwnerPage() {
             {data.phone && <a className="text-[#1A4D4F] hover:underline" href={`tel:${data.phone}`}>{data.phone}</a>}
             {data.source && <span className="text-[#1a1a1a]/45">Source: {data.source}</span>}
             {data.pipelineContactId && <Link className="text-[#1a1a1a]/45 hover:text-[#1a1a1a]" href="/admin/outreach/crm">CRM contact #{data.pipelineContactId}</Link>}
-            {data.applicationId && <Link className="text-[#1a1a1a]/45 hover:text-[#1a1a1a]" href="/admin/applications">Application #{data.applicationId}</Link>}
+            {data.applicationId && <Link className="text-[#1a1a1a]/45 hover:text-[#1a1a1a]" href={applicationDeepLink(data.applicationId)}>Application #{data.applicationId}</Link>}
           </p>
         </div>
         <div className="flex flex-wrap items-end gap-3">

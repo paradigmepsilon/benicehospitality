@@ -35,6 +35,7 @@ test("accepts a complete application and normalizes email and state", () => {
     timeline: "30_days",
     wants: "Tired of handling turnovers on weekends.",
     heardFrom: "facebook_group",
+    clickSource: null,
   });
 });
 
@@ -95,4 +96,18 @@ test("clamps assetCount to a sane range", () => {
   const r = validateApplication({ ...good, assetCount: "9999" });
   assert.equal(r.ok, true);
   if (r.ok) assert.equal(r.value.assetCount, 999);
+});
+
+test("keeps a known click source and drops anything else", () => {
+  const kept = validateApplication({ ...good, source: "mgmt_coliving_hero" });
+  assert.equal(kept.ok, true);
+  if (kept.ok) assert.equal(kept.value.clickSource, "mgmt_coliving_hero");
+
+  const dropped = validateApplication({ ...good, source: "javascript:alert(1)" });
+  assert.equal(dropped.ok, true);
+  if (dropped.ok) assert.equal(dropped.value.clickSource, null);
+
+  const missing = validateApplication(good);
+  assert.equal(missing.ok, true);
+  if (missing.ok) assert.equal(missing.value.clickSource, null);
 });

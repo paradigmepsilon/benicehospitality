@@ -60,6 +60,7 @@ export default function PartnershipBoardPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [contactId, setContactId] = useState<number | null>(null);
+  const [applicationId, setApplicationId] = useState<number | null>(null);
   const [crmQuery, setCrmQuery] = useState("");
   const [crmHits, setCrmHits] = useState<CrmContact[]>([]);
 
@@ -100,20 +101,26 @@ export default function PartnershipBoardPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // "Start a Launch Partnership engagement" on a CRM contact lands here with
-  // the contact in the query string. Read it off window rather than
+  // "Start a partnership engagement" on a rooms application or a CRM contact
+  // lands here with the person in the query string (same keys the fleet board
+  // reads; see src/lib/management/handoff.ts). Read it off window rather than
   // useSearchParams so the page needs no Suspense boundary.
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
-    if (q.get("new") !== "1") return;
+    if (!q.get("name") && q.get("new") !== "1") return;
+    // A state that is not a two-letter code is left blank, never truncated.
+    const state = (q.get("state") ?? "").trim();
     setForm((f) => ({
       ...f,
       clientName: q.get("name") ?? "",
       email: q.get("email") ?? "",
       phone: q.get("phone") ?? "",
+      propertyCity: q.get("city") ?? "",
+      propertyState: /^[A-Za-z]{2}$/.test(state) ? state.toUpperCase() : "",
       source: q.get("source") ?? "",
     }));
     setContactId(Number(q.get("contactId")) || null);
+    setApplicationId(Number(q.get("applicationId")) || null);
     setShowForm(true);
   }, []);
 
@@ -168,7 +175,7 @@ export default function PartnershipBoardPage() {
       const res = await fetch("/api/admin/partnership", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, pipelineContactId: contactId }),
+        body: JSON.stringify({ ...form, pipelineContactId: contactId, applicationId }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not add the client");
@@ -239,6 +246,12 @@ export default function PartnershipBoardPage() {
               <p className="text-xs text-[#3d6a1f] mt-1">
                 Linked to CRM contact #{contactId}.{" "}
                 <button type="button" className="underline" onClick={() => setContactId(null)}>Unlink</button>
+              </p>
+            )}
+            {applicationId && (
+              <p className="text-xs text-[#3d6a1f] mt-1">
+                Linked to management application #{applicationId}.{" "}
+                <button type="button" className="underline" onClick={() => setApplicationId(null)}>Unlink</button>
               </p>
             )}
           </div>

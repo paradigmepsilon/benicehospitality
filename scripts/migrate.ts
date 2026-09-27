@@ -2343,6 +2343,10 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_management_applications_email
     ON management_applications(email)
   `;
+  // Which CTA sent the applicant to the form (a BOOKING_SOURCES value). The
+  // form used to read only `asset` from its URL, so the five MGMT_* offer-page
+  // sources never reached the database. Nullable: older rows have none.
+  await sql`ALTER TABLE management_applications ADD COLUMN IF NOT EXISTS click_source TEXT`;
   console.log("  ✓ management_applications table created");
 
   // Google Meet on bookings: the created event's id/link, best-effort like the
@@ -2417,6 +2421,14 @@ async function migrate() {
   await sql`
     CREATE INDEX IF NOT EXISTS idx_partnership_engagements_contact
     ON partnership_engagements(pipeline_contact_id)
+  `;
+  // A rooms application can start a client card the same way a car application
+  // starts a fleet owner card (fleet_engagements.application_id below). Added
+  // after the fact, so it is an ALTER rather than a column in the CREATE.
+  await sql`ALTER TABLE partnership_engagements ADD COLUMN IF NOT EXISTS application_id INTEGER REFERENCES management_applications(id) ON DELETE SET NULL`;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_partnership_engagements_application
+    ON partnership_engagements(application_id)
   `;
   console.log("  ✓ partnership_engagements table created");
 

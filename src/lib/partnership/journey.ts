@@ -208,6 +208,7 @@ export interface JourneyStep {
 export const STEPS: readonly JourneyStep[] = [
   // lead
   { key: "lead.crm_linked", stage: "lead", label: "Log the source and link the CRM contact", owner: "alex" },
+  { key: "lead.application_read", stage: "lead", label: "Read the application: room count, state, timeline, what they want", owner: "della" },
   { key: "lead.menu_sent", stage: "lead", label: "Send the offer menu", owner: "della", doc: "offer_menu" },
   { key: "lead.discovery_booked", stage: "lead", label: "Discovery call booked through /book", owner: "della" },
   // discovery

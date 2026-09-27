@@ -4,6 +4,7 @@
  * keep the visitor's form state and show one inline message.
  */
 
+import { VALID_BOOKING_SOURCES } from "@/lib/booking-url";
 import { isServiceAreaState, type ManagedAsset } from "./constants";
 
 export interface ApplicationInput {
@@ -18,6 +19,8 @@ export interface ApplicationInput {
   timeline: string;
   wants: string;
   heardFrom: string;
+  /** Which CTA sent them here (a BOOKING_SOURCES value), or null. */
+  clickSource: string | null;
 }
 
 export type ApplicationResult =
@@ -78,6 +81,11 @@ export function validateApplication(raw: unknown): ApplicationResult {
     return { ok: false, error: "Please pick a timeline." };
   }
 
+  // Attribution only. An unknown value is dropped, never rejected: the form
+  // must still submit if a CTA ships with a typo in its source.
+  const source = str(r.source, 60);
+  const clickSource = VALID_BOOKING_SOURCES.has(source) ? source : null;
+
   return {
     ok: true,
     value: {
@@ -92,6 +100,7 @@ export function validateApplication(raw: unknown): ApplicationResult {
       timeline,
       wants: str(r.wants, 2000),
       heardFrom: str(r.heardFrom, 120),
+      clickSource,
     },
   };
 }

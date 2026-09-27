@@ -38,7 +38,7 @@ export const mgmtApplicant: NurtureSequence = {
           bodyHtml: `
             ${p(hi(ctx))}
             ${p("Thanks for applying. Here is the whole process, so nothing is a surprise.")}
-            ${p("First a call. Thirty minutes, no deck. We ask what the asset is, where it sits, and what you want it to do. Then an asset review, where we look at condition, location, and what the market actually pays. If it is a fit, you get an agreement and an onboarding checklist. If it is not, we say so on the call.")}
+            ${p("First a call. Forty-five minutes, no deck. We ask what the asset is, where it sits, and what you want it to do. Then an asset review, where we look at condition, location, and what the market actually pays. If it is a fit, you get an agreement and an onboarding checklist. If it is not, we say so on the call.")}
             ${primaryButton(`${ctx.baseUrl}/book`, "Pick a time")}
           `,
         }),

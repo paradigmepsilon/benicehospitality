@@ -43,6 +43,26 @@ function initialAsset(param: string | null): ManagedAsset {
   return param === "rooms" ? "rooms" : "car";
 }
 
+// The whole intake, so the visitor can see where this form sits in it. Step 2
+// is /book, which shows its own "Step 2 of 2" banner when arriving from here.
+const NEXT_STEPS: { step: string; title: string; body: string }[] = [
+  {
+    step: "1",
+    title: "Tell us about the asset",
+    body: "This form. About three minutes.",
+  },
+  {
+    step: "2",
+    title: "Pick a time for a 45-minute fit call",
+    body: "Right after you submit. Your details carry over.",
+  },
+  {
+    step: "3",
+    title: "Fit decision on the call",
+    body: "A yes comes with the agreement and an onboarding checklist. A no comes with a reason.",
+  },
+];
+
 /**
  * Posts to /api/management/apply. On success we hand off to /book (the
  * redirectTo the API returns); on failure we keep every field exactly as the
@@ -53,6 +73,10 @@ export default function ApplicationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const turnstileRef = useRef<TurnstileInstance>(null);
+
+  // Which CTA sent them here (applyHref in ManagementOffer.tsx sets it). Sent
+  // as-is; the API keeps it only if it is a known BOOKING_SOURCES value.
+  const [clickSource] = useState(() => searchParams.get("source") ?? "");
 
   const [form, setForm] = useState<FormState>(() => ({
     name: "",
@@ -129,6 +153,7 @@ export default function ApplicationForm() {
           timeline: form.timeline,
           wants: form.wants,
           heardFrom: form.heardFrom,
+          source: clickSource,
           website: honeypot,
           turnstileToken: turnstileRef.current?.getResponse(),
         }),
@@ -186,7 +211,7 @@ export default function ApplicationForm() {
       <div className="max-w-3xl mx-auto">
         <AnimatedItem>
           <p className="font-sans text-xs font-semibold tracking-[0.3em] uppercase text-primary-green mb-6">
-            Check your fit
+            Check your fit &middot; Step 1 of 2
           </p>
         </AnimatedItem>
         <AnimatedItem>
@@ -195,10 +220,41 @@ export default function ApplicationForm() {
           </h1>
         </AnimatedItem>
         <AnimatedItem>
-          <p className="font-sans text-lg text-charcoal leading-snug mb-12">
+          <p className="font-sans text-lg text-charcoal leading-snug mb-10">
             A few minutes now, then a call to confirm fit. Nothing is signed
             until you&rsquo;re ready.
           </p>
+        </AnimatedItem>
+
+        <AnimatedItem>
+          <ol
+            aria-label="What happens next"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 border-y border-light-gray py-6"
+          >
+            {NEXT_STEPS.map((item) => (
+              <li key={item.step} className="flex gap-3">
+                <span
+                  aria-hidden
+                  className={[
+                    "shrink-0 w-7 h-7 rounded-full border font-sans text-xs font-semibold flex items-center justify-center",
+                    item.step === "1"
+                      ? "bg-primary-green text-white border-primary-green"
+                      : "bg-white text-charcoal/60 border-light-gray",
+                  ].join(" ")}
+                >
+                  {item.step}
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-sans text-sm font-medium text-near-black leading-snug">
+                    {item.title}
+                  </span>
+                  <span className="block font-sans text-xs text-charcoal/60 leading-snug mt-1">
+                    {item.body}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </AnimatedItem>
 
         <AnimatedItem>

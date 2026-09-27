@@ -13,7 +13,11 @@ import {
   CANONICAL_CALL_TYPE,
   callDurationLabel,
 } from "@/lib/constants/call-types";
-import { VALID_BOOKING_SOURCES, isHotelAuditBooking } from "@/lib/booking-url";
+import {
+  BOOKING_SOURCES,
+  VALID_BOOKING_SOURCES,
+  isHotelAuditBooking,
+} from "@/lib/booking-url";
 
 type Step = "date" | "time" | "focus" | "details" | "success";
 
@@ -193,6 +197,13 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
     source: clickSource,
     callType,
   });
+
+  // Step 2 of the management intake: the visitor just submitted the
+  // application form and was sent here prefilled. Say so, so the two pages
+  // read as one flow instead of a form followed by an unrelated calendar.
+  const fromManagementApply =
+    clickSource === BOOKING_SOURCES.MGMT_APPLY_CAR ||
+    clickSource === BOOKING_SOURCES.MGMT_APPLY_ROOMS;
 
   // Fetch available days for current month (single efficient API call)
   useEffect(() => {
@@ -375,6 +386,24 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
                 </p>
                 <p className="text-white/60 text-xs sm:text-sm mt-0.5">
                   Pick a dimension to focus this 45-minute call on.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Management intake, step 2 of 2 (arriving from /management/apply) */}
+        {fromManagementApply && step !== "success" && (
+          <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+            <div className="max-w-2xl mx-auto mb-8 bg-cream border border-primary-green/40 rounded-lg p-4 sm:p-5 flex items-center gap-4">
+              <div aria-hidden className="shrink-0 w-2 h-10 bg-primary-green rounded-full" />
+              <div className="flex-1 min-w-0">
+                <p className="text-primary-green text-[10px] font-semibold uppercase tracking-[0.18em] mb-1">
+                  Application received &middot; Step 2 of 2
+                </p>
+                <p className="font-sans text-sm text-charcoal/85 leading-snug">
+                  Last step: pick a time for the fit call ({durationLabel(callType)}).
+                  Your name and email are already filled in below.
                 </p>
               </div>
             </div>
@@ -865,6 +894,13 @@ export default function BookingCalendar({ callType: callTypeProp }: BookingCalen
               <p className="font-sans text-sm text-charcoal/60 mb-8">
                 We&apos;ve sent a confirmation to <strong>{form.email}</strong>.
                 We&apos;ll follow up with call details before your appointment.
+                {fromManagementApply && (
+                  <>
+                    {" "}
+                    Your application is attached to this call, so there is nothing
+                    else to send before we talk.
+                  </>
+                )}
               </p>
               <Button href="/" variant="primary">
                 Back to Home

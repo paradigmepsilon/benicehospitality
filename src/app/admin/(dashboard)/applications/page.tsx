@@ -1,36 +1,21 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
 import { relativeTime } from "@/lib/utils";
+import type { ApplicationRow } from "@/lib/management/applications";
+import {
+  APPLICATION_STATUSES,
+  APPLICATION_STATUS_LABELS,
+  CURRENT_STATUS_LABELS,
+  TIMELINE_LABELS,
+  isApplicationStatus,
+  type ApplicationStatus,
+} from "@/lib/management/statuses";
+import { engagementHandoffHref, openEngagementHref } from "@/lib/management/handoff";
 
 type ManagedAsset = "car" | "rooms";
-
-type ApplicationStatus =
-  | "new"
-  | "contacted"
-  | "call_booked"
-  | "qualified"
-  | "declined"
-  | "signed";
-
-interface Application {
-  id: number;
-  name: string;
-  email: string;
-  phone: string | null;
-  asset: ManagedAsset;
-  assetCount: number;
-  state: string;
-  city: string | null;
-  currentStatus: string;
-  timeline: string;
-  wants: string | null;
-  heardFrom: string | null;
-  status: ApplicationStatus;
-  bookingId: number | null;
-  notes: string | null;
-  createdAt: string;
-}
+type Application = ApplicationRow;
 
 type SortOption = "newest" | "oldest" | "name" | "email";
 
@@ -46,20 +31,10 @@ const ASSET_BADGE: Record<ManagedAsset, string> = {
 
 const ASSET_OPTIONS: ManagedAsset[] = ["car", "rooms"];
 
-const TIMELINE_LABELS: Record<string, string> = {
-  now: "Ready now",
-  "30_days": "Within 30 days",
-  "90_days": "Within 90 days",
-  exploring: "Just exploring",
-};
-
-const STATUS_LABELS: Record<ApplicationStatus, string> = {
-  new: "New",
-  contacted: "Contacted",
-  call_booked: "Call Booked",
-  qualified: "Qualified",
-  declined: "Declined",
-  signed: "Signed",
+/** Where a card for this asset lives, in the words the nav uses. */
+const TRACKER_LABEL: Record<ManagedAsset, string> = {
+  car: "fleet",
+  rooms: "partnership",
 };
 
 const STATUS_BADGE: Record<ApplicationStatus, string> = {
@@ -71,17 +46,19 @@ const STATUS_BADGE: Record<ApplicationStatus, string> = {
   signed: "bg-[#4a7d25] text-white border-[#4a7d25]",
 };
 
-const STATUS_OPTIONS: ApplicationStatus[] = [
-  "new",
-  "contacted",
-  "call_booked",
-  "qualified",
-  "declined",
-  "signed",
-];
-
 function formatLocation(city: string | null, state: string): string {
   return city ? `${city}, ${state}` : state;
+}
+
+function submittedOn(iso: string): string {
+  return new Date(iso).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  });
 }
 
 export default function ApplicationsAdminPage() {
@@ -95,6 +72,24 @@ export default function ApplicationsAdminPage() {
   );
   const [sort, setSort] = useState<SortOption>("newest");
   const [updating, setUpdating] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
+  // The row a tracker card or the dashboard linked to (?id=N). Opened and
+  // scrolled into view once the list arrives, then highlighted.
+  const [focusId, setFocusId] = useState<number | null>(null);
+
+  // ?status=new comes from the dashboard card; ?id=N from a tracker card's
+  // "Application #N" link. Read off window rather than useSearchParams so the
+  // page needs no Suspense boundary (same as the two tracker boards).
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const status = q.get("status");
+    if (isApplicationStatus(status)) setStatusFilter(status);
+    const id = Number(q.get("id"));
+    if (Number.isInteger(id) && id > 0) {
+      setFocusId(id);
+      setExpanded(new Set([id]));
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/admin/applications")
@@ -108,6 +103,22 @@ export default function ApplicationsAdminPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // A deep-linked row may be hidden by the status filter it arrived with, so
+  // clear the filter for it, then scroll once it is on screen.
+  useEffect(() => {
+    if (loading || focusId === null) return;
+    const row = applications.find((a) => a.id === focusId);
+    if (!row) return;
+    if (statusFilter !== "all" && row.status !== statusFilter) setStatusFilter("all");
+    const t = setTimeout(() => {
+      document.getElementById(`application-${focusId}`)?.scrollIntoView({ block: "center" });
+    }, 50);
+    return () => clearTimeout(t);
+    // statusFilter is read, not a trigger: re-running on every filter click
+    // would keep yanking the page back to the focused row.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, focusId, applications]);
+
   const filtered = useMemo(() => {
     let result = applications;
 
@@ -116,7 +127,8 @@ export default function ApplicationsAdminPage() {
       result = result.filter(
         (a) =>
           a.email.toLowerCase().includes(q) ||
-          a.name.toLowerCase().includes(q),
+          a.name.toLowerCase().includes(q) ||
+          (a.city ?? "").toLowerCase().includes(q),
       );
     }
 
@@ -143,6 +155,15 @@ export default function ApplicationsAdminPage() {
 
     return result;
   }, [applications, search, assetFilter, statusFilter, sort]);
+
+  function toggleExpanded(id: number) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   async function handleStatusChange(id: number, status: ApplicationStatus) {
     setUpdating(id);
@@ -173,8 +194,8 @@ export default function ApplicationsAdminPage() {
       // Send notes only, never this tab's last-known status. The page
       // fetches once on mount and never polls, so re-sending status here
       // could silently revert a change that happened elsewhere in the
-      // meantime (including the automatic new -> call_booked transition a
-      // booking triggers with no admin action).
+      // meantime (the automatic new -> call_booked transition a booking
+      // triggers, or new -> qualified when a tracker card is started).
       const res = await fetch(`/api/admin/applications/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -204,15 +225,13 @@ export default function ApplicationsAdminPage() {
   const assetCounts: Record<ManagedAsset, number> = { car: 0, rooms: 0 };
   for (const a of applications) assetCounts[a.asset]++;
 
-  const statusCounts: Record<ApplicationStatus, number> = {
-    new: 0,
-    contacted: 0,
-    call_booked: 0,
-    qualified: 0,
-    declined: 0,
-    signed: 0,
-  };
+  const statusCounts = Object.fromEntries(
+    APPLICATION_STATUSES.map((s) => [s, 0]),
+  ) as Record<ApplicationStatus, number>;
   for (const a of applications) statusCounts[a.status]++;
+
+  const detailLabel = "text-[10px] font-semibold uppercase tracking-wide text-[#1a1a1a]/40";
+  const detailValue = "text-sm text-[#1a1a1a]/80 mt-0.5 break-words";
 
   return (
     <div>
@@ -232,6 +251,14 @@ export default function ApplicationsAdminPage() {
                   {assetCounts.car} Car
                   {" · "}
                   {assetCounts.rooms} Rooms
+                  {statusCounts.new > 0 && (
+                    <>
+                      {" · "}
+                      <span className="font-medium text-[#1a1a1a]/80">
+                        {statusCounts.new} new
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </p>
@@ -257,6 +284,18 @@ export default function ApplicationsAdminPage() {
           Export CSV
         </button>
       </div>
+
+      {/* How intake flows, in one line, so a new admin knows where a row goes next. */}
+      {!loading && applications.length > 0 && (
+        <p className="text-xs text-[#1a1a1a]/45 mb-4">
+          Every row came from the public form at /management/apply. A booking from the
+          same email moves it to Call Booked on its own. When you start a card from it,
+          it moves to Qualified and the card links back here. Cars go to{" "}
+          <Link href="/admin/fleet" className="underline hover:text-[#1a1a1a]">Fleet Management</Link>,
+          rooms go to{" "}
+          <Link href="/admin/partnership" className="underline hover:text-[#1a1a1a]">Partnership</Link>.
+        </p>
+      )}
 
       {loading ? (
         <div className="flex items-center gap-2 text-sm text-[#1a1a1a]/50 py-12 justify-center">
@@ -322,7 +361,7 @@ export default function ApplicationsAdminPage() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by name or email..."
+                  placeholder="Search by name, email, or city..."
                   className="w-full pl-9 pr-4 py-2 text-sm border border-[#e8e4dd] rounded-lg focus:outline-none focus:border-[#5b9a2f] transition-colors"
                 />
               </div>
@@ -382,13 +421,13 @@ export default function ApplicationsAdminPage() {
                   {applications.length}
                 </span>
               </button>
-              {STATUS_OPTIONS.map((status) => (
+              {APPLICATION_STATUSES.map((status) => (
                 <button
                   key={status}
                   onClick={() => setStatusFilter(status)}
                   className={filterBtnClass(statusFilter === status)}
                 >
-                  {STATUS_LABELS[status]}
+                  {APPLICATION_STATUS_LABELS[status]}
                   <span className="ml-1.5 opacity-60">
                     {statusCounts[status]}
                   </span>
@@ -412,122 +451,194 @@ export default function ApplicationsAdminPage() {
           ) : (
             <div className="bg-white border border-[#e8e4dd] rounded-lg overflow-hidden">
               <div className="overflow-x-auto">
-                {filtered.map((a, i) => (
-                  <div
-                    key={a.id}
-                    className={`flex flex-col lg:flex-row lg:items-center gap-3 px-4 py-3 lg:min-w-fit ${
-                      i !== filtered.length - 1
-                        ? "border-b border-[#e8e4dd]"
-                        : ""
-                    } hover:bg-[#f8f6f1]/50 transition-colors`}
-                  >
-                    {/* Identity */}
-                    <div className="flex-1 min-w-0 lg:w-48 lg:flex-none">
-                      <p className="text-sm font-medium text-[#1a1a1a] truncate">
-                        {a.name}
-                      </p>
-                      <p className="text-xs text-[#1a1a1a]/55 mt-0.5 truncate">
-                        <a
-                          href={`mailto:${a.email}`}
-                          className="hover:text-[#5b9a2f] transition-colors"
-                        >
-                          {a.email}
-                        </a>
-                        {" · "}
-                        {relativeTime(a.createdAt)}
-                      </p>
-                    </div>
-
-                    {/* Asset badge */}
-                    <span
-                      className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap self-start lg:self-center ${ASSET_BADGE[a.asset]}`}
+                {filtered.map((a, i) => {
+                  const isOpen = expanded.has(a.id);
+                  const isFocused = focusId === a.id;
+                  const existingCard = openEngagementHref(a);
+                  return (
+                    <div
+                      key={a.id}
+                      id={`application-${a.id}`}
+                      className={`${
+                        i !== filtered.length - 1 ? "border-b border-[#e8e4dd]" : ""
+                      } ${isFocused ? "bg-[#5b9a2f]/5" : ""}`}
                     >
-                      {ASSET_LABELS[a.asset]}
-                    </span>
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-3 px-4 py-3 lg:min-w-fit hover:bg-[#f8f6f1]/50 transition-colors">
+                        {/* Identity */}
+                        <div className="flex-1 min-w-0 lg:w-48 lg:flex-none">
+                          <p className="text-sm font-medium text-[#1a1a1a] truncate">
+                            {a.name}
+                            <span className="ml-1.5 text-xs font-normal text-[#1a1a1a]/35">#{a.id}</span>
+                          </p>
+                          <p className="text-xs text-[#1a1a1a]/55 mt-0.5 truncate">
+                            <a
+                              href={`mailto:${a.email}`}
+                              className="hover:text-[#5b9a2f] transition-colors"
+                            >
+                              {a.email}
+                            </a>
+                            {" · "}
+                            {relativeTime(a.createdAt)}
+                          </p>
+                        </div>
 
-                    {/* Count */}
-                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-14">
-                      x{a.assetCount}
-                    </span>
+                        {/* Asset badge */}
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap self-start lg:self-center ${ASSET_BADGE[a.asset]}`}
+                        >
+                          {ASSET_LABELS[a.asset]}
+                        </span>
 
-                    {/* Location */}
-                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
-                      {formatLocation(a.city, a.state)}
-                    </span>
+                        {/* Count */}
+                        <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-14">
+                          x{a.assetCount}
+                        </span>
 
-                    {/* Timeline */}
-                    <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
-                      {TIMELINE_LABELS[a.timeline] ?? a.timeline}
-                    </span>
+                        {/* Location */}
+                        <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
+                          {formatLocation(a.city, a.state)}
+                        </span>
 
-                    {/* Status selector */}
-                    <div className="flex items-center gap-2 lg:w-40">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap ${STATUS_BADGE[a.status]}`}
-                      >
-                        {STATUS_LABELS[a.status]}
-                      </span>
-                      <select
-                        value={a.status}
-                        onChange={(e) =>
-                          handleStatusChange(
-                            a.id,
-                            e.target.value as ApplicationStatus,
-                          )
-                        }
-                        disabled={updating === a.id}
-                        className="px-2 py-1 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
-                        aria-label={`Change status for ${a.email}`}
-                      >
-                        {STATUS_OPTIONS.map((status) => (
-                          <option key={status} value={status}>
-                            {STATUS_LABELS[status]}
-                          </option>
-                        ))}
-                      </select>
+                        {/* Timeline */}
+                        <span className="text-xs text-[#1a1a1a]/60 whitespace-nowrap lg:w-32 truncate">
+                          {TIMELINE_LABELS[a.timeline] ?? a.timeline}
+                        </span>
+
+                        {/* Status selector */}
+                        <div className="flex items-center gap-2 lg:w-40">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full border whitespace-nowrap ${STATUS_BADGE[a.status]}`}
+                          >
+                            {APPLICATION_STATUS_LABELS[a.status]}
+                          </span>
+                          <select
+                            value={a.status}
+                            onChange={(e) =>
+                              handleStatusChange(
+                                a.id,
+                                e.target.value as ApplicationStatus,
+                              )
+                            }
+                            disabled={updating === a.id}
+                            className="px-2 py-1 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
+                            aria-label={`Change status for ${a.email}`}
+                          >
+                            {APPLICATION_STATUSES.map((status) => (
+                              <option key={status} value={status}>
+                                {APPLICATION_STATUS_LABELS[status]}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Notes */}
+                        <input
+                          type="text"
+                          value={noteDrafts[a.id] ?? ""}
+                          onChange={(e) =>
+                            setNoteDrafts((prev) => ({
+                              ...prev,
+                              [a.id]: e.target.value,
+                            }))
+                          }
+                          onBlur={() => handleNotesSave(a.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") e.currentTarget.blur();
+                          }}
+                          disabled={updating === a.id}
+                          placeholder="Add a note..."
+                          aria-label={`Notes for ${a.email}`}
+                          className="flex-1 min-w-[10rem] px-2 py-1.5 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
+                        />
+
+                        {/* Hand off to the tracker for this asset. Opens that
+                            board's New form prefilled and creates nothing
+                            until it is saved. Once a card exists, link to it
+                            instead so nobody starts a second one. */}
+                        {existingCard ? (
+                          <Link
+                            href={existingCard}
+                            className="text-xs font-medium text-[#3d6a1f] hover:underline whitespace-nowrap"
+                          >
+                            Open {TRACKER_LABEL[a.asset]} card →
+                          </Link>
+                        ) : (
+                          <a
+                            href={engagementHandoffHref(a)}
+                            className="text-xs font-medium text-[#1A4D4F] hover:underline whitespace-nowrap"
+                          >
+                            Start a {TRACKER_LABEL[a.asset]} engagement →
+                          </a>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpanded(a.id)}
+                          aria-expanded={isOpen}
+                          aria-controls={`application-${a.id}-details`}
+                          className="text-xs font-medium text-[#1a1a1a]/55 hover:text-[#1a1a1a] whitespace-nowrap"
+                        >
+                          {isOpen ? "Hide details" : "Details"}
+                        </button>
+                      </div>
+
+                      {isOpen && (
+                        <div
+                          id={`application-${a.id}-details`}
+                          className="px-4 pb-4 pt-1 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 bg-[#f8f6f1]/40 border-t border-[#e8e4dd]"
+                        >
+                          <div>
+                            <p className={detailLabel}>Phone</p>
+                            <p className={detailValue}>
+                              {a.phone ? (
+                                <a href={`tel:${a.phone}`} className="hover:text-[#5b9a2f]">{a.phone}</a>
+                              ) : (
+                                "not given"
+                              )}
+                            </p>
+                          </div>
+                          <div>
+                            <p className={detailLabel}>Used today</p>
+                            <p className={detailValue}>{CURRENT_STATUS_LABELS[a.currentStatus] ?? a.currentStatus}</p>
+                          </div>
+                          <div>
+                            <p className={detailLabel}>Submitted</p>
+                            <p className={detailValue}>{submittedOn(a.createdAt)} ET</p>
+                          </div>
+                          <div>
+                            <p className={detailLabel}>Came from</p>
+                            <p className={detailValue}>
+                              {a.clickSource ?? "not recorded"}
+                              {a.heardFrom && (
+                                <span className="block text-xs text-[#1a1a1a]/55">Heard about us: {a.heardFrom}</span>
+                              )}
+                            </p>
+                          </div>
+                          <div className="col-span-2 md:col-span-3">
+                            <p className={detailLabel}>What they want from management</p>
+                            <p className={`${detailValue} whitespace-pre-wrap`}>{a.wants || "not given"}</p>
+                          </div>
+                          <div>
+                            <p className={detailLabel}>Linked records</p>
+                            <p className={`${detailValue} space-y-0.5`}>
+                              {a.bookingId ? (
+                                <Link href="/admin/bookings" className="block hover:text-[#5b9a2f]">Booking #{a.bookingId}</Link>
+                              ) : (
+                                <span className="block">No call booked yet</span>
+                              )}
+                              {a.fleetEngagementId && (
+                                <Link href={`/admin/fleet/${a.fleetEngagementId}`} className="block hover:text-[#5b9a2f]">Fleet card #{a.fleetEngagementId}</Link>
+                              )}
+                              {a.partnershipEngagementId && (
+                                <Link href={`/admin/partnership/${a.partnershipEngagementId}`} className="block hover:text-[#5b9a2f]">Partnership card #{a.partnershipEngagementId}</Link>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
-
-                    {/* Notes */}
-                    <input
-                      type="text"
-                      value={noteDrafts[a.id] ?? ""}
-                      onChange={(e) =>
-                        setNoteDrafts((prev) => ({
-                          ...prev,
-                          [a.id]: e.target.value,
-                        }))
-                      }
-                      onBlur={() => handleNotesSave(a.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") e.currentTarget.blur();
-                      }}
-                      disabled={updating === a.id}
-                      placeholder="Add a note..."
-                      aria-label={`Notes for ${a.email}`}
-                      className="flex-1 min-w-[10rem] px-2 py-1.5 text-xs border border-[#e8e4dd] rounded bg-white focus:outline-none focus:border-[#5b9a2f] disabled:opacity-50"
-                    />
-
-                    {/* Hand off to the Fleet Management tracker. Car
-                        applications only; it opens the New owner form
-                        prefilled and creates nothing until that is saved. */}
-                    {a.asset === "car" && (
-                      <a
-                        href={`/admin/fleet?${new URLSearchParams({
-                          name: a.name,
-                          email: a.email,
-                          phone: a.phone ?? "",
-                          city: a.city ?? "",
-                          state: a.state,
-                          source: "Management application",
-                          applicationId: String(a.id),
-                        }).toString()}`}
-                        className="text-xs font-medium text-[#1A4D4F] hover:underline whitespace-nowrap"
-                      >
-                        Start a fleet engagement →
-                      </a>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

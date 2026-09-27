@@ -22,6 +22,8 @@ import {
 export interface EngagementRow {
   id: number;
   pipelineContactId: number | null;
+  /** The management application this card was started from, if any. */
+  applicationId: number | null;
   clientName: string;
   email: string | null;
   phone: string | null;
@@ -73,6 +75,7 @@ function mapRow(r: Record<string, any>): EngagementRow {
   return {
     id: Number(r.id),
     pipelineContactId: r.pipeline_contact_id === null ? null : Number(r.pipeline_contact_id),
+    applicationId: r.application_id == null ? null : Number(r.application_id),
     clientName: r.client_name,
     email: r.email,
     phone: r.phone,
@@ -164,21 +167,26 @@ export interface CreateEngagementInput {
   source?: string | null;
   owner?: OwnerKey;
   pipelineContactId?: number | null;
+  applicationId?: number | null;
 }
 
 export async function createEngagement(
   input: CreateEngagementInput,
   actor: string | null,
 ): Promise<{ id: number }> {
+  // The application id arrives from a URL the admin can edit. Looking it up
+  // turns an id that does not exist into NULL, instead of a foreign-key 500
+  // that loses the client the admin just typed in. Same shape as fleet.
   const rows = await sql`
     INSERT INTO partnership_engagements
       (client_name, email, phone, property_label, property_city, property_state,
-       source, owner, pipeline_contact_id)
+       source, owner, pipeline_contact_id, application_id)
     VALUES
       (${input.clientName}, ${input.email || null}, ${input.phone || null},
        ${input.propertyLabel || null}, ${input.propertyCity || null},
        ${input.propertyState || null}, ${input.source || null},
-       ${input.owner ?? "della"}, ${input.pipelineContactId ?? null})
+       ${input.owner ?? "della"}, ${input.pipelineContactId ?? null},
+       (SELECT id FROM management_applications WHERE id = ${input.applicationId ?? null}))
     RETURNING id
   `;
   const id = Number(rows[0].id);
